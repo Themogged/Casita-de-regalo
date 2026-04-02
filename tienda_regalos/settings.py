@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     "dev-only-change-this-before-production-2026",
 )
-DEBUG = env_bool("DJANGO_DEBUG", True)
+DEBUG = True
 
 ALLOWED_HOSTS = env_list(
     "DJANGO_ALLOWED_HOSTS",
@@ -108,6 +108,7 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
