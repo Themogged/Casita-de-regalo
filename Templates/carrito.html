@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% load moneda %}
+
+{% block title %}Carrito | Casita de Regalos{% endblock %}
+
+{% block extra_head %}
+<style>
+    .cart-hero {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .cart-hero h1 {
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-bottom: 10px;
+    }
+
+    .cart-hero p {
+        color: var(--hero-text-soft);
+        line-height: 1.7;
+        max-width: 640px;
+    }
+
+    .cart-wrapper {
+        padding: 24px;
+    }
+
+    .cart-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .cart-table th {
+        padding: 14px 16px;
+        text-align: left;
+        color: var(--ink-700);
+        background: var(--rose-50);
+        font-size: 0.92rem;
+    }
+
+    .cart-table td {
+        padding: 18px 16px;
+        border-bottom: 1px solid rgba(233, 72, 134, 0.08);
+        vertical-align: middle;
+    }
+
+    .product-info {
+        display: flex;
+        gap: 14px;
+        align-items: center;
+    }
+
+    .product-thumb {
+        width: 74px;
+        height: 74px;
+        border-radius: 18px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: linear-gradient(180deg, #fff7fb, #ffe4f0);
+    }
+
+    .product-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 6px;
+    }
+
+    .thumb-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        color: var(--rose-700);
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .qty-controls {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px;
+        border-radius: 999px;
+        background: var(--rose-50);
+    }
+
+    .qty-btn,
+    .remove-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        min-height: 34px;
+        border-radius: 999px;
+        font-weight: 700;
+    }
+
+    .qty-btn {
+        background: #fff;
+        color: var(--rose-700);
+        border: 1px solid rgba(233, 72, 134, 0.16);
+        cursor: pointer;
+    }
+
+    .qty-btn.is-disabled {
+        pointer-events: none;
+        opacity: 0.35;
+    }
+
+    .remove-btn {
+        background: #fff1f1;
+        color: #b24d4d;
+        cursor: pointer;
+    }
+
+    .qty-form,
+    .remove-form,
+    .checkout-form {
+        margin: 0;
+    }
+
+    .summary-actions .btn {
+        border: 0;
+        cursor: pointer;
+    }
+
+    .cart-summary {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: center;
+        flex-wrap: wrap;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(233, 72, 134, 0.12);
+    }
+
+    .cart-total strong {
+        display: block;
+        font-size: 2rem;
+        color: var(--rose-700);
+    }
+
+    .cart-summary p {
+        color: var(--ink-700);
+        line-height: 1.7;
+    }
+
+    .summary-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 18px;
+        border-radius: 14px;
+        font-weight: 700;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background: var(--rose-50);
+        color: var(--rose-700);
+    }
+
+    .empty-cart {
+        padding: 40px 28px;
+        text-align: center;
+    }
+
+    .empty-cart h2 {
+        margin-bottom: 10px;
+        font-size: 1.7rem;
+    }
+
+    .empty-cart p {
+        color: var(--ink-700);
+        line-height: 1.7;
+        margin-bottom: 18px;
+    }
+
+    @media (max-width: 760px) {
+        .cart-wrapper {
+            padding: 18px;
+            overflow: visible;
+        }
+
+        .cart-table,
+        .cart-table tbody,
+        .cart-table tr,
+        .cart-table td {
+            display: block;
+            width: 100%;
+        }
+
+        .cart-table thead {
+            display: none;
+        }
+
+        .cart-table tbody {
+            display: grid;
+            gap: 14px;
+        }
+
+        .cart-table tr {
+            padding: 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(233, 72, 134, 0.1);
+            box-shadow: 0 16px 30px rgba(75, 24, 46, 0.06);
+        }
+
+        .cart-table td {
+            padding: 0;
+            border: 0;
+        }
+
+        .cart-table td + td {
+            margin-top: 12px;
+        }
+
+        .cart-table td::before {
+            content: attr(data-label);
+            display: block;
+            margin-bottom: 6px;
+            color: var(--ink-500);
+            font-size: 0.76rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .cart-table td[data-label="Producto"]::before {
+            display: none;
+        }
+
+        .product-info {
+            align-items: flex-start;
+        }
+
+        .product-thumb {
+            width: 82px;
+            height: 82px;
+        }
+
+        .qty-controls {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .cart-summary {
+            align-items: stretch;
+        }
+
+        .summary-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            width: 100%;
+        }
+
+        .summary-actions .btn,
+        .summary-actions .btn-secondary {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card">
+    <div class="cart-hero">
+        <div>
+            <h1>Tu carrito de compra</h1>
+            <p>
+                Revisa cantidades, confirma disponibilidad y termina la prueba del pedido con una experiencia
+                mas alineada a la marca Casita de Regalos.
+            </p>
+        </div>
+        <div>
+            <strong style="font-size:2rem;">{{ productos|length }}</strong>
+            <div>productos en este pedido</div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="page-card cart-wrapper">
+    {% if productos %}
+        <table class="cart-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Quitar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in productos %}
+                    <tr>
+                        <td data-label="Producto">
+                            <div class="product-info">
+                                <div class="product-thumb">
+                                    {% if item.producto.imagen %}
+                                        <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                                    {% else %}
+                                        <div class="thumb-placeholder">Sin imagen</div>
+                                    {% endif %}
+                                </div>
+                                <div>
+                                    <strong>{{ item.producto.nombre }}</strong>
+                                    <div style="color: var(--ink-500); margin-top:4px;">Stock disponible: {{ item.producto.stock }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-label="Precio">{{ item.producto.precio|cop }}</td>
+                        <td data-label="Cantidad">
+                            <div class="qty-controls">
+                                <form method="post" action="{% url 'restar_producto' item.producto.id %}" class="qty-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="qty-btn">-</button>
+                                </form>
+                                <strong>{{ item.cantidad }}</strong>
+                                {% if item.cantidad < item.producto.stock %}
+                                    <form method="post" action="{% url 'sumar_producto' item.producto.id %}" class="qty-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="qty-btn">+</button>
+                                    </form>
+                                {% else %}
+                                    <span class="qty-btn is-disabled">+</span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td data-label="Subtotal"><strong style="color: var(--rose-700);">{{ item.subtotal|cop }}</strong></td>
+                        <td data-label="Quitar">
+                            <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form">
+                                {% csrf_token %}
+                                <button type="submit" class="remove-btn">X</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="cart-summary">
+            <div class="cart-total">
+                <span>Total del pedido</span>
+                <strong>{{ total|cop }}</strong>
+                <p>Cuando confirmes, se registrara el pedido.</p>
+            </div>
+
+            <div class="summary-actions">
+                <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
+                <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Finalizar por WhatsApp</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="empty-cart">
+            <h2>Tu carrito esta vacio</h2>
+            <p>
+                Todavia no agregas productos. Vuelve al catalogo, prueba los filtros y selecciona articulos
+                para revisar el flujo completo.
+            </p>
+            <a href="{% url 'inicio' %}" class="btn-secondary">Ir al catalogo</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

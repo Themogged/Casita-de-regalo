@@ -1,0 +1,13 @@
+{% extends "admin/change_form.html" %}
+
+{% block object-tools-items %}
+{% if original %}
+<li>
+    <a href="{% url 'admin:pedidos_pedido_pdf' original.pk %}" class="historylink">Descargar PDF</a>
+</li>
+{% endif %}
+<li>
+    <a href="{% url 'admin:pedidos_pedido_reportes' %}" class="historylink">Ver reportes</a>
+</li>
+{{ block.super }}
+{% endblock %}

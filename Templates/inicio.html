@@ -1,0 +1,917 @@
+{% extends 'base.html' %}
+{% load moneda %}
+
+{% block title %}Catalogo | Casita de Regalos{% endblock %}
+
+{% block extra_head %}
+<style>
+    .hero-grid,
+    .about-grid,
+    .meta-grid,
+    .catalog-layout {
+        display: grid;
+        gap: 24px;
+    }
+
+    .hero-grid {
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
+        align-items: end;
+    }
+
+    .about-grid {
+        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    }
+
+    .meta-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .catalog-layout {
+        grid-template-columns: 280px minmax(0, 1fr);
+        align-items: start;
+    }
+
+    #catalogo,
+    #como-comprar {
+        scroll-margin-top: 132px;
+    }
+
+    #catalogo.is-loading {
+        opacity: 0.58;
+        pointer-events: none;
+        transition: opacity 0.18s ease;
+    }
+
+    .section-stack,
+    .trust-grid,
+    .line-grid,
+    .steps-grid,
+    .catalog-grid,
+    .category-list,
+    .filter-form,
+    .feature-list {
+        display: grid;
+        gap: 18px;
+    }
+
+    .section-stack {
+        margin-bottom: 28px;
+    }
+
+    .hero-copy h1 {
+        font-size: clamp(2.25rem, 5vw, 3.9rem);
+        line-height: 0.98;
+        margin-bottom: 16px;
+    }
+
+    .hero-copy p,
+    .section-card p,
+    .catalog-main p,
+    .sidebar p,
+    .meta-copy {
+        color: var(--ink-700);
+        line-height: 1.75;
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+    }
+
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 28px;
+    }
+
+    .hero-stat,
+    .hero-panel,
+    .section-card,
+    .sidebar,
+    .catalog-main,
+    .product-card,
+    .step-card,
+    .line-card {
+        border-radius: 24px;
+        border: 1px solid rgba(233, 72, 134, 0.1);
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 18px 36px rgba(75, 24, 46, 0.06);
+    }
+
+    .hero-stat {
+        padding: 18px;
+    }
+
+    .hero-stat strong {
+        display: block;
+        margin-bottom: 6px;
+        color: var(--rose-700);
+        font-size: 1.8rem;
+    }
+
+    .hero-panel,
+    .section-card,
+    .sidebar,
+    .catalog-main {
+        padding: 24px;
+    }
+
+    .hero-panel h2,
+    .section-card h2,
+    .catalog-main h2,
+    .sidebar h2 {
+        margin-bottom: 12px;
+        font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .section-kicker,
+    .pill,
+    .soft-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .section-kicker {
+        margin-bottom: 14px;
+        background: var(--rose-50);
+        color: var(--rose-700);
+    }
+
+    .pill {
+        background: var(--rose-50);
+        color: var(--rose-700);
+    }
+
+    .soft-pill {
+        background: var(--mint-100);
+        color: #33856c;
+    }
+
+    .btn,
+    .btn-secondary,
+    .btn-outline,
+    .btn-disabled {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border-radius: 14px;
+        font-weight: 700;
+        transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        color: #fff;
+        box-shadow: 0 12px 24px rgba(233, 72, 134, 0.18);
+    }
+
+    .btn-secondary,
+    .btn-outline {
+        background: var(--rose-50);
+        color: var(--rose-700);
+    }
+
+    .btn:active,
+    .btn-secondary:active,
+    .btn-outline:active {
+        transform: scale(0.98);
+    }
+
+    .btn-disabled {
+        background: #f2eef1;
+        color: #91818d;
+        cursor: not-allowed;
+    }
+
+    .product-actions form {
+        margin: 0;
+    }
+
+    .product-actions .btn,
+    .product-actions .btn-outline {
+        width: 100%;
+        cursor: pointer;
+        border: 0;
+    }
+
+    .feature-item,
+    .category-link {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--rose-50);
+        color: var(--ink-700);
+    }
+
+    .feature-item strong,
+    .category-link strong {
+        color: var(--ink-900);
+    }
+
+    .trust-grid,
+    .line-grid,
+    .steps-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .line-card,
+    .step-card {
+        padding: 22px;
+    }
+
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        margin-bottom: 14px;
+        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        color: #fff;
+        font-weight: 800;
+    }
+
+    .meta-list {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .meta-list li {
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--rose-50);
+        color: var(--ink-700);
+        line-height: 1.7;
+        border: 1px solid rgba(233, 72, 134, 0.08);
+    }
+
+    .cta-band {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        padding: 18px 20px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255, 237, 244, 0.92), rgba(255, 251, 253, 0.98));
+        border: 1px solid rgba(233, 72, 134, 0.12);
+    }
+
+    .sidebar {
+        position: sticky;
+        top: 126px;
+    }
+
+    .field-group {
+        display: grid;
+        gap: 8px;
+    }
+
+    .field-group label {
+        font-weight: 700;
+        color: var(--ink-900);
+    }
+
+    .field-group input,
+    .field-group select {
+        width: 100%;
+        padding: 13px 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(233, 72, 134, 0.14);
+        background: #fffdfd;
+        color: var(--ink-900);
+        outline: none;
+    }
+
+    .field-group input:focus,
+    .field-group select:focus {
+        border-color: rgba(233, 72, 134, 0.36);
+        box-shadow: 0 0 0 4px rgba(233, 72, 134, 0.08);
+    }
+
+    .filter-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .category-list {
+        margin-top: 22px;
+    }
+
+    .results-counter {
+        display: grid;
+        gap: 4px;
+        justify-items: end;
+    }
+
+    .category-link--active,
+    .category-link:hover {
+        background: var(--rose-100);
+        color: var(--rose-700);
+    }
+
+    .catalog-main {
+        display: grid;
+        gap: 22px;
+    }
+
+    .results-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .catalog-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .product-card {
+        overflow: hidden;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 22px 42px rgba(75, 24, 46, 0.12);
+    }
+
+    .product-media {
+        min-height: 300px;
+        background: linear-gradient(180deg, #fff7fb, #ffe4f0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .product-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 10px;
+    }
+
+    .product-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        padding: 20px;
+        color: var(--rose-700);
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .product-body {
+        display: grid;
+        gap: 14px;
+        padding: 20px;
+    }
+
+    .product-topline,
+    .product-price-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .stock-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 11px;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .stock-badge--ok {
+        background: #e6f8f0;
+        color: #1e8d60;
+    }
+
+    .stock-badge--low {
+        background: #fff3df;
+        color: #bc7a08;
+    }
+
+    .stock-badge--out {
+        background: #fde8e8;
+        color: #bf4343;
+    }
+
+    .product-body h3 {
+        font-size: 1.15rem;
+    }
+
+    .product-description {
+        color: var(--ink-700);
+        line-height: 1.68;
+        min-height: 68px;
+    }
+
+    .product-price {
+        color: var(--rose-700);
+        font-size: 1.4rem;
+        font-weight: 800;
+    }
+
+    .product-copy {
+        color: var(--ink-500);
+        font-size: 0.92rem;
+    }
+
+    .product-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .empty-state {
+        padding: 34px;
+        border-radius: 24px;
+        text-align: center;
+        background: linear-gradient(180deg, #fff9fc, #fffefe);
+        border: 1px dashed rgba(233, 72, 134, 0.22);
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+
+    .pagination a,
+    .pagination span {
+        min-width: 42px;
+        min-height: 42px;
+        padding: 0 14px;
+        border-radius: 12px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--rose-50);
+        color: var(--rose-700);
+        font-weight: 700;
+    }
+
+    .pagination .is-current {
+        background: var(--rose-600);
+        color: #fff;
+    }
+
+    @media (max-width: 980px) {
+        .hero-grid,
+        .about-grid,
+        .meta-grid,
+        .catalog-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+            position: static;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .hero-actions,
+        .hero-stats,
+        .product-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-copy h1 {
+            font-size: clamp(2rem, 11vw, 2.8rem);
+            line-height: 1.02;
+        }
+
+        .hero-grid,
+        .about-grid,
+        .meta-grid,
+        .catalog-layout {
+            gap: 16px;
+        }
+
+        .hero-actions {
+            display: grid;
+        }
+
+        .hero-actions a,
+        .filter-actions a,
+        .filter-actions button,
+        .cta-band .btn {
+            width: 100%;
+        }
+
+        .hero-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .trust-grid,
+        .line-grid,
+        .steps-grid {
+            gap: 14px;
+        }
+
+        .line-card,
+        .step-card {
+            padding: 18px;
+        }
+
+        .hero-panel,
+        .section-card,
+        .sidebar,
+        .catalog-main {
+            padding: 18px;
+        }
+
+        .cta-band {
+            padding: 18px;
+        }
+
+        .sidebar {
+            top: 0;
+        }
+
+        .category-list {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-top: 18px;
+        }
+
+        .category-link {
+            min-height: 100%;
+        }
+
+        .results-header {
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .results-counter {
+            justify-items: start;
+        }
+
+        .product-card {
+            border-radius: 22px;
+        }
+
+        .product-media {
+            min-height: 240px;
+        }
+
+        .product-body {
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .product-description {
+            min-height: 0;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .hero-stats,
+        .category-list {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card">
+    <div class="hero-grid">
+        <div class="hero-copy">
+            <h1>Detalles personalizados para hacer inolvidables tus fechas especiales.</h1>
+            <p>
+                En Casita de Regalos encuentras desayunos sorpresa, cajas personalizadas, detalles
+                romanticos, opciones tematicas y regalos pensados para sorprender en Bello, Medellin
+                y el area metropolitana.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#catalogo" class="btn">Ver catalogo</a>
+                <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <strong>{{ resumen.total_productos }}</strong>
+                    <span>detalles en catalogo</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>{{ resumen.disponibles }}</strong>
+                    <span>opciones disponibles</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>{{ resumen.categorias }}</strong>
+                    <span>categorias activas</span>
+                </div>
+            </div>
+        </div>
+
+        <aside class="hero-panel">
+            <span class="section-kicker">Favoritos</span>
+            <h2>Detalles destacados</h2>
+            <p>Una seleccion lista para inspirarte y ayudarte a elegir mas rapido.</p>
+
+            <div class="feature-list">
+                {% for producto in destacados %}
+                    <a href="{% url 'detalle_producto' producto.id %}" class="feature-item">
+                        <span>
+                            <strong>{{ producto.nombre }}</strong><br>
+                            <small>{{ producto.categoria.nombre|default:"Sin categoria" }}</small>
+                        </span>
+                        <strong>{{ producto.precio|cop }} COP</strong>
+                    </a>
+                {% empty %}
+                    <p>No hay productos destacados todavia.</p>
+                {% endfor %}
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="section-stack">
+    <section class="about-grid">
+        <article class="section-card page-card">
+            <span class="section-kicker">Casita de Regalos</span>
+            <h2>{{ quienes_somos.titulo }}</h2>
+            <p>{{ quienes_somos.descripcion }}</p>
+        </article>
+
+        <article class="section-card page-card">
+            <span class="section-kicker">Cobertura</span>
+            <h2>Atencion cercana y personalizada</h2>
+            <ul class="meta-list">
+                <li><strong>Ubicacion</strong><br>{{ quienes_somos.cobertura }}</li>
+                <li><strong>Personalizacion</strong><br>{{ quienes_somos.promesa }}</li>
+                <li><strong>Asesoria</strong><br>Te ayudamos a elegir el detalle ideal segun la ocasion.</li>
+            </ul>
+        </article>
+    </section>
+
+    <section class="section-card page-card">
+        <span class="section-kicker">Por que elegirnos</span>
+        <h2>Detalles hechos con amor y pensados para sorprender</h2>
+        <div class="trust-grid">
+            {% for pilar in pilares_servicio %}
+                <article class="line-card">
+                    <span class="soft-pill">{{ pilar.etiqueta }}</span>
+                    <h3>{{ pilar.titulo }}</h3>
+                    <p>{{ pilar.descripcion }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section-card page-card">
+        <span class="section-kicker">Categorias favoritas</span>
+        <h2>Encuentra el detalle ideal para cada ocasion</h2>
+        <div class="line-grid">
+            {% for linea in lineas_detalle %}
+                <article class="line-card">
+                    <span class="pill">Coleccion</span>
+                    <h3>{{ linea.titulo }}</h3>
+                    <p>{{ linea.descripcion }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section-card page-card" id="como-comprar">
+        <span class="section-kicker">Como comprar</span>
+        <h2>Tu compra en pocos pasos</h2>
+        <div class="steps-grid">
+            {% for paso in pasos_compra %}
+                <article class="step-card">
+                    <span class="step-number">{{ paso.numero }}</span>
+                    <h3>{{ paso.titulo }}</h3>
+                    <p>{{ paso.descripcion }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="meta-grid">
+        <article class="section-card page-card">
+            <span class="section-kicker">Medios de pago</span>
+            <h2>Formas de confirmar tu pedido</h2>
+            <p class="meta-copy">Una vez definido el detalle, te compartimos el valor final y los datos para reservar tu pedido.</p>
+            <ul class="meta-list">
+                {% for metodo in metodos_pago %}
+                    <li><strong>{{ metodo.titulo }}</strong><br>{{ metodo.descripcion }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+
+        <article class="section-card page-card">
+            <span class="section-kicker">Informacion importante</span>
+            <h2>Condiciones para tu compra</h2>
+            <p class="meta-copy">Estas recomendaciones te ayudan a reservar con tiempo y a recibir un detalle bien preparado.</p>
+            <ul class="meta-list">
+                {% for politica in politicas_clave %}
+                    <li>{{ politica }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+    </section>
+
+    <section class="cta-band">
+        <div>
+            <strong>Ya sabes que detalle quieres?</strong>
+            <p class="meta-copy">Escribenos por WhatsApp y te ayudamos a cotizarlo o personalizarlo.</p>
+        </div>
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotizacion</a>
+    </section>
+</div>
+
+<section class="catalog-layout" id="catalogo">
+    <aside class="sidebar page-card">
+        <span class="section-kicker">Catalogo</span>
+        <h2>Busca tu detalle</h2>
+        <p>
+            Filtra por categoria, busca por nombre o recorre el catalogo completo hasta encontrar
+            la opcion ideal.
+        </p>
+
+        <form method="get" action="{% url 'inicio' %}#catalogo" class="filter-form js-catalog-form">
+            <div class="field-group">
+                <label for="q">Buscar producto</label>
+                <input id="q" type="text" name="q" value="{{ filtros.q }}" placeholder="Ej. desayuno sorpresa, rosas, caja premium">
+            </div>
+
+            <div class="field-group">
+                <label for="categoria">Categoria</label>
+                <select id="categoria" name="categoria">
+                    <option value="">Todas</option>
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}" {% if categoria_actual and categoria_actual.id == categoria.id %}selected{% endif %}>
+                            {{ categoria.nombre }} ({{ categoria.total_productos }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label for="orden">Ordenar por</label>
+                <select id="orden" name="orden">
+                    {% for value, label in opciones_orden %}
+                        <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-actions">
+                <button type="submit" class="btn">Aplicar filtros</button>
+                <a href="{% url 'inicio' %}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
+            </div>
+        </form>
+
+        <div class="category-list">
+            <a href="{% url 'inicio' %}#catalogo" class="category-link js-catalog-nav {% if not categoria_actual %}category-link--active{% endif %}">
+                <span>Todo el catalogo</span>
+                <strong>{{ resumen.total_productos }}</strong>
+            </a>
+            {% for categoria in categorias %}
+                <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-link js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}category-link--active{% endif %}">
+                    <span>{{ categoria.nombre }}</span>
+                    <strong>{{ categoria.total_productos }}</strong>
+                </a>
+            {% endfor %}
+        </div>
+    </aside>
+
+    <div class="catalog-main page-card">
+        <div class="results-header">
+            <div>
+                <span class="section-kicker">Catalogo disponible</span>
+                <h2>
+                    {% if categoria_actual %}
+                        {{ categoria_actual.nombre }}
+                    {% else %}
+                        Todos los productos
+                    {% endif %}
+                </h2>
+                <p>
+                    {% if filtros.q %}
+                        Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
+                    {% else %}
+                        Explora los productos disponibles y elige el que mejor se adapte a tu ocasion.
+                    {% endif %}
+                </p>
+            </div>
+
+            <div class="results-counter">
+                <strong>{{ page_obj.paginator.count }}</strong>
+                <span> resultados</span>
+            </div>
+        </div>
+
+        {% if productos %}
+            <div class="catalog-grid">
+                {% for producto in productos %}
+                    <article class="product-card">
+                        <div class="product-media">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                            {% else %}
+                                <div class="product-placeholder">Imagen pendiente de cargar</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="product-body">
+                            <div class="product-topline">
+                                <span class="pill">{{ producto.categoria.nombre|default:"Sin categoria" }}</span>
+                                <span class="{{ producto.stock_badge_class }}">{{ producto.stock_label }}</span>
+                            </div>
+
+                            <div>
+                                <h3>{{ producto.nombre }}</h3>
+                                <p class="product-description">
+                                    {% if producto.descripcion %}
+                                        {{ producto.descripcion|truncatechars:120 }}
+                                    {% else %}
+                                        Detalle personalizable para fechas especiales.
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                            <div class="product-price-row">
+                                <div>
+                                    <div class="product-price">Desde {{ producto.precio|cop }} COP</div>
+                                    <div class="product-copy">Personalizable segun la ocasion</div>
+                                </div>
+                            </div>
+
+                            <div class="product-actions">
+                                <a href="{% url 'detalle_producto' producto.id %}" class="btn-outline">Ver detalle</a>
+                                {% if producto.disponible %}
+                                    <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar</button>
+                                    </form>
+                                {% else %}
+                                    <span class="btn-disabled">Agotado</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="pagination" aria-label="Paginacion">
+                    {% if page_obj.has_previous %}
+                        <a href="?q={{ filtros.q }}&categoria={{ filtros.categoria_id }}&orden={{ filtros.orden }}&page={{ page_obj.previous_page_number }}#catalogo" class="js-catalog-nav">Anterior</a>
+                    {% endif %}
+
+                    {% for number in page_obj.paginator.page_range %}
+                        {% if number == page_obj.number %}
+                            <span class="is-current">{{ number }}</span>
+                        {% elif number >= page_obj.number|add:-2 and number <= page_obj.number|add:2 %}
+                            <a href="?q={{ filtros.q }}&categoria={{ filtros.categoria_id }}&orden={{ filtros.orden }}&page={{ number }}#catalogo" class="js-catalog-nav">{{ number }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?q={{ filtros.q }}&categoria={{ filtros.categoria_id }}&orden={{ filtros.orden }}&page={{ page_obj.next_page_number }}#catalogo" class="js-catalog-nav">Siguiente</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <h3>No encontramos productos con esos filtros.</h3>
+                <p>Prueba con otra busqueda o vuelve al catalogo completo.</p>
+                <a href="{% url 'inicio' %}#catalogo" class="btn js-catalog-nav">Volver al catalogo completo</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

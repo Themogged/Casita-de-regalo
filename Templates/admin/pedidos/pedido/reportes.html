@@ -1,0 +1,430 @@
+{% extends "admin/base_site.html" %}
+{% load moneda %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    .report-shell {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    .report-hero,
+    .report-filters,
+    .report-grid section,
+    .report-table {
+        background: #ffffff;
+        border: 1px solid #f2d2df;
+        border-radius: 22px;
+        box-shadow: 0 20px 45px rgba(210, 89, 137, 0.08);
+    }
+
+    .report-hero {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, #fff7fb, #ffe3ef);
+    }
+
+    .report-hero h1 {
+        margin: 0 0 0.35rem;
+        font-size: 1.8rem;
+    }
+
+    .report-hero p {
+        margin: 0;
+        color: #8a4b6c;
+        max-width: 48rem;
+        line-height: 1.55;
+    }
+
+    .report-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .report-actions a,
+    .report-filters button,
+    .report-filters a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.35rem;
+        min-height: 2.85rem;
+        padding: 0.8rem 1.1rem;
+        border: 0;
+        border-radius: 999px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .report-actions a.primary,
+    .report-filters button {
+        background: #d95896;
+        color: #ffffff;
+    }
+
+    .report-actions a.secondary,
+    .report-filters a {
+        background: #fff1f7;
+        color: #9f2f6a;
+    }
+
+    .report-filters {
+        padding: 1.25rem;
+    }
+
+    .report-filters form {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .report-field {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .report-field label {
+        font-weight: 700;
+    }
+
+    .report-field input,
+    .report-field select {
+        min-height: 2.75rem;
+        padding: 0.65rem 0.8rem;
+        border: 1px solid #f1bfd3;
+        border-radius: 14px;
+        background: #fffdfd;
+    }
+
+    .report-filter-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .report-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.25rem;
+    }
+
+    .report-grid section,
+    .report-table {
+        padding: 1.25rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .stat-card {
+        padding: 1rem;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #ffffff, #fff7fb);
+        border: 1px solid #f6d8e4;
+    }
+
+    .stat-card span {
+        display: block;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #8b5670;
+        margin-bottom: 0.45rem;
+    }
+
+    .stat-card strong {
+        font-size: 1.55rem;
+        color: #521a37;
+    }
+
+    .status-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-top: 1rem;
+    }
+
+    .status-pill {
+        padding: 0.65rem 0.9rem;
+        border-radius: 999px;
+        background: #fff2f7;
+        color: #88285a;
+        font-weight: 700;
+    }
+
+    .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-head h2 {
+        margin: 0;
+        font-size: 1.15rem;
+    }
+
+    .section-head p {
+        margin: 0;
+        color: #8b5670;
+    }
+
+    .top-list {
+        display: grid;
+        gap: 0.9rem;
+    }
+
+    .top-item {
+        display: grid;
+        gap: 0.45rem;
+    }
+
+    .top-meta {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.75rem;
+        align-items: baseline;
+    }
+
+    .top-meta strong {
+        color: #511d37;
+    }
+
+    .bar-track {
+        height: 10px;
+        background: #fde5ef;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+    .bar-track span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #ec76ad, #cc4f8d);
+    }
+
+    .report-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .report-table th,
+    .report-table td {
+        padding: 0.9rem 0.7rem;
+        border-bottom: 1px solid #f7d9e5;
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .report-table th {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: #8a4b6c;
+    }
+
+    .report-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .empty-state {
+        padding: 1.25rem;
+        border-radius: 16px;
+        background: #fff8fb;
+        color: #7d4d65;
+    }
+
+    .mini-link {
+        color: #a83470;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    @media (max-width: 1100px) {
+        .report-filters form,
+        .stats-grid,
+        .report-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 760px) {
+        .report-filters form,
+        .stats-grid,
+        .report-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .top-meta,
+        .section-head,
+        .report-filter-actions {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .report-table {
+            overflow-x: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Inicio</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{{ changelist_url }}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; Reportes
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="report-shell">
+    <section class="report-hero">
+        <h1>{{ title }}</h1>
+        <p>{{ subtitle }}</p>
+        <div class="report-actions">
+            <a class="primary" href="{{ export_excel_url }}">Exportar Excel</a>
+            <a class="secondary" href="{{ export_pdf_url }}">Exportar PDF</a>
+            <a class="secondary" href="{{ changelist_url }}">Volver al listado</a>
+        </div>
+    </section>
+
+    <section class="report-filters">
+        <form method="get">
+            <div class="report-field">
+                <label for="id_fecha_desde">Desde</label>
+                <input id="id_fecha_desde" type="date" name="fecha_desde" value="{{ filtros.fecha_desde }}">
+            </div>
+            <div class="report-field">
+                <label for="id_fecha_hasta">Hasta</label>
+                <input id="id_fecha_hasta" type="date" name="fecha_hasta" value="{{ filtros.fecha_hasta }}">
+            </div>
+            <div class="report-field">
+                <label for="id_estado">Estado</label>
+                <select id="id_estado" name="estado">
+                    <option value="">Todos</option>
+                    {% for key, label in estados %}
+                    <option value="{{ key }}"{% if filtros.estado == key %} selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="report-field">
+                <label for="id_q">Buscar</label>
+                <input id="id_q" type="text" name="q" value="{{ filtros.q }}" placeholder="Pedido o producto">
+            </div>
+            <div class="report-filter-actions">
+                <button type="submit">Aplicar filtros</button>
+                <a href="{% url 'admin:pedidos_pedido_reportes' %}">Limpiar</a>
+            </div>
+        </form>
+    </section>
+
+    <section class="report-grid">
+        <section>
+            <div class="section-head">
+                <div>
+                    <h2>Resumen ejecutivo</h2>
+                    <p>Vista rapida para revisar movimiento, ticket y volumen vendido.</p>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <span>Pedidos</span>
+                    <strong>{{ resumen.pedidos_total }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Ventas totales</span>
+                    <strong>{{ resumen.ventas_totales|cop }}</strong>
+                </article>
+                <article class="stat-card">
+                    <span>Unidades</span>
+                    <strong>{{ resumen.unidades_totales }}</strong>
+                </article>
+            </div>
+            <div class="status-row">
+                {% for item in resumen.estado_totales %}
+                <span class="status-pill">{{ item.label }}: {{ item.count }}</span>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section>
+            <div class="section-head">
+                <div>
+                    <h2>Top productos</h2>
+                    <p>Los detalles que mas estan empujando el catalogo.</p>
+                </div>
+            </div>
+            {% if top_productos %}
+            <div class="top-list">
+                {% for producto in top_productos %}
+                <article class="top-item">
+                    <div class="top-meta">
+                        <strong>{{ producto.producto_nombre }}</strong>
+                        <span>{{ producto.unidades }} uds - {{ producto.ingresos|cop }}</span>
+                    </div>
+                    <div class="bar-track">
+                        <span style="width: {{ producto.barra }}%"></span>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">Todavia no hay datos suficientes para mostrar productos destacados.</div>
+            {% endif %}
+        </section>
+    </section>
+
+    <section class="report-table">
+        <div class="section-head">
+            <div>
+                <h2>Pedidos recientes</h2>
+                <p>Acceso rapido a los pedidos mas relevantes y su descarga individual.</p>
+            </div>
+        </div>
+        {% if pedidos_recientes %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Items</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos_recientes %}
+                <tr>
+                    <td>#{{ pedido.id }}</td>
+                    <td>{{ pedido.fecha|date:"Y-m-d H:i" }}</td>
+                    <td>{{ pedido.get_estado_display }}</td>
+                    <td>{{ pedido.total|cop }}</td>
+                    <td>{{ pedido.items.count }}</td>
+                    <td>
+                        <a class="mini-link" href="{% url 'admin:pedidos_pedido_change' pedido.pk %}">Editar</a>
+                        &nbsp;|&nbsp;
+                        <a class="mini-link" href="{% url 'admin:pedidos_pedido_pdf' pedido.pk %}">PDF</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">No hay pedidos con esos filtros. Prueba cambiando fechas, estado o busqueda.</div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}

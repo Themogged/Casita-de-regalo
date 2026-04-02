@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{% block title %}Casita de Regalos{% endblock %}</title>
+    <style>
+        :root {
+            --rose-25: #fffbfd;
+            --rose-50: #fff5f9;
+            --rose-100: #ffe6f0;
+            --rose-200: #ffd1e2;
+            --rose-300: #ffb5d1;
+            --rose-400: #ff8fba;
+            --rose-500: #ff5c99;
+            --rose-600: #e94886;
+            --rose-700: #b92d63;
+            --mint-100: #effcf7;
+            --mint-300: #bfeedd;
+            --ink-900: #6f1d48;
+            --ink-700: #8d4f6c;
+            --ink-500: #ab7892;
+            --white: #ffffff;
+            --hero-text: #7a1f4b;
+            --hero-text-soft: rgba(122, 31, 75, 0.82);
+            --shadow-lg: 0 24px 60px rgba(62, 28, 45, 0.12);
+            --shadow-md: 0 18px 35px rgba(62, 28, 45, 0.08);
+            --radius-xl: 28px;
+            --max-width: 1180px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--ink-900);
+            background:
+                radial-gradient(circle at top left, rgba(255, 199, 222, 0.72), transparent 34%),
+                linear-gradient(180deg, var(--rose-25) 0%, var(--rose-50) 44%, var(--white) 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        button {
+            border: 0;
+            font: inherit;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            backdrop-filter: blur(18px);
+            background: rgba(255, 255, 255, 0.86);
+            border-bottom: 1px solid rgba(233, 72, 134, 0.12);
+        }
+
+        .header-inner,
+        .category-strip-inner,
+        .page-shell,
+        .footer-inner {
+            width: min(var(--max-width), calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+            min-height: 78px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.96);
+            box-shadow: 0 10px 24px rgba(185, 45, 99, 0.16);
+            background: var(--white);
+        }
+
+        .brand-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand small {
+            color: var(--ink-500);
+            font-size: 0.84rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .brand strong {
+            font-size: 1.35rem;
+            letter-spacing: 0.01em;
+        }
+
+        .header-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .header-link {
+            padding: 10px 14px;
+            border-radius: 999px;
+            color: var(--ink-700);
+            font-weight: 600;
+        }
+
+        .header-link:hover {
+            background: var(--rose-50);
+            color: var(--rose-700);
+        }
+
+        .cart-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+            color: var(--white);
+            box-shadow: 0 14px 25px rgba(233, 72, 134, 0.22);
+            font-weight: 700;
+        }
+
+        .cart-count {
+            min-width: 28px;
+            padding: 6px 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.18);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .category-strip {
+            padding: 14px 0 18px;
+        }
+
+        .category-strip-inner {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .category-strip-inner::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-pill {
+            white-space: nowrap;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(233, 72, 134, 0.14);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--ink-700);
+            font-weight: 600;
+            box-shadow: 0 10px 22px rgba(185, 45, 99, 0.06);
+        }
+
+        .category-pill:hover {
+            border-color: rgba(233, 72, 134, 0.26);
+            color: var(--rose-700);
+        }
+
+        .page-shell {
+            padding: 18px 0 70px;
+        }
+
+        .hero-card {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+            padding: 36px;
+            border-radius: var(--radius-xl);
+            background:
+                radial-gradient(circle at 90% 15%, rgba(255, 255, 255, 0.45), transparent 18%),
+                linear-gradient(135deg, #fff9fc 0%, #ffd9e9 38%, #ff8fba 100%);
+            color: var(--hero-text);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-card::after {
+            content: "";
+            position: absolute;
+            inset: auto -60px -90px auto;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.34);
+        }
+
+        .hero-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(233, 72, 134, 0.1);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            body.reveal-ready .reveal-on-scroll {
+                opacity: 0;
+                transform: translateY(24px) scale(0.985);
+                filter: blur(6px);
+                transition:
+                    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+                    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+                    filter 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+                transition-delay: var(--reveal-delay, 0ms);
+                will-change: opacity, transform, filter;
+            }
+
+            body.reveal-ready .reveal-on-scroll.is-visible {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        .messages {
+            position: fixed;
+            top: 94px;
+            right: 18px;
+            z-index: 90;
+            display: grid;
+            gap: 10px;
+            width: min(360px, calc(100% - 36px));
+        }
+
+        .message {
+            padding: 14px 16px;
+            border-radius: 16px;
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .message.success {
+            background: #2d9d78;
+        }
+
+        .message.warning {
+            background: #d99114;
+        }
+
+        .message.error {
+            background: #d65a5a;
+        }
+
+        .site-footer {
+            border-top: 1px solid rgba(233, 72, 134, 0.12);
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        .footer-inner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 34px 0;
+        }
+
+        .footer-card h3,
+        .footer-card h4 {
+            margin-bottom: 10px;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .footer-brand img {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(233, 72, 134, 0.12);
+        }
+
+        .footer-card p,
+        .footer-card a {
+            color: var(--ink-700);
+            line-height: 1.7;
+        }
+
+        .footer-card a:hover {
+            color: var(--rose-700);
+        }
+
+        .footer-bottom {
+            padding: 0 0 28px;
+            text-align: center;
+            color: var(--ink-500);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 860px) {
+            .header-inner {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+                padding: 14px 0;
+            }
+
+            .hero-card {
+                padding: 28px 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page-shell,
+            .category-strip {
+                width: 100%;
+            }
+
+            .header-inner,
+            .category-strip-inner,
+            .page-shell,
+            .footer-inner {
+                width: min(var(--max-width), calc(100% - 22px));
+            }
+
+            .header-links {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .header-links::-webkit-scrollbar {
+                display: none;
+            }
+
+            .brand {
+                align-items: center;
+                gap: 12px;
+            }
+
+            .brand-copy strong {
+                font-size: 1.15rem;
+            }
+
+            .brand-copy small {
+                font-size: 0.75rem;
+            }
+
+            .header-link {
+                flex-shrink: 0;
+                padding: 9px 13px;
+                background: rgba(255, 255, 255, 0.9);
+                border: 1px solid rgba(233, 72, 134, 0.1);
+            }
+
+            .cart-btn {
+                width: auto;
+                justify-content: center;
+                margin-left: auto;
+                flex-shrink: 0;
+            }
+
+            .hero-card {
+                margin-bottom: 22px;
+                padding: 24px 18px;
+                border-radius: 24px;
+            }
+
+            .page-shell {
+                padding: 14px 0 54px;
+            }
+
+            .messages {
+                top: auto;
+                right: 12px;
+                bottom: 14px;
+                width: min(320px, calc(100% - 24px));
+            }
+
+            .footer-inner {
+                gap: 16px;
+                padding: 26px 0;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="{% url 'inicio' %}" class="brand">
+                <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos" class="brand-mark">
+                <div class="brand-copy">
+                    <small>acompañando tus sentimientos</small>
+                    <strong>Casita de Regalos</strong>
+                </div>
+            </a>
+
+            <nav class="header-links">
+                <a href="{% url 'inicio' %}" class="header-link">Inicio</a>
+                <a href="{% url 'inicio' %}#catalogo" class="header-link">Catalogo</a>
+                <a href="{% url 'inicio' %}#como-comprar" class="header-link">Como comprar</a>
+                <a href="#footer" class="header-link">Contacto</a>
+                <a href="{% url 'ver_carrito' %}" class="cart-btn">
+                    <span>Carrito</span>
+                    <span class="cart-count">{{ carrito_total }}</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    {% if categorias_menu %}
+        <div class="category-strip">
+            <div class="category-strip-inner">
+                <a href="{% url 'inicio' %}" class="category-pill">Todos</a>
+                {% for categoria in categorias_menu %}
+                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
+                        {{ categoria.nombre }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main class="page-shell">
+        {% block hero %}{% endblock %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer" id="footer">
+        <div class="footer-inner">
+            <div class="footer-card">
+                <div class="footer-brand">
+                    <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos">
+                    <div>
+                        <h3>Casita de Regalos</h3>
+                        <p>acompañando tus sentimientos</p>
+                    </div>
+                </div>
+                <p>Tienda online en Bello, Antioquia, pensada para sorprender con detalles personalizados y una compra guiada por WhatsApp.</p>
+            </div>
+
+            <div class="footer-card">
+                <h4>Explorar</h4>
+                <a href="{% url 'inicio' %}#catalogo">Ver catalogo</a>
+                <a href="{% url 'ver_carrito' %}">Ir al carrito</a>
+            </div>
+
+            <div class="footer-card">
+                <h4>Atencion</h4>
+                <p>Bello, Antioquia, Colombia</p>
+                <p>Atencion en Medellin y area metropolitana</p>
+                <p>WhatsApp: +57 311 626 2155</p>
+            </div>
+
+            <div class="footer-card">
+                <h4>Redes</h4>
+                <a href="https://instagram.com/casitaregalos" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            2026 Casita de Regalos. Hecho con amor.
+        </div>
+    </footer>
+
+    <script>
+        const getMessagesContainer = () => {
+            let container = document.querySelector('.messages');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'messages';
+                document.body.appendChild(container);
+            }
+            return container;
+        };
+
+        const showToast = (message, level = 'success') => {
+            const container = getMessagesContainer();
+            const item = document.createElement('div');
+            item.className = `message ${level}`;
+            item.textContent = message;
+            container.appendChild(item);
+
+            requestAnimationFrame(() => {
+                item.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+            });
+
+            setTimeout(() => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(-6px)';
+                setTimeout(() => item.remove(), 260);
+            }, 2200);
+        };
+
+        const updateCartCount = (value) => {
+            document.querySelectorAll('.cart-count').forEach((node) => {
+                node.textContent = value;
+            });
+        };
+
+        let revealObserver = null;
+
+        const revealTargetSelectors = [
+            '.hero-card',
+            '.hero-panel',
+            '.hero-stat',
+            '.page-card',
+            '.line-card',
+            '.step-card',
+            '.product-card',
+            '.cta-band',
+            '.empty-state',
+            '.detail-media',
+            '.related-item',
+            '.footer-card',
+        ].join(', ');
+
+        const revealGroupSelectors = [
+            '.hero-stats',
+            '.about-grid',
+            '.trust-grid',
+            '.line-grid',
+            '.steps-grid',
+            '.meta-grid',
+            '.catalog-layout',
+            '.catalog-grid',
+            '.pagination',
+            '.detail-layout',
+            '.related-grid',
+            '.footer-inner',
+        ];
+
+        const getRevealObserver = () => {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return null;
+            }
+
+            if (!revealObserver) {
+                revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (!entry.isIntersecting) return;
+                        entry.target.classList.add('is-visible');
+                        revealObserver.unobserve(entry.target);
+                    });
+                }, {
+                    threshold: 0.14,
+                    rootMargin: '0px 0px -8% 0px',
+                });
+            }
+
+            return revealObserver;
+        };
+
+        const initScrollReveal = (scope = document) => {
+            const targets = [...scope.querySelectorAll(revealTargetSelectors)];
+            if (!targets.length) return;
+
+            targets.forEach((node) => {
+                node.classList.add('reveal-on-scroll');
+            });
+
+            revealGroupSelectors.forEach((selector) => {
+                scope.querySelectorAll(selector).forEach((group) => {
+                    [...group.children]
+                        .filter((child) => child.classList && child.classList.contains('reveal-on-scroll'))
+                        .forEach((child, index) => {
+                            child.style.setProperty('--reveal-delay', `${Math.min(index, 5) * 70}ms`);
+                        });
+                });
+            });
+
+            const observer = getRevealObserver();
+            if (!observer) {
+                targets.forEach((node) => node.classList.add('is-visible'));
+                return;
+            }
+
+            document.body.classList.add('reveal-ready');
+            targets.forEach((node) => {
+                if (node.classList.contains('is-visible')) return;
+                observer.observe(node);
+            });
+        };
+
+        const fetchCatalogSection = async (url, options = {}) => {
+            const currentCatalog = document.querySelector('#catalogo');
+            if (!currentCatalog) return;
+            if (currentCatalog.dataset.loading === 'true') return;
+
+            currentCatalog.dataset.loading = 'true';
+            currentCatalog.classList.add('is-loading');
+
+            try {
+                const response = await fetch(url, {
+                    method: options.method || 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    credentials: 'same-origin',
+                    body: options.body || null,
+                });
+
+                if (!response.ok) {
+                    window.location.href = url;
+                    return;
+                }
+
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const nextCatalog = doc.querySelector('#catalogo');
+
+                if (!nextCatalog) {
+                    window.location.href = url;
+                    return;
+                }
+
+                currentCatalog.replaceWith(nextCatalog);
+                initScrollReveal(nextCatalog);
+                if (options.pushState !== false) {
+                    window.history.pushState({ catalog: true }, '', url);
+                }
+            } catch (error) {
+                window.location.href = url;
+            } finally {
+                const catalog = document.querySelector('#catalogo');
+                if (catalog) {
+                    catalog.dataset.loading = 'false';
+                    catalog.classList.remove('is-loading');
+                }
+            }
+        };
+
+        const getCsrfToken = (form) => {
+            return (
+                form.querySelector('input[name=csrfmiddlewaretoken]')?.value
+                || document.querySelector('meta[name="csrf-token"]')?.content
+                || ''
+            );
+        };
+
+        document.addEventListener('submit', async (event) => {
+            const catalogForm = event.target.closest('.js-catalog-form');
+            if (catalogForm) {
+                event.preventDefault();
+                const formData = new FormData(catalogForm);
+                const params = new URLSearchParams();
+
+                for (const [key, value] of formData.entries()) {
+                    params.append(key, value);
+                }
+
+                const baseUrl = catalogForm.action.split('#', 1)[0];
+                const targetUrl = `${baseUrl}?${params.toString()}#catalogo`;
+                await fetchCatalogSection(targetUrl);
+                return;
+            }
+
+            const form = event.target.closest('.js-add-to-cart-form');
+            if (!form) return;
+
+            const button = event.submitter || form.querySelector('.js-add-to-cart');
+            if (!button) return;
+
+            event.preventDefault();
+            if (button.dataset.loading === 'true') return;
+
+            const originalText = button.textContent.trim();
+            button.dataset.loading = 'true';
+            button.style.pointerEvents = 'none';
+            button.style.opacity = '0.72';
+            button.textContent = 'Agregando...';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCsrfToken(form),
+                    },
+                    credentials: 'same-origin',
+                });
+
+                const data = await response.json();
+                showToast(data.message || 'Producto actualizado.', data.level || (response.ok ? 'success' : 'warning'));
+
+                if (typeof data.cart_total !== 'undefined') {
+                    updateCartCount(data.cart_total);
+                }
+            } catch (error) {
+                showToast('No pudimos agregar el producto en este momento.', 'error');
+            } finally {
+                button.dataset.loading = 'false';
+                button.style.pointerEvents = '';
+                button.style.opacity = '';
+                button.textContent = originalText;
+            }
+        });
+
+        document.addEventListener('click', async (event) => {
+            const catalogLink = event.target.closest('.js-catalog-nav');
+            if (!catalogLink) return;
+            if (catalogLink.target && catalogLink.target !== '_self') return;
+
+            event.preventDefault();
+            await fetchCatalogSection(catalogLink.href);
+        });
+
+        window.addEventListener('popstate', async () => {
+            if (!window.location.pathname.endsWith('/')) return;
+            if (!document.querySelector('#catalogo')) return;
+            await fetchCatalogSection(window.location.href, { pushState: false });
+        });
+
+        initScrollReveal();
+
+        setTimeout(() => {
+            document.querySelectorAll('.message').forEach((message) => {
+                message.style.opacity = '0';
+                message.style.transform = 'translateY(-6px)';
+            });
+        }, 2600);
+    </script>
+</body>
+</html>
