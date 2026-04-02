@@ -29,10 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"],
 )
 
-CSRF_TRUSTED_ORIGINS = env_list(
-    "DJANGO_CSRF_TRUSTED_ORIGINS",
-    ["https://casita-de-regalos.onrender.com"],
-)
+CSRF_TRUSTED_ORIGINS = [
+    "https://casita-de-regalos.onrender.com",
+]
 
 
 INSTALLED_APPS = [
