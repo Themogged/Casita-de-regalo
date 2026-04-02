@@ -32,7 +32,7 @@ ALLOWED_HOSTS = env_list(
 
 CSRF_TRUSTED_ORIGINS = env_list(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
-    ["http://localhost:8000", "http://127.0.0.1:8000"],
+    ["https://casita-de-regalos.onrender.com"],
 )
 
 
