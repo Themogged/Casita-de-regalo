@@ -11,11 +11,11 @@
     .meta-grid,
     .catalog-layout {
         display: grid;
-        gap: 24px;
+        gap: 20px;
     }
 
     .hero-grid {
-        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.9fr);
+        grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.85fr);
         align-items: end;
     }
 
@@ -28,7 +28,7 @@
     }
 
     .catalog-layout {
-        grid-template-columns: 280px minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr);
         align-items: start;
     }
 
@@ -38,7 +38,7 @@
     }
 
     .home-flow {
-        gap: 28px;
+        gap: 22px;
     }
 
     .section-stack {
@@ -123,10 +123,10 @@
     .product-card,
     .step-card,
     .line-card {
-        border-radius: 24px;
+        border-radius: 22px;
         border: 1px solid rgba(233, 72, 134, 0.1);
-        background: rgba(255, 255, 255, 0.94);
-        box-shadow: 0 18px 36px rgba(75, 24, 46, 0.06);
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 14px 28px rgba(75, 24, 46, 0.05);
     }
 
     .hero-stat {
@@ -144,7 +144,7 @@
     .section-card,
     .sidebar,
     .catalog-main {
-        padding: 24px;
+        padding: 22px;
     }
 
     .hero-panel h2,
@@ -195,25 +195,18 @@
         padding: 0 18px;
         border-radius: 14px;
         font-weight: 700;
-        transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
     }
 
     .btn {
-        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        background: var(--rose-600);
         color: #fff;
-        box-shadow: 0 12px 24px rgba(233, 72, 134, 0.18);
     }
 
     .btn-secondary,
     .btn-outline {
-        background: var(--rose-50);
+        background: #fffafc;
         color: var(--rose-700);
-    }
-
-    .btn:active,
-    .btn-secondary:active,
-    .btn-outline:active {
-        transform: scale(0.98);
+        border: 1px solid rgba(233, 72, 134, 0.12);
     }
 
     .btn-disabled {
@@ -241,7 +234,8 @@
         align-items: flex-start;
         padding: 14px 16px;
         border-radius: 18px;
-        background: var(--rose-50);
+        background: #fffafc;
+        border: 1px solid rgba(233, 72, 134, 0.08);
         color: var(--ink-700);
     }
 
@@ -302,7 +296,7 @@
         flex-wrap: wrap;
         padding: 18px 20px;
         border-radius: 20px;
-        background: linear-gradient(135deg, rgba(255, 237, 244, 0.92), rgba(255, 251, 253, 0.98));
+        background: #fffafc;
         border: 1px solid rgba(233, 72, 134, 0.12);
     }
 
@@ -407,13 +401,73 @@
 
     .category-link--active,
     .category-link:hover {
-        background: var(--rose-100);
+        background: #fff2f8;
         color: var(--rose-700);
     }
 
     .catalog-main {
         display: grid;
-        gap: 22px;
+        gap: 18px;
+    }
+
+    .catalog-toolbar {
+        display: grid;
+        gap: 14px;
+        padding: 18px;
+        border-radius: 20px;
+        background: #fff7fb;
+        border: 1px solid rgba(233, 72, 134, 0.1);
+    }
+
+    .catalog-toolbar-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .catalog-toolbar-copy {
+        display: grid;
+        gap: 6px;
+    }
+
+    .catalog-toolbar-copy p {
+        margin: 0;
+        color: var(--ink-700);
+        line-height: 1.6;
+    }
+
+    .catalog-toolbar-copy strong {
+        font-size: 1.15rem;
+        color: var(--ink-900);
+    }
+
+    .catalog-chip-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .catalog-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 16px;
+        border-radius: 999px;
+        border: 1px solid rgba(233, 72, 134, 0.12);
+        background: #ffffff;
+        color: var(--ink-700);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .catalog-chip.is-active,
+    .catalog-chip:hover {
+        background: var(--rose-600);
+        border-color: var(--rose-600);
+        color: #fff;
     }
 
     .results-header {
@@ -425,24 +479,19 @@
     }
 
     .catalog-grid {
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
     }
 
     .product-card {
         overflow: hidden;
         display: grid;
         grid-template-rows: auto 1fr;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .product-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 22px 42px rgba(75, 24, 46, 0.12);
     }
 
     .product-media {
-        min-height: 300px;
-        background: linear-gradient(180deg, #fff7fb, #ffe4f0);
+        min-height: 310px;
+        background: linear-gradient(180deg, #fff9fc, #fff0f6);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -468,8 +517,8 @@
 
     .product-body {
         display: grid;
-        gap: 14px;
-        padding: 20px;
+        gap: 12px;
+        padding: 18px;
     }
 
     .product-topline,
@@ -557,7 +606,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: var(--rose-50);
+        background: #fff7fb;
+        border: 1px solid rgba(233, 72, 134, 0.1);
         color: var(--rose-700);
         font-weight: 700;
     }
@@ -655,21 +705,12 @@
         .trust-grid,
         .line-grid,
         .steps-grid {
-            grid-template-columns: none;
-            grid-auto-flow: column;
-            grid-auto-columns: minmax(240px, 82vw);
+            grid-template-columns: 1fr;
+            grid-auto-flow: row;
+            grid-auto-columns: auto;
             gap: 12px;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scroll-snap-type: x proximity;
-            padding: 2px 2px 8px;
-        }
-
-        .feature-list > *,
-        .trust-grid > *,
-        .line-grid > *,
-        .steps-grid > * {
-            scroll-snap-align: start;
+            overflow: visible;
+            padding: 0;
         }
 
         .line-card,
@@ -757,6 +798,22 @@
             align-items: flex-start;
         }
 
+        .catalog-toolbar {
+            padding: 16px;
+        }
+
+        .catalog-chip-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .catalog-chip-row::-webkit-scrollbar {
+            display: none;
+        }
+
         .results-header h2 {
             font-size: 1.4rem;
             margin-bottom: 6px;
@@ -774,29 +831,15 @@
         }
 
         .product-card {
-            grid-template-columns: 104px minmax(0, 1fr);
-            grid-template-rows: 1fr;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr;
             border-radius: 20px;
             align-items: stretch;
-            transition: none;
-        }
-
-        .catalog-grid,
-        .product-card,
-        .product-media,
-        .product-media img,
-        .product-body,
-        .product-actions,
-        .product-actions .btn,
-        .product-actions .btn-outline,
-        .btn-disabled {
-            transition: none !important;
-            animation: none !important;
         }
 
         .product-media {
-            min-height: auto;
-            height: 100%;
+            min-height: 240px;
+            height: auto;
         }
 
         .product-body {
@@ -866,10 +909,6 @@
         .hero-stats,
         .category-list {
             grid-template-columns: 1fr;
-        }
-
-        .product-card {
-            grid-template-columns: 98px minmax(0, 1fr);
         }
 
         .product-body {
@@ -960,41 +999,13 @@
 
         <article class="section-card page-card">
             <span class="section-kicker">Cobertura</span>
-            <h2>Atencion cercana y personalizada</h2>
+            <h2>Atención cercana y personalizada</h2>
             <ul class="meta-list">
-                <li><strong>Ubicacion</strong><br>{{ quienes_somos.cobertura }}</li>
-                <li><strong>Personalizacion</strong><br>{{ quienes_somos.promesa }}</li>
+                <li><strong>Ubicación</strong><br>{{ quienes_somos.cobertura }}</li>
+                <li><strong>Personalización</strong><br>{{ quienes_somos.promesa }}</li>
                 <li><strong>Asesoría</strong><br>Te ayudamos a elegir el detalle ideal según la ocasión.</li>
             </ul>
         </article>
-    </section>
-
-    <section class="section-card page-card">
-        <span class="section-kicker">Por que elegirnos</span>
-        <h2>Detalles hechos con amor y pensados para sorprender</h2>
-        <div class="trust-grid">
-            {% for pilar in pilares_servicio %}
-                <article class="line-card">
-                    <span class="soft-pill">{{ pilar.etiqueta }}</span>
-                    <h3>{{ pilar.titulo }}</h3>
-                    <p>{{ pilar.descripcion }}</p>
-                </article>
-            {% endfor %}
-        </div>
-    </section>
-
-    <section class="section-card page-card">
-        <span class="section-kicker">Categorías favoritas</span>
-        <h2>Encuentra el detalle ideal para cada ocasión</h2>
-        <div class="line-grid">
-            {% for linea in lineas_detalle %}
-                <article class="line-card">
-                    <span class="pill">Coleccion</span>
-                    <h3>{{ linea.titulo }}</h3>
-                    <p>{{ linea.descripcion }}</p>
-                </article>
-            {% endfor %}
-        </div>
     </section>
 
     <section class="section-card page-card" id="como-comprar">
@@ -1045,74 +1056,30 @@
 </div>
 
 <section class="catalog-layout" id="catalogo">
-    <aside class="sidebar page-card">
-        <div class="sidebar-intro">
-            <span class="section-kicker">Catálogo</span>
-            <h2>Busca tu detalle</h2>
-            <p>
-                Filtra por categoría, busca por nombre o recorre el catálogo completo hasta encontrar
-                la opción ideal.
-            </p>
-        </div>
-
-        <details class="sidebar-panel" open>
-            <summary>Filtrar catálogo</summary>
-            <div class="sidebar-panel-body">
-                <form method="get" action="{% url 'inicio' %}#catalogo" class="filter-form js-catalog-form">
-                    <div class="field-group">
-                        <label for="q">Buscar producto</label>
-                        <input id="q" type="text" name="q" value="{{ filtros.q }}" placeholder="Ej. desayuno sorpresa, rosas, caja premium">
-                    </div>
-
-                    <div class="field-group">
-                        <label for="categoria">Categoría</label>
-                        <select id="categoria" name="categoria">
-                            <option value="">Todas</option>
-                            {% for categoria in categorias %}
-                                <option value="{{ categoria.id }}" {% if categoria_actual and categoria_actual.id == categoria.id %}selected{% endif %}>
-                                    {{ categoria.nombre }} ({{ categoria.total_productos }})
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="field-group">
-                        <label for="orden">Ordenar por</label>
-                        <select id="orden" name="orden">
-                            {% for value, label in opciones_orden %}
-                                <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="filter-actions">
-                        <button type="submit" class="btn">Aplicar filtros</button>
-                        <a href="{% url 'inicio' %}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
-                    </div>
-                </form>
-            </div>
-        </details>
-
-        <details class="sidebar-panel" open>
-            <summary>Categorías</summary>
-            <div class="sidebar-panel-body">
-                <div class="category-list">
-                    <a href="{% url 'inicio' %}#catalogo" class="category-link js-catalog-nav {% if not categoria_actual %}category-link--active{% endif %}">
-                        <span>Todo el catálogo</span>
-                        <strong>{{ resumen.total_productos }}</strong>
-                    </a>
-                    {% for categoria in categorias %}
-                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-link js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}category-link--active{% endif %}">
-                            <span>{{ categoria.nombre }}</span>
-                            <strong>{{ categoria.total_productos }}</strong>
-                        </a>
-                    {% endfor %}
+    <div class="catalog-main page-card">
+        <div class="catalog-toolbar">
+            <div class="catalog-toolbar-top">
+                <div class="catalog-toolbar-copy">
+                    <span class="section-kicker">Catálogo</span>
+                    <strong>Explora por categoría</strong>
+                    <p>Elige una línea y revisa los detalles disponibles sin salir del catálogo.</p>
+                </div>
+                <div class="results-counter">
+                    <strong>{{ page_obj.paginator.count }}</strong>
+                    <span> resultados</span>
                 </div>
             </div>
-        </details>
-    </aside>
 
-    <div class="catalog-main page-card">
+            <div class="catalog-chip-row">
+                <a href="{% url 'inicio' %}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}">Todos</a>
+                {% for categoria in categorias %}
+                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}">
+                        {{ categoria.nombre }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
         <div class="results-header">
             <div>
                 <span class="section-kicker">Catálogo disponible</span>
@@ -1132,10 +1099,6 @@
                 </p>
             </div>
 
-            <div class="results-counter">
-                <strong>{{ page_obj.paginator.count }}</strong>
-                <span> resultados</span>
-            </div>
         </div>
 
         {% if productos %}

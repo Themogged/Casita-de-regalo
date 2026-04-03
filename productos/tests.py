@@ -54,7 +54,8 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Bello, Antioquia')
         self.assertContains(response, 'Cómo comprar')
-        self.assertContains(response, 'Categorías favoritas')
+        self.assertContains(response, 'Formas de confirmar tu pedido')
+        self.assertContains(response, 'Explora por categoría')
 
     def test_inicio_envia_headers_de_seguridad(self):
         response = self.client.get(reverse('inicio'), secure=True)
@@ -89,9 +90,9 @@ class CatalogoViewsTests(TestCase):
         response = self.client.get(reverse('inicio'), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'action="/#catalogo"')
         self.assertContains(response, '?q=&categoria=&orden=destacados&page=2#catalogo')
         self.assertContains(
             response,
             f'{reverse("inicio")}?categoria={self.categoria_regalos.id}#catalogo',
         )
+        self.assertContains(response, 'class="catalog-chip js-catalog-nav is-active"')
