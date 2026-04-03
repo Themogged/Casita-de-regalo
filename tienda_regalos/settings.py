@@ -23,7 +23,7 @@ SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     "dev-only-change-this-before-production-2026",
 )
-DEBUG = True
+DEBUG = False
 
 
 ALLOWED_HOSTS = ["casita-de-regalos.onrender.com"]
