@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -12,17 +11,11 @@ def env_bool(name, default=False):
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
-def env_list(name, default=None):
-    value = os.getenv(name)
-    if value is None:
-        return list(default or [])
-    return [item.strip() for item in value.split(",") if item.strip()]
-
-
 SECRET_KEY = os.getenv(
     "DJANGO_SECRET_KEY",
     "dev-only-change-this-before-production-2026",
 )
+
 DEBUG = False
 
 
@@ -46,8 +39,10 @@ INSTALLED_APPS = [
     "pedidos",
 ]
 
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # 🔥 IMPORTANTE
     "tienda_regalos.middleware.AdminRateLimitMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -58,7 +53,9 @@ MIDDLEWARE = [
     "tienda_regalos.middleware.SecurityHeadersMiddleware",
 ]
 
+
 ROOT_URLCONF = "tienda_regalos.urls"
+
 
 TEMPLATES = [
     {
@@ -78,6 +75,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "tienda_regalos.wsgi.application"
 
@@ -104,10 +102,17 @@ USE_I18N = True
 USE_TZ = True
 
 
-STATIC_URL = "static/"
+# 🔥 STATIC FILES (CSS, JS, etc)
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
+# 🔥 MEDIA (IMÁGENES SUBIDAS)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -118,6 +123,7 @@ CACHES = {
         "LOCATION": "tienda-regalos-security",
     }
 }
+
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
@@ -136,23 +142,15 @@ SECURE_REFERRER_POLICY = "same-origin"
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin"
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+
 ADMIN_LOGIN_MAX_ATTEMPTS = int(os.getenv("DJANGO_ADMIN_LOGIN_MAX_ATTEMPTS", "5"))
 ADMIN_LOGIN_BLOCK_MINUTES = int(os.getenv("DJANGO_ADMIN_LOGIN_BLOCK_MINUTES", "15"))
 
-if DEBUG:
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SECURE_SSL_REDIRECT = False
-    SECURE_HSTS_SECONDS = 0
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
-    SECURE_HSTS_PRELOAD = False
-else:
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
-    SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", "31536000"))
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool(
-        "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS",
-        True,
-    )
-    SECURE_HSTS_PRELOAD = env_bool("DJANGO_SECURE_HSTS_PRELOAD", True)
+
+# 🔥 PRODUCCIÓN
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
