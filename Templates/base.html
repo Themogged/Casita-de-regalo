@@ -115,22 +115,7 @@
         .brand small {
             color: var(--ink-500);
             font-size: 0.84rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        .brand small,
-        .footer-brand p {
-            font-size: 0;
-        }
-
-        .brand small::before,
-        .footer-brand p::before {
-            content: "acompa\00f1ando tus sentimientos";
-            font-size: 0.84rem;
-            line-height: 1.4;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
+            letter-spacing: 0.06em;
         }
 
         .brand strong {
@@ -351,12 +336,6 @@
             line-height: 1.7;
         }
 
-        .footer-brand p::before {
-            font-size: 0.92rem;
-            letter-spacing: 0.01em;
-            text-transform: none;
-        }
-
         .footer-card a:hover {
             color: var(--rose-700);
         }
@@ -487,10 +466,6 @@
                 line-height: 1.25;
             }
 
-            .brand small::before {
-                font-size: 0.75rem;
-            }
-
             .header-link {
                 flex-shrink: 0;
                 padding: 8px 12px;
@@ -548,7 +523,7 @@
             <a href="{% url 'inicio' %}" class="brand">
                 <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos" class="brand-mark">
                 <div class="brand-copy">
-                    <small>acompañando tus sentimientos</small>
+                    <small>ACOMPA&Ntilde;ANDO TUS SENTIMIENTOS</small>
                     <strong>Casita de Regalos</strong>
                 </div>
             </a>
@@ -599,7 +574,7 @@
                     <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos">
                     <div>
                         <h3>Casita de Regalos</h3>
-                        <p>acompañando tus sentimientos</p>
+                        <p>acompa&ntilde;ando tus sentimientos</p>
                     </div>
                 </div>
                 <p>Tienda online en Bello, Antioquia, pensada para sorprender con detalles personalizados y una compra guiada por WhatsApp.</p>
