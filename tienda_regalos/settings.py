@@ -26,7 +26,7 @@ SECRET_KEY = os.getenv(
 DEBUG = True
 
 
-ALLOWED_HOSTS = ["https://casita-de-regalos.onrender.com"]
+ALLOWED_HOSTS = ["casita-de-regalos.onrender.com"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://casita-de-regalos.onrender.com",
