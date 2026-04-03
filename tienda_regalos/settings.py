@@ -16,7 +16,7 @@ SECRET_KEY = os.getenv(
     "dev-only-change-this-before-production-2026",
 )
 
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = ["casita-de-regalos.onrender.com"]
