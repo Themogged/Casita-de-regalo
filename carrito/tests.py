@@ -7,7 +7,7 @@ from productos.models import Categoria, Producto
 
 class CarritoViewsTests(TestCase):
     def setUp(self):
-        categoria = Categoria.objects.create(nombre='Cumpleanos test')
+        categoria = Categoria.objects.create(nombre='Cumpleaños test')
         self.producto = Producto.objects.create(
             nombre='Desayuno prueba',
             descripcion='Detalle para validar carrito.',

@@ -22,7 +22,7 @@ class PedidoAdminReportTests(TestCase):
         cls.pedido_confirmado = Pedido.objects.create(total=Decimal("81000"), estado="confirmado")
         PedidoItem.objects.create(
             pedido=cls.pedido_confirmado,
-            producto_nombre="Desayuno cumpleanero",
+            producto_nombre="Desayuno cumpleañero",
             cantidad=1,
             precio=Decimal("81000"),
         )
@@ -65,7 +65,7 @@ class PedidoAdminReportTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Desayuno cumpleanero")
+        self.assertContains(response, "Desayuno cumpleañero")
         self.assertNotContains(response, "Ramo premium")
 
     def test_export_excel_returns_xlsx_with_rows(self):
@@ -80,7 +80,7 @@ class PedidoAdminReportTests(TestCase):
 
         archive = ZipFile(BytesIO(response.content))
         worksheet = archive.read("xl/worksheets/sheet1.xml").decode("utf-8")
-        self.assertIn("Desayuno cumpleanero", worksheet)
+        self.assertIn("Desayuno cumpleañero", worksheet)
         self.assertIn("Ramo premium", worksheet)
 
     def test_export_pdf_of_single_order_returns_file(self):
