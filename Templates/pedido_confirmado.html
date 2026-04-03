@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+{% load moneda %}
+
+{% block title %}Pedido confirmado | Casita de Regalos{% endblock %}
+
+{% block extra_head %}
+<style>
+    .checkout-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+        gap: 24px;
+    }
+
+    .checkout-card,
+    .checkout-summary {
+        padding: 28px;
+    }
+
+    .checkout-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.78);
+        color: var(--rose-700);
+        font-size: 0.88rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .checkout-card h1 {
+        font-size: clamp(2.1rem, 4vw, 3.2rem);
+        margin-bottom: 14px;
+    }
+
+    .checkout-card p {
+        max-width: 640px;
+        line-height: 1.75;
+        color: var(--hero-text-soft);
+    }
+
+    .checkpoint-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .checkpoint-item {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 18px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(233, 72, 134, 0.1);
+    }
+
+    .checkpoint-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        color: #fff;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .checkout-summary h2 {
+        margin-bottom: 18px;
+        font-size: 1.35rem;
+    }
+
+    .checkout-meta {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .checkout-meta div {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(233, 72, 134, 0.1);
+        color: var(--ink-700);
+    }
+
+    .checkout-items {
+        display: grid;
+        gap: 12px;
+        margin-bottom: 22px;
+    }
+
+    .checkout-item-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 18px;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fffafd, #fff1f7);
+        border: 1px solid rgba(233, 72, 134, 0.08);
+    }
+
+    .checkout-item-row small {
+        display: block;
+        margin-top: 4px;
+        color: var(--ink-500);
+    }
+
+    .checkout-total {
+        margin-bottom: 22px;
+        padding: 18px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, rgba(233, 72, 134, 0.1), rgba(255, 143, 186, 0.18));
+    }
+
+    .checkout-total span {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--ink-700);
+    }
+
+    .checkout-total strong {
+        font-size: 2rem;
+        color: var(--rose-700);
+    }
+
+    .checkout-actions {
+        display: grid;
+        gap: 12px;
+    }
+
+    .checkout-btn,
+    .checkout-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 50px;
+        padding: 0 18px;
+        border-radius: 16px;
+        font-weight: 700;
+    }
+
+    .checkout-btn {
+        background: linear-gradient(135deg, #1fa971, #46cf95);
+        color: #fff;
+    }
+
+    .checkout-link {
+        background: var(--rose-50);
+        color: var(--rose-700);
+    }
+
+    .checkout-note {
+        margin-top: 16px;
+        color: var(--ink-500);
+        line-height: 1.65;
+        font-size: 0.95rem;
+    }
+
+    @media (max-width: 860px) {
+        .checkout-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .checkout-card,
+        .checkout-summary {
+            padding: 22px;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .checkout-card,
+        .checkout-summary {
+            padding: 20px 18px;
+        }
+
+        .checkout-item-row,
+        .checkout-meta div {
+            flex-direction: column;
+            gap: 6px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card">
+    <div class="checkout-card">
+        <span class="checkout-kicker">Pedido registrado</span>
+        <h1>Tu compra ya quedo lista para confirmar</h1>
+        <p>
+            El pedido <strong>#{{ pedido.id }}</strong> ya se guardo dentro de la tienda. Ahora solo falta
+            enviar la confirmacion por WhatsApp para que Casita de Regalos lo reciba y te acompanen con el siguiente paso.
+        </p>
+
+        <div class="checkpoint-list">
+            <div class="checkpoint-item">
+                <span class="checkpoint-badge">1</span>
+                <div>
+                    <strong>Pedido guardado</strong>
+                    <p>La reserva ya quedo registrada con sus productos y total final.</p>
+                </div>
+            </div>
+            <div class="checkpoint-item">
+                <span class="checkpoint-badge">2</span>
+                <div>
+                    <strong>Resumen claro antes de salir</strong>
+                    <p>Revisa aqui mismo el detalle completo antes de abrir el chat.</p>
+                </div>
+            </div>
+            <div class="checkpoint-item">
+                <span class="checkpoint-badge">3</span>
+                <div>
+                    <strong>Confirmacion por WhatsApp</strong>
+                    <p>Desde el boton verde se envia el mensaje listo con el numero de pedido.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="checkout-shell">
+    <article class="page-card checkout-summary">
+        <h2>Resumen del pedido</h2>
+
+        <div class="checkout-meta">
+            <div>
+                <span>Numero de pedido</span>
+                <strong>#{{ pedido.id }}</strong>
+            </div>
+            <div>
+                <span>Estado</span>
+                <strong>{{ pedido.get_estado_display }}</strong>
+            </div>
+            <div>
+                <span>Fecha</span>
+                <strong>{{ pedido.fecha|date:"d/m/Y H:i" }}</strong>
+            </div>
+        </div>
+
+        <div class="checkout-items">
+            {% for item in pedido.items.all %}
+                <div class="checkout-item-row">
+                    <div>
+                        <strong>{{ item.producto_nombre }}</strong>
+                        <small>{{ item.cantidad }} unidad{% if item.cantidad != 1 %}es{% endif %}</small>
+                    </div>
+                    <strong>{{ item.subtotal|cop }}</strong>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="checkout-total">
+            <span>Total del pedido</span>
+            <strong>{{ pedido.total|cop }}</strong>
+        </div>
+
+        <div class="checkout-actions">
+            <a href="{{ whatsapp_url }}" class="checkout-btn" target="_blank" rel="noopener noreferrer">
+                Abrir WhatsApp y confirmar
+            </a>
+            <a href="{% url 'inicio' %}#catalogo" class="checkout-link">
+                Volver al catalogo
+            </a>
+        </div>
+
+        <p class="checkout-note">
+            Si WhatsApp no se abre al primer intento, toca el boton verde de nuevo. El pedido ya quedo registrado.
+        </p>
+    </article>
+</section>
+{% endblock %}

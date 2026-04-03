@@ -1,6 +1,7 @@
 from decimal import Decimal
 from urllib.parse import quote, urlparse
 
+from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
@@ -51,6 +52,30 @@ def _carrito_total_items(carrito):
 
 def _es_ajax(request):
     return request.headers.get("x-requested-with") == "XMLHttpRequest"
+
+
+def _build_whatsapp_url_for_pedido(pedido):
+    lineas = [
+        "*Pedido - Casita de Regalos*",
+        "",
+        f"Pedido #{pedido.id}",
+    ]
+
+    for item in pedido.items.all():
+        lineas.append(
+            f"- {item.producto_nombre} x{item.cantidad} = {_format_cop(item.subtotal())}"
+        )
+
+    lineas.extend(
+        [
+            "",
+            f"Total: {_format_cop(pedido.total)}",
+            "Quiero confirmar mi pedido",
+        ]
+    )
+
+    mensaje = "\n".join(lineas)
+    return f"https://wa.me/{settings.BUSINESS_WHATSAPP_NUMBER}?text={quote(mensaje)}"
 
 
 def _redirect_despues_de_agregar(request):
@@ -193,6 +218,24 @@ def eliminar_producto(request, producto_id):
     return redirect("ver_carrito")
 
 
+@require_GET
+def pedido_confirmado(request, pedido_id):
+    pedido = get_object_or_404(
+        Pedido.objects.prefetch_related("items"),
+        id=pedido_id,
+    )
+    whatsapp_url = _build_whatsapp_url_for_pedido(pedido)
+
+    return render(
+        request,
+        "pedido_confirmado.html",
+        {
+            "pedido": pedido,
+            "whatsapp_url": whatsapp_url,
+        },
+    )
+
+
 @require_POST
 def enviar_carrito_whatsapp(request):
     carrito = _get_carrito(request)
@@ -201,7 +244,6 @@ def enviar_carrito_whatsapp(request):
         messages.warning(request, "Tu carrito esta vacio.")
         return redirect("ver_carrito")
 
-    mensaje = "*Pedido - Casita de Regalos*\n\n"
     total = Decimal("0.00")
     items_pedido = []
 
@@ -235,8 +277,6 @@ def enviar_carrito_whatsapp(request):
             pedido = Pedido.objects.create(total=total)
 
             for producto, cantidad, subtotal in items_pedido:
-                mensaje += f"- {producto.nombre} x{cantidad} = {_format_cop(subtotal)}\n"
-
                 PedidoItem.objects.create(
                     pedido=pedido,
                     producto_nombre=producto.nombre,
@@ -250,10 +290,10 @@ def enviar_carrito_whatsapp(request):
         messages.error(request, "Hubo un problema con el carrito. Intenta nuevamente.")
         return redirect("ver_carrito")
 
-    mensaje += f"\nTotal: {_format_cop(total)}\n"
-    mensaje += f"Pedido #{pedido.id}"
-    mensaje += "\nQuiero confirmar mi pedido"
-
     _set_carrito(request, {})
-    url = f"https://wa.me/573116262155?text={quote(mensaje)}"
-    return redirect(url)
+    request.session["ultimo_pedido_id"] = pedido.id
+    messages.success(
+        request,
+        f"Pedido #{pedido.id} registrado. Revisa el resumen y confirma por WhatsApp.",
+    )
+    return redirect("pedido_confirmado", pedido_id=pedido.id)

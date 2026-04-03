@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 
+from pedidos.models import Pedido, PedidoItem
 from productos.models import Categoria, Producto
 
 
@@ -64,3 +65,36 @@ class CarritoViewsTests(TestCase):
         response = self.client.get(reverse('agregar_carrito', args=[self.producto.id]))
 
         self.assertEqual(response.status_code, 405)
+
+    def test_finalizar_compra_redirige_a_confirmacion_y_descuenta_stock(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        response = self.client.post(reverse('comprar_whatsapp'))
+
+        pedido = Pedido.objects.get()
+        self.assertRedirects(
+            response,
+            reverse('pedido_confirmado', args=[pedido.id]),
+        )
+
+        self.producto.refresh_from_db()
+        self.assertEqual(self.producto.stock, 2)
+        self.assertEqual(self.client.session.get('carrito', {}), {})
+
+    def test_confirmacion_muestra_resumen_y_boton_de_whatsapp(self):
+        pedido = Pedido.objects.create(total='81000.00')
+        PedidoItem.objects.create(
+            pedido=pedido,
+            producto_nombre='Desayuno prueba',
+            cantidad=1,
+            precio='81000.00',
+        )
+
+        response = self.client.get(reverse('pedido_confirmado', args=[pedido.id]))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, f'#{pedido.id}')
+        self.assertContains(response, 'Abrir WhatsApp')
+        self.assertContains(response, '573116262155')
