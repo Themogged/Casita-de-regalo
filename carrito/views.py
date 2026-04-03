@@ -255,5 +255,5 @@ def enviar_carrito_whatsapp(request):
     mensaje += "\nQuiero confirmar mi pedido"
 
     _set_carrito(request, {})
-    url = f"https://wa.me/573232259151?text={quote(mensaje)}"
+    url = f"https://wa.me/573116262155?text={quote(mensaje)}"
     return redirect(url)
