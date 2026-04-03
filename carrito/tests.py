@@ -91,3 +91,19 @@ class CarritoViewsTests(TestCase):
         self.producto.refresh_from_db()
         self.assertEqual(self.producto.stock, 2)
         self.assertEqual(self.client.session.get('carrito', {}), {})
+
+    def test_finalizar_compra_por_ajax_responde_con_url_de_whatsapp(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        response = self.client.post(
+            reverse('comprar_whatsapp'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['ok'], True)
+        self.assertEqual(response.json()['cart_total'], 0)
+        self.assertIn('https://wa.me/573116262155?text=', response.json()['whatsapp_url'])

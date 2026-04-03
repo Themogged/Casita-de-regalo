@@ -54,6 +54,17 @@ def _es_ajax(request):
     return request.headers.get("x-requested-with") == "XMLHttpRequest"
 
 
+def _json_checkout_error(message, status=400, redirect_url=None):
+    payload = {
+        "ok": False,
+        "level": "warning",
+        "message": message,
+    }
+    if redirect_url:
+        payload["redirect_url"] = redirect_url
+    return JsonResponse(payload, status=status)
+
+
 def _build_whatsapp_url_for_pedido(pedido):
     lineas = [
         "*Pedido - Casita de Regalos*",
@@ -223,7 +234,10 @@ def enviar_carrito_whatsapp(request):
     carrito = _get_carrito(request)
 
     if not carrito:
-        messages.warning(request, "Tu carrito esta vacio.")
+        mensaje = "Tu carrito esta vacio."
+        if _es_ajax(request):
+            return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, mensaje)
         return redirect("ver_carrito")
 
     total = Decimal("0.00")
@@ -241,15 +255,20 @@ def enviar_carrito_whatsapp(request):
                 producto = productos.get(int(producto_id))
 
                 if not producto:
-                    messages.error(request, "Uno de los productos ya no esta disponible.")
+                    mensaje = "Uno de los productos ya no esta disponible."
+                    if _es_ajax(request):
+                        return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
+                    messages.error(request, mensaje)
                     return redirect("ver_carrito")
 
                 if cantidad > producto.stock:
-                    messages.warning(
-                        request,
+                    mensaje = (
                         f"Solo hay {producto.stock} unidades disponibles de {producto.nombre}. "
-                        "Revisa tu carrito antes de continuar.",
+                        "Revisa tu carrito antes de continuar."
                     )
+                    if _es_ajax(request):
+                        return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
+                    messages.warning(request, mensaje)
                     return redirect("ver_carrito")
 
                 subtotal = producto.precio * cantidad
@@ -269,8 +288,25 @@ def enviar_carrito_whatsapp(request):
                 producto.stock -= cantidad
                 producto.save(update_fields=["stock"])
     except ValueError:
-        messages.error(request, "Hubo un problema con el carrito. Intenta nuevamente.")
+        mensaje = "Hubo un problema con el carrito. Intenta nuevamente."
+        if _es_ajax(request):
+            return _json_checkout_error(mensaje, status=500, redirect_url=reverse("ver_carrito"))
+        messages.error(request, mensaje)
         return redirect("ver_carrito")
 
     _set_carrito(request, {})
-    return redirect(_build_whatsapp_url_for_pedido(pedido))
+    whatsapp_url = _build_whatsapp_url_for_pedido(pedido)
+
+    if _es_ajax(request):
+        return JsonResponse(
+            {
+                "ok": True,
+                "level": "success",
+                "message": "Abriendo WhatsApp con tu pedido...",
+                "whatsapp_url": whatsapp_url,
+                "cart_total": 0,
+                "order_id": pedido.id,
+            }
+        )
+
+    return redirect(whatsapp_url)
