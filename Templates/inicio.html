@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% load moneda %}
 
-{% block title %}Catalogo | Casita de Regalos{% endblock %}
+{% block title %}Catálogo | Casita de Regalos{% endblock %}
 
 {% block extra_head %}
 <style>
+    .home-flow,
     .hero-grid,
     .about-grid,
     .meta-grid,
@@ -36,10 +37,22 @@
         scroll-margin-top: 132px;
     }
 
+    .home-flow {
+        gap: 28px;
+    }
+
+    .section-stack {
+        order: 1;
+    }
+
+    .catalog-layout {
+        order: 2;
+    }
+
     #catalogo.is-loading {
-        opacity: 0.58;
+        opacity: 1;
         pointer-events: none;
-        transition: opacity 0.18s ease;
+        transition: none;
     }
 
     .section-stack,
@@ -55,7 +68,22 @@
     }
 
     .section-stack {
-        margin-bottom: 28px;
+        margin-bottom: 0;
+    }
+
+    .feature-list,
+    .trust-grid,
+    .line-grid,
+    .steps-grid {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .feature-list::-webkit-scrollbar,
+    .trust-grid::-webkit-scrollbar,
+    .line-grid::-webkit-scrollbar,
+    .steps-grid::-webkit-scrollbar {
+        display: none;
     }
 
     .hero-copy h1 {
@@ -222,6 +250,10 @@
         color: var(--ink-900);
     }
 
+    .feature-item {
+        min-height: 100%;
+    }
+
     .trust-grid,
     .line-grid,
     .steps-grid {
@@ -277,6 +309,57 @@
     .sidebar {
         position: sticky;
         top: 126px;
+    }
+
+    .sidebar-intro {
+        display: grid;
+        gap: 10px;
+    }
+
+    .sidebar-panel {
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(233, 72, 134, 0.1);
+    }
+
+    .sidebar-panel summary {
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        color: var(--ink-900);
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .sidebar-panel summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .sidebar-panel summary::after {
+        content: "+";
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--rose-50);
+        color: var(--rose-700);
+        font-size: 1rem;
+        line-height: 1;
+    }
+
+    .sidebar-panel[open] summary::after {
+        content: "\2212";
+    }
+
+    .sidebar-panel-body {
+        display: grid;
+        gap: 18px;
+        margin-top: 16px;
     }
 
     .field-group {
@@ -484,6 +567,22 @@
         color: #fff;
     }
 
+    @media (min-width: 681px) {
+        .sidebar-panel {
+            margin-top: 22px;
+            padding-top: 0;
+            border-top: 0;
+        }
+
+        .sidebar-panel summary {
+            display: none;
+        }
+
+        .sidebar-panel-body {
+            margin-top: 0;
+        }
+    }
+
     @media (max-width: 980px) {
         .hero-grid,
         .about-grid,
@@ -499,9 +598,29 @@
 
     @media (max-width: 680px) {
         .hero-actions,
-        .hero-stats,
-        .product-actions {
+        .hero-stats {
             grid-template-columns: 1fr;
+        }
+
+        .home-flow {
+            gap: 18px;
+        }
+
+        .catalog-layout {
+            order: 1;
+        }
+
+        .section-stack {
+            order: 2;
+        }
+
+        .hero-copy p {
+            font-size: 0.98rem;
+            line-height: 1.65;
+        }
+
+        .section-stack {
+            gap: 16px;
         }
 
         .hero-copy h1 {
@@ -529,12 +648,28 @@
 
         .hero-stats {
             grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
         }
 
+        .feature-list,
         .trust-grid,
         .line-grid,
         .steps-grid {
-            gap: 14px;
+            grid-template-columns: none;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(240px, 82vw);
+            gap: 12px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x proximity;
+            padding: 2px 2px 8px;
+        }
+
+        .feature-list > *,
+        .trust-grid > *,
+        .line-grid > *,
+        .steps-grid > * {
+            scroll-snap-align: start;
         }
 
         .line-card,
@@ -542,28 +677,79 @@
             padding: 18px;
         }
 
+        .feature-item {
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 136px;
+            padding: 16px;
+        }
+
+        .hero-stat {
+            padding: 14px;
+        }
+
+        .hero-stat strong {
+            font-size: 1.45rem;
+        }
+
         .hero-panel,
         .section-card,
         .sidebar,
         .catalog-main {
-            padding: 18px;
+            padding: 16px;
+        }
+
+        .hero-panel p,
+        .section-card p,
+        .catalog-main p,
+        .sidebar p,
+        .meta-copy {
+            line-height: 1.62;
         }
 
         .cta-band {
-            padding: 18px;
+            padding: 16px;
         }
 
         .sidebar {
             top: 0;
         }
 
+        .sidebar-panel {
+            margin-top: 14px;
+            padding-top: 14px;
+        }
+
+        .sidebar-panel-body {
+            margin-top: 14px;
+            gap: 14px;
+        }
+
+        .field-group input,
+        .field-group select {
+            padding: 12px 13px;
+        }
+
+        .meta-list {
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .meta-list li {
+            padding: 12px 14px;
+            line-height: 1.58;
+        }
+
         .category-list {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            margin-top: 18px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 0;
         }
 
         .category-link {
             min-height: 100%;
+            padding: 13px 14px;
         }
 
         .results-header {
@@ -571,25 +757,108 @@
             align-items: flex-start;
         }
 
+        .results-header h2 {
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+
         .results-counter {
             justify-items: start;
+            padding: 8px 12px;
+            border-radius: 16px;
+            background: var(--rose-50);
+        }
+
+        .catalog-grid {
+            gap: 12px;
         }
 
         .product-card {
-            border-radius: 22px;
+            grid-template-columns: 104px minmax(0, 1fr);
+            grid-template-rows: 1fr;
+            border-radius: 20px;
+            align-items: stretch;
+            transition: none;
+        }
+
+        .catalog-grid,
+        .product-card,
+        .product-media,
+        .product-media img,
+        .product-body,
+        .product-actions,
+        .product-actions .btn,
+        .product-actions .btn-outline,
+        .btn-disabled {
+            transition: none !important;
+            animation: none !important;
         }
 
         .product-media {
-            min-height: 240px;
+            min-height: auto;
+            height: 100%;
         }
 
         .product-body {
-            gap: 12px;
-            padding: 16px;
+            gap: 10px;
+            padding: 14px;
+            align-content: start;
         }
 
         .product-description {
             min-height: 0;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-body h3 {
+            font-size: 1rem;
+            line-height: 1.3;
+        }
+
+        .line-card h3,
+        .step-card h3,
+        .feature-item strong {
+            font-size: 1rem;
+            line-height: 1.28;
+        }
+
+        .line-card p,
+        .step-card p,
+        .feature-item small,
+        .feature-item + p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.14rem;
+        }
+
+        .product-copy {
+            display: none;
+        }
+
+        .product-actions {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .product-actions .btn,
+        .product-actions .btn-outline,
+        .btn-disabled {
+            min-height: 42px;
+            padding: 0 12px;
+            font-size: 0.92rem;
+        }
+
+        .product-topline,
+        .product-price-row {
+            align-items: flex-start;
         }
     }
 
@@ -597,6 +866,28 @@
         .hero-stats,
         .category-list {
             grid-template-columns: 1fr;
+        }
+
+        .product-card {
+            grid-template-columns: 98px minmax(0, 1fr);
+        }
+
+        .product-body {
+            padding: 12px;
+        }
+
+        .product-topline {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .product-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .pagination {
+            gap: 8px;
         }
     }
 </style>
@@ -609,19 +900,19 @@
             <h1>Detalles personalizados para hacer inolvidables tus fechas especiales.</h1>
             <p>
                 En Casita de Regalos encuentras desayunos sorpresa, cajas personalizadas, detalles
-                romanticos, opciones tematicas y regalos pensados para sorprender en Bello, Medellin
-                y el area metropolitana.
+                románticos, opciones temáticas y regalos pensados para sorprender en Bello, Medellín
+                y el área metropolitana.
             </p>
 
             <div class="hero-actions">
-                <a href="#catalogo" class="btn">Ver catalogo</a>
+                <a href="#catalogo" class="btn">Ver catálogo</a>
                 <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
             </div>
 
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>detalles en catalogo</span>
+                    <span>detalles en catálogo</span>
                 </div>
                 <div class="hero-stat">
                     <strong>{{ resumen.disponibles }}</strong>
@@ -629,7 +920,7 @@
                 </div>
                 <div class="hero-stat">
                     <strong>{{ resumen.categorias }}</strong>
-                    <span>categorias activas</span>
+                    <span>categorías activas</span>
                 </div>
             </div>
         </div>
@@ -637,19 +928,19 @@
         <aside class="hero-panel">
             <span class="section-kicker">Favoritos</span>
             <h2>Detalles destacados</h2>
-            <p>Una seleccion lista para inspirarte y ayudarte a elegir mas rapido.</p>
+            <p>Una selección lista para inspirarte y ayudarte a elegir más rápido.</p>
 
             <div class="feature-list">
                 {% for producto in destacados %}
                     <a href="{% url 'detalle_producto' producto.id %}" class="feature-item">
                         <span>
                             <strong>{{ producto.nombre }}</strong><br>
-                            <small>{{ producto.categoria.nombre|default:"Sin categoria" }}</small>
+                            <small>{{ producto.categoria.nombre|default:"Sin categoría" }}</small>
                         </span>
                         <strong>{{ producto.precio|cop }} COP</strong>
                     </a>
                 {% empty %}
-                    <p>No hay productos destacados todavia.</p>
+                    <p>No hay productos destacados todavía.</p>
                 {% endfor %}
             </div>
         </aside>
@@ -658,6 +949,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="home-flow">
 <div class="section-stack">
     <section class="about-grid">
         <article class="section-card page-card">
@@ -672,7 +964,7 @@
             <ul class="meta-list">
                 <li><strong>Ubicacion</strong><br>{{ quienes_somos.cobertura }}</li>
                 <li><strong>Personalizacion</strong><br>{{ quienes_somos.promesa }}</li>
-                <li><strong>Asesoria</strong><br>Te ayudamos a elegir el detalle ideal segun la ocasion.</li>
+                <li><strong>Asesoría</strong><br>Te ayudamos a elegir el detalle ideal según la ocasión.</li>
             </ul>
         </article>
     </section>
@@ -692,8 +984,8 @@
     </section>
 
     <section class="section-card page-card">
-        <span class="section-kicker">Categorias favoritas</span>
-        <h2>Encuentra el detalle ideal para cada ocasion</h2>
+        <span class="section-kicker">Categorías favoritas</span>
+        <h2>Encuentra el detalle ideal para cada ocasión</h2>
         <div class="line-grid">
             {% for linea in lineas_detalle %}
                 <article class="line-card">
@@ -706,7 +998,7 @@
     </section>
 
     <section class="section-card page-card" id="como-comprar">
-        <span class="section-kicker">Como comprar</span>
+        <span class="section-kicker">Cómo comprar</span>
         <h2>Tu compra en pocos pasos</h2>
         <div class="steps-grid">
             {% for paso in pasos_compra %}
@@ -748,70 +1040,82 @@
             <strong>Ya sabes que detalle quieres?</strong>
             <p class="meta-copy">Escribenos por WhatsApp y te ayudamos a cotizarlo o personalizarlo.</p>
         </div>
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotizacion</a>
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotización</a>
     </section>
 </div>
 
 <section class="catalog-layout" id="catalogo">
     <aside class="sidebar page-card">
-        <span class="section-kicker">Catalogo</span>
-        <h2>Busca tu detalle</h2>
-        <p>
-            Filtra por categoria, busca por nombre o recorre el catalogo completo hasta encontrar
-            la opcion ideal.
-        </p>
-
-        <form method="get" action="{% url 'inicio' %}#catalogo" class="filter-form js-catalog-form">
-            <div class="field-group">
-                <label for="q">Buscar producto</label>
-                <input id="q" type="text" name="q" value="{{ filtros.q }}" placeholder="Ej. desayuno sorpresa, rosas, caja premium">
-            </div>
-
-            <div class="field-group">
-                <label for="categoria">Categoria</label>
-                <select id="categoria" name="categoria">
-                    <option value="">Todas</option>
-                    {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}" {% if categoria_actual and categoria_actual.id == categoria.id %}selected{% endif %}>
-                            {{ categoria.nombre }} ({{ categoria.total_productos }})
-                        </option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="field-group">
-                <label for="orden">Ordenar por</label>
-                <select id="orden" name="orden">
-                    {% for value, label in opciones_orden %}
-                        <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-
-            <div class="filter-actions">
-                <button type="submit" class="btn">Aplicar filtros</button>
-                <a href="{% url 'inicio' %}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
-            </div>
-        </form>
-
-        <div class="category-list">
-            <a href="{% url 'inicio' %}#catalogo" class="category-link js-catalog-nav {% if not categoria_actual %}category-link--active{% endif %}">
-                <span>Todo el catalogo</span>
-                <strong>{{ resumen.total_productos }}</strong>
-            </a>
-            {% for categoria in categorias %}
-                <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-link js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}category-link--active{% endif %}">
-                    <span>{{ categoria.nombre }}</span>
-                    <strong>{{ categoria.total_productos }}</strong>
-                </a>
-            {% endfor %}
+        <div class="sidebar-intro">
+            <span class="section-kicker">Catálogo</span>
+            <h2>Busca tu detalle</h2>
+            <p>
+                Filtra por categoría, busca por nombre o recorre el catálogo completo hasta encontrar
+                la opción ideal.
+            </p>
         </div>
+
+        <details class="sidebar-panel" open>
+            <summary>Filtrar catálogo</summary>
+            <div class="sidebar-panel-body">
+                <form method="get" action="{% url 'inicio' %}#catalogo" class="filter-form js-catalog-form">
+                    <div class="field-group">
+                        <label for="q">Buscar producto</label>
+                        <input id="q" type="text" name="q" value="{{ filtros.q }}" placeholder="Ej. desayuno sorpresa, rosas, caja premium">
+                    </div>
+
+                    <div class="field-group">
+                        <label for="categoria">Categoría</label>
+                        <select id="categoria" name="categoria">
+                            <option value="">Todas</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}" {% if categoria_actual and categoria_actual.id == categoria.id %}selected{% endif %}>
+                                    {{ categoria.nombre }} ({{ categoria.total_productos }})
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label for="orden">Ordenar por</label>
+                        <select id="orden" name="orden">
+                            {% for value, label in opciones_orden %}
+                                <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-actions">
+                        <button type="submit" class="btn">Aplicar filtros</button>
+                        <a href="{% url 'inicio' %}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
+                    </div>
+                </form>
+            </div>
+        </details>
+
+        <details class="sidebar-panel" open>
+            <summary>Categorías</summary>
+            <div class="sidebar-panel-body">
+                <div class="category-list">
+                    <a href="{% url 'inicio' %}#catalogo" class="category-link js-catalog-nav {% if not categoria_actual %}category-link--active{% endif %}">
+                        <span>Todo el catálogo</span>
+                        <strong>{{ resumen.total_productos }}</strong>
+                    </a>
+                    {% for categoria in categorias %}
+                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-link js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}category-link--active{% endif %}">
+                            <span>{{ categoria.nombre }}</span>
+                            <strong>{{ categoria.total_productos }}</strong>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </details>
     </aside>
 
     <div class="catalog-main page-card">
         <div class="results-header">
             <div>
-                <span class="section-kicker">Catalogo disponible</span>
+                <span class="section-kicker">Catálogo disponible</span>
                 <h2>
                     {% if categoria_actual %}
                         {{ categoria_actual.nombre }}
@@ -823,7 +1127,7 @@
                     {% if filtros.q %}
                         Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
                     {% else %}
-                        Explora los productos disponibles y elige el que mejor se adapte a tu ocasion.
+                        Explora los productos disponibles y elige el que mejor se adapte a tu ocasión.
                     {% endif %}
                 </p>
             </div>
@@ -848,7 +1152,7 @@
 
                         <div class="product-body">
                             <div class="product-topline">
-                                <span class="pill">{{ producto.categoria.nombre|default:"Sin categoria" }}</span>
+                                <span class="pill">{{ producto.categoria.nombre|default:"Sin categoría" }}</span>
                                 <span class="{{ producto.stock_badge_class }}">{{ producto.stock_label }}</span>
                             </div>
 
@@ -866,7 +1170,7 @@
                             <div class="product-price-row">
                                 <div>
                                     <div class="product-price">Desde {{ producto.precio|cop }} COP</div>
-                                    <div class="product-copy">Personalizable segun la ocasion</div>
+                                    <div class="product-copy">Personalizable según la ocasión</div>
                                 </div>
                             </div>
 
@@ -887,7 +1191,7 @@
             </div>
 
             {% if page_obj.paginator.num_pages > 1 %}
-                <nav class="pagination" aria-label="Paginacion">
+                <nav class="pagination" aria-label="Paginación">
                     {% if page_obj.has_previous %}
                         <a href="?q={{ filtros.q }}&categoria={{ filtros.categoria_id }}&orden={{ filtros.orden }}&page={{ page_obj.previous_page_number }}#catalogo" class="js-catalog-nav">Anterior</a>
                     {% endif %}
@@ -908,10 +1212,11 @@
         {% else %}
             <div class="empty-state">
                 <h3>No encontramos productos con esos filtros.</h3>
-                <p>Prueba con otra busqueda o vuelve al catalogo completo.</p>
-                <a href="{% url 'inicio' %}#catalogo" class="btn js-catalog-nav">Volver al catalogo completo</a>
+                <p>Prueba con otra búsqueda o vuelve al catálogo completo.</p>
+                <a href="{% url 'inicio' %}#catalogo" class="btn js-catalog-nav">Volver al catálogo completo</a>
             </div>
         {% endif %}
     </div>
 </section>
+</div>
 {% endblock %}

@@ -6,58 +6,58 @@ from .models import Categoria, Producto
 
 
 QUIENES_SOMOS = {
-    'titulo': 'Detalles personalizados para fechas que merecen algo magico',
+    'titulo': 'Detalles personalizados para fechas que merecen algo mágico',
     'descripcion': (
         'Casita de Regalos es una tienda online ubicada en Bello, Antioquia, enfocada en convertir '
-        'cumpleanos, aniversarios, fechas especiales y sorpresas en experiencias inolvidables. '
-        'La marca transmite ternura, cercania y una atencion guiada que acompana cada compra desde '
+        'cumpleaños, aniversarios, fechas especiales y sorpresas en experiencias inolvidables. '
+        'La marca transmite ternura, cercanía y una atención guiada que acompaña cada compra desde '
         'la idea inicial hasta la entrega final.'
     ),
-    'cobertura': 'Bello, Medellin y area metropolitana',
-    'promesa': 'Personalizacion segun gusto, presupuesto y ocasion',
+    'cobertura': 'Bello, Medellín y área metropolitana',
+    'promesa': 'Personalización según gusto, presupuesto y ocasión',
 }
 
 PILARES_SERVICIO = [
     {
         'titulo': 'Detalles personalizados',
-        'descripcion': 'Desayunos sorpresa, bandejas, cajas, globos, flores y regalos armados segun la ocasion.',
+        'descripcion': 'Desayunos sorpresa, bandejas, cajas, globos, flores y regalos armados según la ocasión.',
         'etiqueta': 'Hecho a medida',
     },
     {
-        'titulo': 'Asesoria por WhatsApp',
+        'titulo': 'Asesoría por WhatsApp',
         'descripcion': 'Cada pedido se conversa, se cotiza y se confirma antes de producirse para evitar errores.',
-        'etiqueta': 'Atencion directa',
+        'etiqueta': 'Atención directa',
     },
     {
         'titulo': 'Experiencia local premium',
-        'descripcion': 'Servicio pensado para Bello, Medellin y fechas especiales con presentacion impecable.',
+        'descripcion': 'Servicio pensado para Bello, Medellín y fechas especiales con presentación impecable.',
         'etiqueta': 'Cobertura cercana',
     },
 ]
 
 LINEAS_DETALLE = [
     {
-        'titulo': 'Cumpleanos y desayunos sorpresa',
+        'titulo': 'Cumpleaños y desayunos sorpresa',
         'descripcion': 'Bandejas, cajas, globos, frutas, waffles, snacks y mensajes para sorprender.',
     },
     {
-        'titulo': 'Amor, aniversario y romanticos',
+        'titulo': 'Amor, aniversario y románticos',
         'descripcion': 'Rosas, chocolates, corazones, cajas finas y detalles con frases personalizadas.',
     },
     {
         'titulo': 'Infantil y personajes',
-        'descripcion': 'Tematicas como Hello Kitty, Mario y propuestas visuales para ninos y celebraciones especiales.',
+        'descripcion': 'Temáticas como Hello Kitty, Mario y propuestas visuales para niños y celebraciones especiales.',
     },
     {
         'titulo': 'Mini detalles y opciones express',
-        'descripcion': 'Alternativas mas accesibles, utiles para regalos rapidos sin perder identidad visual.',
+        'descripcion': 'Alternativas más accesibles, útiles para regalos rápidos sin perder identidad visual.',
     },
 ]
 
 PIEZAS_EDITORIALES = [
     {
-        'titulo': 'Quienes somos',
-        'etiqueta': 'Presentacion de marca',
+        'titulo': 'Quiénes somos',
+        'etiqueta': 'Presentación de marca',
         'imagen': 'referencias/referencia-01.png',
         'descripcion': (
             'La marca se presenta como tienda online en Bello, Antioquia, con enfoque en hacer '
@@ -69,36 +69,36 @@ PIEZAS_EDITORIALES = [
         'etiqueta': 'Compra guiada',
         'imagen': 'referencias/referencia-02.png',
         'descripcion': (
-            'El flujo real ya esta claro: explorar referencias, elegir el detalle, recibir asesoria '
-            'por WhatsApp y confirmar el pago para entrar a produccion.'
+            'El flujo real ya está claro: explorar referencias, elegir el detalle, recibir asesoría '
+            'por WhatsApp y confirmar el pago para entrar a producción.'
         ),
     },
     {
-        'titulo': 'Politicas y condiciones',
+        'titulo': 'Políticas y condiciones',
         'etiqueta': 'Confianza y claridad',
         'imagen': 'referencias/referencia-20.png',
         'descripcion': (
             'Las reglas visibles ayudan a que la experiencia se vea profesional: anticipo, tiempos, '
-            'personalizacion, entregas inmediatas segun disponibilidad y precios variables.'
+            'personalización, entregas inmediatas según disponibilidad y precios variables.'
         ),
     },
 ]
 
 COLECCIONES_REFERENCIA = [
     {
-        'titulo': 'Cumpleanos y desayunos sorpresa',
+        'titulo': 'Cumpleaños y desayunos sorpresa',
         'descripcion': (
-            'La linea mas fuerte del catalogo visual: cajas, bandejas, globos, frutas, snacks y '
+            'La línea más fuerte del catálogo visual: cajas, bandejas, globos, frutas, snacks y '
             'desayunos presentados como experiencias listas para regalar.'
         ),
-        'mensaje': 'Hola, quiero cotizar una referencia de cumpleanos o desayuno sorpresa.',
+        'mensaje': 'Hola, quiero cotizar una referencia de cumpleaños o desayuno sorpresa.',
         'items': [
             {
                 'titulo': 'Cumple azul premium',
-                'etiqueta': 'Cumpleanos',
+                'etiqueta': 'Cumpleaños',
                 'precio': '$81.000 COP',
                 'imagen': 'referencias/referencia-03.png',
-                'descripcion': 'Referencia con caja en madera, globos, mix de fruta, waffles, jugo y decoracion para celebrar con tono elegante.',
+                'descripcion': 'Referencia con caja en madera, globos, mix de fruta, waffles, jugo y decoración para celebrar con tono elegante.',
                 'mensaje': 'Hola, quiero cotizar la referencia Cumple azul premium.',
             },
             {
@@ -106,39 +106,39 @@ COLECCIONES_REFERENCIA = [
                 'etiqueta': 'Desayuno sorpresa',
                 'precio': '$80.000 COP',
                 'imagen': 'referencias/referencia-04.png',
-                'descripcion': 'Bandejas y desayunos sorpresa con globos, yogurt, fruta, sandwich y detalles visuales suaves.',
+                'descripcion': 'Bandejas y desayunos sorpresa con globos, yogurt, fruta, sándwich y detalles visuales suaves.',
                 'mensaje': 'Hola, quiero cotizar la referencia Desayuno globos pastel.',
             },
             {
-                'titulo': 'Rose gold cumpleanero',
-                'etiqueta': 'Cumpleanos',
+                'titulo': 'Rose gold cumpleañero',
+                'etiqueta': 'Cumpleaños',
                 'precio': '$77.000 COP',
                 'imagen': 'referencias/referencia-07.png',
-                'descripcion': 'Caja en madera con globos rose gold, frutas, waffles, postre y mensaje para una celebracion delicada.',
-                'mensaje': 'Hola, quiero cotizar la referencia Rose gold cumpleanero.',
+                'descripcion': 'Caja en madera con globos rose gold, frutas, waffles, postre y mensaje para una celebración delicada.',
+                'mensaje': 'Hola, quiero cotizar la referencia Rose gold cumpleañero.',
             },
             {
-                'titulo': 'Cumple lila fantasia',
-                'etiqueta': 'Cumpleanos',
+                'titulo': 'Cumple lila fantasía',
+                'etiqueta': 'Cumpleaños',
                 'precio': '$75.000 COP',
                 'imagen': 'referencias/referencia-08.png',
-                'descripcion': 'Opciones juveniles y coloridas con snacks, desayunos y decoracion pensadas para regalos personalizados.',
-                'mensaje': 'Hola, quiero cotizar la referencia Cumple lila fantasia.',
+                'descripcion': 'Opciones juveniles y coloridas con snacks, desayunos y decoración pensadas para regalos personalizados.',
+                'mensaje': 'Hola, quiero cotizar la referencia Cumple lila fantasía.',
             },
             {
                 'titulo': 'Black and gold deluxe',
                 'etiqueta': 'Premium',
                 'precio': '$94.000 COP',
                 'imagen': 'referencias/referencia-09.png',
-                'descripcion': 'Detalle premium con globos negro y dorado, fruta, cereal y presentacion mas sofisticada.',
+                'descripcion': 'Detalle premium con globos negro y dorado, fruta, cereal y presentación más sofisticada.',
                 'mensaje': 'Hola, quiero cotizar la referencia Black and gold deluxe.',
             },
             {
                 'titulo': 'Desayuno mariposa rosa',
-                'etiqueta': 'Cumpleanos',
+                'etiqueta': 'Cumpleaños',
                 'precio': '$89.000 COP',
                 'imagen': 'referencias/referencia-17.png',
-                'descripcion': 'Mesa o bandeja en madera con globos en helio, mariposas, yogurt, jugo y decoracion femenina.',
+                'descripcion': 'Mesa o bandeja en madera con globos en helio, mariposas, yogurt, jugo y decoración femenina.',
                 'mensaje': 'Hola, quiero cotizar la referencia Desayuno mariposa rosa.',
             },
             {
@@ -146,76 +146,76 @@ COLECCIONES_REFERENCIA = [
                 'etiqueta': 'Desayuno sorpresa',
                 'precio': '$88.000 COP',
                 'imagen': 'referencias/referencia-18.png',
-                'descripcion': 'Combinaciones de snacks, globos metalizados y presentaciones compactas para regalos rapidos pero vistosos.',
+                'descripcion': 'Combinaciones de snacks, globos metalizados y presentaciones compactas para regalos rápidos pero vistosos.',
                 'mensaje': 'Hola, quiero cotizar la referencia Combo snack con globos.',
             },
         ],
     },
     {
-        'titulo': 'Amor, aniversarios y romanticos',
+        'titulo': 'Amor, aniversarios y románticos',
         'descripcion': (
-            'Una linea perfecta para aniversarios, parejas, mensajes especiales y regalos con un look '
-            'mas emocional, elegante y memorable.'
+            'Una línea perfecta para aniversarios, parejas, mensajes especiales y regalos con un look '
+            'más emocional, elegante y memorable.'
         ),
-        'mensaje': 'Hola, quiero cotizar una referencia romantica o de aniversario.',
+        'mensaje': 'Hola, quiero cotizar una referencia romántica o de aniversario.',
         'items': [
             {
                 'titulo': 'Caja aniversario te amo',
                 'etiqueta': 'Aniversario',
                 'precio': '$75.000 COP',
                 'imagen': 'referencias/referencia-05.png',
-                'descripcion': 'Caja con globo burbuja, waffles, jugo y mensaje romantico para aniversarios y sorpresas especiales.',
+                'descripcion': 'Caja con globo burbuja, waffles, jugo y mensaje romántico para aniversarios y sorpresas especiales.',
                 'mensaje': 'Hola, quiero cotizar la referencia Caja aniversario te amo.',
             },
             {
                 'titulo': 'Amor delicado rosa',
-                'etiqueta': 'Romantico',
+                'etiqueta': 'Romántico',
                 'precio': '$89.000 COP',
                 'imagen': 'referencias/referencia-06.png',
-                'descripcion': 'Presentacion suave con tonos rosa, globo y detalles dulces para una sorpresa romantica o de fecha especial.',
+                'descripcion': 'Presentación suave con tonos rosa, globo y detalles dulces para una sorpresa romántica o de fecha especial.',
                 'mensaje': 'Hola, quiero cotizar la referencia Amor delicado rosa.',
             },
             {
                 'titulo': 'Trio corazones sorpresa',
-                'etiqueta': 'Romantico',
+                'etiqueta': 'Romántico',
                 'precio': '$63.000 COP',
                 'imagen': 'referencias/referencia-10.png',
                 'descripcion': 'Referencias visuales con corazones, chocolates, rosas y cajas que funcionan muy bien para regalar amor.',
                 'mensaje': 'Hola, quiero cotizar la referencia Trio corazones sorpresa.',
             },
             {
-                'titulo': 'Buenos dias con amor',
+                'titulo': 'Buenos días con amor',
                 'etiqueta': 'Detalle especial',
                 'precio': '$55.000 COP',
                 'imagen': 'referencias/referencia-15.png',
-                'descripcion': 'Desayunos pequenos y cajas con snacks, bebidas y mensajes para sorprender desde la manana.',
-                'mensaje': 'Hola, quiero cotizar la referencia Buenos dias con amor.',
+                'descripcion': 'Desayunos pequeños y cajas con snacks, bebidas y mensajes para sorprender desde la mañana.',
+                'mensaje': 'Hola, quiero cotizar la referencia Buenos días con amor.',
             },
             {
-                'titulo': 'Caja corazon premium',
-                'etiqueta': 'Romantico premium',
+                'titulo': 'Caja corazón premium',
+                'etiqueta': 'Romántico premium',
                 'precio': '$122.000 COP',
                 'imagen': 'referencias/referencia-19.png',
-                'descripcion': 'Caja fina en forma de corazon con sandwich, jugo, rosas, chocolates o peluche para regalos premium.',
-                'mensaje': 'Hola, quiero cotizar la referencia Caja corazon premium.',
+                'descripcion': 'Caja fina en forma de corazón con sándwich, jugo, rosas, chocolates o peluche para regalos premium.',
+                'mensaje': 'Hola, quiero cotizar la referencia Caja corazón premium.',
             },
         ],
     },
     {
-        'titulo': 'Tematicos, mini detalles y personajes',
+        'titulo': 'Temáticos, mini detalles y personajes',
         'descripcion': (
-            'Aqui vive la parte mas versatil del catalogo: personajes, mini regalos, cajas express y '
-            'detalles que se adaptan bien a presupuestos mas agiles.'
+            'Aquí vive la parte más versátil del catálogo: personajes, mini regalos, cajas express y '
+            'detalles que se adaptan bien a presupuestos más ágiles.'
         ),
-        'mensaje': 'Hola, quiero cotizar una referencia tematica o mini detalle.',
+        'mensaje': 'Hola, quiero cotizar una referencia temática o mini detalle.',
         'items': [
             {
-                'titulo': 'Tematicos con personaje',
-                'etiqueta': 'Tematico',
+                'titulo': 'Temáticos con personaje',
+                'etiqueta': 'Temático',
                 'precio': '$44.000 COP',
                 'imagen': 'referencias/referencia-11.png',
-                'descripcion': 'Opciones personalizadas con Hello Kitty, Mario, fotos y personajes elegidos segun el gusto del cliente.',
-                'mensaje': 'Hola, quiero cotizar la referencia Tematicos con personaje.',
+                'descripcion': 'Opciones personalizadas con Hello Kitty, Mario, fotos y personajes elegidos según el gusto del cliente.',
+                'mensaje': 'Hola, quiero cotizar la referencia Temáticos con personaje.',
             },
             {
                 'titulo': 'Mini detalles con globo',
@@ -226,19 +226,19 @@ COLECCIONES_REFERENCIA = [
                 'mensaje': 'Hola, quiero cotizar la referencia Mini detalles con globo.',
             },
             {
-                'titulo': 'Dia especial express',
+                'titulo': 'Día especial express',
                 'etiqueta': 'Mini detalle',
                 'precio': '$28.000 COP',
                 'imagen': 'referencias/referencia-16.png',
-                'descripcion': 'Detalles pequenos con empaque protagonista, ideales para regalos rapidos, dia de la madre o fechas cortas.',
-                'mensaje': 'Hola, quiero cotizar la referencia Dia especial express.',
+                'descripcion': 'Detalles pequeños con empaque protagonista, ideales para regalos rápidos, día de la madre o fechas cortas.',
+                'mensaje': 'Hola, quiero cotizar la referencia Día especial express.',
             },
         ],
     },
     {
         'titulo': 'Frutales, flores y momentos premium',
         'descripcion': (
-            'Referencias con mas impacto visual para fechas premium, regalos gourmet, flores, fresas y '
+            'Referencias con más impacto visual para fechas premium, regalos gourmet, flores, fresas y '
             'combinaciones memorables.'
         ),
         'mensaje': 'Hola, quiero cotizar una referencia premium, frutal o con flores.',
@@ -252,12 +252,12 @@ COLECCIONES_REFERENCIA = [
                 'mensaje': 'Hola, quiero cotizar la referencia Rosas y fresas premium.',
             },
             {
-                'titulo': 'Bunny y corazon frutal',
+                'titulo': 'Bunny y corazón frutal',
                 'etiqueta': 'Fecha especial',
                 'precio': '$42.000 COP',
                 'imagen': 'referencias/referencia-14.png',
-                'descripcion': 'Detalles creativos con tematica tierna y tablas frutales en forma de corazon para regalos frescos y diferentes.',
-                'mensaje': 'Hola, quiero cotizar la referencia Bunny y corazon frutal.',
+                'descripcion': 'Detalles creativos con temática tierna y tablas frutales en forma de corazón para regalos frescos y diferentes.',
+                'mensaje': 'Hola, quiero cotizar la referencia Bunny y corazón frutal.',
             },
         ],
     },
@@ -266,30 +266,30 @@ COLECCIONES_REFERENCIA = [
 PASOS_COMPRA = [
     {
         'numero': '01',
-        'titulo': 'Explora el catalogo',
-        'descripcion': 'Dirigete a nuestras referencias y revisa opciones de detalles personalizados.',
+        'titulo': 'Explora el catálogo',
+        'descripcion': 'Dirígete a nuestras referencias y revisa opciones de detalles personalizados.',
     },
     {
         'numero': '02',
         'titulo': 'Personaliza tu pedido',
-        'descripcion': 'Elige la referencia que mas te guste y ajusta colores, mensaje, extras y presupuesto.',
+        'descripcion': 'Elige la referencia que más te guste y ajusta colores, mensaje, extras y presupuesto.',
     },
     {
         'numero': '03',
         'titulo': 'Confirma por WhatsApp',
-        'descripcion': 'Contactanos para recibir asesoria, disponibilidad real y cotizacion personalizada.',
+        'descripcion': 'Contáctanos para recibir asesoría, disponibilidad real y cotización personalizada.',
     },
     {
         'numero': '04',
         'titulo': 'Reserva y realiza el pago',
-        'descripcion': 'Una vez confirmado el pedido, realizas el pago y entramos a prepararlo con dedicacion.',
+        'descripcion': 'Una vez confirmado el pedido, realizas el pago y entramos a prepararlo con dedicación.',
     },
 ]
 
 METODOS_PAGO = [
     {
         'titulo': 'Nequi',
-        'descripcion': '311 626 2155 a nombre de Monica Gutierrez. Ideal para confirmar rapido y enviar comprobante por WhatsApp.',
+        'descripcion': '311 626 2155 a nombre de Mónica Gutiérrez. Ideal para confirmar rápido y enviar comprobante por WhatsApp.',
     },
     {
         'titulo': 'Bancolombia',
@@ -297,18 +297,18 @@ METODOS_PAGO = [
     },
     {
         'titulo': 'Pago validado',
-        'descripcion': 'Primero se valida disponibilidad, personalizacion y precio final. Luego se confirma el abono o pago completo.',
+        'descripcion': 'Primero se valida disponibilidad, personalización y precio final. Luego se confirma el abono o pago completo.',
     },
 ]
 
 POLITICAS_CLAVE = [
-    'Los pedidos se agendan unicamente si se cancela el 50% del valor total.',
+    'Los pedidos se agendan únicamente si se cancela el 50% del valor total.',
     'No manejamos devoluciones de dinero.',
-    'Los pedidos se recomiendan con 1 o 2 dias de anticipacion.',
-    'Todas las anchetas y detalles se pueden personalizar segun presupuesto y gusto del cliente.',
+    'Los pedidos se recomiendan con 1 o 2 días de anticipación.',
+    'Todas las anchetas y detalles se pueden personalizar según presupuesto y gusto del cliente.',
     'Si deseas entrega inmediata, primero debes consultar por referencias disponibles.',
     'En cada imagen se evidencia lo que incluye cada detalle y cualquier agotado se avisa antes de confirmar.',
-    'Los precios pueden variar segun temporada, materiales y personalizacion.',
+    'Los precios pueden variar según temporada, materiales y personalización.',
 ]
 
 
@@ -375,7 +375,7 @@ def inicio(request):
             ('destacados', 'Destacados'),
             ('precio_asc', 'Precio: menor a mayor'),
             ('precio_desc', 'Precio: mayor a menor'),
-            ('recientes', 'Mas recientes'),
+            ('recientes', 'Más recientes'),
             ('nombre', 'Nombre'),
         ],
         'page_obj': page_obj,

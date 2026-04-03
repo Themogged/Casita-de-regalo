@@ -226,6 +226,10 @@
         line-height: 1.65;
     }
 
+    .detail-mobile-bar {
+        display: none;
+    }
+
     @media (max-width: 920px) {
         .detail-layout {
             grid-template-columns: 1fr;
@@ -236,6 +240,19 @@
         .detail-media,
         .detail-placeholder {
             min-height: 280px;
+        }
+
+        .detail-breadcrumbs {
+            font-size: 0.86rem;
+            gap: 8px;
+        }
+
+        .detail-card h1 {
+            font-size: clamp(1.75rem, 8vw, 2.35rem);
+        }
+
+        .detail-price {
+            font-size: 1.85rem;
         }
 
         .detail-topline,
@@ -259,6 +276,69 @@
         .related-grid {
             grid-template-columns: 1fr;
         }
+
+        .detail-mobile-bar {
+            position: fixed;
+            left: 12px;
+            right: 12px;
+            bottom: max(12px, env(safe-area-inset-bottom));
+            z-index: 45;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(233, 72, 134, 0.12);
+            box-shadow: 0 18px 42px rgba(75, 24, 46, 0.16);
+            backdrop-filter: blur(16px);
+        }
+
+        .detail-mobile-bar-price {
+            display: grid;
+            gap: 2px;
+        }
+
+        .detail-mobile-bar-price span {
+            color: var(--ink-500);
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .detail-mobile-bar-price strong {
+            color: var(--rose-700);
+            font-size: 1.2rem;
+        }
+
+        .detail-mobile-bar-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .detail-mobile-bar-actions form {
+            margin: 0;
+        }
+
+        .detail-mobile-bar .btn,
+        .detail-mobile-bar .btn-secondary,
+        .detail-mobile-bar .btn-disabled {
+            min-height: 46px;
+            padding: 0 14px;
+            white-space: nowrap;
+        }
+
+        .related-card {
+            margin-bottom: 108px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .detail-mobile-bar {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
@@ -266,7 +346,7 @@
 {% block hero %}
 <section class="hero-card">
     <div class="detail-breadcrumbs">
-        <a href="{% url 'inicio' %}">Catalogo</a>
+        <a href="{% url 'inicio' %}">Catálogo</a>
         <span>/</span>
         {% if producto.categoria %}
             <a href="{% url 'inicio' %}?categoria={{ producto.categoria.id }}">{{ producto.categoria.nombre }}</a>
@@ -277,7 +357,7 @@
 
     <h1>{{ producto.nombre }}</h1>
     <p>
-        Descubre todos los detalles de este producto, revisa su categoria, disponibilidad y elige si
+        Descubre todos los detalles de este producto, revisa su categoría, disponibilidad y elige si
         prefieres agregarlo al carrito o cotizarlo por WhatsApp.
     </p>
 </section>
@@ -295,7 +375,7 @@
 
     <article class="detail-card page-card">
         <div class="detail-topline">
-            <span class="detail-category">{{ producto.categoria.nombre|default:"Sin categoria" }}</span>
+            <span class="detail-category">{{ producto.categoria.nombre|default:"Sin categoría" }}</span>
             <span class="{{ producto.stock_badge_class }}">{{ producto.stock_label }}</span>
         </div>
 
@@ -305,8 +385,8 @@
             {% if producto.descripcion %}
                 {{ producto.descripcion|linebreaksbr }}
             {% else %}
-                Este producto aun no tiene una descripcion detallada. Aqui puedes contar materiales, tamano,
-                personalizacion, presentacion y por que vale la pena comprarlo.
+                Este producto aún no tiene una descripción detallada. Aquí puedes contar materiales, tamaño,
+                personalización, presentación y por qué vale la pena comprarlo.
             {% endif %}
         </div>
 
@@ -316,12 +396,12 @@
                 <strong>{{ producto.stock }} unidades</strong>
             </div>
             <div class="detail-meta-row">
-                <span>Categoria</span>
-                <strong>{{ producto.categoria.nombre|default:"Sin categoria" }}</strong>
+                <span>Categoría</span>
+                <strong>{{ producto.categoria.nombre|default:"Sin categoría" }}</strong>
             </div>
             <div class="detail-meta-row">
                 <span>Estado</span>
-                <strong>{% if producto.destacado %}Producto destacado{% else %}Disponible en catalogo{% endif %}</strong>
+                <strong>{% if producto.destacado %}Producto destacado{% else %}Disponible en catálogo{% endif %}</strong>
             </div>
         </div>
 
@@ -338,10 +418,10 @@
         </div>
 
         <div class="detail-note">
-            Este valor puede variar segun personalizacion, materiales, temporada y extras del pedido.
+            Este valor puede variar según personalización, materiales, temporada y extras del pedido.
         </div>
 
-        <a href="{% url 'inicio' %}" class="detail-backlink">Volver al catalogo</a>
+        <a href="{% url 'inicio' %}" class="detail-backlink">Volver al catálogo</a>
     </article>
 </section>
 
@@ -358,7 +438,7 @@
                         {% if item.descripcion %}
                             {{ item.descripcion|truncatechars:90 }}
                         {% else %}
-                            Producto relacionado para seguir explorando el catalogo.
+                            Producto relacionado para seguir explorando el catálogo.
                         {% endif %}
                     </p>
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
@@ -370,8 +450,26 @@
         </div>
     {% else %}
         <p style="color: var(--ink-700); line-height:1.7;">
-            Todavia no hay otros productos en esta categoria. Cuando cargues mas articulos, apareceran aqui.
+            Todavía no hay otros productos en esta categoría. Cuando cargues más artículos, aparecerán aquí.
         </p>
     {% endif %}
 </section>
+
+<div class="detail-mobile-bar">
+    <div class="detail-mobile-bar-price">
+        <span>Desde</span>
+        <strong>{{ producto.precio|cop }} COP</strong>
+    </div>
+    <div class="detail-mobile-bar-actions">
+        {% if producto.disponible %}
+            <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
+                {% csrf_token %}
+                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar</button>
+            </form>
+        {% else %}
+            <span class="btn-disabled">Agotado</span>
+        {% endif %}
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    </div>
+</div>
 {% endblock %}

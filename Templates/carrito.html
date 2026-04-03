@@ -202,6 +202,15 @@
             overflow: visible;
         }
 
+        .cart-hero h1 {
+            font-size: clamp(1.8rem, 9vw, 2.4rem);
+        }
+
+        .cart-hero p {
+            font-size: 0.97rem;
+            line-height: 1.6;
+        }
+
         .cart-table,
         .cart-table tbody,
         .cart-table tr,
@@ -267,6 +276,14 @@
 
         .cart-summary {
             align-items: stretch;
+            position: sticky;
+            bottom: 12px;
+            z-index: 5;
+            padding: 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(233, 72, 134, 0.12);
+            box-shadow: 0 16px 34px rgba(75, 24, 46, 0.12);
         }
 
         .summary-actions {
@@ -279,6 +296,10 @@
         .summary-actions .btn-secondary {
             width: 100%;
         }
+
+        .cart-total strong {
+            font-size: 1.75rem;
+        }
     }
 </style>
 {% endblock %}
@@ -290,7 +311,7 @@
             <h1>Tu carrito de compra</h1>
             <p>
                 Revisa cantidades, confirma disponibilidad y termina la prueba del pedido con una experiencia
-                mas alineada a la marca Casita de Regalos.
+                más alineada a la marca Casita de Regalos.
             </p>
         </div>
         <div>
@@ -366,7 +387,7 @@
             <div class="cart-total">
                 <span>Total del pedido</span>
                 <strong>{{ total|cop }}</strong>
-                <p>Al continuar se abrira WhatsApp con tu pedido listo para enviar.</p>
+                <p>Al continuar se abrirá WhatsApp con tu pedido listo para enviar.</p>
             </div>
 
             <div class="summary-actions">
@@ -379,12 +400,12 @@
         </div>
     {% else %}
         <div class="empty-cart">
-            <h2>Tu carrito esta vacio</h2>
+            <h2>Tu carrito está vacío</h2>
             <p>
-                Todavia no agregas productos. Vuelve al catalogo, prueba los filtros y selecciona articulos
+                Todavía no agregas productos. Vuelve al catálogo, prueba los filtros y selecciona artículos
                 para revisar el flujo completo.
             </p>
-            <a href="{% url 'inicio' %}" class="btn-secondary">Ir al catalogo</a>
+            <a href="{% url 'inicio' %}" class="btn-secondary">Ir al catálogo</a>
         </div>
     {% endif %}
 </section>
