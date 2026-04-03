@@ -371,9 +371,9 @@
 
             <div class="summary-actions">
                 <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
-                <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form" target="_blank">
+                <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn" formtarget="_blank">Finalizar por WhatsApp</button>
+                    <button type="submit" class="btn js-whatsapp-checkout-button">Finalizar por WhatsApp</button>
                 </form>
             </div>
         </div>

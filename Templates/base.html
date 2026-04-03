@@ -772,6 +772,60 @@
                 return;
             }
 
+            const checkoutForm = event.target.closest('.js-whatsapp-checkout-form');
+            if (checkoutForm) {
+                event.preventDefault();
+
+                const button = event.submitter || checkoutForm.querySelector('.js-whatsapp-checkout-button');
+                if (!button || button.dataset.loading === 'true') return;
+
+                const originalText = button.textContent.trim();
+                button.dataset.loading = 'true';
+                button.style.pointerEvents = 'none';
+                button.style.opacity = '0.72';
+                button.textContent = 'Abriendo WhatsApp...';
+
+                try {
+                    const response = await fetch(checkoutForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': getCsrfToken(checkoutForm),
+                        },
+                        credentials: 'same-origin',
+                    });
+
+                    const data = await response.json();
+                    showToast(
+                        data.message || 'Preparando tu pedido...',
+                        data.level || (response.ok ? 'success' : 'warning'),
+                    );
+
+                    if (typeof data.cart_total !== 'undefined') {
+                        updateCartCount(data.cart_total);
+                    }
+
+                    if (data.whatsapp_url) {
+                        window.location.assign(data.whatsapp_url);
+                        return;
+                    }
+
+                    if (data.redirect_url) {
+                        window.location.assign(data.redirect_url);
+                        return;
+                    }
+                } catch (error) {
+                    showToast('No pudimos abrir WhatsApp en este momento.', 'error');
+                } finally {
+                    button.dataset.loading = 'false';
+                    button.style.pointerEvents = '';
+                    button.style.opacity = '';
+                    button.textContent = originalText;
+                }
+
+                return;
+            }
+
             const form = event.target.closest('.js-add-to-cart-form');
             if (!form) return;
 
