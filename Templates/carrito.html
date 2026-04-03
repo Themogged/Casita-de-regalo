@@ -366,14 +366,14 @@
             <div class="cart-total">
                 <span>Total del pedido</span>
                 <strong>{{ total|cop }}</strong>
-                <p>Al continuar veras un resumen final antes de abrir WhatsApp.</p>
+                <p>Al continuar se abrira WhatsApp con tu pedido listo para enviar.</p>
             </div>
 
             <div class="summary-actions">
                 <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
                 <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn">Finalizar compra</button>
+                    <button type="submit" class="btn">Finalizar por WhatsApp</button>
                 </form>
             </div>
         </div>

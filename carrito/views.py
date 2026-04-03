@@ -218,24 +218,6 @@ def eliminar_producto(request, producto_id):
     return redirect("ver_carrito")
 
 
-@require_GET
-def pedido_confirmado(request, pedido_id):
-    pedido = get_object_or_404(
-        Pedido.objects.prefetch_related("items"),
-        id=pedido_id,
-    )
-    whatsapp_url = _build_whatsapp_url_for_pedido(pedido)
-
-    return render(
-        request,
-        "pedido_confirmado.html",
-        {
-            "pedido": pedido,
-            "whatsapp_url": whatsapp_url,
-        },
-    )
-
-
 @require_POST
 def enviar_carrito_whatsapp(request):
     carrito = _get_carrito(request)
@@ -291,9 +273,4 @@ def enviar_carrito_whatsapp(request):
         return redirect("ver_carrito")
 
     _set_carrito(request, {})
-    request.session["ultimo_pedido_id"] = pedido.id
-    messages.success(
-        request,
-        f"Pedido #{pedido.id} registrado. Revisa el resumen y confirma por WhatsApp.",
-    )
-    return redirect("pedido_confirmado", pedido_id=pedido.id)
+    return redirect(_build_whatsapp_url_for_pedido(pedido))
