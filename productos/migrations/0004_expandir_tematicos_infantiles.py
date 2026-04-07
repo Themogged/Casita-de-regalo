@@ -33,7 +33,7 @@ THEMATIC_PRODUCTS = [
         ),
         "precio": "65000.00",
         "stock": 5,
-        "imagen": "productos/tematicos/bob-esponja.jpeg",
+        "imagen": "productos/tematicos/bob-esponja-20260406.jpeg",
         "destacado": True,
     },
     {
