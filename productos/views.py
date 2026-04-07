@@ -395,21 +395,63 @@ def inicio(request):
 
 def detalle_producto(request, producto_id):
     producto = get_object_or_404(
-        Producto.objects.select_related('categoria'),
+        Producto.objects.select_related('categoria').prefetch_related('imagenes'),
         id=producto_id,
     )
+    navegacion_qs = Producto.objects.select_related('categoria').order_by('-destacado', 'nombre', 'id')
+    if producto.categoria_id:
+        navegacion_qs = navegacion_qs.filter(categoria=producto.categoria)
+
+    navegacion_ids = list(navegacion_qs.values_list('id', flat=True))
+    posicion_producto = 1
+    total_en_navegacion = len(navegacion_ids)
+    producto_anterior = None
+    producto_siguiente = None
+
+    if producto.id in navegacion_ids:
+        indice_actual = navegacion_ids.index(producto.id)
+        posicion_producto = indice_actual + 1
+
+        if indice_actual > 0:
+            producto_anterior = navegacion_qs.filter(id=navegacion_ids[indice_actual - 1]).first()
+
+        if indice_actual < total_en_navegacion - 1:
+            producto_siguiente = navegacion_qs.filter(id=navegacion_ids[indice_actual + 1]).first()
+
     relacionados = (
         Producto.objects.select_related('categoria')
         .filter(categoria=producto.categoria)
         .exclude(id=producto.id)
-        .order_by('-destacado', 'nombre')[:4]
+        .order_by('-destacado', 'nombre')[:8]
     )
+
+    galeria_imagenes = []
+    if producto.imagen:
+        galeria_imagenes.append(
+            {
+                'url': producto.imagen.url,
+                'alt': producto.nombre,
+            }
+        )
+
+    for imagen in producto.imagenes.all():
+        galeria_imagenes.append(
+            {
+                'url': imagen.imagen.url,
+                'alt': imagen.titulo or producto.nombre,
+            }
+        )
 
     return render(
         request,
         'producto_detalle.html',
         {
             'producto': producto,
+            'producto_anterior': producto_anterior,
+            'producto_siguiente': producto_siguiente,
+            'posicion_producto': posicion_producto,
+            'total_en_navegacion': total_en_navegacion,
             'relacionados': relacionados,
+            'galeria_imagenes': galeria_imagenes,
         },
     )

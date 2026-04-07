@@ -8,3 +8,5 @@ __pycache__/
 Thumbs.db
 
 media/referencias/originales/
+media/productos/*.gif
+media/productos/galeria/

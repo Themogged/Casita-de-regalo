@@ -43,3 +43,16 @@ class Producto(models.Model):
 
     class Meta:
         ordering = ['-destacado', 'nombre']
+
+
+class ProductoImagen(models.Model):
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name='imagenes')
+    imagen = models.ImageField(upload_to='productos/galeria/')
+    titulo = models.CharField(max_length=120, blank=True)
+    orden = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return self.titulo or f'Imagen de {self.producto.nombre}'
+
+    class Meta:
+        ordering = ['orden', 'id']

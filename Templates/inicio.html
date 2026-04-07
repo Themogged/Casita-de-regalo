@@ -397,6 +397,10 @@
         display: grid;
         gap: 4px;
         justify-items: end;
+        padding: 8px 12px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(233, 72, 134, 0.1);
     }
 
     .category-link--active,
@@ -412,8 +416,8 @@
 
     .catalog-toolbar {
         display: grid;
-        gap: 14px;
-        padding: 18px;
+        gap: 12px;
+        padding: 16px 18px;
         border-radius: 20px;
         background: #fff7fb;
         border: 1px solid rgba(233, 72, 134, 0.1);
@@ -445,22 +449,31 @@
 
     .catalog-chip-row {
         display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 2px 2px 6px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .catalog-chip-row::-webkit-scrollbar {
+        display: none;
     }
 
     .catalog-chip {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 42px;
-        padding: 0 16px;
+        min-height: 40px;
+        padding: 0 14px;
         border-radius: 999px;
         border: 1px solid rgba(233, 72, 134, 0.12);
         background: #ffffff;
         color: var(--ink-700);
         font-weight: 700;
+        font-size: 0.93rem;
         white-space: nowrap;
+        flex: 0 0 auto;
     }
 
     .catalog-chip.is-active,
@@ -556,6 +569,14 @@
 
     .product-body h3 {
         font-size: 1.15rem;
+    }
+
+    .product-title-link {
+        color: var(--ink-900);
+    }
+
+    .product-title-link:hover {
+        color: var(--rose-700);
     }
 
     .product-description {
@@ -803,15 +824,7 @@
         }
 
         .catalog-chip-row {
-            flex-wrap: nowrap;
-            overflow-x: auto;
             padding-bottom: 4px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .catalog-chip-row::-webkit-scrollbar {
-            display: none;
         }
 
         .results-header h2 {
@@ -1120,7 +1133,7 @@
                             </div>
 
                             <div>
-                                <h3>{{ producto.nombre }}</h3>
+                                <h3><a href="{% url 'detalle_producto' producto.id %}" class="product-title-link">{{ producto.nombre }}</a></h3>
                                 <p class="product-description">
                                     {% if producto.descripcion %}
                                         {{ producto.descripcion|truncatechars:120 }}

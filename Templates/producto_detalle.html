@@ -26,6 +26,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        position: relative;
     }
 
     .detail-media img {
@@ -34,6 +35,75 @@
         object-fit: contain;
         background: linear-gradient(180deg, #fff8fb, #ffe7f1);
         padding: 14px;
+    }
+
+    .detail-gallery {
+        display: grid;
+        gap: 14px;
+    }
+
+    .detail-gallery-stage {
+        position: relative;
+    }
+
+    .detail-gallery-image {
+        width: 100%;
+        height: 100%;
+    }
+
+    .detail-gallery-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(233, 72, 134, 0.14);
+        color: var(--rose-700);
+        font-size: 1.2rem;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 12px 24px rgba(75, 24, 46, 0.1);
+        z-index: 2;
+    }
+
+    .detail-gallery-nav--prev {
+        left: 14px;
+    }
+
+    .detail-gallery-nav--next {
+        right: 14px;
+    }
+
+    .detail-gallery-thumbs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+        gap: 10px;
+    }
+
+    .detail-gallery-thumb {
+        padding: 0;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        background: #fff;
+        cursor: pointer;
+    }
+
+    .detail-gallery-thumb.is-active {
+        border-color: var(--rose-600);
+        box-shadow: 0 10px 20px rgba(185, 45, 99, 0.12);
+    }
+
+    .detail-gallery-thumb img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        background: linear-gradient(180deg, #fff8fb, #ffe7f1);
     }
 
     .detail-placeholder {
@@ -55,6 +125,58 @@
         margin-bottom: 18px;
         color: var(--ink-700);
         font-size: 0.95rem;
+    }
+
+    .detail-switcher {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .detail-switcher-status {
+        min-width: 0;
+        text-align: center;
+        font-weight: 700;
+        color: var(--ink-900);
+        justify-self: center;
+        padding: 9px 14px;
+        border-radius: 999px;
+        background: rgba(255, 245, 249, 0.92);
+        border: 1px solid rgba(233, 72, 134, 0.12);
+    }
+
+    .detail-switcher-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 46px;
+        min-width: 0;
+        padding: 0 18px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid rgba(233, 72, 134, 0.14);
+        color: var(--rose-700);
+        font-weight: 700;
+        flex-shrink: 0;
+        box-shadow: 0 10px 22px rgba(75, 24, 46, 0.06);
+    }
+
+    .detail-switcher-btn--prev {
+        justify-self: start;
+    }
+
+    .detail-switcher-btn--next {
+        justify-self: end;
+    }
+
+    .detail-switcher-btn.is-disabled {
+        color: var(--ink-500);
+        background: #faf7f8;
+        border-color: rgba(141, 79, 108, 0.12);
+        pointer-events: none;
     }
 
     .detail-topline {
@@ -196,22 +318,34 @@
         color: #bf4343;
     }
 
+    .related-carousel {
+        align-items: stretch;
+    }
+
     .related-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
         gap: 18px;
     }
 
     .related-item {
+        width: clamp(230px, 26vw, 290px);
         padding: 18px;
         border-radius: 20px;
         border: 1px solid rgba(233, 72, 134, 0.1);
         background: #fff;
+        height: 100%;
     }
 
     .related-item h3 {
         margin: 8px 0;
         font-size: 1.05rem;
+    }
+
+    .related-item-title {
+        color: var(--ink-900);
+    }
+
+    .related-item-title:hover {
+        color: var(--rose-700);
     }
 
     .related-item p {
@@ -234,6 +368,11 @@
         .detail-media,
         .detail-placeholder {
             min-height: 280px;
+        }
+
+        .detail-gallery-nav {
+            width: 40px;
+            height: 40px;
         }
 
         .detail-breadcrumbs {
@@ -267,8 +406,27 @@
             padding: 18px;
         }
 
-        .related-grid {
-            grid-template-columns: 1fr;
+        .detail-switcher {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .detail-switcher-status {
+            grid-column: 1 / -1;
+            order: -1;
+        }
+
+        .detail-switcher-btn {
+            width: 100%;
+            min-width: 0;
+        }
+
+        .related-item {
+            width: min(78vw, 280px);
+        }
+
+        .detail-gallery-thumbs {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
         .detail-mobile-bar {
@@ -354,16 +512,65 @@
         Descubre todos los detalles de este producto, revisa su categoría, disponibilidad y elige si
         prefieres agregarlo al carrito o cotizarlo por WhatsApp.
     </p>
+
+    {% if producto_anterior or producto_siguiente %}
+        <div class="detail-switcher">
+            {% if producto_anterior %}
+                <a href="{% url 'detalle_producto' producto_anterior.id %}" class="detail-switcher-btn">‹ Anterior</a>
+            {% else %}
+                <span class="detail-switcher-btn is-disabled">‹ Anterior</span>
+            {% endif %}
+
+            <div class="detail-switcher-status">Producto {{ posicion_producto }} de {{ total_en_navegacion }}</div>
+
+            {% if producto_siguiente %}
+                <a href="{% url 'detalle_producto' producto_siguiente.id %}" class="detail-switcher-btn">Siguiente ›</a>
+            {% else %}
+                <span class="detail-switcher-btn is-disabled">Siguiente ›</span>
+            {% endif %}
+        </div>
+    {% endif %}
 </section>
 {% endblock %}
 
 {% block content %}
 <section class="detail-layout">
-    <div class="detail-media">
-        {% if producto.imagen %}
-            <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
-        {% else %}
-            <div class="detail-placeholder">Imagen pendiente de cargar</div>
+    <div class="detail-gallery" data-gallery>
+        <div class="detail-media detail-gallery-stage">
+            {% if galeria_imagenes %}
+                {% for imagen in galeria_imagenes %}
+                    <img
+                        src="{{ imagen.url }}"
+                        alt="{{ imagen.alt }}"
+                        class="detail-gallery-image"
+                        data-gallery-image
+                        {% if not forloop.first %}hidden{% endif %}
+                    >
+                {% endfor %}
+
+                {% if galeria_imagenes|length > 1 %}
+                    <button type="button" class="detail-gallery-nav detail-gallery-nav--prev" data-gallery-prev aria-label="Imagen anterior">&larr;</button>
+                    <button type="button" class="detail-gallery-nav detail-gallery-nav--next" data-gallery-next aria-label="Imagen siguiente">&rarr;</button>
+                {% endif %}
+            {% else %}
+                <div class="detail-placeholder">Imagen pendiente de cargar</div>
+            {% endif %}
+        </div>
+
+        {% if galeria_imagenes|length > 1 %}
+            <div class="detail-gallery-thumbs">
+                {% for imagen in galeria_imagenes %}
+                    <button
+                        type="button"
+                        class="detail-gallery-thumb {% if forloop.first %}is-active{% endif %}"
+                        data-gallery-thumb
+                        data-gallery-index="{{ forloop.counter0 }}"
+                        aria-label="Ver imagen {{ forloop.counter }} de {{ producto.nombre }}"
+                    >
+                        <img src="{{ imagen.url }}" alt="{{ imagen.alt }}">
+                    </button>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
 
@@ -422,25 +629,29 @@
 <section class="related-card page-card">
     <h2 style="margin-bottom: 18px;">Productos relacionados</h2>
 
-    {% if relacionados %}
-        <div class="related-grid">
-            {% for item in relacionados %}
-                <article class="related-item">
-                    <span class="{{ item.stock_badge_class }}">{{ item.stock_label }}</span>
-                    <h3>{{ item.nombre }}</h3>
-                    <p>
-                        {% if item.descripcion %}
-                            {{ item.descripcion|truncatechars:90 }}
-                        {% else %}
-                            Producto relacionado para seguir explorando el catálogo.
-                        {% endif %}
-                    </p>
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
-                        <strong style="color: var(--rose-700);">{{ item.precio|cop }}</strong>
-                        <a href="{% url 'detalle_producto' item.id %}" class="btn-secondary">Ver</a>
-                    </div>
-                </article>
-            {% endfor %}
+{% if relacionados %}
+        <div class="carousel-shell js-carousel related-carousel">
+            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver productos relacionados anteriores">‹</button>
+            <div class="related-grid carousel-track js-carousel-track">
+                {% for item in relacionados %}
+                    <article class="related-item">
+                        <span class="{{ item.stock_badge_class }}">{{ item.stock_label }}</span>
+                        <h3><a href="{% url 'detalle_producto' item.id %}" class="related-item-title">{{ item.nombre }}</a></h3>
+                        <p>
+                            {% if item.descripcion %}
+                                {{ item.descripcion|truncatechars:90 }}
+                            {% else %}
+                                Producto relacionado para seguir explorando el catálogo.
+                            {% endif %}
+                        </p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                            <strong style="color: var(--rose-700);">{{ item.precio|cop }}</strong>
+                            <a href="{% url 'detalle_producto' item.id %}" class="btn-secondary">Ver</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver más productos relacionados">›</button>
         </div>
     {% else %}
         <p style="color: var(--ink-700); line-height:1.7;">
@@ -466,4 +677,54 @@
         <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('[data-gallery]').forEach(function (gallery) {
+            const slides = Array.from(gallery.querySelectorAll('[data-gallery-image]'));
+            const thumbs = Array.from(gallery.querySelectorAll('[data-gallery-thumb]'));
+            const prev = gallery.querySelector('[data-gallery-prev]');
+            const next = gallery.querySelector('[data-gallery-next]');
+
+            if (slides.length <= 1) {
+                return;
+            }
+
+            let currentIndex = slides.findIndex(function (slide) {
+                return !slide.hidden;
+            });
+
+            if (currentIndex < 0) {
+                currentIndex = 0;
+            }
+
+            const renderGallery = function (index) {
+                currentIndex = (index + slides.length) % slides.length;
+
+                slides.forEach(function (slide, slideIndex) {
+                    slide.hidden = slideIndex !== currentIndex;
+                });
+
+                thumbs.forEach(function (thumb, thumbIndex) {
+                    thumb.classList.toggle('is-active', thumbIndex === currentIndex);
+                });
+            };
+
+            prev?.addEventListener('click', function () {
+                renderGallery(currentIndex - 1);
+            });
+
+            next?.addEventListener('click', function () {
+                renderGallery(currentIndex + 1);
+            });
+
+            thumbs.forEach(function (thumb) {
+                thumb.addEventListener('click', function () {
+                    renderGallery(Number(thumb.dataset.galleryIndex || 0));
+                });
+            });
+
+            renderGallery(currentIndex);
+        });
+    });
+</script>
 {% endblock %}

@@ -169,14 +169,68 @@
         }
 
         .category-strip {
-            padding: 14px 0 18px;
+            padding: 12px 0 16px;
+        }
+
+        .carousel-shell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .carousel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(233, 72, 134, 0.12);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--rose-700);
+            font-size: 1.15rem;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 8px 18px rgba(185, 45, 99, 0.06);
+            flex-shrink: 0;
+        }
+
+        .carousel-btn:hover:not(:disabled) {
+            background: var(--rose-50);
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.38;
+            cursor: default;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 2px 2px 6px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .carousel-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .carousel-track > * {
+            flex: 0 0 auto;
+            scroll-snap-align: start;
         }
 
         .category-strip-inner {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             overflow-x: auto;
-            padding-bottom: 4px;
+            padding: 2px 2px 6px;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
@@ -187,12 +241,14 @@
 
         .category-pill {
             white-space: nowrap;
-            padding: 10px 16px;
+            padding: 9px 14px;
             border-radius: 999px;
             border: 1px solid rgba(233, 72, 134, 0.14);
             background: rgba(255, 255, 255, 0.92);
             color: var(--ink-700);
             font-weight: 600;
+            font-size: 0.94rem;
+            flex: 0 0 auto;
         }
 
         .category-pill:hover {
@@ -443,12 +499,12 @@
             }
 
             .category-strip {
-                padding: 10px 0 16px;
+                padding: 10px 0 14px;
             }
 
             .category-pill {
-                padding: 9px 14px;
-                font-size: 0.92rem;
+                padding: 9px 13px;
+                font-size: 0.9rem;
             }
 
             .hero-card {
@@ -609,6 +665,51 @@
             });
         };
 
+        const syncCarousel = (shell) => {
+            const track = shell.querySelector('.js-carousel-track');
+            const prev = shell.querySelector('[data-carousel-prev]');
+            const next = shell.querySelector('[data-carousel-next]');
+            if (!track || !prev || !next) return;
+
+            const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+            const hasOverflow = maxScroll > 8;
+
+            prev.hidden = !hasOverflow;
+            next.hidden = !hasOverflow;
+            prev.disabled = !hasOverflow || track.scrollLeft <= 6;
+            next.disabled = !hasOverflow || track.scrollLeft >= maxScroll - 6;
+        };
+
+        const bindCarousel = (shell) => {
+            if (shell.dataset.carouselReady === 'true') {
+                syncCarousel(shell);
+                return;
+            }
+
+            const track = shell.querySelector('.js-carousel-track');
+            const prev = shell.querySelector('[data-carousel-prev]');
+            const next = shell.querySelector('[data-carousel-next]');
+            if (!track || !prev || !next) return;
+
+            const step = () => Math.max(220, Math.floor(track.clientWidth * 0.78));
+
+            prev.addEventListener('click', () => {
+                track.scrollBy({ left: -step(), behavior: 'smooth' });
+            });
+
+            next.addEventListener('click', () => {
+                track.scrollBy({ left: step(), behavior: 'smooth' });
+            });
+
+            track.addEventListener('scroll', () => syncCarousel(shell), { passive: true });
+            shell.dataset.carouselReady = 'true';
+            syncCarousel(shell);
+        };
+
+        const initCarousels = (scope = document) => {
+            scope.querySelectorAll('.js-carousel').forEach((shell) => bindCarousel(shell));
+        };
+
         const initMobileCatalogPanels = (scope = document) => {
             if (!window.matchMedia('(max-width: 760px)').matches) return;
 
@@ -661,6 +762,7 @@
 
                 currentCatalog.replaceWith(nextCatalog);
                 initMobileCatalogPanels(nextCatalog);
+                initCarousels(nextCatalog);
                 if (options.pushState !== false) {
                     window.history.pushState({ catalog: true }, '', url);
                 }
@@ -810,6 +912,11 @@
             await fetchCatalogSection(window.location.href, { pushState: false });
         });
 
+        window.addEventListener('resize', () => {
+            document.querySelectorAll('.js-carousel').forEach((shell) => syncCarousel(shell));
+        });
+
+        initCarousels();
         initMobileCatalogPanels();
     </script>
 </body>
