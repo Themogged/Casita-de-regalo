@@ -25,7 +25,7 @@ def seed_catalogo(apps, schema_editor):
         ('Desayuno globos pastel', 'Bandeja sorpresa con globos, yogurt, sandwich, jugo y detalles visuales suaves.', '80000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-04.png', True),
         ('Caja aniversario te amo', 'Caja romantica con globo burbuja, waffles, jugo y mensaje especial.', '75000.00', 4, 'Amor y aniversario', 'referencias/referencia-05.png', True),
         ('Amor delicado rosa', 'Referencia romantica en tonos rosa con globo, dulces y presentacion suave.', '89000.00', 4, 'Amor y aniversario', 'referencias/referencia-06.png', False),
-        ('Rose gold cumpleanero', 'Caja cumpleanera con globos rose gold, frutas, waffles y postre.', '77000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-07.png', True),
+        ('Rose gold cumpleañero', 'Caja cumpleañera con globos rose gold, frutas, waffles y postre.', '77000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-07.png', True),
         ('Cumple lila fantasia', 'Opcion juvenil y colorida con snacks, desayuno y decoracion personalizada.', '75000.00', 4, 'Cumpleaños y desayunos', 'referencias/referencia-08.png', False),
         ('Black and gold deluxe', 'Detalle premium con globos negro y dorado, fruta y una presentacion mas sofisticada.', '94000.00', 3, 'Regalos premium', 'referencias/referencia-09.png', True),
         ('Trio corazones sorpresa', 'Coleccion romantica con corazones, chocolates, rosas y cajas para sorprender.', '63000.00', 5, 'Amor y aniversario', 'referencias/referencia-10.png', False),
