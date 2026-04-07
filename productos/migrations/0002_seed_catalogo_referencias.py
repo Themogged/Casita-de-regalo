@@ -9,7 +9,7 @@ def seed_catalogo(apps, schema_editor):
 
     categorias = {}
     for nombre in [
-        'Cumpleanos y desayunos',
+        'Cumpleaños y desayunos',
         'Amor y aniversario',
         'Tematicos e infantiles',
         'Mini detalles',
@@ -21,12 +21,12 @@ def seed_catalogo(apps, schema_editor):
     Producto.objects.filter(nombre__in=['f', 'h']).delete()
 
     productos = [
-        ('Cumple azul premium', 'Referencia cumpleanera con caja en madera, globos, fruta, waffles y decoracion. Precio base sujeto a personalizacion.', '81000.00', 6, 'Cumpleanos y desayunos', 'referencias/referencia-03.png', True),
-        ('Desayuno globos pastel', 'Bandeja sorpresa con globos, yogurt, sandwich, jugo y detalles visuales suaves.', '80000.00', 5, 'Cumpleanos y desayunos', 'referencias/referencia-04.png', True),
+        ('Cumple azul premium', 'Referencia cumpleanera con caja en madera, globos, fruta, waffles y decoracion. Precio base sujeto a personalizacion.', '81000.00', 6, 'Cumpleaños y desayunos', 'referencias/referencia-03.png', True),
+        ('Desayuno globos pastel', 'Bandeja sorpresa con globos, yogurt, sandwich, jugo y detalles visuales suaves.', '80000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-04.png', True),
         ('Caja aniversario te amo', 'Caja romantica con globo burbuja, waffles, jugo y mensaje especial.', '75000.00', 4, 'Amor y aniversario', 'referencias/referencia-05.png', True),
         ('Amor delicado rosa', 'Referencia romantica en tonos rosa con globo, dulces y presentacion suave.', '89000.00', 4, 'Amor y aniversario', 'referencias/referencia-06.png', False),
-        ('Rose gold cumpleanero', 'Caja cumpleanera con globos rose gold, frutas, waffles y postre.', '77000.00', 5, 'Cumpleanos y desayunos', 'referencias/referencia-07.png', True),
-        ('Cumple lila fantasia', 'Opcion juvenil y colorida con snacks, desayuno y decoracion personalizada.', '75000.00', 4, 'Cumpleanos y desayunos', 'referencias/referencia-08.png', False),
+        ('Rose gold cumpleanero', 'Caja cumpleanera con globos rose gold, frutas, waffles y postre.', '77000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-07.png', True),
+        ('Cumple lila fantasia', 'Opcion juvenil y colorida con snacks, desayuno y decoracion personalizada.', '75000.00', 4, 'Cumpleaños y desayunos', 'referencias/referencia-08.png', False),
         ('Black and gold deluxe', 'Detalle premium con globos negro y dorado, fruta y una presentacion mas sofisticada.', '94000.00', 3, 'Regalos premium', 'referencias/referencia-09.png', True),
         ('Trio corazones sorpresa', 'Coleccion romantica con corazones, chocolates, rosas y cajas para sorprender.', '63000.00', 5, 'Amor y aniversario', 'referencias/referencia-10.png', False),
         ('Tematicos con personaje', 'Referencias con Hello Kitty, Mario, fotos y personajes elegidos por el cliente.', '44000.00', 6, 'Tematicos e infantiles', 'referencias/referencia-11.png', True),
@@ -35,8 +35,8 @@ def seed_catalogo(apps, schema_editor):
         ('Bunny y corazon frutal', 'Detalle creativo con tematica tierna y tabla frutal en forma de corazon.', '42000.00', 4, 'Frutales y flores', 'referencias/referencia-14.png', False),
         ('Buenos dias con amor', 'Desayuno pequeno con bebidas, snacks y mensaje para sorprender desde temprano.', '55000.00', 5, 'Amor y aniversario', 'referencias/referencia-15.png', False),
         ('Dia especial express', 'Mini detalle con empaque protagonista para regalos rapidos y fechas cortas.', '28000.00', 7, 'Mini detalles', 'referencias/referencia-16.png', False),
-        ('Desayuno mariposa rosa', 'Mesa o bandeja en madera con globos, yogurt, jugo y decoracion femenina.', '89000.00', 4, 'Cumpleanos y desayunos', 'referencias/referencia-17.png', False),
-        ('Combo snack con globos', 'Combinacion de snacks y globos metalizados para una sorpresa vistosa.', '88000.00', 5, 'Cumpleanos y desayunos', 'referencias/referencia-18.png', False),
+        ('Desayuno mariposa rosa', 'Mesa o bandeja en madera con globos, yogurt, jugo y decoracion femenina.', '89000.00', 4, 'Cumpleaños y desayunos', 'referencias/referencia-17.png', False),
+        ('Combo snack con globos', 'Combinacion de snacks y globos metalizados para una sorpresa vistosa.', '88000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-18.png', False),
         ('Caja corazon premium', 'Caja fina en forma de corazon con sandwich, jugo, rosas, chocolates o peluche.', '122000.00', 3, 'Regalos premium', 'referencias/referencia-19.png', True),
     ]
 
@@ -81,7 +81,7 @@ def unseed_catalogo(apps, schema_editor):
     Producto.objects.filter(nombre__in=nombres).delete()
     Categoria.objects.filter(
         nombre__in=[
-            'Cumpleanos y desayunos',
+            'Cumpleaños y desayunos',
             'Amor y aniversario',
             'Tematicos e infantiles',
             'Mini detalles',
