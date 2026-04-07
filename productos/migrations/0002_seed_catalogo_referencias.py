@@ -21,7 +21,7 @@ def seed_catalogo(apps, schema_editor):
     Producto.objects.filter(nombre__in=['f', 'h']).delete()
 
     productos = [
-        ('Cumple azul premium', 'Referencia cumpleanera con caja en madera, globos, fruta, waffles y decoracion. Precio base sujeto a personalizacion.', '81000.00', 6, 'Cumpleaños y desayunos', 'referencias/referencia-03.png', True),
+        ('Cumple azul premium', 'Referencia cumpleañera con caja en madera, globos, fruta, waffles y decoracion. Precio base sujeto a personalizacion.', '81000.00', 6, 'Cumpleaños y desayunos', 'referencias/referencia-03.png', True),
         ('Desayuno globos pastel', 'Bandeja sorpresa con globos, yogurt, sandwich, jugo y detalles visuales suaves.', '80000.00', 5, 'Cumpleaños y desayunos', 'referencias/referencia-04.png', True),
         ('Caja aniversario te amo', 'Caja romantica con globo burbuja, waffles, jugo y mensaje especial.', '75000.00', 4, 'Amor y aniversario', 'referencias/referencia-05.png', True),
         ('Amor delicado rosa', 'Referencia romantica en tonos rosa con globo, dulces y presentacion suave.', '89000.00', 4, 'Amor y aniversario', 'referencias/referencia-06.png', False),
