@@ -3,19 +3,6 @@ from django.db import migrations
 
 THEMATIC_PRODUCTS = [
     {
-        "nombre": "Tem\u00e1tico personalizado a elecci\u00f3n",
-        "legacy_names": ["Tematicos con personaje"],
-        "descripcion": (
-            "Dise\u00f1o tem\u00e1tico infantil personalizable con personaje, colores, nombre y mensaje del cliente. "
-            "Ideal para ideas como Hello Kitty, Mario, Stitch, Pitufos y m\u00e1s. "
-            "El valor final puede variar seg\u00fan el contenido, tama\u00f1o y nivel de decoraci\u00f3n."
-        ),
-        "precio": "44000.00",
-        "stock": 6,
-        "imagen": "referencias/referencia-11.png",
-        "destacado": True,
-    },
-    {
         "nombre": "Detalle Bob Esponja infantil",
         "descripcion": (
             "Detalle tem\u00e1tico inspirado en Bob Esponja, ideal para regalos infantiles llenos de color y dulces.\n\n"
