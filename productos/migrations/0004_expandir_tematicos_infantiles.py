@@ -49,9 +49,10 @@ THEMATIC_PRODUCTS = [
         "nombre": "Tem\u00e1tico Stitch personalizado",
         "descripcion": (
             "Referencia infantil en tonos azules para personalizar con Stitch u otro personaje favorito. "
-            "Perfecta para armar con dulces, sorpresas o recordatorios seg\u00fan el presupuesto del cliente."
+            "Perfecta para armar con dulces, sorpresas o recordatorios seg\u00fan el presupuesto del cliente. "
+            "Se le agrega lo que el cliente desee o pida a elecci\u00f3n."
         ),
-        "precio": "42000.00",
+        "precio": "25000.00",
         "stock": 6,
         "imagen": "productos/tematicos/stitch.jpeg",
         "destacado": False,
@@ -60,9 +61,10 @@ THEMATIC_PRODUCTS = [
         "nombre": "Tem\u00e1tico Pitufos personalizado",
         "descripcion": (
             "Ejemplo de detalle tem\u00e1tico con estructura decorativa ligera y presentaci\u00f3n infantil. "
-            "Se adapta a nombre, personaje, colores y contenido elegido por el cliente."
+            "Se adapta a nombre, personaje, colores y contenido elegido por el cliente. "
+            "Se le agrega lo que el cliente desee o pida a elecci\u00f3n."
         ),
-        "precio": "42000.00",
+        "precio": "25000.00",
         "stock": 6,
         "imagen": "productos/tematicos/pitufos.jpeg",
         "destacado": False,
@@ -71,9 +73,10 @@ THEMATIC_PRODUCTS = [
         "nombre": "Cumple tem\u00e1tico Barbie",
         "descripcion": (
             "Dise\u00f1o rosado para cumplea\u00f1os infantiles inspirado en Barbie o estilos princesa. "
-            "Ideal para personalizar con nombre, edad, snacks, decoraci\u00f3n y mensaje especial."
+            "Ideal para personalizar con nombre, edad, snacks, decoraci\u00f3n y mensaje especial. "
+            "Se le agrega lo que el cliente desee o pida a elecci\u00f3n."
         ),
-        "precio": "42000.00",
+        "precio": "25000.00",
         "stock": 6,
         "imagen": "productos/tematicos/barbie.jpeg",
         "destacado": False,
@@ -82,9 +85,10 @@ THEMATIC_PRODUCTS = [
         "nombre": "Cumple tem\u00e1tico Hello Kitty",
         "descripcion": (
             "Detalle infantil con est\u00e9tica dulce y femenina, perfecto para fiestas de Hello Kitty. "
-            "El cliente puede elegir nombre, edad, colores pastel y el tipo de relleno."
+            "El cliente puede elegir nombre, edad, colores pastel y el tipo de relleno. "
+            "Se le agrega lo que el cliente desee o pida a elecci\u00f3n."
         ),
-        "precio": "42000.00",
+        "precio": "25000.00",
         "stock": 6,
         "imagen": "productos/tematicos/hello-kitty.jpeg",
         "destacado": False,
@@ -95,7 +99,7 @@ THEMATIC_PRODUCTS = [
             "Modelo infantil con presentaci\u00f3n frutal, pensado para una opci\u00f3n fresca y colorida. "
             "Puede llevar frutas, decoraci\u00f3n tem\u00e1tica, nombre y contenido personalizado seg\u00fan la ocasi\u00f3n."
         ),
-        "precio": "55000.00",
+        "precio": "97000.00",
         "stock": 5,
         "imagen": "productos/tematicos/pocoyo.jpeg",
         "destacado": False,
