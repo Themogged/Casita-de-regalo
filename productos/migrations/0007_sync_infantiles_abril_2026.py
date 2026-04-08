@@ -13,7 +13,8 @@ INFANTILE_PRODUCTS = [
             "- decoración\n"
             "- Trululu gomas\n"
             "- Takis\n"
-            "- bebida Alpin"
+            "- bebida Alpin\n\n"
+            "La mini torta que aparece en la foto no esta incluida."
         ),
         "precio": "150000.00",
         "stock": 4,
