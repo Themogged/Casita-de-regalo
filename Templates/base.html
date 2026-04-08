@@ -98,6 +98,7 @@
             display: flex;
             align-items: center;
             gap: 14px;
+            min-width: 0;
         }
 
         .brand-mark {
@@ -114,6 +115,7 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            min-width: 0;
         }
 
         .brand small {
@@ -132,6 +134,8 @@
             align-items: center;
             gap: 14px;
             flex-wrap: wrap;
+            min-width: 0;
+            justify-content: flex-end;
         }
 
         .header-link {
@@ -288,6 +292,7 @@
             border: 1px solid rgba(233, 72, 134, 0.1);
             border-radius: var(--radius-xl);
             box-shadow: 0 16px 30px rgba(77, 26, 50, 0.06);
+            overflow: hidden;
         }
 
         .messages {
@@ -331,6 +336,10 @@
             padding: 34px 0;
         }
 
+        .footer-card {
+            min-width: 0;
+        }
+
         .footer-card h3,
         .footer-card h4 {
             margin-bottom: 10px;
@@ -372,6 +381,7 @@
             align-items: center;
             gap: 12px;
             width: fit-content;
+            max-width: 100%;
             padding: 10px 14px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.9);
@@ -444,12 +454,12 @@
 
             .header-links {
                 width: 100%;
-                justify-content: flex-start;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                padding-bottom: 6px;
-                scrollbar-width: none;
-                -ms-overflow-style: none;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                justify-content: stretch;
+                gap: 10px;
+                overflow: visible;
+                padding-bottom: 0;
             }
 
             .header-links::-webkit-scrollbar {
@@ -482,18 +492,22 @@
             }
 
             .header-link {
-                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
                 padding: 8px 12px;
                 font-size: 0.92rem;
+                text-align: center;
                 background: rgba(255, 255, 255, 0.9);
                 border: 1px solid rgba(233, 72, 134, 0.1);
             }
 
             .cart-btn {
-                width: auto;
+                width: 100%;
+                grid-column: 1 / -1;
                 justify-content: center;
-                margin-left: auto;
-                flex-shrink: 0;
+                margin-left: 0;
                 padding: 10px 15px;
                 font-size: 0.95rem;
             }
@@ -528,6 +542,20 @@
                 gap: 16px;
                 padding: 26px 0;
             }
+
+            .social-link {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-links {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-btn {
+                grid-column: auto;
+            }
         }
     </style>
     {% block extra_head %}{% endblock %}
@@ -545,8 +573,8 @@
 
             <nav class="header-links">
                 <a href="{% url 'inicio' %}" class="header-link">Inicio</a>
-                <a href="{% url 'inicio' %}#catalogo" class="header-link">Catálogo</a>
-                <a href="{% url 'inicio' %}#como-comprar" class="header-link">Cómo comprar</a>
+                <a href="{% url 'inicio' %}#catalogo" class="header-link">Cat&aacute;logo</a>
+                <a href="{% url 'inicio' %}#como-comprar" class="header-link">C&oacute;mo comprar</a>
                 <a href="#footer" class="header-link">Contacto</a>
                 <a href="{% url 'ver_carrito' %}" class="cart-btn">
                     <span>Carrito</span>
@@ -597,14 +625,14 @@
 
             <div class="footer-card">
                 <h4>Explorar</h4>
-                <a href="{% url 'inicio' %}#catalogo">Ver catálogo</a>
+                <a href="{% url 'inicio' %}#catalogo">Ver cat&aacute;logo</a>
                 <a href="{% url 'ver_carrito' %}">Ir al carrito</a>
             </div>
 
             <div class="footer-card">
-                <h4>Atención</h4>
+                <h4>Atenci&oacute;n</h4>
                 <p>Bello, Antioquia, Colombia</p>
-                <p>Atención en Medellín y área metropolitana</p>
+                <p>Atenci&oacute;n en Medell&iacute;n y &aacute;rea metropolitana</p>
                 <p>WhatsApp: +57 311 626 2155</p>
             </div>
 

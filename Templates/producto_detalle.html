@@ -10,15 +10,18 @@
         grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
         gap: 24px;
         margin-bottom: 26px;
+        align-items: start;
     }
 
     .detail-card,
     .related-card {
         padding: 24px;
+        min-width: 0;
     }
 
     .detail-media {
         min-height: 420px;
+        min-width: 0;
         border-radius: 24px;
         overflow: hidden;
         background: linear-gradient(180deg, #fff7fb, #ffe4f0);
@@ -152,6 +155,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+        text-align: center;
         min-height: 46px;
         min-width: 0;
         padding: 0 18px;
@@ -201,6 +205,7 @@
         font-size: clamp(2rem, 4vw, 3rem);
         line-height: 1.06;
         margin-bottom: 12px;
+        overflow-wrap: anywhere;
     }
 
     .detail-description {
@@ -426,7 +431,7 @@
         }
 
         .detail-gallery-thumbs {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
 
         .detail-mobile-bar {
@@ -491,6 +496,10 @@
         .detail-mobile-bar {
             grid-template-columns: 1fr;
         }
+
+        .detail-mobile-bar-actions {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
@@ -516,17 +525,17 @@
     {% if producto_anterior or producto_siguiente %}
         <div class="detail-switcher">
             {% if producto_anterior %}
-                <a href="{% url 'detalle_producto' producto_anterior.id %}" class="detail-switcher-btn">‹ Anterior</a>
+                <a href="{% url 'detalle_producto' producto_anterior.id %}" class="detail-switcher-btn">&lsaquo; Anterior</a>
             {% else %}
-                <span class="detail-switcher-btn is-disabled">‹ Anterior</span>
+                <span class="detail-switcher-btn is-disabled">&lsaquo; Anterior</span>
             {% endif %}
 
             <div class="detail-switcher-status">Producto {{ posicion_producto }} de {{ total_en_navegacion }}</div>
 
             {% if producto_siguiente %}
-                <a href="{% url 'detalle_producto' producto_siguiente.id %}" class="detail-switcher-btn">Siguiente ›</a>
+                <a href="{% url 'detalle_producto' producto_siguiente.id %}" class="detail-switcher-btn">Siguiente &rsaquo;</a>
             {% else %}
-                <span class="detail-switcher-btn is-disabled">Siguiente ›</span>
+                <span class="detail-switcher-btn is-disabled">Siguiente &rsaquo;</span>
             {% endif %}
         </div>
     {% endif %}
@@ -631,7 +640,7 @@
 
 {% if relacionados %}
         <div class="carousel-shell js-carousel related-carousel">
-            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver productos relacionados anteriores">‹</button>
+            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver productos relacionados anteriores">&lsaquo;</button>
             <div class="related-grid carousel-track js-carousel-track">
                 {% for item in relacionados %}
                     <article class="related-item">
@@ -651,7 +660,7 @@
                     </article>
                 {% endfor %}
             </div>
-            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver más productos relacionados">›</button>
+            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver más productos relacionados">&rsaquo;</button>
         </div>
     {% else %}
         <p style="color: var(--ink-700); line-height:1.7;">

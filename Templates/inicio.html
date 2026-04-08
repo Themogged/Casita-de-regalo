@@ -90,6 +90,7 @@
         font-size: clamp(2.25rem, 5vw, 3.9rem);
         line-height: 0.98;
         margin-bottom: 16px;
+        text-wrap: balance;
     }
 
     .hero-copy p,
@@ -569,6 +570,7 @@
 
     .product-body h3 {
         font-size: 1.15rem;
+        text-wrap: pretty;
     }
 
     .product-title-link {
@@ -697,6 +699,10 @@
         .hero-copy h1 {
             font-size: clamp(2rem, 11vw, 2.8rem);
             line-height: 1.02;
+        }
+
+        .catalog-toolbar-top {
+            align-items: flex-start;
         }
 
         .hero-grid,
@@ -834,6 +840,8 @@
 
         .results-counter {
             justify-items: start;
+            width: 100%;
+            max-width: 100%;
             padding: 8px 12px;
             border-radius: 16px;
             background: var(--rose-50);
@@ -921,6 +929,10 @@
     @media (max-width: 520px) {
         .hero-stats,
         .category-list {
+            grid-template-columns: 1fr;
+        }
+
+        .catalog-grid {
             grid-template-columns: 1fr;
         }
 
@@ -1061,10 +1073,10 @@
 
     <section class="cta-band">
         <div>
-            <strong>Ya sabes que detalle quieres?</strong>
-            <p class="meta-copy">Escribenos por WhatsApp y te ayudamos a cotizarlo o personalizarlo.</p>
+            <strong>&iquest;Ya sabes qu&eacute; detalle quieres?</strong>
+            <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a cotizarlo o personalizarlo.</p>
         </div>
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotización</a>
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotizaci&oacute;n</a>
     </section>
 </div>
 
