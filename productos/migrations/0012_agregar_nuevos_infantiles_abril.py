@@ -22,7 +22,7 @@ NEW_PRODUCTS = [
         "destacado": False,
     },
     {
-        "nombre": "Sorpresa infantil guerreras kpop",
+        "nombre": "Sorpresa infantil Guerreras Kpop",
         "descripcion": (
             "Caja infantil con temática Huntrix, pensada para celebraciones con una presentación abundante y llamativa.\n\n"
             "Incluye:\n"
