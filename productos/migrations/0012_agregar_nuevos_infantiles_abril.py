@@ -22,9 +22,9 @@ NEW_PRODUCTS = [
         "destacado": False,
     },
     {
-        "nombre": "Sorpresa infantil rosada deluxe",
+        "nombre": "Sorpresa infantil Huntrix",
         "descripcion": (
-            "Caja infantil en tonos rosados y lilas, pensada para celebraciones con una presentación abundante y llamativa.\n\n"
+            "Caja infantil con temática Huntrix, pensada para celebraciones con una presentación abundante y llamativa.\n\n"
             "Incluye:\n"
             "- caja y espaldar de madera\n"
             "- globos\n"
