@@ -2,7 +2,7 @@ from django.db import migrations
 
 
 OLD_NAME = "Sorpresa infantil Huntrix"
-NEW_NAME = "Sorpresa infantil guerreras kpop"
+NEW_NAME = "Sorpresa infantil Guerreras Kpop"
 
 NEW_DESCRIPTION = (
     "Caja infantil inspirada en guerreras k-pop, pensada para celebraciones con una presentación abundante y llamativa.\n\n"
