@@ -3,6 +3,19 @@ import os
 from .settings import *  # noqa: F401,F403
 
 
+def env_bool(name, default=False):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def env_list(name, default=""):
+    value = os.getenv(name)
+    raw = value if value is not None else default
+    return [item.strip() for item in raw.split(",") if item.strip()]
+
+
 PYTHONANYWHERE_HOST = os.getenv("PYTHONANYWHERE_HOST", "daxian7.pythonanywhere.com").strip()
 
 DEBUG = env_bool("DJANGO_DEBUG", False)
