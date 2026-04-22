@@ -1,0 +1,33 @@
+import os
+
+from .settings import *  # noqa: F401,F403
+
+
+PYTHONANYWHERE_HOST = os.getenv("PYTHONANYWHERE_HOST", "daxian7.pythonanywhere.com").strip()
+
+DEBUG = env_bool("DJANGO_DEBUG", False)
+
+ALLOWED_HOSTS = list(
+    dict.fromkeys(
+        env_list("DJANGO_ALLOWED_HOSTS", PYTHONANYWHERE_HOST)
+        + ["127.0.0.1", "localhost", "0.0.0.0", "[::1]", "testserver"]
+    )
+)
+
+CSRF_TRUSTED_ORIGINS = list(
+    dict.fromkeys(
+        env_list("DJANGO_CSRF_TRUSTED_ORIGINS", f"https://{PYTHONANYWHERE_HOST}")
+        + [
+            "http://127.0.0.1:8000",
+            "http://localhost:8000",
+            "http://0.0.0.0:8000",
+        ]
+    )
+)
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", True)
+SECURE_HSTS_SECONDS = int(os.getenv("DJANGO_SECURE_HSTS_SECONDS", "31536000"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", False)
+SECURE_HSTS_PRELOAD = env_bool("DJANGO_SECURE_HSTS_PRELOAD", False)
