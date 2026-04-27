@@ -7,27 +7,30 @@
     <title>{% block title %}Casita de Regalos{% endblock %}</title>
     <style>
         :root {
-            --rose-25: #fffbfd;
-            --rose-50: #fff5f9;
-            --rose-100: #ffe6f0;
-            --rose-200: #ffd1e2;
-            --rose-300: #ffb5d1;
-            --rose-400: #ff8fba;
-            --rose-500: #ff5c99;
-            --rose-600: #e94886;
-            --rose-700: #b92d63;
-            --mint-100: #effcf7;
-            --mint-300: #bfeedd;
-            --ink-900: #6f1d48;
-            --ink-700: #8d4f6c;
-            --ink-500: #ab7892;
+            --rose-25: #fffaf9;
+            --rose-50: #fff1f5;
+            --rose-100: #ffdce8;
+            --rose-200: #ffc8da;
+            --rose-300: #f5abc6;
+            --rose-400: #eb80a8;
+            --rose-500: #db5b92;
+            --rose-600: #c6447d;
+            --rose-700: #96275c;
+            --mint-100: #edf8f4;
+            --mint-300: #c8e7db;
+            --sage-100: #edf4ee;
+            --sand-100: #fff6ed;
+            --ink-900: #5f1c3d;
+            --ink-700: #8a5a74;
+            --ink-500: #b08ba0;
             --white: #ffffff;
-            --hero-text: #7a1f4b;
-            --hero-text-soft: rgba(122, 31, 75, 0.82);
-            --shadow-lg: 0 24px 60px rgba(62, 28, 45, 0.12);
-            --shadow-md: 0 18px 35px rgba(62, 28, 45, 0.08);
-            --radius-xl: 28px;
-            --max-width: 1180px;
+            --hero-text: #5f1c3d;
+            --hero-text-soft: rgba(95, 28, 61, 0.78);
+            --shadow-lg: 0 34px 80px rgba(94, 35, 63, 0.12);
+            --shadow-md: 0 20px 48px rgba(94, 35, 63, 0.08);
+            --radius-xl: 32px;
+            --max-width: 1240px;
+            --soft-line: rgba(198, 68, 125, 0.12);
         }
 
         *,
@@ -47,11 +50,42 @@
 
         body {
             min-height: 100vh;
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Trebuchet MS", "Gill Sans", sans-serif;
             color: var(--ink-900);
             background:
-                radial-gradient(circle at top left, rgba(255, 213, 230, 0.72), transparent 30%),
-                linear-gradient(180deg, #fffdfd 0%, #fff7fa 42%, #ffffff 100%);
+                radial-gradient(circle at 10% 8%, rgba(255, 214, 228, 0.86), transparent 20%),
+                radial-gradient(circle at 88% 10%, rgba(255, 242, 225, 0.8), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(242, 223, 235, 0.8), transparent 24%),
+                linear-gradient(180deg, #fffdfc 0%, #fff7fa 48%, #ffffff 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(24px);
+            pointer-events: none;
+            opacity: 0.72;
+        }
+
+        body::before {
+            width: 320px;
+            height: 320px;
+            top: 78px;
+            left: -80px;
+            background: radial-gradient(circle, rgba(255, 220, 232, 0.85) 0%, rgba(255, 220, 232, 0) 72%);
+        }
+
+        body::after {
+            width: 280px;
+            height: 280px;
+            right: -70px;
+            bottom: 100px;
+            background: radial-gradient(circle, rgba(255, 236, 219, 0.85) 0%, rgba(255, 236, 219, 0) 72%);
         }
 
         a {
@@ -73,9 +107,10 @@
             position: sticky;
             top: 0;
             z-index: 30;
-            background: rgba(255, 255, 255, 0.96);
-            border-bottom: 1px solid rgba(233, 72, 134, 0.12);
-            box-shadow: 0 10px 28px rgba(92, 33, 62, 0.05);
+            background: rgba(255, 251, 252, 0.82);
+            border-bottom: 1px solid rgba(198, 68, 125, 0.08);
+            box-shadow: 0 16px 40px rgba(92, 33, 62, 0.05);
+            backdrop-filter: blur(18px);
         }
 
         .header-inner,
@@ -91,7 +126,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 18px;
-            min-height: 74px;
+            min-height: 88px;
         }
 
         .brand {
@@ -102,12 +137,12 @@
         }
 
         .brand-mark {
-            width: 58px;
-            height: 58px;
+            width: 62px;
+            height: 62px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.96);
-            box-shadow: 0 10px 24px rgba(185, 45, 99, 0.16);
+            border: 4px solid rgba(255, 255, 255, 0.96);
+            box-shadow: 0 14px 32px rgba(185, 45, 99, 0.18);
             background: var(--white);
         }
 
@@ -119,36 +154,44 @@
         }
 
         .brand small {
-            color: var(--ink-500);
-            font-size: 0.84rem;
-            letter-spacing: 0.06em;
+            color: var(--ink-700);
+            font-size: 0.76rem;
+            letter-spacing: 0.18em;
+            font-weight: 700;
         }
 
         .brand strong {
-            font-size: 1.35rem;
+            font-family: Georgia, "Palatino Linotype", serif;
+            font-size: 1.52rem;
             letter-spacing: 0.01em;
+            line-height: 1.05;
         }
 
         .header-links {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 8px;
             flex-wrap: wrap;
             min-width: 0;
             justify-content: flex-end;
+            padding: 6px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(198, 68, 125, 0.1);
+            box-shadow: 0 10px 24px rgba(94, 35, 63, 0.05);
         }
 
         .header-link {
-            padding: 10px 14px;
-            border-radius: 14px;
+            padding: 11px 16px;
+            border-radius: 999px;
             border: 1px solid transparent;
             color: var(--ink-700);
             font-weight: 600;
         }
 
         .header-link:hover {
-            background: var(--rose-50);
-            border-color: rgba(233, 72, 134, 0.12);
+            background: rgba(255, 255, 255, 0.92);
+            border-color: rgba(198, 68, 125, 0.12);
             color: var(--rose-700);
         }
 
@@ -156,11 +199,12 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            padding: 11px 16px;
+            padding: 11px 18px;
             border-radius: 999px;
-            background: var(--rose-600);
+            background: linear-gradient(135deg, #d84d88, #b83167 68%, #96275c 100%);
             color: var(--white);
             font-weight: 700;
+            box-shadow: 0 16px 28px rgba(185, 45, 99, 0.2);
         }
 
         .cart-count {
@@ -173,7 +217,7 @@
         }
 
         .category-strip {
-            padding: 12px 0 16px;
+            padding: 14px 0 18px;
         }
 
         .carousel-shell {
@@ -232,11 +276,15 @@
 
         .category-strip-inner {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
-            padding: 2px 2px 6px;
+            padding: 4px;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.68);
+            border: 1px solid rgba(198, 68, 125, 0.1);
+            box-shadow: 0 12px 24px rgba(94, 35, 63, 0.04);
         }
 
         .category-strip-inner::-webkit-scrollbar {
@@ -245,9 +293,9 @@
 
         .category-pill {
             white-space: nowrap;
-            padding: 9px 14px;
+            padding: 10px 16px;
             border-radius: 999px;
-            border: 1px solid rgba(233, 72, 134, 0.14);
+            border: 1px solid transparent;
             background: rgba(255, 255, 255, 0.92);
             color: var(--ink-700);
             font-weight: 600;
@@ -256,30 +304,49 @@
         }
 
         .category-pill:hover {
-            border-color: rgba(233, 72, 134, 0.26);
+            background: linear-gradient(135deg, #fff9fb, #fff0f6);
+            border-color: rgba(198, 68, 125, 0.18);
             color: var(--rose-700);
         }
 
         .page-shell {
-            padding: 20px 0 58px;
+            padding: 26px 0 68px;
         }
 
         .hero-card {
             position: relative;
             overflow: hidden;
-            margin-bottom: 24px;
-            padding: 34px;
+            margin-bottom: 28px;
+            padding: 40px;
             border-radius: var(--radius-xl);
             background:
-                radial-gradient(circle at 88% 16%, rgba(255, 255, 255, 0.7), transparent 16%),
-                linear-gradient(180deg, #fffafb 0%, #ffeef5 100%);
-            border: 1px solid rgba(233, 72, 134, 0.12);
+                radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.88), transparent 18%),
+                radial-gradient(circle at 12% 82%, rgba(255, 255, 255, 0.54), transparent 22%),
+                linear-gradient(135deg, #fff6f2 0%, #ffe7f1 38%, #fff9fd 100%);
+            border: 1px solid rgba(198, 68, 125, 0.12);
             color: var(--hero-text);
-            box-shadow: 0 18px 36px rgba(77, 26, 50, 0.08);
+            box-shadow: 0 30px 70px rgba(77, 26, 50, 0.09);
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: calc(var(--radius-xl) - 10px);
+            border: 1px solid rgba(255, 255, 255, 0.55);
+            pointer-events: none;
         }
 
         .hero-card::after {
-            content: none;
+            content: "";
+            position: absolute;
+            right: -80px;
+            top: -90px;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0) 70%);
+            pointer-events: none;
         }
 
         .hero-card > * {
@@ -288,11 +355,20 @@
         }
 
         .page-card {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(233, 72, 134, 0.1);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 252, 253, 0.98) 100%);
+            border: 1px solid rgba(198, 68, 125, 0.08);
             border-radius: var(--radius-xl);
-            box-shadow: 0 16px 30px rgba(77, 26, 50, 0.06);
+            box-shadow:
+                0 20px 40px rgba(77, 26, 50, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.75);
             overflow: hidden;
+        }
+
+        .page-card h2,
+        .page-card h3 {
+            font-family: Georgia, "Palatino Linotype", serif;
+            letter-spacing: -0.02em;
         }
 
         .messages {
@@ -306,8 +382,8 @@
         }
 
         .message {
-            padding: 14px 16px;
-            border-radius: 16px;
+            padding: 15px 16px;
+            border-radius: 18px;
             color: var(--white);
             box-shadow: var(--shadow-md);
         }
@@ -325,8 +401,10 @@
         }
 
         .site-footer {
-            border-top: 1px solid rgba(233, 72, 134, 0.12);
-            background: rgba(255, 251, 253, 0.96);
+            border-top: 1px solid rgba(198, 68, 125, 0.08);
+            background:
+                radial-gradient(circle at 12% 0%, rgba(255, 234, 242, 0.76), transparent 26%),
+                linear-gradient(180deg, rgba(255, 250, 251, 0.98) 0%, rgba(255, 246, 248, 0.98) 100%);
         }
 
         .footer-inner {
@@ -338,11 +416,17 @@
 
         .footer-card {
             min-width: 0;
+            padding: 18px 0;
         }
 
         .footer-card h3,
         .footer-card h4 {
             margin-bottom: 10px;
+        }
+
+        .footer-card h4 {
+            font-family: Georgia, "Palatino Linotype", serif;
+            font-size: 1.15rem;
         }
 
         .footer-brand {
@@ -382,11 +466,11 @@
             gap: 12px;
             width: fit-content;
             max-width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.9);
-            border: 1px solid rgba(233, 72, 134, 0.1);
-            box-shadow: 0 8px 18px rgba(185, 45, 99, 0.05);
+            border: 1px solid rgba(198, 68, 125, 0.08);
+            box-shadow: 0 12px 24px rgba(185, 45, 99, 0.05);
         }
 
         .social-link:hover {
@@ -420,7 +504,7 @@
         }
 
         .footer-bottom {
-            padding: 0 0 28px;
+            padding: 0 0 34px;
             text-align: center;
             color: var(--ink-500);
             font-size: 0.95rem;
@@ -435,7 +519,7 @@
             }
 
             .hero-card {
-                padding: 28px 24px;
+                padding: 30px 24px;
             }
         }
 
@@ -459,7 +543,8 @@
                 justify-content: stretch;
                 gap: 10px;
                 overflow: visible;
-                padding-bottom: 0;
+                padding: 8px;
+                border-radius: 24px;
             }
 
             .header-links::-webkit-scrollbar {
@@ -473,8 +558,8 @@
             }
 
             .brand-mark {
-                width: 52px;
-                height: 52px;
+                width: 54px;
+                height: 54px;
             }
 
             .brand-copy {
@@ -482,12 +567,12 @@
             }
 
             .brand-copy strong {
-                font-size: 1.08rem;
-                line-height: 1.15;
+                font-size: 1.18rem;
+                line-height: 1.1;
             }
 
             .brand-copy small {
-                font-size: 0.75rem;
+                font-size: 0.68rem;
                 line-height: 1.25;
             }
 
@@ -499,8 +584,8 @@
                 padding: 8px 12px;
                 font-size: 0.92rem;
                 text-align: center;
-                background: rgba(255, 255, 255, 0.9);
-                border: 1px solid rgba(233, 72, 134, 0.1);
+                background: rgba(255, 255, 255, 0.92);
+                border: 1px solid rgba(198, 68, 125, 0.1);
             }
 
             .cart-btn {
@@ -523,12 +608,12 @@
 
             .hero-card {
                 margin-bottom: 22px;
-                padding: 24px 18px;
+                padding: 26px 18px;
                 border-radius: 24px;
             }
 
             .page-shell {
-                padding: 14px 0 54px;
+                padding: 16px 0 54px;
             }
 
             .messages {

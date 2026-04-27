@@ -14,8 +14,10 @@
     }
 
     .cart-hero h1 {
-        font-size: clamp(2rem, 5vw, 3rem);
-        margin-bottom: 10px;
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.2rem, 5vw, 3.3rem);
+        margin-bottom: 12px;
+        line-height: 0.98;
     }
 
     .cart-hero p {
@@ -25,7 +27,7 @@
     }
 
     .cart-wrapper {
-        padding: 24px;
+        padding: 28px;
     }
 
     .cart-table {
@@ -34,16 +36,16 @@
     }
 
     .cart-table th {
-        padding: 14px 16px;
+        padding: 15px 16px;
         text-align: left;
         color: var(--ink-700);
-        background: var(--rose-50);
+        background: linear-gradient(135deg, #fff4f7, #fffaf2);
         font-size: 0.92rem;
     }
 
     .cart-table td {
-        padding: 18px 16px;
-        border-bottom: 1px solid rgba(233, 72, 134, 0.08);
+        padding: 20px 16px;
+        border-bottom: 1px solid rgba(198, 68, 125, 0.08);
         vertical-align: middle;
     }
 
@@ -54,12 +56,12 @@
     }
 
     .product-thumb {
-        width: 74px;
-        height: 74px;
-        border-radius: 18px;
+        width: 82px;
+        height: 82px;
+        border-radius: 22px;
         overflow: hidden;
         flex-shrink: 0;
-        background: linear-gradient(180deg, #fff7fb, #ffe4f0);
+        background: linear-gradient(180deg, #fff7fb, #ffeaf4);
     }
 
     .product-thumb img {
@@ -88,7 +90,8 @@
         gap: 8px;
         padding: 6px;
         border-radius: 999px;
-        background: var(--rose-50);
+        background: linear-gradient(135deg, #fff5f8, #fffaf5);
+        border: 1px solid rgba(198, 68, 125, 0.08);
     }
 
     .qty-btn,
@@ -96,8 +99,8 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-width: 34px;
-        min-height: 34px;
+        min-width: 36px;
+        min-height: 36px;
         border-radius: 999px;
         font-weight: 700;
     }
@@ -137,14 +140,14 @@
         gap: 20px;
         align-items: center;
         flex-wrap: wrap;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(233, 72, 134, 0.12);
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(198, 68, 125, 0.1);
     }
 
     .cart-total strong {
         display: block;
-        font-size: 2rem;
+        font-size: 2.2rem;
         color: var(--rose-700);
     }
 
@@ -165,23 +168,25 @@
         align-items: center;
         justify-content: center;
         min-height: 48px;
-        padding: 0 18px;
-        border-radius: 14px;
+        padding: 0 20px;
+        border-radius: 999px;
         font-weight: 700;
     }
 
     .btn {
-        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        background: linear-gradient(135deg, #d74f8a 0%, #b93167 70%, #98285b 100%);
         color: #fff;
+        box-shadow: 0 16px 28px rgba(185, 45, 99, 0.16);
     }
 
     .btn-secondary {
-        background: var(--rose-50);
+        background: linear-gradient(135deg, #fff6f9, #fffdfc);
         color: var(--rose-700);
+        border: 1px solid rgba(198, 68, 125, 0.1);
     }
 
     .empty-cart {
-        padding: 40px 28px;
+        padding: 48px 30px;
         text-align: center;
     }
 
@@ -198,7 +203,7 @@
 
     @media (max-width: 760px) {
         .cart-wrapper {
-            padding: 18px;
+            padding: 20px;
             overflow: visible;
         }
 
@@ -279,10 +284,10 @@
             position: sticky;
             bottom: 12px;
             z-index: 5;
-            padding: 16px;
-            border-radius: 22px;
+            padding: 18px;
+            border-radius: 24px;
             background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(233, 72, 134, 0.12);
+            border: 1px solid rgba(198, 68, 125, 0.1);
             box-shadow: 0 16px 34px rgba(75, 24, 46, 0.12);
         }
 
@@ -310,8 +315,8 @@
         <div>
             <h1>Tu carrito de compra</h1>
             <p>
-                Revisa cantidades, confirma disponibilidad y termina la prueba del pedido con una experiencia
-                más alineada a la marca Casita de Regalos.
+                Revisa cantidades, confirma disponibilidad y prepara tu pedido con una experiencia
+                más limpia, elegante y alineada a la marca Casita de Regalos.
             </p>
         </div>
         <div>

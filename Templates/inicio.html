@@ -15,8 +15,8 @@
     }
 
     .hero-grid {
-        grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.85fr);
-        align-items: end;
+        grid-template-columns: minmax(0, 1.24fr) minmax(320px, 0.86fr);
+        align-items: stretch;
     }
 
     .about-grid {
@@ -38,7 +38,7 @@
     }
 
     .home-flow {
-        gap: 22px;
+        gap: 26px;
     }
 
     .section-stack {
@@ -87,10 +87,12 @@
     }
 
     .hero-copy h1 {
-        font-size: clamp(2.25rem, 5vw, 3.9rem);
-        line-height: 0.98;
-        margin-bottom: 16px;
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.7rem, 5.8vw, 4.8rem);
+        line-height: 0.93;
+        margin-bottom: 18px;
         text-wrap: balance;
+        max-width: 11ch;
     }
 
     .hero-copy p,
@@ -102,11 +104,35 @@
         line-height: 1.75;
     }
 
+    .hero-copy p {
+        max-width: 62ch;
+        font-size: 1.03rem;
+    }
+
+    .hero-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .hero-tag {
+        display: inline-flex;
+        align-items: center;
+        padding: 9px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--ink-700);
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+
     .hero-actions {
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
-        margin-top: 24px;
+        margin-top: 28px;
     }
 
     .hero-stats {
@@ -124,28 +150,51 @@
     .product-card,
     .step-card,
     .line-card {
-        border-radius: 22px;
-        border: 1px solid rgba(233, 72, 134, 0.1);
+        border-radius: 26px;
+        border: 1px solid rgba(198, 68, 125, 0.09);
         background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 14px 28px rgba(75, 24, 46, 0.05);
+        box-shadow: 0 18px 36px rgba(75, 24, 46, 0.05);
     }
 
     .hero-stat {
-        padding: 18px;
+        padding: 18px 18px 20px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 250, 0.96) 100%);
     }
 
     .hero-stat strong {
         display: block;
         margin-bottom: 6px;
         color: var(--rose-700);
-        font-size: 1.8rem;
+        font-size: 1.95rem;
     }
 
     .hero-panel,
     .section-card,
     .sidebar,
     .catalog-main {
-        padding: 22px;
+        padding: 24px;
+    }
+
+    .hero-panel {
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
+            linear-gradient(165deg, #7a244a 0%, #5f1c3d 58%, #49152f 100%);
+        color: #fff5fa;
+        border: 0;
+        box-shadow: 0 28px 54px rgba(88, 24, 55, 0.2);
+    }
+
+    .hero-panel::after {
+        content: "";
+        position: absolute;
+        inset: auto -30px -30px auto;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+        pointer-events: none;
     }
 
     .hero-panel h2,
@@ -154,6 +203,20 @@
     .sidebar h2 {
         margin-bottom: 12px;
         font-size: clamp(1.35rem, 3vw, 2rem);
+    }
+
+    .section-card h2,
+    .catalog-main h2 {
+        line-height: 1.05;
+    }
+
+    .hero-panel h2,
+    .hero-panel p,
+    .hero-panel strong,
+    .hero-panel small {
+        color: inherit;
+        position: relative;
+        z-index: 1;
     }
 
     .section-kicker,
@@ -171,8 +234,9 @@
 
     .section-kicker {
         margin-bottom: 14px;
-        background: var(--rose-50);
+        background: linear-gradient(135deg, #fff4f7, #fffaf2);
         color: var(--rose-700);
+        border: 1px solid rgba(198, 68, 125, 0.08);
     }
 
     .pill {
@@ -192,22 +256,23 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 46px;
-        padding: 0 18px;
-        border-radius: 14px;
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 999px;
         font-weight: 700;
     }
 
     .btn {
-        background: var(--rose-600);
+        background: linear-gradient(135deg, #d74f8a 0%, #b93167 70%, #98285b 100%);
         color: #fff;
+        box-shadow: 0 16px 28px rgba(185, 45, 99, 0.18);
     }
 
     .btn-secondary,
     .btn-outline {
-        background: #fffafc;
+        background: rgba(255, 255, 255, 0.88);
         color: var(--rose-700);
-        border: 1px solid rgba(233, 72, 134, 0.12);
+        border: 1px solid rgba(198, 68, 125, 0.12);
     }
 
     .btn-disabled {
@@ -233,11 +298,23 @@
         justify-content: space-between;
         gap: 12px;
         align-items: flex-start;
-        padding: 14px 16px;
-        border-radius: 18px;
+        padding: 16px 16px;
+        border-radius: 20px;
         background: #fffafc;
-        border: 1px solid rgba(233, 72, 134, 0.08);
+        border: 1px solid rgba(198, 68, 125, 0.08);
         color: var(--ink-700);
+    }
+
+    .hero-panel .feature-item {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.1);
+        color: #fff8fb;
+        backdrop-filter: blur(4px);
+    }
+
+    .hero-panel .feature-item strong,
+    .hero-panel .feature-item small {
+        color: inherit;
     }
 
     .feature-item strong,
@@ -257,20 +334,42 @@
 
     .line-card,
     .step-card {
-        padding: 22px;
+        padding: 24px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 251, 0.98) 100%);
+    }
+
+    .about-grid .section-card:first-child {
+        background:
+            radial-gradient(circle at top right, rgba(255, 240, 228, 0.72), transparent 24%),
+            linear-gradient(135deg, rgba(255, 251, 248, 0.98) 0%, rgba(255, 241, 246, 0.98) 100%);
+    }
+
+    .about-grid .section-card:last-child {
+        background:
+            radial-gradient(circle at top left, rgba(244, 237, 255, 0.44), transparent 24%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(252, 246, 249, 0.98) 100%);
+    }
+
+    .meta-grid .section-card:first-child {
+        background: linear-gradient(135deg, rgba(255, 250, 247, 0.98) 0%, rgba(255, 243, 248, 0.98) 100%);
+    }
+
+    .meta-grid .section-card:last-child {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 251, 0.98) 100%);
     }
 
     .step-number {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 44px;
-        height: 44px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         margin-bottom: 14px;
-        background: linear-gradient(135deg, var(--rose-600), var(--rose-400));
+        background: linear-gradient(135deg, #d75991, #a12c60);
         color: #fff;
         font-weight: 800;
+        box-shadow: 0 12px 22px rgba(185, 45, 99, 0.18);
     }
 
     .meta-list {
@@ -295,10 +394,12 @@
         align-items: center;
         gap: 16px;
         flex-wrap: wrap;
-        padding: 18px 20px;
-        border-radius: 20px;
-        background: #fffafc;
-        border: 1px solid rgba(233, 72, 134, 0.12);
+        padding: 22px 24px;
+        border-radius: 26px;
+        background:
+            radial-gradient(circle at right center, rgba(255, 230, 238, 0.9), transparent 26%),
+            linear-gradient(135deg, #fffaf8 0%, #fff1f6 100%);
+        border: 1px solid rgba(198, 68, 125, 0.1);
     }
 
     .sidebar {
@@ -412,16 +513,17 @@
 
     .catalog-main {
         display: grid;
-        gap: 18px;
+        gap: 20px;
     }
 
     .catalog-toolbar {
         display: grid;
         gap: 12px;
-        padding: 16px 18px;
-        border-radius: 20px;
-        background: #fff7fb;
-        border: 1px solid rgba(233, 72, 134, 0.1);
+        padding: 18px 20px;
+        border-radius: 24px;
+        background:
+            linear-gradient(135deg, rgba(255, 249, 251, 0.96) 0%, rgba(255, 241, 246, 0.96) 100%);
+        border: 1px solid rgba(198, 68, 125, 0.1);
     }
 
     .catalog-toolbar-top {
@@ -444,8 +546,9 @@
     }
 
     .catalog-toolbar-copy strong {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
         color: var(--ink-900);
+        font-family: Georgia, "Palatino Linotype", serif;
     }
 
     .catalog-chip-row {
@@ -465,10 +568,10 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 40px;
-        padding: 0 14px;
+        min-height: 42px;
+        padding: 0 16px;
         border-radius: 999px;
-        border: 1px solid rgba(233, 72, 134, 0.12);
+        border: 1px solid rgba(198, 68, 125, 0.1);
         background: #ffffff;
         color: var(--ink-700);
         font-weight: 700;
@@ -479,8 +582,8 @@
 
     .catalog-chip.is-active,
     .catalog-chip:hover {
-        background: var(--rose-600);
-        border-color: var(--rose-600);
+        background: linear-gradient(135deg, #d75991, #b93167);
+        border-color: transparent;
         color: #fff;
     }
 
@@ -492,20 +595,41 @@
         flex-wrap: wrap;
     }
 
+    .results-header h2 {
+        font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+        line-height: 1.02;
+        margin-bottom: 8px;
+    }
+
     .catalog-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 18px;
     }
 
     .product-card {
         overflow: hidden;
         display: grid;
         grid-template-rows: auto 1fr;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 100%);
+        position: relative;
+    }
+
+    .product-card::after {
+        content: "";
+        position: absolute;
+        inset: auto 18px 0 18px;
+        height: 18px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(241, 204, 221, 0.16), rgba(241, 204, 221, 0));
+        pointer-events: none;
     }
 
     .product-media {
-        min-height: 310px;
-        background: linear-gradient(180deg, #fff9fc, #fff0f6);
+        min-height: 340px;
+        background:
+            radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8), transparent 28%),
+            linear-gradient(180deg, #fffafc, #fff0f6);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -515,7 +639,7 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
-        padding: 10px;
+        padding: 14px;
     }
 
     .product-placeholder {
@@ -531,8 +655,8 @@
 
     .product-body {
         display: grid;
-        gap: 12px;
-        padding: 18px;
+        gap: 14px;
+        padding: 22px;
     }
 
     .product-topline,
@@ -542,6 +666,10 @@
         gap: 12px;
         align-items: center;
         flex-wrap: wrap;
+    }
+
+    .product-price-row {
+        align-items: end;
     }
 
     .stock-badge {
@@ -569,8 +697,9 @@
     }
 
     .product-body h3 {
-        font-size: 1.15rem;
+        font-size: 1.25rem;
         text-wrap: pretty;
+        line-height: 1.16;
     }
 
     .product-title-link {
@@ -583,25 +712,32 @@
 
     .product-description {
         color: var(--ink-700);
-        line-height: 1.68;
-        min-height: 68px;
+        line-height: 1.7;
+        min-height: 74px;
     }
 
     .product-price {
         color: var(--rose-700);
-        font-size: 1.4rem;
+        font-size: 1.55rem;
         font-weight: 800;
     }
 
     .product-copy {
         color: var(--ink-500);
         font-size: 0.92rem;
+        letter-spacing: 0.02em;
     }
 
     .product-actions {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
+    }
+
+    .product-card .btn,
+    .product-card .btn-outline,
+    .catalog-main .btn-outline {
+        min-height: 46px;
     }
 
     .empty-state {
@@ -697,8 +833,9 @@
         }
 
         .hero-copy h1 {
-            font-size: clamp(2rem, 11vw, 2.8rem);
-            line-height: 1.02;
+            font-size: clamp(2.2rem, 11vw, 3.35rem);
+            line-height: 0.96;
+            max-width: none;
         }
 
         .catalog-toolbar-top {
@@ -721,6 +858,10 @@
         .filter-actions button,
         .cta-band .btn {
             width: 100%;
+        }
+
+        .hero-tags {
+            gap: 8px;
         }
 
         .hero-stats {
@@ -765,7 +906,7 @@
         .section-card,
         .sidebar,
         .catalog-main {
-            padding: 16px;
+            padding: 18px;
         }
 
         .hero-panel p,
@@ -848,24 +989,24 @@
         }
 
         .catalog-grid {
-            gap: 12px;
+            gap: 14px;
         }
 
         .product-card {
             grid-template-columns: 1fr;
             grid-template-rows: auto 1fr;
-            border-radius: 20px;
+            border-radius: 24px;
             align-items: stretch;
         }
 
         .product-media {
-            min-height: 240px;
+            min-height: 260px;
             height: auto;
         }
 
         .product-body {
             gap: 10px;
-            padding: 14px;
+            padding: 16px;
             align-content: start;
         }
 
@@ -900,7 +1041,7 @@
         }
 
         .product-price {
-            font-size: 1.14rem;
+            font-size: 1.22rem;
         }
 
         .product-copy {
@@ -961,12 +1102,19 @@
 <section class="hero-card">
     <div class="hero-grid">
         <div class="hero-copy">
-            <h1>Detalles personalizados para hacer inolvidables tus fechas especiales.</h1>
+            <span class="section-kicker">Detalles con presencia</span>
+            <h1>Regalos que se sienten especiales desde el primer vistazo.</h1>
             <p>
                 En Casita de Regalos encuentras desayunos sorpresa, cajas personalizadas, detalles
                 románticos, opciones temáticas y regalos pensados para sorprender en Bello, Medellín
                 y el área metropolitana.
             </p>
+
+            <div class="hero-tags">
+                <span class="hero-tag">Desayunos sorpresa</span>
+                <span class="hero-tag">Temáticos personalizados</span>
+                <span class="hero-tag">Regalos premium</span>
+            </div>
 
             <div class="hero-actions">
                 <a href="#catalogo" class="btn">Ver catálogo</a>
@@ -990,9 +1138,9 @@
         </div>
 
         <aside class="hero-panel">
-            <span class="section-kicker">Favoritos</span>
-            <h2>Detalles destacados</h2>
-            <p>Una selección lista para inspirarte y ayudarte a elegir más rápido.</p>
+            <span class="section-kicker">Selección top</span>
+            <h2>Favoritos listos para impresionar</h2>
+            <p>Una curaduría pensada para que elijas rápido, con estilo y sin perder el toque especial.</p>
 
             <div class="feature-list">
                 {% for producto in destacados %}
@@ -1024,7 +1172,7 @@
 
         <article class="section-card page-card">
             <span class="section-kicker">Cobertura</span>
-            <h2>Atención cercana y personalizada</h2>
+            <h2>Atención cercana con acabado especial</h2>
             <ul class="meta-list">
                 <li><strong>Ubicación</strong><br>{{ quienes_somos.cobertura }}</li>
                 <li><strong>Personalización</strong><br>{{ quienes_somos.promesa }}</li>
@@ -1035,7 +1183,7 @@
 
     <section class="section-card page-card" id="como-comprar">
         <span class="section-kicker">Cómo comprar</span>
-        <h2>Tu compra en pocos pasos</h2>
+        <h2>Un proceso simple, claro y acompañado</h2>
         <div class="steps-grid">
             {% for paso in pasos_compra %}
                 <article class="step-card">
@@ -1050,7 +1198,7 @@
     <section class="meta-grid">
         <article class="section-card page-card">
             <span class="section-kicker">Medios de pago</span>
-            <h2>Formas de confirmar tu pedido</h2>
+            <h2>Reserva tu detalle de forma segura</h2>
             <p class="meta-copy">Una vez definido el detalle, te compartimos el valor final y los datos para reservar tu pedido.</p>
             <ul class="meta-list">
                 {% for metodo in metodos_pago %}
@@ -1061,7 +1209,7 @@
 
         <article class="section-card page-card">
             <span class="section-kicker">Informacion importante</span>
-            <h2>Condiciones para tu compra</h2>
+            <h2>Lo esencial antes de confirmar</h2>
             <p class="meta-copy">Estas recomendaciones te ayudan a reservar con tiempo y a recibir un detalle bien preparado.</p>
             <ul class="meta-list">
                 {% for politica in politicas_clave %}
@@ -1073,8 +1221,8 @@
 
     <section class="cta-band">
         <div>
-            <strong>&iquest;Ya sabes qu&eacute; detalle quieres?</strong>
-            <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a cotizarlo o personalizarlo.</p>
+            <strong>&iquest;Ya tienes una idea en mente?</strong>
+            <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a convertirla en un detalle bien presentado y a tu estilo.</p>
         </div>
         <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotizaci&oacute;n</a>
     </section>
@@ -1087,7 +1235,7 @@
                 <div class="catalog-toolbar-copy">
                     <span class="section-kicker">Catálogo</span>
                     <strong>Explora por categoría</strong>
-                    <p>Elige una línea y revisa los detalles disponibles sin salir del catálogo.</p>
+                    <p>Una selección organizada para que descubras ideas lindas, actuales y listas para regalar.</p>
                 </div>
                 <div class="results-counter">
                     <strong>{{ page_obj.paginator.count }}</strong>
@@ -1119,7 +1267,7 @@
                     {% if filtros.q %}
                         Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
                     {% else %}
-                        Explora los productos disponibles y elige el que mejor se adapte a tu ocasión.
+                        Descubre los productos disponibles y elige el que mejor conecte con la ocasión que quieres celebrar.
                     {% endif %}
                 </p>
             </div>
