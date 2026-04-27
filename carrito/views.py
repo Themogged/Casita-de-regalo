@@ -65,7 +65,7 @@ def _json_checkout_error(message, status=400, redirect_url=None):
     return JsonResponse(payload, status=status)
 
 
-def _build_whatsapp_url_for_pedido(pedido):
+def _build_whatsapp_url_for_pedido(pedido, checkout_data=None):
     lineas = [
         "*Pedido - Casita de Regalos*",
         "",
@@ -81,7 +81,27 @@ def _build_whatsapp_url_for_pedido(pedido):
         [
             "",
             f"Total: {_format_cop(pedido.total)}",
-            "Quiero confirmar mi pedido",
+        ]
+    )
+
+    checkout_data = checkout_data or {}
+    detalle_personalizacion = [
+        ("Ocasion", checkout_data.get("ocasion")),
+        ("Para", checkout_data.get("para_quien")),
+        ("Mensaje en tarjeta", checkout_data.get("mensaje_tarjeta")),
+        ("Detalle adicional", checkout_data.get("detalle_extra")),
+    ]
+
+    datos_visibles = [(titulo, valor) for titulo, valor in detalle_personalizacion if valor]
+    if datos_visibles:
+        lineas.extend(["", "*Detalles para personalizar:*"])
+        for titulo, valor in datos_visibles:
+            lineas.append(f"- {titulo}: {valor}")
+
+    lineas.extend(
+        [
+            "",
+            "Quiero confirmar mi pedido y revisar disponibilidad final.",
         ]
     )
 
@@ -185,6 +205,7 @@ def ver_carrito(request):
         {
             "productos": productos,
             "total": total,
+            "checkout_prefill": request.session.get("checkout_prefill", {}),
         },
     )
 
@@ -232,6 +253,14 @@ def eliminar_producto(request, producto_id):
 @require_POST
 def enviar_carrito_whatsapp(request):
     carrito = _get_carrito(request)
+    checkout_data = {
+        "ocasion": request.POST.get("ocasion", "").strip(),
+        "para_quien": request.POST.get("para_quien", "").strip(),
+        "mensaje_tarjeta": request.POST.get("mensaje_tarjeta", "").strip(),
+        "detalle_extra": request.POST.get("detalle_extra", "").strip(),
+    }
+    request.session["checkout_prefill"] = checkout_data
+    request.session.modified = True
 
     if not carrito:
         mensaje = "Tu carrito esta vacio."
@@ -295,7 +324,9 @@ def enviar_carrito_whatsapp(request):
         return redirect("ver_carrito")
 
     _set_carrito(request, {})
-    whatsapp_url = _build_whatsapp_url_for_pedido(pedido)
+    request.session.pop("checkout_prefill", None)
+    request.session.modified = True
+    whatsapp_url = _build_whatsapp_url_for_pedido(pedido, checkout_data=checkout_data)
 
     if _es_ajax(request):
         return JsonResponse(

@@ -1,6 +1,9 @@
+import json
+import os
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
+from unittest import mock
 
 from .models import Categoria, Producto, ProductoImagen
 
@@ -69,7 +72,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Bello, Antioquia')
         self.assertContains(response, 'Cómo comprar')
-        self.assertContains(response, 'Formas de confirmar tu pedido')
+        self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Explora por categoría')
 
     def test_inicio_envia_headers_de_seguridad(self):
@@ -138,3 +141,64 @@ class CatalogoViewsTests(TestCase):
             f'{reverse("inicio")}?categoria={self.categoria_regalos.id}#catalogo',
         )
         self.assertContains(response, 'class="catalog-chip js-catalog-nav is-active"')
+
+    def test_asistente_devuelve_fallback_si_no_hay_api_key(self):
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Quiero algo tematico para una nina",
+                        "history": [],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["mode"], "fallback")
+        self.assertIn("tematica", payload["reply"].lower())
+        self.assertTrue(payload["actions"])
+
+    def test_asistente_puede_responder_en_modo_ai(self):
+        with mock.patch(
+            "productos.assistant_views.get_assistant_reply",
+            return_value={
+                "message": "Te recomiendo revisar tematicos e infantiles y luego confirmar por WhatsApp.",
+                "mode": "ai",
+                "configured": True,
+                "actions": [{"label": "Ver catalogo", "href": "/#catalogo"}],
+            },
+        ):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Tengo 80 mil para un detalle infantil",
+                        "history": [{"role": "user", "text": "Hola"}],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["mode"], "ai")
+        self.assertTrue(payload["configured"])
+        self.assertIn("whatsapp", payload["reply"].lower())
+
+    def test_asistente_valida_mensaje_vacio(self):
+        response = self.client.post(
+            reverse('assistant_chat'),
+            data=json.dumps({"message": "   ", "history": []}),
+            content_type='application/json',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["ok"])

@@ -30,6 +30,132 @@
         padding: 28px;
     }
 
+    .checkout-experience {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+        gap: 22px;
+        margin-top: 28px;
+        align-items: start;
+    }
+
+    .checkout-card,
+    .checkout-sidecard {
+        padding: 22px;
+        border-radius: 26px;
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 248, 251, 0.99) 100%);
+        box-shadow: 0 18px 34px rgba(75, 24, 46, 0.05);
+    }
+
+    .checkout-card h2,
+    .checkout-sidecard h3 {
+        font-family: Georgia, "Palatino Linotype", serif;
+        line-height: 1.04;
+    }
+
+    .checkout-card h2 {
+        font-size: clamp(1.5rem, 3.2vw, 2.15rem);
+        margin-bottom: 10px;
+    }
+
+    .checkout-card p,
+    .checkout-sidecard p {
+        color: var(--ink-700);
+        line-height: 1.7;
+    }
+
+    .checkout-kicker {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        margin-bottom: 14px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #fff4f7, #fffaf2);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        color: var(--rose-700);
+        font-size: 0.8rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .checkout-fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+    }
+
+    .checkout-field {
+        display: grid;
+        gap: 8px;
+    }
+
+    .checkout-field--full {
+        grid-column: 1 / -1;
+    }
+
+    .checkout-field label {
+        color: var(--ink-900);
+        font-weight: 700;
+    }
+
+    .checkout-field input,
+    .checkout-field textarea {
+        width: 100%;
+        border: 1px solid rgba(198, 68, 125, 0.12);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.94);
+        padding: 14px 15px;
+        color: var(--ink-900);
+        font: inherit;
+        outline: none;
+    }
+
+    .checkout-field textarea {
+        min-height: 118px;
+        resize: vertical;
+    }
+
+    .checkout-field input:focus,
+    .checkout-field textarea:focus {
+        border-color: rgba(198, 68, 125, 0.28);
+        box-shadow: 0 0 0 4px rgba(216, 89, 145, 0.08);
+    }
+
+    .checkout-help {
+        margin-top: 8px;
+        color: var(--ink-500);
+        font-size: 0.92rem;
+    }
+
+    .checkout-sidecard {
+        display: grid;
+        gap: 16px;
+        background:
+            radial-gradient(circle at top right, rgba(255, 234, 243, 0.92), transparent 28%),
+            linear-gradient(180deg, rgba(255, 252, 253, 0.99) 0%, rgba(255, 244, 248, 0.99) 100%);
+    }
+
+    .checkout-points {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+    }
+
+    .checkout-points li {
+        padding: 14px 14px 14px 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.84);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        color: var(--ink-700);
+        line-height: 1.6;
+    }
+
+    .checkout-points strong {
+        color: var(--ink-900);
+    }
+
     .cart-table {
         width: 100%;
         border-collapse: collapse;
@@ -156,6 +282,18 @@
         line-height: 1.7;
     }
 
+    .cart-total p {
+        display: none;
+    }
+
+    .cart-total::after {
+        content: "Al continuar se abrirá WhatsApp con tu pedido listo, mejor presentado y más fácil de confirmar.";
+        display: block;
+        margin-top: 8px;
+        color: var(--ink-700);
+        line-height: 1.7;
+    }
+
     .summary-actions {
         display: flex;
         gap: 12px;
@@ -205,6 +343,21 @@
         .cart-wrapper {
             padding: 20px;
             overflow: visible;
+        }
+
+        .checkout-experience {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .checkout-card,
+        .checkout-sidecard {
+            padding: 18px;
+            border-radius: 24px;
+        }
+
+        .checkout-fields {
+            grid-template-columns: 1fr;
         }
 
         .cart-hero h1 {
@@ -281,29 +434,37 @@
 
         .cart-summary {
             align-items: stretch;
-            position: sticky;
-            bottom: 12px;
-            z-index: 5;
-            padding: 18px;
-            border-radius: 24px;
+            position: static;
+            bottom: auto;
+            z-index: auto;
+            padding: 14px 0 0;
+            border-radius: 0;
             background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(198, 68, 125, 0.1);
-            box-shadow: 0 16px 34px rgba(75, 24, 46, 0.12);
+            border: 0;
+            box-shadow: none;
         }
 
         .summary-actions {
             display: grid;
             grid-template-columns: 1fr;
             width: 100%;
+            gap: 10px;
         }
 
         .summary-actions .btn,
         .summary-actions .btn-secondary {
             width: 100%;
+            min-height: 44px;
+            padding: 0 16px;
         }
 
         .cart-total strong {
-            font-size: 1.75rem;
+            font-size: 1.55rem;
+        }
+
+        .cart-total::after {
+            font-size: 0.94rem;
+            line-height: 1.6;
         }
     }
 </style>
@@ -388,8 +549,58 @@
             </tbody>
         </table>
 
-        <div class="cart-summary">
-            <div class="cart-total">
+        <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form">
+            {% csrf_token %}
+
+            <div class="checkout-experience">
+                <div class="checkout-card">
+                    <span class="checkout-kicker">Personaliza el pedido</span>
+                    <h2>Haz que el mensaje salga mejor presentado</h2>
+                    <p>
+                        Completa estos datos si quieres que el pedido llegue a WhatsApp con más contexto
+                        y una personalización más clara para tu detalle.
+                    </p>
+
+                    <div class="checkout-fields">
+                        <div class="checkout-field">
+                            <label for="checkout-ocasion">Ocasión</label>
+                            <input type="text" id="checkout-ocasion" name="ocasion" maxlength="120" placeholder="Ej: cumpleaños, aniversario, sorpresa" value="{{ checkout_prefill.ocasion|default:'' }}">
+                        </div>
+
+                        <div class="checkout-field">
+                            <label for="checkout-para">¿Para quién es?</label>
+                            <input type="text" id="checkout-para" name="para_quien" maxlength="120" placeholder="Ej: para mi novia, para mi mamá" value="{{ checkout_prefill.para_quien|default:'' }}">
+                        </div>
+
+                        <div class="checkout-field checkout-field--full">
+                            <label for="checkout-mensaje">Mensaje para tarjeta</label>
+                            <textarea id="checkout-mensaje" name="mensaje_tarjeta" placeholder="Escribe aquí el mensaje que te gustaría incluir">{{ checkout_prefill.mensaje_tarjeta|default:'' }}</textarea>
+                        </div>
+
+                        <div class="checkout-field checkout-field--full">
+                            <label for="checkout-extra">Detalle adicional</label>
+                            <textarea id="checkout-extra" name="detalle_extra" placeholder="Colores, temática, referencias o cualquier ajuste que quieras pedir">{{ checkout_prefill.detalle_extra|default:'' }}</textarea>
+                        </div>
+                    </div>
+
+                    <p class="checkout-help">
+                        Todo esto es opcional, pero ayuda a que la cotización y la preparación del detalle salgan mucho más claras.
+                    </p>
+                </div>
+
+                <aside class="checkout-sidecard">
+                    <span class="checkout-kicker">Cierre premium</span>
+                    <h3>Así se verá más profesional tu pedido</h3>
+                    <ul class="checkout-points">
+                        <li><strong>Resumen claro:</strong> el mensaje incluirá productos, cantidades y total.</li>
+                        <li><strong>Contexto útil:</strong> también enviará ocasión, destinatario y mensaje deseado si lo llenas.</li>
+                        <li><strong>Compra guiada:</strong> después revisamos disponibilidad final y ajustes antes de confirmar.</li>
+                    </ul>
+                </aside>
+            </div>
+
+            <div class="cart-summary">
+                <div class="cart-total">
                 <span>Total del pedido</span>
                 <strong>{{ total|cop }}</strong>
                 <p>Al continuar se abrirá WhatsApp con tu pedido listo para enviar.</p>
@@ -397,12 +608,10 @@
 
             <div class="summary-actions">
                 <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
-                <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn js-whatsapp-checkout-button">Finalizar por WhatsApp</button>
-                </form>
+                <button type="submit" class="btn js-whatsapp-checkout-button">Finalizar por WhatsApp</button>
             </div>
-        </div>
+            </div>
+        </form>
     {% else %}
         <div class="empty-cart">
             <h2>Tu carrito está vacío</h2>

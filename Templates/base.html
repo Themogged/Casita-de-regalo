@@ -510,12 +510,256 @@
             font-size: 0.95rem;
         }
 
+        .assistant-shell {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 85;
+            display: grid;
+            justify-items: end;
+            gap: 12px;
+        }
+
+        .assistant-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            min-height: 58px;
+            padding: 0 20px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            color: #fff;
+            box-shadow: 0 18px 38px rgba(145, 38, 86, 0.28);
+            cursor: pointer;
+        }
+
+        .assistant-toggle strong {
+            font-size: 0.98rem;
+            letter-spacing: 0.01em;
+        }
+
+        .assistant-toggle-icon {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
+        }
+
+        .assistant-panel {
+            width: min(390px, calc(100vw - 28px));
+            border-radius: 30px;
+            overflow: hidden;
+            background: rgba(255, 252, 253, 0.98);
+            border: 1px solid rgba(198, 68, 125, 0.12);
+            box-shadow: 0 28px 60px rgba(86, 25, 53, 0.16);
+            backdrop-filter: blur(18px);
+        }
+
+        .assistant-panel[hidden] {
+            display: none;
+        }
+
+        .assistant-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 18px 18px 14px;
+            background:
+                radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 28%),
+                linear-gradient(135deg, #7a244a 0%, #5f1c3d 60%, #45152d 100%);
+            color: #fff8fb;
+        }
+
+        .assistant-header-copy {
+            display: grid;
+            gap: 3px;
+        }
+
+        .assistant-header-copy strong {
+            font-family: Georgia, "Palatino Linotype", serif;
+            font-size: 1.15rem;
+            line-height: 1.02;
+        }
+
+        .assistant-header-copy span {
+            font-size: 0.84rem;
+            color: rgba(255, 248, 251, 0.82);
+        }
+
+        .assistant-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: fit-content;
+            min-height: 28px;
+            padding: 0 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: rgba(255, 248, 251, 0.92);
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+
+        .assistant-status::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #94ffcd;
+            box-shadow: 0 0 0 4px rgba(148, 255, 205, 0.16);
+        }
+
+        .assistant-status.is-fallback::before {
+            background: #ffd991;
+            box-shadow: 0 0 0 4px rgba(255, 217, 145, 0.16);
+        }
+
+        .assistant-close {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .assistant-body {
+            display: grid;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .assistant-context {
+            padding: 12px 14px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #fff6f9, #fffbf6);
+            border: 1px solid rgba(198, 68, 125, 0.08);
+            color: var(--ink-700);
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+
+        .assistant-messages {
+            max-height: 320px;
+            overflow-y: auto;
+            display: grid;
+            gap: 10px;
+            padding-right: 4px;
+        }
+
+        .assistant-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .assistant-messages::-webkit-scrollbar-thumb {
+            background: rgba(198, 68, 125, 0.18);
+            border-radius: 999px;
+        }
+
+        .assistant-message {
+            display: grid;
+            gap: 10px;
+        }
+
+        .assistant-message.is-user {
+            justify-items: end;
+        }
+
+        .assistant-message.is-typing .assistant-bubble {
+            color: var(--ink-700);
+            font-style: italic;
+        }
+
+        .assistant-bubble {
+            max-width: 92%;
+            padding: 13px 14px;
+            border-radius: 20px;
+            line-height: 1.58;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 24px rgba(86, 25, 53, 0.05);
+        }
+
+        .assistant-message.is-bot .assistant-bubble {
+            background: linear-gradient(180deg, rgba(255, 248, 251, 0.98) 0%, rgba(255, 242, 247, 0.98) 100%);
+            border: 1px solid rgba(198, 68, 125, 0.08);
+            color: var(--ink-900);
+        }
+
+        .assistant-message.is-user .assistant-bubble {
+            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            color: #fff;
+        }
+
+        .assistant-actions,
+        .assistant-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .assistant-action,
+        .assistant-suggestion {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 14px;
+            border-radius: 999px;
+            background: #fff;
+            border: 1px solid rgba(198, 68, 125, 0.1);
+            color: var(--rose-700);
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .assistant-suggestion {
+            background: linear-gradient(135deg, #fff6f9, #fffdfc);
+        }
+
+        .assistant-form {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+        }
+
+        .assistant-input {
+            width: 100%;
+            min-height: 48px;
+            padding: 0 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(198, 68, 125, 0.12);
+            background: rgba(255, 255, 255, 0.96);
+            color: var(--ink-900);
+            outline: none;
+        }
+
+        .assistant-input:focus {
+            border-color: rgba(198, 68, 125, 0.28);
+            box-shadow: 0 0 0 4px rgba(216, 89, 145, 0.08);
+        }
+
+        .assistant-send {
+            min-width: 52px;
+            min-height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 12px 24px rgba(145, 38, 86, 0.18);
+        }
+
         @media (max-width: 860px) {
             .header-inner {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 14px;
-                padding: 14px 0;
+                gap: 10px;
+                padding: 10px 0;
+                min-height: auto;
             }
 
             .hero-card {
@@ -524,6 +768,15 @@
         }
 
         @media (max-width: 640px) {
+            html {
+                scroll-padding-top: 78px;
+            }
+
+            .site-header {
+                background: rgba(255, 251, 252, 0.94);
+                box-shadow: 0 8px 22px rgba(92, 33, 62, 0.04);
+            }
+
             .page-shell,
             .category-strip {
                 width: 100%;
@@ -533,18 +786,33 @@
             .category-strip-inner,
             .page-shell,
             .footer-inner {
-                width: min(var(--max-width), calc(100% - 22px));
+                width: min(var(--max-width), calc(100% - 18px));
+            }
+
+            .header-inner {
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                gap: 4px;
+                padding: 4px 0 6px;
             }
 
             .header-links {
                 width: 100%;
-                display: grid;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                justify-content: stretch;
-                gap: 10px;
-                overflow: visible;
-                padding: 8px;
-                border-radius: 24px;
+                order: 3;
+                display: flex;
+                align-items: center;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: 6px;
+                overflow-x: auto;
+                padding: 0;
+                border-radius: 0;
+                background: transparent;
+                border: 0;
+                box-shadow: none;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
             }
 
             .header-links::-webkit-scrollbar {
@@ -553,13 +821,16 @@
 
             .brand {
                 align-items: center;
-                gap: 12px;
+                gap: 7px;
                 min-width: 0;
+                flex: 1 1 auto;
             }
 
             .brand-mark {
-                width: 54px;
-                height: 54px;
+                width: 34px;
+                height: 34px;
+                border-width: 2px;
+                box-shadow: 0 6px 12px rgba(185, 45, 99, 0.08);
             }
 
             .brand-copy {
@@ -567,43 +838,54 @@
             }
 
             .brand-copy strong {
-                font-size: 1.18rem;
-                line-height: 1.1;
+                font-size: 0.8rem;
+                line-height: 1;
             }
 
             .brand-copy small {
-                font-size: 0.68rem;
-                line-height: 1.25;
+                display: none;
             }
 
             .header-link {
-                display: flex;
+                display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                width: 100%;
-                padding: 8px 12px;
-                font-size: 0.92rem;
+                width: auto;
+                flex: 0 0 auto;
+                white-space: nowrap;
+                padding: 5px 9px;
+                font-size: 0.72rem;
+                line-height: 1;
                 text-align: center;
-                background: rgba(255, 255, 255, 0.92);
+                background: rgba(255, 255, 255, 0.88);
                 border: 1px solid rgba(198, 68, 125, 0.1);
             }
 
             .cart-btn {
-                width: 100%;
-                grid-column: 1 / -1;
+                width: auto;
+                flex: 0 0 auto;
                 justify-content: center;
-                margin-left: 0;
-                padding: 10px 15px;
-                font-size: 0.95rem;
+                margin-left: auto;
+                padding: 6px 9px;
+                min-height: 34px;
+                font-size: 0.72rem;
+                gap: 5px;
+                box-shadow: 0 6px 12px rgba(185, 45, 99, 0.1);
+            }
+
+            .cart-count {
+                min-width: 18px;
+                padding: 2px 5px;
+                font-size: 0.68rem;
             }
 
             .category-strip {
-                padding: 10px 0 14px;
+                padding: 4px 0 8px;
             }
 
             .category-pill {
-                padding: 9px 13px;
-                font-size: 0.9rem;
+                padding: 6px 10px;
+                font-size: 0.76rem;
             }
 
             .hero-card {
@@ -631,15 +913,61 @@
             .social-link {
                 width: 100%;
             }
+
+            .assistant-shell {
+                right: 12px;
+                left: 12px;
+                bottom: 12px;
+                justify-items: stretch;
+            }
+
+            .assistant-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .assistant-panel {
+                width: 100%;
+            }
         }
 
         @media (max-width: 480px) {
-            .header-links {
-                grid-template-columns: 1fr;
+            html {
+                scroll-padding-top: 72px;
+            }
+
+            .header-inner,
+            .category-strip-inner,
+            .page-shell,
+            .footer-inner {
+                width: min(var(--max-width), calc(100% - 18px));
+            }
+
+            .brand-mark {
+                width: 32px;
+                height: 32px;
+            }
+
+            .brand-copy strong {
+                font-size: 0.78rem;
+            }
+
+            .header-links .header-link:first-of-type {
+                display: none;
+            }
+
+            .header-link {
+                padding: 5px 8px;
+                font-size: 0.7rem;
             }
 
             .cart-btn {
-                grid-column: auto;
+                padding: 5px 8px;
+                font-size: 0.68rem;
+            }
+
+            .assistant-form {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -749,6 +1077,51 @@
         </div>
     </footer>
 
+    <div class="assistant-shell" data-assistant data-assistant-endpoint="{% url 'assistant_chat' %}">
+        <section class="assistant-panel" data-assistant-panel hidden>
+            <header class="assistant-header">
+                <div class="assistant-header-copy">
+                    <strong>Asistente Casita</strong>
+                    <span data-assistant-status class="assistant-status">IA conectada</span>
+                </div>
+                <button type="button" class="assistant-close" data-assistant-close aria-label="Cerrar asistente">×</button>
+            </header>
+
+            <div class="assistant-body">
+                <div class="assistant-context">
+                    Puedo ayudarte a encontrar productos, explicar cómo comprar, resolver pagos o llevarte directo a WhatsApp.
+                </div>
+
+                <div class="assistant-messages" data-assistant-messages></div>
+
+                <div class="assistant-suggestions" data-assistant-suggestions>
+                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Quiero ver el catalogo">Ver catálogo</button>
+                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Como comprar">Cómo comprar</button>
+                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Medios de pago">Pagos</button>
+                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Hablar por whatsapp">WhatsApp</button>
+                </div>
+
+                <form class="assistant-form" data-assistant-form>
+                    <input
+                        type="text"
+                        class="assistant-input"
+                        data-assistant-input
+                        placeholder="Escribe: pagos, catalogo, tematicos, whatsapp..."
+                        maxlength="220"
+                    >
+                    <button type="submit" class="assistant-send" aria-label="Enviar mensaje">→</button>
+                </form>
+            </div>
+        </section>
+
+        <button type="button" class="assistant-toggle" data-assistant-toggle aria-expanded="false" aria-controls="assistant-panel">
+            <svg class="assistant-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 2C6.48 2 2 6.02 2 10.98c0 2.83 1.46 5.35 3.73 7l-.7 3.55a.75.75 0 0 0 1.09.8l3.22-1.74c.84.2 1.73.31 2.66.31 5.52 0 10-4.02 10-8.98S17.52 2 12 2Zm-4.2 7.9a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Zm4.2 0a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Zm4.2 0a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z"/>
+            </svg>
+            <strong>Asistente</strong>
+        </button>
+    </div>
+
     <script>
         const getMessagesContainer = () => {
             let container = document.querySelector('.messages');
@@ -837,6 +1210,362 @@
                 );
 
                 panel.open = hasActiveFilters;
+            });
+        };
+
+        const normalizeAssistantText = (value) => (
+            (value || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9\s]/g, ' ')
+                .replace(/\s+/g, ' ')
+                .trim()
+        );
+
+        const buildAssistantCategoryActions = () => {
+            return [...document.querySelectorAll('.category-strip .category-pill')]
+                .map((link) => ({
+                    label: link.textContent.trim(),
+                    href: link.href,
+                    keywords: normalizeAssistantText(link.textContent),
+                }))
+                .filter((item) => item.label && item.href);
+        };
+
+        const assistantCategories = buildAssistantCategoryActions();
+
+        const assistantState = {
+            greeted: false,
+            history: [],
+            mode: 'fallback',
+            pending: false,
+        };
+
+        const assistantElements = {
+            shell: document.querySelector('[data-assistant]'),
+            panel: document.querySelector('[data-assistant-panel]'),
+            toggle: document.querySelector('[data-assistant-toggle]'),
+            close: document.querySelector('[data-assistant-close]'),
+            messages: document.querySelector('[data-assistant-messages]'),
+            form: document.querySelector('[data-assistant-form]'),
+            input: document.querySelector('[data-assistant-input]'),
+            suggestions: document.querySelector('[data-assistant-suggestions]'),
+            status: document.querySelector('[data-assistant-status]'),
+        };
+
+        const appendAssistantMessage = ({ role = 'bot', text = '', actions = [] }) => {
+            const { messages } = assistantElements;
+            if (!messages) return;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = `assistant-message is-${role}`;
+
+            const bubble = document.createElement('div');
+            bubble.className = 'assistant-bubble';
+            bubble.textContent = text;
+            wrapper.appendChild(bubble);
+
+            if (actions.length) {
+                const actionsRow = document.createElement('div');
+                actionsRow.className = 'assistant-actions';
+
+                actions.forEach((action) => {
+                    if (action.href) {
+                        const link = document.createElement('a');
+                        link.className = 'assistant-action';
+                        link.href = action.href;
+                        link.textContent = action.label;
+                        if (action.external) {
+                            link.target = '_blank';
+                            link.rel = 'noopener noreferrer';
+                        }
+                        actionsRow.appendChild(link);
+                        return;
+                    }
+
+                    if (action.prompt) {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = 'assistant-action';
+                        button.dataset.assistantPrompt = action.prompt;
+                        button.textContent = action.label;
+                        actionsRow.appendChild(button);
+                    }
+                });
+
+                wrapper.appendChild(actionsRow);
+            }
+
+            messages.appendChild(wrapper);
+            messages.scrollTop = messages.scrollHeight;
+            return wrapper;
+        };
+
+        const updateAssistantStatus = (mode = 'fallback') => {
+            const { status } = assistantElements;
+            if (!status) return;
+
+            assistantState.mode = mode;
+            status.classList.toggle('is-fallback', mode !== 'ai');
+            status.textContent = mode === 'ai' ? 'IA conectada' : 'Modo asistido';
+        };
+
+        const pushAssistantHistory = (role, text) => {
+            if (!text) return;
+            assistantState.history.push({ role, text });
+            assistantState.history = assistantState.history.slice(-8);
+        };
+
+        const showAssistantTyping = () => {
+            const node = appendAssistantMessage({
+                role: 'bot',
+                text: 'Pensando una respuesta para ti...',
+                actions: [],
+            });
+            node?.classList.add('is-typing');
+            return node;
+        };
+
+        const getAssistantWelcome = () => ({
+            text: 'Hola, soy el asistente de Casita. Puedo ayudarte a elegir productos, orientarte por presupuesto y llevarte a WhatsApp cuando ya quieras confirmar.',
+            actions: [
+                { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "inicio" %}'}#como-comprar` },
+                { label: 'WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle', external: true },
+            ],
+        });
+
+        const assistantEndpoint = assistantElements.shell?.dataset.assistantEndpoint || '';
+
+        const assistantFallbackKnowledge = (rawInput) => {
+            const input = normalizeAssistantText(rawInput);
+
+            const matchedCategory = assistantCategories.find((item) => {
+                const words = item.keywords.split(' ').filter(Boolean);
+                return words.some((word) => word.length > 3 && input.includes(word));
+            });
+
+            if (matchedCategory) {
+                return {
+                    text: `Te llevo a ${matchedCategory.label}. Ahí podrás ver las referencias disponibles y elegir la que mejor conecte con tu ocasión.`,
+                    actions: [
+                        { label: `Abrir ${matchedCategory.label}`, href: matchedCategory.href },
+                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle%20de%20esa%20categoria', external: true },
+                    ],
+                };
+            }
+
+            if (input.includes('catalogo') || input.includes('producto') || input.includes('ver todo')) {
+                return {
+                    text: 'Puedes recorrer el catálogo completo o entrar por categoría si ya tienes una idea más clara del tipo de detalle que buscas.',
+                    actions: [
+                        { label: 'Ir al catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                        { label: 'Explorar categorías', prompt: 'Que categorias hay' },
+                    ],
+                };
+            }
+
+            if (input.includes('categoria') || input.includes('categorias')) {
+                const categoryButtons = assistantCategories.slice(0, 5).map((item) => ({
+                    label: item.label,
+                    href: item.href,
+                }));
+                return {
+                    text: 'Estas son algunas de las categorías activas que puedes explorar ahora mismo:',
+                    actions: categoryButtons,
+                };
+            }
+
+            if (input.includes('como comprar') || input.includes('comprar') || input.includes('proceso') || input.includes('pedido')) {
+                return {
+                    text: 'El proceso es simple: exploras el catálogo, eliges una referencia, la personalizas si quieres y luego confirmas todo por WhatsApp.',
+                    actions: [
+                        { label: 'Ver cómo comprar', href: `${window.location.origin}${'{% url "inicio" %}'}#como-comprar` },
+                        { label: 'Ir al carrito', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
+                    ],
+                };
+            }
+
+            if (input.includes('pago') || input.includes('nequi') || input.includes('bancolombia')) {
+                return {
+                    text: 'Puedes confirmar tu pedido por Nequi o Bancolombia. Primero se valida disponibilidad y personalización, y luego se coordina el pago.',
+                    actions: [
+                        { label: 'Ir a medios de pago', href: `${window.location.origin}${'{% url "inicio" %}'}#como-comprar` },
+                        { label: 'Pedir datos por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20los%20datos%20de%20pago', external: true },
+                    ],
+                };
+            }
+
+            if (input.includes('personaliz') || input.includes('mensaje') || input.includes('tematica') || input.includes('colores')) {
+                return {
+                    text: 'Sí, la mayoría de los detalles se pueden personalizar según la ocasión, colores, mensaje, temática o presupuesto.',
+                    actions: [
+                        { label: 'Ver temáticos', prompt: 'Quiero ver tematicos e infantiles' },
+                        { label: 'Cotizar personalización', href: 'https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado', external: true },
+                    ],
+                };
+            }
+
+            if (input.includes('whatsapp') || input.includes('hablar') || input.includes('asesoria') || input.includes('contacto')) {
+                return {
+                    text: 'Perfecto. Si ya quieres una atención más directa, te llevo al WhatsApp de Casita para cotizar, confirmar o resolver una duda puntual.',
+                    actions: [
+                        { label: 'Abrir WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle', external: true },
+                        { label: 'Ir a contacto', href: '#footer' },
+                    ],
+                };
+            }
+
+            if (input.includes('carrito') || input.includes('agregar')) {
+                return {
+                    text: 'Puedes agregar productos desde el catálogo o desde la ficha del producto. Luego revisas el carrito y finalizas por WhatsApp.',
+                    actions: [
+                        { label: 'Ir al carrito', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
+                        { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                    ],
+                };
+            }
+
+            if (input.includes('donde estan') || input.includes('ubicacion') || input.includes('medellin') || input.includes('bello')) {
+                return {
+                    text: 'Casita de Regalos atiende desde Bello, Antioquia, con cobertura en Medellín y el área metropolitana.',
+                    actions: [
+                        { label: 'Ver contacto', href: '#footer' },
+                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20la%20cobertura', external: true },
+                    ],
+                };
+            }
+
+            return {
+                text: 'Puedo ayudarte con catálogo, categorías, pagos, personalización, carrito o WhatsApp. Si quieres, prueba escribiendo algo como "pagos", "catálogo" o "temáticos".',
+                actions: [
+                    { label: 'Ver catálogo', prompt: 'Quiero ver el catalogo' },
+                    { label: 'Pagos', prompt: 'Medios de pago' },
+                    { label: 'WhatsApp', prompt: 'Hablar por whatsapp' },
+                ],
+            };
+        };
+
+        const requestAssistantReply = async (message) => {
+            if (!assistantEndpoint) {
+                const fallback = assistantFallbackKnowledge(message);
+                return {
+                    reply: fallback.text,
+                    actions: fallback.actions || [],
+                    mode: 'fallback',
+                };
+            }
+
+            const response = await fetch(assistantEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]')?.content || '',
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify({
+                    message,
+                    history: assistantState.history,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('assistant-request-failed');
+            }
+
+            const data = await response.json();
+            if (!data.ok || !data.reply) {
+                throw new Error('assistant-response-invalid');
+            }
+
+            return data;
+        };
+
+        const openAssistant = () => {
+            const { panel, toggle, input, messages } = assistantElements;
+            if (!panel || !toggle || !messages) return;
+
+            panel.hidden = false;
+            toggle.setAttribute('aria-expanded', 'true');
+
+            if (!assistantState.greeted) {
+                updateAssistantStatus('fallback');
+                appendAssistantMessage({ role: 'bot', ...getAssistantWelcome() });
+                assistantState.greeted = true;
+            }
+
+            setTimeout(() => input?.focus(), 60);
+        };
+
+        const closeAssistant = () => {
+            const { panel, toggle } = assistantElements;
+            if (!panel || !toggle) return;
+            panel.hidden = true;
+            toggle.setAttribute('aria-expanded', 'false');
+        };
+
+        const handleAssistantPrompt = async (text) => {
+            const cleanText = (text || '').trim();
+            if (!cleanText || assistantState.pending) return;
+
+            assistantState.pending = true;
+            appendAssistantMessage({ role: 'user', text: cleanText });
+            pushAssistantHistory('user', cleanText);
+
+            const typingNode = showAssistantTyping();
+
+            try {
+                const response = await requestAssistantReply(cleanText);
+                typingNode?.remove();
+                updateAssistantStatus(response.mode || 'fallback');
+                appendAssistantMessage({ role: 'bot', text: response.reply, actions: response.actions || [] });
+                pushAssistantHistory('assistant', response.reply);
+            } catch (error) {
+                typingNode?.remove();
+                const fallback = assistantFallbackKnowledge(cleanText);
+                updateAssistantStatus('fallback');
+                appendAssistantMessage({ role: 'bot', text: fallback.text, actions: fallback.actions || [] });
+                pushAssistantHistory('assistant', fallback.text);
+            } finally {
+                assistantState.pending = false;
+            }
+        };
+
+        const initAssistant = () => {
+            const { shell, panel, toggle, close, form, input, suggestions } = assistantElements;
+            if (!shell || !panel || !toggle || !close || !form || !input || !suggestions) return;
+
+            toggle.addEventListener('click', () => {
+                if (panel.hidden) {
+                    openAssistant();
+                    return;
+                }
+                closeAssistant();
+            });
+
+            close.addEventListener('click', closeAssistant);
+
+            suggestions.addEventListener('click', async (event) => {
+                const promptButton = event.target.closest('[data-assistant-prompt]');
+                if (!promptButton) return;
+                openAssistant();
+                await handleAssistantPrompt(promptButton.dataset.assistantPrompt);
+            });
+
+            panel.addEventListener('click', async (event) => {
+                const promptButton = event.target.closest('[data-assistant-prompt]');
+                if (!promptButton) return;
+                await handleAssistantPrompt(promptButton.dataset.assistantPrompt);
+            });
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const value = input.value.trim();
+                if (!value) return;
+                await handleAssistantPrompt(value);
+                input.value = '';
             });
         };
 
@@ -936,6 +1665,7 @@
                             'X-CSRFToken': getCsrfToken(checkoutForm),
                         },
                         credentials: 'same-origin',
+                        body: new FormData(checkoutForm),
                     });
 
                     const data = await response.json();
@@ -1031,6 +1761,7 @@
 
         initCarousels();
         initMobileCatalogPanels();
+        initAssistant();
     </script>
 </body>
 </html>
