@@ -1,8 +1,10 @@
 import json
 import os
+import unicodedata
 from urllib import error, request
 
-from django.db.models import Count
+from django.core.cache import cache
+from django.db.models import Count, Q
 from django.urls import reverse
 
 from .models import Categoria, Producto
@@ -13,23 +15,9 @@ class AssistantProviderError(Exception):
 
 
 def _normalize_text(value):
-    replacements = str.maketrans(
-        {
-            "á": "a",
-            "é": "e",
-            "í": "i",
-            "ó": "o",
-            "ú": "u",
-            "Á": "a",
-            "É": "e",
-            "Í": "i",
-            "Ó": "o",
-            "Ú": "u",
-            "ñ": "n",
-            "Ñ": "n",
-        }
-    )
-    return (value or "").translate(replacements).strip().lower()
+    normalized = unicodedata.normalize("NFD", str(value or ""))
+    without_marks = "".join(char for char in normalized if unicodedata.category(char) != "Mn")
+    return without_marks.strip().lower()
 
 
 def _format_cop(value):
@@ -41,10 +29,15 @@ def _get_openai_api_key():
 
 
 def _get_openai_model():
-    return os.getenv("OPENAI_ASSISTANT_MODEL", "gpt-4.1-mini").strip() or "gpt-4.1-mini"
+    return os.getenv("OPENAI_ASSISTANT_MODEL", "gpt-4o-mini").strip() or "gpt-4o-mini"
 
 
 def _serialize_catalog_context():
+    cache_key = "assistant.catalog.context"
+    cached_context = cache.get(cache_key)
+    if cached_context:
+        return cached_context
+
     categorias = (
         Categoria.objects.annotate(total_productos=Count("producto"))
         .filter(total_productos__gt=0)
@@ -75,11 +68,11 @@ def _serialize_catalog_context():
         for producto in destacados
     ]
 
-    return "\n".join(
+    context = "\n".join(
         [
             "Marca: Casita de Regalos.",
             "Ubicacion: Bello, Antioquia. Cobertura: Medellin y area metropolitana.",
-            "Estilo: cercano, premium, dulce, orientado a detalles personalizados.",
+            "Estilo: cercano, premium, delicado y orientado a detalles personalizados.",
             "Flujo de compra: el cliente explora referencias, agrega al carrito y finaliza por WhatsApp para confirmar disponibilidad y pago.",
             "Pagos habituales: Nequi y Bancolombia. La confirmacion final se hace por WhatsApp.",
             "Politica comercial: personalizacion segun ocasion, presupuesto, colores y mensaje.",
@@ -90,16 +83,18 @@ def _serialize_catalog_context():
         ]
     )
 
+    cache.set(cache_key, context, 300)
+    return context
+
 
 def _build_system_prompt():
     return (
         "Eres la asesora virtual oficial de Casita de Regalos. "
-        "Respondes en espanol natural, calido, claro y muy comercial, como una marca top actual. "
+        "Respondes en espanol natural, calido, claro y muy comercial. "
         "Tu objetivo es ayudar al cliente a elegir un detalle, resolver dudas y llevarlo con confianza a WhatsApp cuando ya quiera confirmar. "
         "No inventes productos inexistentes ni precios no vistos en el contexto. "
         "Si no estas completamente segura de algo, dilo con honestidad y sugiere confirmar por WhatsApp. "
-        "Mantente breve: idealmente entre 45 y 110 palabras. "
-        "Puedes recomendar categorias, tipos de regalo, ideas por presupuesto o por ocasion. "
+        "Mantente breve: entre 45 y 110 palabras. "
         "Contexto real del negocio y catalogo:\n"
         f"{_serialize_catalog_context()}"
     )
@@ -192,84 +187,381 @@ def _call_openai_responses_api(message, history):
     return text
 
 
-def _build_actions(message):
-    normalized = _normalize_text(message)
-    categorias = list(Categoria.objects.order_by("nombre"))
+def _get_category_index():
+    cache_key = "assistant.catalog.category_index"
+    cached_index = cache.get(cache_key)
+    if cached_index:
+        return cached_index
 
-    for categoria in categorias:
-        if _normalize_text(categoria.nombre) in normalized:
-            return [
-                {
-                    "label": f"Ver {categoria.nombre}",
-                    "href": f"{reverse('inicio')}?categoria={categoria.id}#catalogo",
-                },
-                {
-                    "label": "Hablar por WhatsApp",
-                    "href": "https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle",
-                    "external": True,
-                },
-            ]
-
-    if any(token in normalized for token in ["pago", "nequi", "bancolombia"]):
-        return [
-            {"label": "Ver como comprar", "href": f"{reverse('inicio')}#como-comprar"},
+    index = []
+    for categoria in Categoria.objects.order_by("nombre"):
+        normalized_name = _normalize_text(categoria.nombre)
+        keywords = {normalized_name}
+        for token in normalized_name.replace(" y ", " ").split():
+            if len(token) >= 3:
+                keywords.add(token)
+        index.append(
             {
-                "label": "Pedir datos por WhatsApp",
-                "href": "https://wa.me/573116262155?text=Hola%20quiero%20los%20datos%20de%20pago",
-                "external": True,
-            },
-        ]
+                "instance": categoria,
+                "name": categoria.nombre,
+                "normalized_name": normalized_name,
+                "keywords": keywords,
+            }
+        )
 
-    if any(token in normalized for token in ["carrito", "agregar", "comprar"]):
-        return [
-            {"label": "Ir al carrito", "href": reverse("ver_carrito")},
-            {"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"},
-        ]
+    cache.set(cache_key, index, 300)
+    return index
 
-    return [
-        {"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"},
+
+def _find_category_by_theme(normalized):
+    theme_map = {
+        "infantil": ["infantil", "tematic"],
+        "romantico": ["amor", "anivers", "romantic"],
+        "cumpleanos": ["cumple", "desayuno"],
+        "premium": ["premium"],
+        "mini": ["mini", "express"],
+    }
+
+    requested_themes = []
+    if any(token in normalized for token in ["nino", "nina", "infantil", "tematico", "tematicos", "personaje", "bebe"]):
+        requested_themes.append("infantil")
+    if any(token in normalized for token in ["amor", "aniversario", "romantico", "novia", "novio"]):
+        requested_themes.append("romantico")
+    if any(token in normalized for token in ["cumple", "desayuno", "sorpresa"]):
+        requested_themes.append("cumpleanos")
+    if any(token in normalized for token in ["premium", "lujo"]):
+        requested_themes.append("premium")
+    if any(token in normalized for token in ["mini", "express"]):
+        requested_themes.append("mini")
+
+    for requested_theme in requested_themes:
+        for item in _get_category_index():
+            if any(keyword in item["normalized_name"] for keyword in theme_map[requested_theme]):
+                return item["instance"]
+    return None
+
+
+def _detect_price_range(normalized):
+    explicit_map = {
+        "economico": (20000, 50000),
+        "barato": (20000, 45000),
+        "bajo presupuesto": (20000, 45000),
+        "medio": (50000, 85000),
+        "moderado": (50000, 85000),
+        "premium": (85000, 160000),
+        "lujo": (120000, 260000),
+        "caro": (90000, 220000),
+    }
+
+    for keyword, price_range in explicit_map.items():
+        if keyword in normalized:
+            return price_range
+
+    numbers = []
+    current = ""
+    for char in normalized:
+        if char.isdigit():
+            current += char
+        elif current:
+            numbers.append(int(current))
+            current = ""
+    if current:
+        numbers.append(int(current))
+
+    if not numbers:
+        return None
+
+    amount = max(numbers)
+    if amount < 1000:
+        amount *= 1000
+
+    margin = max(15000, int(amount * 0.25))
+    return max(10000, amount - margin), amount + margin
+
+
+def _detect_intent_and_context(message):
+    normalized = _normalize_text(message)
+
+    intents = []
+    intent_map = {
+        "saludo": ["hola", "buenas", "hey", "hello"],
+        "presupuesto": ["precio", "costo", "cuanto", "valor", "presupuesto", "economico", "barato", "premium", "lujo", "caro"],
+        "ocasion": ["cumple", "aniversario", "amor", "romantico", "amistad", "gracias", "sorpresa", "desayuno", "novia", "novio"],
+        "infantil": ["nino", "nina", "infantil", "tematico", "tematicos", "personaje", "bebe"],
+        "compra": ["comprar", "carrito", "agregar", "pedido", "adquirir", "finalizar"],
+        "pago": ["pago", "pagos", "pagar", "nequi", "bancolombia", "transferencia", "consignar"],
+        "entrega": ["entrega", "envio", "domicilio", "medellin", "bello", "direccion", "tiempo"],
+        "personalizacion": ["personalizar", "personalizado", "mensaje", "nombre", "color", "tematica", "tema"],
+        "consulta": ["catalogo", "productos", "referencias", "disponible", "opciones", "tienen", "muestran"],
+        "contacto": ["whatsapp", "asesora", "asesoria", "contacto", "hablar"],
+    }
+
+    for intent, tokens in intent_map.items():
+        if any(token in normalized for token in tokens):
+            intents.append(intent)
+
+    matched_category = None
+    for item in _get_category_index():
+        if item["normalized_name"] in normalized or any(keyword in normalized for keyword in item["keywords"]):
+            matched_category = item["instance"]
+            break
+
+    if matched_category is None:
+        matched_category = _find_category_by_theme(normalized)
+
+    matched_products = []
+    stopwords = {
+        "quiero",
+        "tengo",
+        "algo",
+        "para",
+        "detalle",
+        "regalo",
+        "regalos",
+        "una",
+        "uno",
+        "unos",
+        "unas",
+        "como",
+        "puedo",
+        "sobre",
+        "del",
+        "con",
+        "por",
+        "busco",
+        "necesito",
+    }
+    search_tokens = [
+        token for token in normalized.split()
+        if len(token) >= 4 and token not in stopwords
+    ]
+    if search_tokens:
+        product_query = Q()
+        for token in search_tokens[:6]:
+            product_query |= Q(nombre__icontains=token) | Q(descripcion__icontains=token)
+        matched_products = list(
+            Producto.objects.select_related("categoria")
+            .filter(stock__gt=0)
+            .filter(product_query)
+            .order_by("-destacado", "precio", "nombre")[:3]
+        )
+
+    price_range = _detect_price_range(normalized)
+
+    return {
+        "normalized": normalized,
+        "intents": intents,
+        "category": matched_category,
+        "products": matched_products,
+        "price_range": price_range,
+    }
+
+
+def _find_recommended_products(context_data, limit=3):
+    query = Producto.objects.select_related("categoria").filter(stock__gt=0)
+    category = context_data["category"]
+    price_range = context_data["price_range"]
+    intents = set(context_data["intents"])
+
+    if category:
+        query = query.filter(categoria=category)
+    elif "infantil" in intents:
+        query = query.filter(
+            Q(categoria__nombre__icontains="infantil")
+            | Q(categoria__nombre__icontains="tematic")
+            | Q(nombre__icontains="infantil")
+            | Q(nombre__icontains="tematic")
+        )
+
+    if price_range:
+        min_price, max_price = price_range
+        query = query.filter(precio__gte=min_price, precio__lte=max_price)
+
+    products = list(query.order_by("-destacado", "precio", "nombre")[:limit])
+    if products:
+        return products
+
+    if category:
+        return list(
+            Producto.objects.select_related("categoria")
+            .filter(stock__gt=0, categoria=category)
+            .order_by("-destacado", "precio", "nombre")[:limit]
+        )
+
+    return list(
+        Producto.objects.select_related("categoria")
+        .filter(stock__gt=0)
+        .order_by("-destacado", "precio", "nombre")[:limit]
+    )
+
+
+def _build_product_line(product):
+    category_name = product.categoria.nombre if product.categoria else "catalogo general"
+    return f"{product.nombre} en {category_name} por {_format_cop(product.precio)}"
+
+
+def _build_fallback_actions(context_data):
+    actions = []
+    category = context_data["category"]
+    intents = set(context_data["intents"])
+    products = context_data["products"]
+
+    if products:
+        first_product = products[0]
+        actions.append(
+            {
+                "label": f"Ver {first_product.nombre}",
+                "href": reverse("detalle_producto", args=[first_product.id]),
+            }
+        )
+
+    if category and not products:
+        actions.append(
+            {
+                "label": f"Ver {category.nombre}",
+                "href": f"{reverse('inicio')}?categoria={category.id}#catalogo",
+            }
+        )
+
+    if "compra" in intents:
+        actions.append({"label": "Ir al carrito", "href": reverse("ver_carrito")})
+    elif "pago" in intents or "entrega" in intents:
+        actions.append({"label": "Como comprar", "href": f"{reverse('inicio')}#como-comprar"})
+    elif not actions:
+        actions.append({"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"})
+
+    whatsapp_text = "Hola%20quiero%20asesoria%20para%20elegir%20un%20detalle"
+    if products:
+        whatsapp_text = f"Hola%20quiero%20cotizar%20{products[0].nombre.replace(' ', '%20')}"
+    elif category:
+        whatsapp_text = f"Hola%20quiero%20cotizar%20algo%20de%20{category.nombre.replace(' ', '%20')}"
+    elif "pago" in intents:
+        whatsapp_text = "Hola%20quiero%20los%20datos%20de%20pago"
+    elif "compra" in intents:
+        whatsapp_text = "Hola%20quiero%20finalizar%20mi%20pedido"
+
+    actions.append(
         {
             "label": "WhatsApp",
-            "href": "https://wa.me/573116262155?text=Hola%20quiero%20asesoria%20para%20elegir%20un%20detalle",
+            "href": f"https://wa.me/573116262155?text={whatsapp_text}",
             "external": True,
-        },
-    ]
+        }
+    )
+
+    unique = []
+    seen = set()
+    for action in actions:
+        key = (action["label"], action.get("href"), action.get("prompt"))
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(action)
+    return unique[:3]
+
+
+def _build_fallback_message(context_data):
+    intents = set(context_data["intents"])
+    category = context_data["category"]
+    products = context_data["products"] or _find_recommended_products(context_data)
+    price_range = context_data["price_range"]
+
+    greeting = "Hola, te ayudo a encontrar un detalle lindo y bien pensado."
+    if "saludo" in intents and not intents - {"saludo"}:
+        return (
+            f"{greeting} Puedes preguntarme por categoria, presupuesto, pagos, personalizacion o entrega, "
+            "y te guio rapido con opciones claras."
+        )
+
+    if products and category and "infantil" in intents:
+        product_lines = "; ".join(_build_product_line(product) for product in products[:2])
+        return (
+            f"Para una linea tematica e infantil te recomiendo empezar por {product_lines}. "
+            "Si quieres, puedes abrir una referencia ahora mismo y luego cerrar la compra por WhatsApp."
+        )
+
+    if products and category:
+        product_lines = "; ".join(_build_product_line(product) for product in products[:2])
+        return (
+            f"Para {category.nombre.lower()} te recomiendo empezar por {product_lines}. "
+            "Si quieres, puedes abrir una referencia ahora mismo y luego cerrar la compra por WhatsApp."
+        )
+
+    if products and "presupuesto" in intents:
+        product_lines = "; ".join(_build_product_line(product) for product in products[:2])
+        return (
+            f"Con ese presupuesto hay opciones que se ven muy bien, por ejemplo {product_lines}. "
+            "Si me dices para quien es o la ocasion, te afino mejor la recomendacion."
+        )
+
+    if "infantil" in intents:
+        base_text = (
+            "Para una linea tematica e infantil tenemos propuestas con personajes, colores, desayunos y detalles personalizados. "
+        )
+        if products:
+            sample = "; ".join(_build_product_line(product) for product in products[:2])
+            return base_text + f"Ahora mismo puedes revisar {sample}. "
+        return base_text + "Si me dices edad, personaje o presupuesto, te ubico mejor."
+
+    if "pago" in intents:
+        return (
+            "El pago normalmente se confirma despues de validar disponibilidad y personalizacion. "
+            "Casita trabaja sobre todo con Nequi y Bancolombia, y el cierre final se hace por WhatsApp."
+        )
+
+    if "entrega" in intents:
+        return (
+            "La cobertura principal es Bello, Medellin y el area metropolitana. "
+            "El tiempo exacto y el costo de entrega se confirman por WhatsApp segun la zona y el tipo de detalle."
+        )
+
+    if "personalizacion" in intents:
+        return (
+            "Si, se puede personalizar segun ocasion, colores, mensaje, nombre o estilo del regalo. "
+            "Lo ideal es elegir una base del catalogo y luego ajustar los detalles finos por WhatsApp."
+        )
+
+    if "compra" in intents:
+        return (
+            "Puedes explorar el catalogo, agregar productos al carrito y cerrar el pedido por WhatsApp. "
+            "Asi se confirma disponibilidad, personalizacion y pago sin perder tiempo."
+        )
+
+    if "consulta" in intents or category:
+        if category:
+            return (
+                f"En {category.nombre} hay varias referencias activas y se pueden adaptar segun presupuesto o estilo. "
+                "Abre la categoria y desde ahi revisamos juntos la mejor opcion."
+            )
+        return (
+            "El catalogo esta organizado por categorias para que encuentres rapido detalles romanticos, infantiles, premium y opciones express. "
+            "Si me dices la ocasion, te llevo mas directo."
+        )
+
+    if "ocasion" in intents and price_range:
+        return (
+            f"Para esa ocasion se puede trabajar muy bien entre {_format_cop(price_range[0])} y {_format_cop(price_range[1])}. "
+            "Si me dices si buscas algo romantico, infantil o premium, te aterrizo mejores referencias."
+        )
+
+    if "ocasion" in intents:
+        return (
+            "Tenemos detalles muy bonitos para cumpleanos, aniversarios, desayunos sorpresa y momentos especiales. "
+            "Si me dices para quien es y cuanto quieres invertir, te recomiendo algo mas preciso."
+        )
+
+    return (
+        f"{greeting} Puedo orientarte por categoria, presupuesto, pagos, personalizacion o entrega, "
+        "y despues llevarte directo al catalogo o a WhatsApp para cerrar."
+    )
 
 
 def _fallback_reply(message):
-    normalized = _normalize_text(message)
-
-    if any(token in normalized for token in ["tematico", "infantil", "personaje", "nino", "nina"]):
-        text = (
-            "Tenemos una linea tematica muy bonita con personajes, desayunos infantiles, cajas sorpresa y opciones personalizadas "
-            "segun la edad, colores o presupuesto. Si me dices para quien es y cuanto quieres invertir, te oriento mejor."
-        )
-    elif any(token in normalized for token in ["amor", "aniversario", "romantico", "novia", "novio"]):
-        text = (
-            "Para algo romantico puedes mirar detalles con rosas, chocolates, corazones, cajas premium y desayunos sorpresa. "
-            "Si quieres, te ayudo a elegir algo mas delicado, elegante o intenso segun la ocasion."
-        )
-    elif any(token in normalized for token in ["cumple", "desayuno", "sorpresa"]):
-        text = (
-            "La categoria de cumpleanos y desayunos tiene varias de las referencias mas fuertes de la marca. "
-            "Hay cajas, bandejas, globos, frutas, snacks y presentaciones mas premium o mas express."
-        )
-    elif any(token in normalized for token in ["pago", "nequi", "bancolombia"]):
-        text = (
-            "La confirmacion final normalmente se coordina por WhatsApp despues de validar disponibilidad y personalizacion. "
-            "Alli te comparten los datos de pago y el paso a paso del pedido."
-        )
-    else:
-        text = (
-            "Puedo ayudarte a elegir por ocasion, presupuesto, categoria o estilo de regalo. "
-            "Tambien te puedo orientar sobre pagos, personalizacion o como finalizar por WhatsApp."
-        )
-
+    context_data = _detect_intent_and_context(message)
     return {
-        "message": text,
+        "message": _build_fallback_message(context_data),
         "mode": "fallback",
         "configured": False,
-        "actions": _build_actions(message),
+        "actions": _build_fallback_actions(context_data),
     }
 
 
@@ -277,23 +569,31 @@ def get_assistant_reply(message, history=None):
     clean_message = (message or "").strip()
     if not clean_message:
         return {
-            "message": "Escribeme algo y te ayudo a elegir un detalle lindo para esa ocasion.",
+            "message": "Escribeme algo y te ayudo a elegir un detalle lindo, segun ocasion, presupuesto o estilo.",
             "mode": "fallback",
-            "configured": bool(_get_openai_api_key()),
-            "actions": _build_actions("catalogo"),
+            "configured": False,
+            "actions": [
+                {"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"},
+                {"label": "Como comprar", "href": f"{reverse('inicio')}#como-comprar"},
+                {
+                    "label": "WhatsApp",
+                    "href": "https://wa.me/573116262155?text=Hola%20quiero%20asesoria%20para%20elegir%20un%20detalle",
+                    "external": True,
+                },
+            ],
         }
 
-    if not _get_openai_api_key():
-        return _fallback_reply(clean_message)
+    if _get_openai_api_key():
+        try:
+            context_data = _detect_intent_and_context(clean_message)
+            ai_message = _call_openai_responses_api(clean_message, history or [])
+            return {
+                "message": ai_message,
+                "mode": "ai",
+                "configured": True,
+                "actions": _build_fallback_actions(context_data),
+            }
+        except AssistantProviderError:
+            pass
 
-    try:
-        ai_message = _call_openai_responses_api(clean_message, history or [])
-    except AssistantProviderError:
-        return _fallback_reply(clean_message)
-
-    return {
-        "message": ai_message,
-        "mode": "ai",
-        "configured": True,
-        "actions": _build_actions(clean_message),
-    }
+    return _fallback_reply(clean_message)

@@ -1082,14 +1082,14 @@
             <header class="assistant-header">
                 <div class="assistant-header-copy">
                     <strong>Asistente Casita</strong>
-                    <span data-assistant-status class="assistant-status">IA conectada</span>
+                    <span data-assistant-status class="assistant-status">Asistente inteligente</span>
                 </div>
                 <button type="button" class="assistant-close" data-assistant-close aria-label="Cerrar asistente">×</button>
             </header>
 
             <div class="assistant-body">
                 <div class="assistant-context">
-                    Puedo ayudarte a encontrar productos, explicar cómo comprar, resolver pagos o llevarte directo a WhatsApp.
+                    Puedo orientarte por categoria, presupuesto, personalizacion, pagos y cierre por WhatsApp.
                 </div>
 
                 <div class="assistant-messages" data-assistant-messages></div>
@@ -1308,7 +1308,7 @@
 
             assistantState.mode = mode;
             status.classList.toggle('is-fallback', mode !== 'ai');
-            status.textContent = mode === 'ai' ? 'IA conectada' : 'Modo asistido';
+            status.textContent = mode === 'ai' ? 'IA conectada' : 'Asistente inteligente';
         };
 
         const pushAssistantHistory = (role, text) => {
@@ -1328,7 +1328,7 @@
         };
 
         const getAssistantWelcome = () => ({
-            text: 'Hola, soy el asistente de Casita. Puedo ayudarte a elegir productos, orientarte por presupuesto y llevarte a WhatsApp cuando ya quieras confirmar.',
+            text: 'Hola, soy el asistente de Casita. Te ayudo a elegir mejor, resolver dudas del catalogo y llevarte a WhatsApp cuando ya quieras confirmar.',
             actions: [
                 { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
                 { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "inicio" %}'}#como-comprar` },
