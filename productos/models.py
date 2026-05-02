@@ -41,6 +41,18 @@ class Producto(models.Model):
             return 'stock-badge stock-badge--low'
         return 'stock-badge stock-badge--ok'
 
+    @property
+    def public_status_label(self):
+        if self.stock <= 0:
+            return 'Agotado'
+        return 'Disponible'
+
+    @property
+    def public_status_badge_class(self):
+        if self.stock <= 0:
+            return 'stock-badge stock-badge--out'
+        return 'stock-badge stock-badge--ok'
+
     class Meta:
         ordering = ['-destacado', 'nombre']
 

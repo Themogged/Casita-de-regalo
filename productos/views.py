@@ -356,7 +356,6 @@ def inicio(request):
     resumen = {
         'total_productos': productos.count(),
         'categorias': categorias.count(),
-        'disponibles': productos.filter(stock__gt=0).count(),
     }
 
     paginator = Paginator(productos, 9)

@@ -590,7 +590,7 @@
     <article class="detail-card page-card">
         <div class="detail-topline">
             <span class="detail-category">{{ producto.categoria.nombre|default:"Sin categoría" }}</span>
-            <span class="{{ producto.stock_badge_class }}">{{ producto.stock_label }}</span>
+            <span class="{{ producto.public_status_badge_class }}">{{ producto.public_status_label }}</span>
         </div>
 
         <div class="detail-price">Desde {{ producto.precio|cop }} COP</div>
@@ -607,7 +607,7 @@
         <div class="detail-meta">
             <div class="detail-meta-row">
                 <span>Disponibilidad</span>
-                <strong>{{ producto.stock }} unidades</strong>
+                <strong>{% if producto.disponible %}Disponible para pedido{% else %}Agotado temporalmente{% endif %}</strong>
             </div>
             <div class="detail-meta-row">
                 <span>Categoría</span>
@@ -648,7 +648,7 @@
             <div class="related-grid carousel-track js-carousel-track">
                 {% for item in relacionados %}
                     <article class="related-item">
-                        <span class="{{ item.stock_badge_class }}">{{ item.stock_label }}</span>
+                        <span class="{{ item.public_status_badge_class }}">{{ item.public_status_label }}</span>
                         <h3><a href="{% url 'detalle_producto' item.id %}" class="related-item-title">{{ item.nombre }}</a></h3>
                         <p>
                             {% if item.descripcion %}

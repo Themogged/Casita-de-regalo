@@ -121,6 +121,21 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Ramo premium')
         self.assertContains(response, 'Agotado')
 
+    def test_catalogo_no_muestra_cantidades_de_stock(self):
+        response = self.client.get(reverse('inicio'), {'q': 'sorpresa'}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Disponible')
+        self.assertNotContains(response, '5 unidades')
+        self.assertNotContains(response, 'Ultimas')
+
+    def test_detalle_no_muestra_cantidad_de_stock(self):
+        response = self.client.get(reverse('detalle_producto', args=[self.producto_principal.id]), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Disponible para pedido')
+        self.assertNotContains(response, '5 unidades')
+
     def test_catalogo_permite_abrir_detalle_desde_el_nombre(self):
         response = self.client.get(reverse('inicio'), secure=True)
 

@@ -15,8 +15,9 @@
     }
 
     .hero-grid {
-        grid-template-columns: minmax(0, 1.24fr) minmax(320px, 0.86fr);
-        align-items: stretch;
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 0.78fr);
+        align-items: center;
+        gap: clamp(18px, 3vw, 34px);
     }
 
     .about-grid {
@@ -39,6 +40,10 @@
 
     .home-flow {
         gap: 26px;
+    }
+
+    .hero-card {
+        padding: clamp(22px, 4vw, 42px);
     }
 
     .section-stack {
@@ -88,11 +93,11 @@
 
     .hero-copy h1 {
         font-family: Georgia, "Palatino Linotype", serif;
-        font-size: clamp(2.7rem, 5.8vw, 4.8rem);
-        line-height: 0.93;
-        margin-bottom: 18px;
+        font-size: clamp(2.45rem, 4.9vw, 4.2rem);
+        line-height: 0.98;
+        margin-bottom: 16px;
         text-wrap: balance;
-        max-width: 11ch;
+        max-width: 13ch;
     }
 
     .hero-copy p,
@@ -105,26 +110,26 @@
     }
 
     .hero-copy p {
-        max-width: 62ch;
-        font-size: 1.03rem;
+        max-width: 56ch;
+        font-size: 1rem;
     }
 
     .hero-tags {
         display: flex;
         flex-wrap: wrap;
         gap: 10px;
-        margin-top: 18px;
+        margin-top: 16px;
     }
 
     .hero-tag {
         display: inline-flex;
         align-items: center;
-        padding: 9px 14px;
+        padding: 8px 12px;
         border-radius: 999px;
         background: rgba(255, 255, 255, 0.72);
         border: 1px solid rgba(198, 68, 125, 0.1);
         color: var(--ink-700);
-        font-size: 0.9rem;
+        font-size: 0.84rem;
         font-weight: 700;
     }
 
@@ -132,14 +137,14 @@
         display: flex;
         gap: 12px;
         flex-wrap: wrap;
-        margin-top: 28px;
+        margin-top: 24px;
     }
 
     .hero-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-        margin-top: 28px;
+        gap: 10px;
+        margin-top: 22px;
     }
 
     .hero-stat,
@@ -157,7 +162,7 @@
     }
 
     .hero-stat {
-        padding: 18px 18px 20px;
+        padding: 14px 16px;
         background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 250, 0.96) 100%);
     }
 
@@ -165,7 +170,7 @@
         display: block;
         margin-bottom: 6px;
         color: var(--rose-700);
-        font-size: 1.95rem;
+        font-size: 1.5rem;
     }
 
     .hero-panel,
@@ -180,7 +185,7 @@
         overflow: hidden;
         background:
             radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
-            linear-gradient(165deg, #7a244a 0%, #5f1c3d 58%, #49152f 100%);
+            linear-gradient(165deg, #8b2f5e 0%, #71224b 58%, #541834 100%);
         color: #fff5fa;
         border: 0;
         box-shadow: 0 28px 54px rgba(88, 24, 55, 0.2);
@@ -202,7 +207,7 @@
     .catalog-main h2,
     .sidebar h2 {
         margin-bottom: 12px;
-        font-size: clamp(1.35rem, 3vw, 2rem);
+        font-size: clamp(1.35rem, 2.7vw, 2rem);
     }
 
     .section-card h2,
@@ -306,8 +311,8 @@
     }
 
     .hero-panel .feature-item {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.16);
         color: #fff8fb;
         backdrop-filter: blur(4px);
     }
@@ -833,8 +838,8 @@
         }
 
         .hero-copy h1 {
-            font-size: clamp(2.2rem, 11vw, 3.35rem);
-            line-height: 0.96;
+            font-size: clamp(2rem, 9.5vw, 2.75rem);
+            line-height: 1;
             max-width: none;
         }
 
@@ -865,8 +870,9 @@
         }
 
         .hero-stats {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: 1fr;
             gap: 10px;
+            margin-top: 16px;
         }
 
         .feature-list,
@@ -890,16 +896,27 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
-            min-height: 136px;
-            padding: 16px;
-        }
-
-        .hero-stat {
+            min-height: auto;
             padding: 14px;
         }
 
+        .hero-stat {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 14px;
+        }
+
         .hero-stat strong {
-            font-size: 1.45rem;
+            margin: 0;
+            font-size: 1.04rem;
+            line-height: 1;
+        }
+
+        .hero-stat span {
+            text-align: right;
+            font-size: 0.83rem;
         }
 
         .hero-panel,
@@ -907,6 +924,10 @@
         .sidebar,
         .catalog-main {
             padding: 18px;
+        }
+
+        .hero-panel {
+            border-radius: 22px;
         }
 
         .hero-panel p,
@@ -1103,44 +1124,44 @@
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="section-kicker">Detalles con presencia</span>
-            <h1>Regalos que se sienten especiales desde el primer vistazo.</h1>
+            <h1>Detalles personalizados para sorprender bonito.</h1>
             <p>
-                En Casita de Regalos encuentras desayunos sorpresa, cajas personalizadas, detalles
-                románticos, opciones temáticas y regalos pensados para sorprender en Bello, Medellín
-                y el área metropolitana.
+                En Casita de Regalos eliges desayunos sorpresa, cajas personalizadas, detalles
+                rom&aacute;nticos y regalos tem&aacute;ticos con asesor&iacute;a directa en Bello,
+                Medell&iacute;n y el &aacute;rea metropolitana.
             </p>
 
             <div class="hero-tags">
                 <span class="hero-tag">Desayunos sorpresa</span>
-                <span class="hero-tag">Temáticos personalizados</span>
+                <span class="hero-tag">Tem&aacute;ticos personalizados</span>
                 <span class="hero-tag">Regalos premium</span>
             </div>
 
             <div class="hero-actions">
-                <a href="#catalogo" class="btn">Ver catálogo</a>
+                <a href="#catalogo" class="btn">Ver cat&aacute;logo</a>
                 <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
             </div>
 
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>detalles en catálogo</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>{{ resumen.disponibles }}</strong>
-                    <span>opciones disponibles</span>
+                    <span>referencias curadas</span>
                 </div>
                 <div class="hero-stat">
                     <strong>{{ resumen.categorias }}</strong>
-                    <span>categorías activas</span>
+                    <span>categor&iacute;as claras</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>WhatsApp</strong>
+                    <span>asesor&iacute;a directa</span>
                 </div>
             </div>
         </div>
 
         <aside class="hero-panel">
-            <span class="section-kicker">Selección top</span>
-            <h2>Favoritos listos para impresionar</h2>
-            <p>Una curaduría pensada para que elijas rápido, con estilo y sin perder el toque especial.</p>
+            <span class="section-kicker">Selecci&oacute;n top</span>
+            <h2>Ideas listas para elegir sin complicarte</h2>
+            <p>Referencias destacadas para cotizar r&aacute;pido por WhatsApp y ajustar a tu ocasi&oacute;n.</p>
 
             <div class="feature-list">
                 {% for producto in destacados %}
@@ -1289,7 +1310,7 @@
                         <div class="product-body">
                             <div class="product-topline">
                                 <span class="pill">{{ producto.categoria.nombre|default:"Sin categoría" }}</span>
-                                <span class="{{ producto.stock_badge_class }}">{{ producto.stock_label }}</span>
+                                <span class="{{ producto.public_status_badge_class }}">{{ producto.public_status_label }}</span>
                             </div>
 
                             <div>
