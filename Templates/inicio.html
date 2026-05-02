@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load moneda %}
+{% load moneda static %}
 
 {% block title %}Catálogo | Casita de Regalos{% endblock %}
 
@@ -393,6 +393,35 @@
         border: 1px solid rgba(233, 72, 134, 0.08);
     }
 
+    .payment-list {
+        list-style: none;
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .payment-list li {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 12px;
+        align-items: start;
+        padding: 14px 16px;
+        border-radius: 18px;
+        background: var(--rose-50);
+        color: var(--ink-700);
+        line-height: 1.65;
+        border: 1px solid rgba(233, 72, 134, 0.08);
+    }
+
+    .payment-logo {
+        width: 88px;
+        min-width: 88px;
+        height: 42px;
+        object-fit: contain;
+        border-radius: 14px;
+        box-shadow: 0 10px 18px rgba(75, 24, 46, 0.08);
+    }
+
     .cta-band {
         display: flex;
         justify-content: space-between;
@@ -631,6 +660,7 @@
     }
 
     .product-media {
+        position: relative;
         min-height: 340px;
         background:
             radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8), transparent 28%),
@@ -638,6 +668,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .product-ribbon {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        color: var(--rose-700);
+        border: 1px solid rgba(198, 68, 125, 0.12);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        box-shadow: 0 12px 22px rgba(75, 24, 46, 0.06);
     }
 
     .product-media img {
@@ -1124,11 +1173,11 @@
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="section-kicker">Detalles con presencia</span>
-            <h1>Detalles personalizados para sorprender bonito.</h1>
+            <h1>Regalos personalizados para fechas que se sienten especiales.</h1>
             <p>
-                En Casita de Regalos eliges desayunos sorpresa, cajas personalizadas, detalles
-                rom&aacute;nticos y regalos tem&aacute;ticos con asesor&iacute;a directa en Bello,
-                Medell&iacute;n y el &aacute;rea metropolitana.
+                Desayunos sorpresa, cajas personalizadas y detalles rom&aacute;nticos o tem&aacute;ticos
+                hechos en Bello para celebrar cumplea&ntilde;os, aniversarios y sorpresas en Medell&iacute;n
+                y el &aacute;rea metropolitana.
             </p>
 
             <div class="hero-tags">
@@ -1139,29 +1188,29 @@
 
             <div class="hero-actions">
                 <a href="#catalogo" class="btn">Ver cat&aacute;logo</a>
-                <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
+                <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
             </div>
 
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>referencias curadas</span>
+                    <span>ideas para regalar</span>
                 </div>
                 <div class="hero-stat">
-                    <strong>{{ resumen.categorias }}</strong>
-                    <span>categor&iacute;as claras</span>
+                    <strong>1-2 d&iacute;as</strong>
+                    <span>reserva recomendada</span>
                 </div>
                 <div class="hero-stat">
                     <strong>WhatsApp</strong>
-                    <span>asesor&iacute;a directa</span>
+                    <span>confirmaci&oacute;n personalizada</span>
                 </div>
             </div>
         </div>
 
         <aside class="hero-panel">
             <span class="section-kicker">Selecci&oacute;n top</span>
-            <h2>Ideas listas para elegir sin complicarte</h2>
-            <p>Referencias destacadas para cotizar r&aacute;pido por WhatsApp y ajustar a tu ocasi&oacute;n.</p>
+            <h2>Favoritos para inspirarte y cotizar r&aacute;pido</h2>
+            <p>Elige una referencia, agrega tus ajustes y confirma disponibilidad por WhatsApp.</p>
 
             <div class="feature-list">
                 {% for producto in destacados %}
@@ -1170,7 +1219,7 @@
                             <strong>{{ producto.nombre }}</strong><br>
                             <small>{{ producto.categoria.nombre|default:"Sin categoría" }}</small>
                         </span>
-                        <strong>{{ producto.precio|cop }} COP</strong>
+                        <strong>Desde {{ producto.precio|cop }} COP</strong>
                     </a>
                 {% empty %}
                     <p>No hay productos destacados todavía.</p>
@@ -1221,17 +1270,20 @@
             <span class="section-kicker">Medios de pago</span>
             <h2>Reserva tu detalle de forma segura</h2>
             <p class="meta-copy">Una vez definido el detalle, te compartimos el valor final y los datos para reservar tu pedido.</p>
-            <ul class="meta-list">
+            <ul class="payment-list">
                 {% for metodo in metodos_pago %}
-                    <li><strong>{{ metodo.titulo }}</strong><br>{{ metodo.descripcion }}</li>
+                    <li>
+                        <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo">
+                        <span><strong>{{ metodo.titulo }}</strong><br>{{ metodo.descripcion }}</span>
+                    </li>
                 {% endfor %}
             </ul>
         </article>
 
         <article class="section-card page-card">
-            <span class="section-kicker">Informacion importante</span>
+            <span class="section-kicker">Informaci&oacute;n importante</span>
             <h2>Lo esencial antes de confirmar</h2>
-            <p class="meta-copy">Estas recomendaciones te ayudan a reservar con tiempo y a recibir un detalle bien preparado.</p>
+            <p class="meta-copy">Estas recomendaciones evitan confusiones y ayudan a preparar tu detalle con el cuidado que merece.</p>
             <ul class="meta-list">
                 {% for politica in politicas_clave %}
                     <li>{{ politica }}</li>
@@ -1245,7 +1297,7 @@
             <strong>&iquest;Ya tienes una idea en mente?</strong>
             <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a convertirla en un detalle bien presentado y a tu estilo.</p>
         </div>
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado" class="btn" target="_blank" rel="noopener noreferrer">Solicitar cotizaci&oacute;n</a>
+        <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn" target="_blank" rel="noopener noreferrer">Pedir asesor&iacute;a ahora</a>
     </section>
 </div>
 
@@ -1256,7 +1308,7 @@
                 <div class="catalog-toolbar-copy">
                     <span class="section-kicker">Catálogo</span>
                     <strong>Explora por categoría</strong>
-                    <p>Una selección organizada para que descubras ideas lindas, actuales y listas para regalar.</p>
+                    <p>Filtra por ocasión, estilo o presupuesto y arma una selección para cotizar por WhatsApp.</p>
                 </div>
                 <div class="results-counter">
                     <strong>{{ page_obj.paginator.count }}</strong>
@@ -1288,7 +1340,7 @@
                     {% if filtros.q %}
                         Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
                     {% else %}
-                        Descubre los productos disponibles y elige el que mejor conecte con la ocasión que quieres celebrar.
+                        Descubre ideas disponibles y elige la que mejor conecte con la ocasi&oacute;n que quieres celebrar.
                     {% endif %}
                 </p>
             </div>
@@ -1300,6 +1352,9 @@
                 {% for producto in productos %}
                     <article class="product-card">
                         <div class="product-media">
+                            {% if producto.destacado %}
+                                <span class="product-ribbon">Top regalo</span>
+                            {% endif %}
                             {% if producto.imagen %}
                                 <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
                             {% else %}
@@ -1327,7 +1382,7 @@
                             <div class="product-price-row">
                                 <div>
                                     <div class="product-price">Desde {{ producto.precio|cop }} COP</div>
-                                    <div class="product-copy">Personalizable según la ocasión</div>
+                                    <div class="product-copy">Precio base, ajustable seg&uacute;n personalizaci&oacute;n</div>
                                 </div>
                             </div>
 
@@ -1336,7 +1391,7 @@
                                 {% if producto.disponible %}
                                     <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar</button>
+                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar favorito</button>
                                     </form>
                                 {% else %}
                                     <span class="btn-disabled">Agotado</span>
@@ -1375,5 +1430,6 @@
         {% endif %}
     </div>
 </section>
+
 </div>
 {% endblock %}

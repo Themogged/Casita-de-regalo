@@ -30,6 +30,20 @@
         padding: 28px;
     }
 
+    .cart-notice {
+        margin-bottom: 18px;
+        padding: 16px 18px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, #fff7fb, #fffdf8);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--ink-700);
+        line-height: 1.65;
+    }
+
+    .cart-notice strong {
+        color: var(--ink-900);
+    }
+
     .checkout-experience {
         display: grid;
         grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
@@ -287,7 +301,7 @@
     }
 
     .cart-total::after {
-        content: "Al continuar se abrirá WhatsApp con tu pedido listo, mejor presentado y más fácil de confirmar.";
+        content: "Al continuar se abrirá WhatsApp con tu selección. Allí confirmamos disponibilidad, personalización, domicilio y pago.";
         display: block;
         margin-top: 8px;
         color: var(--ink-700);
@@ -474,15 +488,15 @@
 <section class="hero-card">
     <div class="cart-hero">
         <div>
-            <h1>Tu carrito de compra</h1>
+            <h1>Tu selecci&oacute;n para cotizar</h1>
             <p>
-                Revisa cantidades, confirma disponibilidad y prepara tu pedido con una experiencia
-                más limpia, elegante y alineada a la marca Casita de Regalos.
+                Este carrito funciona como lista de favoritos. La compra no queda confirmada aqu&iacute;;
+                se revisa disponibilidad, personalizaci&oacute;n y pago directamente por WhatsApp.
             </p>
         </div>
         <div>
             <strong style="font-size:2rem;">{{ productos|length }}</strong>
-            <div>productos en este pedido</div>
+            <div>favoritos para cotizar</div>
         </div>
     </div>
 </section>
@@ -491,6 +505,11 @@
 {% block content %}
 <section class="page-card cart-wrapper">
     {% if productos %}
+        <div class="cart-notice">
+            <strong>Importante:</strong> los valores son base desde. Antes de elaborar cualquier detalle
+            confirmamos por WhatsApp la disponibilidad, personalizaci&oacute;n, domicilio y valor final.
+        </div>
+
         <table class="cart-table">
             <thead>
                 <tr>
@@ -553,61 +572,61 @@
 
             <div class="checkout-experience">
                 <div class="checkout-card">
-                    <span class="checkout-kicker">Personaliza el pedido</span>
-                    <h2>Haz que el mensaje salga mejor presentado</h2>
+                    <span class="checkout-kicker">Personaliza tu selecci&oacute;n</span>
+                    <h2>Cu&eacute;ntanos c&oacute;mo quieres el detalle</h2>
                     <p>
-                        Completa estos datos si quieres que el pedido llegue a WhatsApp con más contexto
-                        y una personalización más clara para tu detalle.
+                        Completa estos datos si quieres que el mensaje llegue a WhatsApp con m&aacute;s contexto
+                        y sea m&aacute;s f&aacute;cil cotizar tu regalo.
                     </p>
 
                     <div class="checkout-fields">
                         <div class="checkout-field">
-                            <label for="checkout-ocasion">Ocasión</label>
-                            <input type="text" id="checkout-ocasion" name="ocasion" maxlength="120" placeholder="Ej: cumpleaños, aniversario, sorpresa" value="{{ checkout_prefill.ocasion|default:'' }}">
+                            <label for="checkout-ocasion">Ocasi&oacute;n</label>
+                            <input type="text" id="checkout-ocasion" name="ocasion" maxlength="120" placeholder="Ej: cumplea&ntilde;os, aniversario, sorpresa" value="{{ checkout_prefill.ocasion|default:'' }}">
                         </div>
 
                         <div class="checkout-field">
-                            <label for="checkout-para">¿Para quién es?</label>
-                            <input type="text" id="checkout-para" name="para_quien" maxlength="120" placeholder="Ej: para mi novia, para mi mamá" value="{{ checkout_prefill.para_quien|default:'' }}">
+                            <label for="checkout-para">&iquest;Para qui&eacute;n es?</label>
+                            <input type="text" id="checkout-para" name="para_quien" maxlength="120" placeholder="Ej: para mi novia, para mi mam&aacute;" value="{{ checkout_prefill.para_quien|default:'' }}">
                         </div>
 
                         <div class="checkout-field checkout-field--full">
                             <label for="checkout-mensaje">Mensaje para tarjeta</label>
-                            <textarea id="checkout-mensaje" name="mensaje_tarjeta" placeholder="Escribe aquí el mensaje que te gustaría incluir">{{ checkout_prefill.mensaje_tarjeta|default:'' }}</textarea>
+                            <textarea id="checkout-mensaje" name="mensaje_tarjeta" placeholder="Escribe aqu&iacute; el mensaje que te gustar&iacute;a incluir">{{ checkout_prefill.mensaje_tarjeta|default:'' }}</textarea>
                         </div>
 
                         <div class="checkout-field checkout-field--full">
                             <label for="checkout-extra">Detalle adicional</label>
-                            <textarea id="checkout-extra" name="detalle_extra" placeholder="Colores, temática, referencias o cualquier ajuste que quieras pedir">{{ checkout_prefill.detalle_extra|default:'' }}</textarea>
+                            <textarea id="checkout-extra" name="detalle_extra" placeholder="Colores, tem&aacute;tica, referencias o cualquier ajuste que quieras pedir">{{ checkout_prefill.detalle_extra|default:'' }}</textarea>
                         </div>
                     </div>
 
                     <p class="checkout-help">
-                        Todo esto es opcional, pero ayuda a que la cotización y la preparación del detalle salgan mucho más claras.
+                        Todo esto es opcional, pero ayuda a cotizar y preparar el detalle con menos dudas.
                     </p>
                 </div>
 
                 <aside class="checkout-sidecard">
-                    <span class="checkout-kicker">Cierre premium</span>
-                    <h3>Así se verá más profesional tu pedido</h3>
+                    <span class="checkout-kicker">Confirmaci&oacute;n guiada</span>
+                    <h3>Tu compra se cierra por WhatsApp</h3>
                     <ul class="checkout-points">
-                        <li><strong>Resumen claro:</strong> el mensaje incluirá productos, cantidades y total.</li>
-                        <li><strong>Contexto útil:</strong> también enviará ocasión, destinatario y mensaje deseado si lo llenas.</li>
-                        <li><strong>Compra guiada:</strong> después revisamos disponibilidad final y ajustes antes de confirmar.</li>
+                        <li><strong>Resumen claro:</strong> el mensaje incluir&aacute; productos, cantidades y total base.</li>
+                        <li><strong>Personalizaci&oacute;n:</strong> tambi&eacute;n enviar&aacute; ocasi&oacute;n, destinatario y mensaje si lo llenas.</li>
+                        <li><strong>Validaci&oacute;n final:</strong> revisamos disponibilidad, ajustes y pago antes de elaborar.</li>
                     </ul>
                 </aside>
             </div>
 
             <div class="cart-summary">
                 <div class="cart-total">
-                <span>Total del pedido</span>
+                <span>Total base de la selecci&oacute;n</span>
                 <strong>{{ total|cop }}</strong>
-                <p>Al continuar se abrirá WhatsApp con tu pedido listo para enviar.</p>
+                <p>Al continuar se abrir&aacute; WhatsApp con tu selecci&oacute;n lista para enviar.</p>
             </div>
 
             <div class="summary-actions">
                 <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
-                <button type="submit" class="btn js-whatsapp-checkout-button">Finalizar por WhatsApp</button>
+                <button type="submit" class="btn js-whatsapp-checkout-button">Enviar selecci&oacute;n</button>
             </div>
             </div>
         </form>

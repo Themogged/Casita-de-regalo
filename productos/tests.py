@@ -83,6 +83,15 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.headers['X-Frame-Options'], 'DENY')
         self.assertIn('Permissions-Policy', response.headers)
 
+    def test_paginas_legales_cargan_correctamente(self):
+        terminos = self.client.get(reverse('terminos_condiciones'), secure=True)
+        privacidad = self.client.get(reverse('aviso_privacidad'), secure=True)
+
+        self.assertEqual(terminos.status_code, 200)
+        self.assertContains(terminos, 'T&eacute;rminos y condiciones')
+        self.assertEqual(privacidad.status_code, 200)
+        self.assertContains(privacidad, 'Aviso de privacidad')
+
     def test_catalogo_filtra_por_categoria(self):
         response = self.client.get(reverse('inicio'), {'categoria': self.categoria_flores.id}, secure=True)
 

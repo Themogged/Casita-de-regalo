@@ -623,16 +623,16 @@
             {% if producto.disponible %}
                 <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar al carrito</button>
+                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar favorito</button>
                 </form>
             {% else %}
                 <span class="btn-disabled">Producto agotado</span>
             {% endif %}
-            <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
+            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
         </div>
 
         <div class="detail-note">
-            Este valor puede variar según personalización, materiales, temporada y extras del pedido.
+            Precio base desde. El valor final puede variar según personalización, materiales, temporada, domicilio y extras del pedido.
         </div>
 
         <a href="{% url 'inicio' %}" class="detail-backlink">Volver al catálogo</a>

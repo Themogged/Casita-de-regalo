@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 70" role="img" aria-labelledby="title">
+  <title id="title">Bancolombia</title>
+  <rect width="220" height="70" rx="20" fill="#fff"/>
+  <rect x="18" y="17" width="42" height="36" rx="9" fill="#ffd200"/>
+  <path d="M27 25h24v6H27Zm0 11h24v6H27Z" fill="#2b2523"/>
+  <path d="M32 48h19v-6H32Z" fill="#2b2523" opacity=".82"/>
+  <text x="72" y="43" font-family="Trebuchet MS, Arial, sans-serif" font-size="26" font-weight="800" fill="#2b2523">Bancolombia</text>
+</svg>

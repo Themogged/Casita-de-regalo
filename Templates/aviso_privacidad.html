@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Aviso de privacidad | Casita de Regalos{% endblock %}
+
+{% block extra_head %}
+<style>
+    .privacy-hero h1 {
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.1rem, 5vw, 3.4rem);
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .privacy-hero p,
+    .privacy-card p,
+    .privacy-card li {
+        color: var(--ink-700);
+        line-height: 1.72;
+    }
+
+    .privacy-card {
+        padding: clamp(22px, 4vw, 34px);
+    }
+
+    .privacy-card h2 {
+        margin-bottom: 12px;
+    }
+
+    .privacy-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+        list-style: none;
+    }
+
+    .privacy-list li {
+        padding: 16px;
+        border-radius: 20px;
+        background: #fff7fb;
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card privacy-hero">
+    <h1>Aviso de privacidad</h1>
+    <p>
+        Casita de Regalos usa la informaci&oacute;n del cliente solo para cotizar, personalizar,
+        preparar y coordinar pedidos por WhatsApp.
+    </p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="page-card privacy-card">
+    <h2>Uso de datos</h2>
+    <p>
+        Podemos solicitar nombre, tel&eacute;fono, direcci&oacute;n de entrega, mensaje para tarjeta,
+        fecha, horario, referencias visuales y datos necesarios para preparar el detalle.
+    </p>
+
+    <ul class="privacy-list">
+        <li>Los datos se usan para atender la solicitud, confirmar disponibilidad, coordinar pago y gestionar la entrega.</li>
+        <li>No vendemos ni compartimos datos personales con terceros ajenos al pedido.</li>
+        <li>Las fotos de productos entregados pueden usarse para promoci&oacute;n, salvo que el cliente solicite lo contrario.</li>
+        <li>El cliente puede pedir correcci&oacute;n o eliminaci&oacute;n de sus datos escribiendo al WhatsApp oficial.</li>
+    </ul>
+</section>
+{% endblock %}

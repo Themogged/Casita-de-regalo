@@ -6,15 +6,15 @@ from .models import Categoria, Producto
 
 
 QUIENES_SOMOS = {
-    'titulo': 'Detalles personalizados para fechas que merecen algo mágico',
+    'titulo': 'Regalos personalizados en Bello y Medellín para fechas que se sienten especiales',
     'descripcion': (
-        'Casita de Regalos es una tienda online ubicada en Bello, Antioquia, enfocada en convertir '
-        'cumpleaños, aniversarios, fechas especiales y sorpresas en experiencias inolvidables. '
-        'La marca transmite ternura, cercanía y una atención guiada que acompaña cada compra desde '
-        'la idea inicial hasta la entrega final.'
+        'Somos una tienda online ubicada en Bello, Antioquia. Creamos desayunos sorpresa, cajas '
+        'personalizadas, regalos románticos y detalles temáticos para cumpleaños, aniversarios y '
+        'momentos importantes. Te acompañamos por WhatsApp desde la idea inicial hasta la confirmación '
+        'del pedido.'
     ),
     'cobertura': 'Bello, Medellín y área metropolitana',
-    'promesa': 'Personalización según gusto, presupuesto y ocasión',
+    'promesa': 'Cada detalle se ajusta según gusto, presupuesto, temática y ocasión',
 }
 
 PILARES_SERVICIO = [
@@ -267,22 +267,22 @@ PASOS_COMPRA = [
     {
         'numero': '01',
         'titulo': 'Explora el catálogo',
-        'descripcion': 'Dirígete a nuestras referencias y revisa opciones de detalles personalizados.',
+        'descripcion': 'Busca por categoría, ocasión o presupuesto y guarda tus opciones favoritas.',
     },
     {
         'numero': '02',
         'titulo': 'Personaliza tu pedido',
-        'descripcion': 'Elige la referencia que más te guste y ajusta colores, mensaje, extras y presupuesto.',
+        'descripcion': 'Elige colores, nombres, temática, mensaje para tarjeta y extras según tu idea.',
     },
     {
         'numero': '03',
         'titulo': 'Confirma por WhatsApp',
-        'descripcion': 'Contáctanos para recibir asesoría, disponibilidad real y cotización personalizada.',
+        'descripcion': 'Te confirmamos disponibilidad, precio final, domicilio y tiempo de preparación.',
     },
     {
         'numero': '04',
         'titulo': 'Reserva y realiza el pago',
-        'descripcion': 'Una vez confirmado el pedido, realizas el pago y entramos a prepararlo con dedicación.',
+        'descripcion': 'El pedido queda reservado al validar el abono del 50% o el pago total acordado.',
     },
 ]
 
@@ -290,25 +290,83 @@ METODOS_PAGO = [
     {
         'titulo': 'Nequi',
         'descripcion': '311 626 2155 a nombre de Mónica Gutiérrez. Ideal para confirmar rápido y enviar comprobante por WhatsApp.',
+        'logo': 'productos/img/logo-nequi.svg',
     },
     {
         'titulo': 'Bancolombia',
         'descripcion': 'Cuenta de ahorros 58066610009 para reservas y pedidos personalizados confirmados.',
+        'logo': 'productos/img/logo-bancolombia.svg',
     },
     {
         'titulo': 'Pago validado',
         'descripcion': 'Primero se valida disponibilidad, personalización y precio final. Luego se confirma el abono o pago completo.',
+        'logo': 'productos/img/icon-payment-ok.svg',
     },
 ]
 
 POLITICAS_CLAVE = [
-    'Los pedidos se agendan únicamente si se cancela el 50% del valor total.',
-    'No manejamos devoluciones de dinero.',
-    'Los pedidos se recomiendan con 1 o 2 días de anticipación.',
-    'Todas las anchetas y detalles se pueden personalizar según presupuesto y gusto del cliente.',
-    'Si deseas entrega inmediata, primero debes consultar por referencias disponibles.',
-    'En cada imagen se evidencia lo que incluye cada detalle y cualquier agotado se avisa antes de confirmar.',
-    'Los precios pueden variar según temporada, materiales y personalización.',
+    'Los pedidos se agendan cuando se confirma disponibilidad y se abona el 50% del valor total.',
+    'Por ser detalles personalizados, no se realizan devoluciones una vez iniciado el proceso de elaboración.',
+    'Recomendamos hacer pedidos con 1 o 2 días de anticipación para prepararlos con mejor cuidado.',
+    'Todas las anchetas y detalles pueden ajustarse según presupuesto, gusto y ocasión del cliente.',
+    'Si deseas entrega inmediata, primero consultamos qué referencias e insumos están disponibles.',
+    'En cada referencia se muestra lo que incluye el detalle; cualquier cambio o agotado se avisa antes de confirmar.',
+    'Los precios publicados son valores base desde y pueden variar según temporada, materiales y personalización.',
+]
+
+TERMINOS_CONDICIONES = [
+    {
+        'titulo': 'Confirmación del pedido',
+        'descripcion': 'El pedido queda reservado cuando se valida disponibilidad y se abona el 50% o el valor total acordado.',
+    },
+    {
+        'titulo': 'Personalización',
+        'descripcion': 'El cliente debe enviar nombres, colores, temática, frases y revisar que la información esté correcta.',
+    },
+    {
+        'titulo': 'Tiempo de preparación',
+        'descripcion': 'Recomendamos pedir con 1 o 2 días de anticipación. Los pedidos urgentes dependen de disponibilidad.',
+    },
+    {
+        'titulo': 'Cambios',
+        'descripcion': 'Los cambios se reciben únicamente antes de iniciar la elaboración del detalle.',
+    },
+    {
+        'titulo': 'Disponibilidad y sustituciones',
+        'descripcion': 'Insumos como dulces, flores, globos o empaques pueden variar; se ofrecen reemplazos similares.',
+    },
+    {
+        'titulo': 'Precios',
+        'descripcion': 'Los valores publicados son base desde y pueden cambiar por personalización, temporada o extras.',
+    },
+    {
+        'titulo': 'Entregas',
+        'descripcion': 'Las entregas se coordinan por WhatsApp y el domicilio depende de la zona.',
+    },
+    {
+        'titulo': 'No devoluciones',
+        'descripcion': 'Por tratarse de productos personalizados, no hay devoluciones ni reembolsos una vez iniciado el proceso.',
+    },
+    {
+        'titulo': 'Cancelaciones',
+        'descripcion': 'Si el pedido se cancela con elaboración avanzada, el anticipo no se devuelve.',
+    },
+    {
+        'titulo': 'Responsabilidad del cliente',
+        'descripcion': 'El cliente debe brindar correctamente nombres, frases, dirección, horarios y datos de contacto.',
+    },
+    {
+        'titulo': 'Variaciones',
+        'descripcion': 'Las fotos son referencias; pueden existir ligeras diferencias por disponibilidad y elaboración manual.',
+    },
+    {
+        'titulo': 'Uso de imágenes',
+        'descripcion': 'Casita de Regalos puede usar fotos de los productos entregados para promoción, salvo solicitud contraria del cliente.',
+    },
+    {
+        'titulo': 'Aceptación',
+        'descripcion': 'Al confirmar el pedido por WhatsApp, el cliente acepta estos términos y condiciones.',
+    },
 ]
 
 
@@ -387,6 +445,7 @@ def inicio(request):
         'pasos_compra': PASOS_COMPRA,
         'metodos_pago': METODOS_PAGO,
         'politicas_clave': POLITICAS_CLAVE,
+        'terminos_condiciones': TERMINOS_CONDICIONES,
         'resumen': resumen,
     }
     return render(request, 'inicio.html', contexto)
@@ -454,3 +513,17 @@ def detalle_producto(request, producto_id):
             'galeria_imagenes': galeria_imagenes,
         },
     )
+
+
+def terminos_condiciones(request):
+    return render(
+        request,
+        'terminos_condiciones.html',
+        {
+            'terminos_condiciones': TERMINOS_CONDICIONES,
+        },
+    )
+
+
+def aviso_privacidad(request):
+    return render(request, 'aviso_privacidad.html')

@@ -450,6 +450,12 @@
             line-height: 1.7;
         }
 
+        .footer-card a {
+            display: block;
+            width: fit-content;
+            margin-bottom: 7px;
+        }
+
         .footer-card a:hover {
             color: var(--rose-700);
         }
@@ -1047,6 +1053,12 @@
                 <p>Bello, Antioquia, Colombia</p>
                 <p>Atenci&oacute;n en Medell&iacute;n y &aacute;rea metropolitana</p>
                 <p>WhatsApp: +57 311 626 2155</p>
+            </div>
+
+            <div class="footer-card">
+                <h4>Legal</h4>
+                <a href="{% url 'terminos_condiciones' %}">T&eacute;rminos y condiciones</a>
+                <a href="{% url 'aviso_privacidad' %}">Aviso de privacidad</a>
             </div>
 
             <div class="footer-card">

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 70" role="img" aria-labelledby="title">
+  <title id="title">Pago validado</title>
+  <rect width="90" height="70" rx="20" fill="#fff"/>
+  <circle cx="45" cy="35" r="24" fill="#e6f8f0"/>
+  <path d="m34.5 35.4 7 7 15-16" fill="none" stroke="#1f8a63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
