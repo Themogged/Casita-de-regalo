@@ -49,6 +49,17 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '$81.000')
 
+    def test_carrito_no_muestra_stock_publico(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        response = self.client.get(reverse('ver_carrito'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'Stock disponible')
+        self.assertNotContains(response, '3 unidades')
+
     def test_agregar_por_ajax_responde_sin_redireccion(self):
         response = self.client.post(
             reverse('agregar_carrito', args=[self.producto.id]),
