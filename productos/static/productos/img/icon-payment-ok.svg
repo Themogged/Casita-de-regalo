@@ -1,6 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 70" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 70" role="img" aria-labelledby="title">
   <title id="title">Pago validado</title>
-  <rect width="90" height="70" rx="20" fill="#fff"/>
-  <circle cx="45" cy="35" r="24" fill="#e6f8f0"/>
-  <path d="m34.5 35.4 7 7 15-16" fill="none" stroke="#1f8a63" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="1" y="1" width="178" height="68" rx="20" fill="#fff" stroke="#D7F0E5" stroke-width="2"/>
+  <circle cx="37" cy="35" r="22" fill="#E6F8F0"/>
+  <path d="m27.5 35.4 7 7 14.8-16" fill="none" stroke="#1F8A63" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="72" y="34" font-family="Trebuchet MS, Arial, sans-serif" font-size="23" font-weight="900" fill="#1F8A63">Validado</text>
+  <text x="73" y="51" font-family="Trebuchet MS, Arial, sans-serif" font-size="12" font-weight="700" fill="#6A8F7D">Pago confirmado</text>
 </svg>
