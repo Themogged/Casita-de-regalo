@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %}Preguntas frecuentes | Casita de Regalos{% endblock %}
+{% block meta_description %}Resuelve dudas sobre regalos personalizados, desayunos sorpresa, domicilios, pagos y pedidos en Bello, Medell&iacute;n y el &aacute;rea metropolitana.{% endblock %}
+{% block meta_keywords %}preguntas frecuentes regalos personalizados, domicilios Bello, domicilios Medellin, desayunos sorpresa, metodos de pago Casita de Regalos{% endblock %}
+{% block og_title %}Preguntas frecuentes | Casita de Regalos{% endblock %}
+{% block og_description %}Dudas frecuentes sobre tiempos, domicilios, personalizaci&oacute;n, pagos y confirmaci&oacute;n de pedidos personalizados.{% endblock %}
+
+{% block structured_data %}
+    {% if faq_schema_json %}
+        <script type="application/ld+json">{{ faq_schema_json|safe }}</script>
+    {% endif %}
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .faq-hero h1 {
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.1rem, 5vw, 3.5rem);
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .faq-hero p,
+    .faq-card p {
+        color: var(--ink-700);
+        line-height: 1.72;
+    }
+
+    .faq-card {
+        padding: clamp(22px, 4vw, 34px);
+    }
+
+    .faq-intro {
+        max-width: 780px;
+        margin-bottom: 22px;
+    }
+
+    .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 14px;
+    }
+
+    .faq-item {
+        overflow: hidden;
+        border-radius: 24px;
+        background: linear-gradient(180deg, #fffafc, #fffefe);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        box-shadow: 0 12px 24px rgba(94, 35, 63, 0.04);
+    }
+
+    .faq-item summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 18px;
+        color: var(--ink-900);
+        cursor: pointer;
+        font-weight: 800;
+        list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .faq-item summary::after {
+        content: "+";
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        color: var(--rose-700);
+        background: var(--rose-50);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        flex: 0 0 auto;
+    }
+
+    .faq-item[open] summary::after {
+        content: "-";
+    }
+
+    .faq-item p {
+        padding: 0 18px 18px;
+    }
+
+    .faq-action {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-top: 24px;
+        padding: 18px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #fff6fa, #fffefe);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }
+
+    .faq-action strong {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--ink-900);
+    }
+
+    .faq-action a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 18px;
+        border-radius: 999px;
+        color: #fff;
+        background: linear-gradient(135deg, #d84d88, #b83167 68%, #96275c 100%);
+        font-weight: 800;
+        box-shadow: 0 12px 24px rgba(185, 45, 99, 0.16);
+    }
+
+    @media (max-width: 640px) {
+        .faq-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .faq-action {
+            align-items: stretch;
+        }
+
+        .faq-action a {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card faq-hero">
+    <h1>Preguntas frecuentes</h1>
+    <p>
+        Resuelve dudas sobre tiempos, domicilios, personalizaci&oacute;n, pagos y confirmaci&oacute;n
+        de pedidos personalizados en Bello, Medell&iacute;n y el &aacute;rea metropolitana.
+    </p>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="page-card faq-card">
+    <div class="faq-intro">
+        <p>
+            Estas respuestas ayudan a entender c&oacute;mo funciona la cotizaci&oacute;n antes de confirmar
+            por WhatsApp. Los detalles se preparan de forma personalizada, por eso siempre validamos
+            disponibilidad, precio final y tiempos antes de iniciar.
+        </p>
+    </div>
+
+    <div class="faq-grid">
+        {% for item in preguntas_frecuentes %}
+            <details class="faq-item" {% if forloop.first %}open{% endif %}>
+                <summary>{{ item.pregunta }}</summary>
+                <p>{{ item.respuesta }}</p>
+            </details>
+        {% endfor %}
+    </div>
+
+    <div class="faq-action">
+        <div>
+            <strong>&iquest;Necesitas una respuesta m&aacute;s puntual?</strong>
+            <p>Escr&iacute;benos por WhatsApp y revisamos tu idea, presupuesto o fecha de entrega.</p>
+        </div>
+        <a href="https://wa.me/573116262155?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20de%20Casita%20de%20Regalos.%20Tengo%20una%20pregunta%20sobre%20un%20pedido%20personalizado." target="_blank" rel="noopener noreferrer external" data-track-click="whatsapp" data-track-label="faq_whatsapp">
+            Preguntar por WhatsApp
+        </a>
+    </div>
+</section>
+{% endblock %}

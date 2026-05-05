@@ -1,3 +1,5 @@
+import json
+
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
@@ -176,12 +178,12 @@ COLECCIONES_REFERENCIA = [
                 'mensaje': 'Hola, quiero cotizar la referencia Amor delicado rosa.',
             },
             {
-                'titulo': 'Trio corazones sorpresa',
+                'titulo': 'Trío corazones sorpresa',
                 'etiqueta': 'Romántico',
                 'precio': '$63.000 COP',
                 'imagen': 'referencias/referencia-10.png',
                 'descripcion': 'Referencias visuales con corazones, chocolates, rosas y cajas que funcionan muy bien para regalar amor.',
-                'mensaje': 'Hola, quiero cotizar la referencia Trio corazones sorpresa.',
+                'mensaje': 'Hola, quiero cotizar la referencia Trío corazones sorpresa.',
             },
             {
                 'titulo': 'Buenos días con amor',
@@ -267,7 +269,7 @@ PASOS_COMPRA = [
     {
         'numero': '01',
         'titulo': 'Explora el catálogo',
-        'descripcion': 'Busca por categoría, ocasión o presupuesto y guarda tus opciones favoritas.',
+        'descripcion': 'Busca por categoría, ocasión o tipo de detalle y guarda tus opciones favoritas.',
     },
     {
         'numero': '02',
@@ -312,6 +314,33 @@ POLITICAS_CLAVE = [
     'Si deseas entrega inmediata, primero consultamos qué referencias e insumos están disponibles.',
     'En cada referencia se muestra lo que incluye el detalle; cualquier cambio o agotado se avisa antes de confirmar.',
     'Los precios publicados son valores base desde y pueden variar según temporada, materiales y personalización.',
+]
+
+PREGUNTAS_FRECUENTES = [
+    {
+        'pregunta': '¿Con cuánto tiempo debo pedir?',
+        'respuesta': 'Lo ideal es reservar con 1 o 2 días de anticipación. Si necesitas algo urgente, primero validamos disponibilidad por WhatsApp.',
+    },
+    {
+        'pregunta': '¿Hacen domicilios?',
+        'respuesta': 'Sí. Coordinamos entregas en Bello, Medellín y el área metropolitana. El valor del domicilio depende de la zona y se confirma antes de cerrar el pedido.',
+    },
+    {
+        'pregunta': '¿Puedo personalizar colores y temática?',
+        'respuesta': 'Sí. Puedes ajustar colores, temática, nombre, mensaje para tarjeta y algunos detalles según disponibilidad y presupuesto.',
+    },
+    {
+        'pregunta': '¿Cómo confirmo mi pedido?',
+        'respuesta': 'La selección se revisa por WhatsApp. Allí confirmamos disponibilidad, personalización, domicilio, precio final y el abono o pago acordado.',
+    },
+    {
+        'pregunta': '¿Qué métodos de pago manejan?',
+        'respuesta': 'Trabajamos principalmente con Nequi y Bancolombia. Los datos se comparten cuando el detalle queda definido y validado.',
+    },
+    {
+        'pregunta': '¿El precio puede cambiar?',
+        'respuesta': 'Sí. Los precios publicados son valores base desde y pueden variar según personalización, temporada, insumos, flores, globos o extras elegidos.',
+    },
 ]
 
 TERMINOS_CONDICIONES = [
@@ -377,6 +406,62 @@ ORDENES_CATALOGO = {
     'recientes': ('-fecha_creacion', 'nombre'),
     'nombre': ('nombre',),
 }
+
+
+def _build_home_schema(request):
+    site_url = request.build_absolute_uri('/')
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        'name': 'Casita de Regalos',
+        'url': site_url,
+        'telephone': '+57 311 626 2155',
+        'priceRange': '$$',
+        'description': (
+            'Regalos personalizados, desayunos sorpresa, detalles románticos y regalos de cumpleaños '
+            'para Bello, Medellín y el área metropolitana.'
+        ),
+        'address': {
+            '@type': 'PostalAddress',
+            'addressLocality': 'Bello',
+            'addressRegion': 'Antioquia',
+            'addressCountry': 'CO',
+        },
+        'areaServed': [
+            {'@type': 'City', 'name': 'Bello'},
+            {'@type': 'City', 'name': 'Medellín'},
+            {'@type': 'AdministrativeArea', 'name': 'Área metropolitana del Valle de Aburrá'},
+        ],
+        'sameAs': ['https://www.instagram.com/casitaregalos/'],
+        'knowsAbout': [
+            'Regalos personalizados',
+            'Desayunos sorpresa',
+            'Detalles románticos',
+            'Regalos de cumpleaños',
+            'Anchetas personalizadas',
+        ],
+    }
+    return json.dumps(schema, ensure_ascii=False)
+
+
+def _build_faq_schema():
+    questions = [
+        {
+            '@type': 'Question',
+            'name': item['pregunta'],
+            'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': item['respuesta'],
+            },
+        }
+        for item in PREGUNTAS_FRECUENTES
+    ]
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': questions,
+    }
+    return json.dumps(schema, ensure_ascii=False)
 
 
 def inicio(request):
@@ -446,6 +531,7 @@ def inicio(request):
         'metodos_pago': METODOS_PAGO,
         'politicas_clave': POLITICAS_CLAVE,
         'terminos_condiciones': TERMINOS_CONDICIONES,
+        'seo_schema_json': _build_home_schema(request),
         'resumen': resumen,
     }
     return render(request, 'inicio.html', contexto)
@@ -511,6 +597,17 @@ def detalle_producto(request, producto_id):
             'total_en_navegacion': total_en_navegacion,
             'relacionados': relacionados,
             'galeria_imagenes': galeria_imagenes,
+        },
+    )
+
+
+def preguntas_frecuentes(request):
+    return render(
+        request,
+        'preguntas_frecuentes.html',
+        {
+            'preguntas_frecuentes': PREGUNTAS_FRECUENTES,
+            'faq_schema_json': _build_faq_schema(),
         },
     )
 

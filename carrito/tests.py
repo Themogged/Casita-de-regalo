@@ -73,7 +73,7 @@ class CarritoViewsTests(TestCase):
             {
                 'ok': True,
                 'level': 'success',
-                'message': 'Desayuno prueba agregado al carrito.',
+                'message': 'Desayuno prueba guardado para cotizar.',
                 'cart_total': 1,
                 'product_id': self.producto.id,
             },

@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest import mock
 
-from .models import Categoria, Producto, ProductoImagen
+from .models import Categoria, InteraccionCliente, Producto, ProductoImagen
 
 
 class CatalogoViewsTests(TestCase):
@@ -74,6 +74,7 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Cómo comprar')
         self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Explora por categoría')
+        self.assertContains(response, 'data-track-click="instagram"')
 
     def test_inicio_envia_headers_de_seguridad(self):
         response = self.client.get(reverse('inicio'), secure=True)
@@ -86,11 +87,53 @@ class CatalogoViewsTests(TestCase):
     def test_paginas_legales_cargan_correctamente(self):
         terminos = self.client.get(reverse('terminos_condiciones'), secure=True)
         privacidad = self.client.get(reverse('aviso_privacidad'), secure=True)
+        preguntas = self.client.get(reverse('preguntas_frecuentes'), secure=True)
 
         self.assertEqual(terminos.status_code, 200)
         self.assertContains(terminos, 'T&eacute;rminos y condiciones')
         self.assertEqual(privacidad.status_code, 200)
         self.assertContains(privacidad, 'Aviso de privacidad')
+        self.assertEqual(preguntas.status_code, 200)
+        self.assertContains(preguntas, 'Preguntas frecuentes')
+        self.assertContains(preguntas, 'FAQPage')
+
+    def test_sitemap_y_robots_exponen_urls_publicas(self):
+        robots = self.client.get(reverse('robots_txt'), secure=True)
+        sitemap = self.client.get(reverse('sitemap_xml'), secure=True)
+
+        self.assertEqual(robots.status_code, 200)
+        self.assertContains(robots, 'Sitemap:')
+        self.assertContains(robots, '/sitemap.xml')
+        self.assertContains(robots, 'Disallow: /admin/')
+
+        self.assertEqual(sitemap.status_code, 200)
+        self.assertContains(sitemap, '<urlset')
+        self.assertContains(sitemap, reverse('inicio'))
+        self.assertContains(sitemap, reverse('preguntas_frecuentes'))
+        self.assertContains(sitemap, reverse('detalle_producto', args=[self.producto_principal.id]))
+
+    def test_registra_interaccion_de_cliente(self):
+        response = self.client.post(
+            reverse('registrar_interaccion'),
+            data=json.dumps(
+                {
+                    'tipo': 'whatsapp',
+                    'etiqueta': 'hero_whatsapp',
+                    'destino': 'https://wa.me/573116262155',
+                    'pagina': '/',
+                }
+            ),
+            content_type='application/json',
+            secure=True,
+            HTTP_USER_AGENT='CatalogoTest/1.0',
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.json()['ok'])
+        evento = InteraccionCliente.objects.get()
+        self.assertEqual(evento.tipo, 'whatsapp')
+        self.assertEqual(evento.etiqueta, 'hero_whatsapp')
+        self.assertEqual(evento.pagina, '/')
 
     def test_catalogo_filtra_por_categoria(self):
         response = self.client.get(reverse('inicio'), {'categoria': self.categoria_flores.id}, secure=True)
@@ -184,7 +227,7 @@ class CatalogoViewsTests(TestCase):
         payload = response.json()
         self.assertTrue(payload["ok"])
         self.assertEqual(payload["mode"], "fallback")
-        self.assertIn("tematica", payload["reply"].lower())
+        self.assertIn("temática", payload["reply"].lower())
         self.assertTrue(payload["actions"])
 
     def test_asistente_puede_responder_en_modo_ai(self):

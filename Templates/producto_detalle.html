@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load moneda %}
+{% load moneda media_optimization %}
 
 {% block title %}{{ producto.nombre }} | Casita de Regalos{% endblock %}
 
@@ -522,7 +522,7 @@
 
     <h1>{{ producto.nombre }}</h1>
     <p>
-        Explora su presentación, revisa qué incluye y decide si quieres agregarlo al carrito o
+        Explora su presentación, revisa qué incluye y decide si quieres guardarlo para cotizar o
         cotizarlo por WhatsApp con un acabado mucho más personalizado.
     </p>
 
@@ -553,10 +553,12 @@
             {% if galeria_imagenes %}
                 {% for imagen in galeria_imagenes %}
                     <img
-                        src="{{ imagen.url }}"
+                        src="{{ imagen.url|optimized_image_url }}"
                         alt="{{ imagen.alt }}"
                         class="detail-gallery-image"
                         data-gallery-image
+                        loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                        decoding="async"
                         {% if not forloop.first %}hidden{% endif %}
                     >
                 {% endfor %}
@@ -580,7 +582,7 @@
                         data-gallery-index="{{ forloop.counter0 }}"
                         aria-label="Ver imagen {{ forloop.counter }} de {{ producto.nombre }}"
                     >
-                        <img src="{{ imagen.url }}" alt="{{ imagen.alt }}">
+                        <img src="{{ imagen.url|optimized_image_url }}" alt="{{ imagen.alt }}" loading="lazy" decoding="async">
                     </button>
                 {% endfor %}
             </div>
@@ -623,12 +625,12 @@
             {% if producto.disponible %}
                 <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar favorito</button>
+                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar para cotizar</button>
                 </form>
             {% else %}
                 <span class="btn-disabled">Producto agotado</span>
             {% endif %}
-            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
+            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="detalle_producto_whatsapp">Quiero cotizar</a>
         </div>
 
         <div class="detail-note">
@@ -682,12 +684,12 @@
         {% if producto.disponible %}
             <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                 {% csrf_token %}
-                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar</button>
+                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar</button>
             </form>
         {% else %}
             <span class="btn-disabled">Agotado</span>
         {% endif %}
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="detalle_mobile_whatsapp">WhatsApp</a>
     </div>
 </div>
 <script>

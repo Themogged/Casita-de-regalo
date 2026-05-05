@@ -64,21 +64,21 @@ def _serialize_catalog_context():
             category_lines.append(f"- {categoria.nombre}: {categoria.total_productos} referencias.")
 
     featured_lines = [
-        f"- {producto.nombre} ({producto.categoria.nombre if producto.categoria else 'Sin categoria'}) por {_format_cop(producto.precio)}."
+        f"- {producto.nombre} ({producto.categoria.nombre if producto.categoria else 'Sin categoría'}) por {_format_cop(producto.precio)}."
         for producto in destacados
     ]
 
     context = "\n".join(
         [
             "Marca: Casita de Regalos.",
-            "Ubicacion: Bello, Antioquia. Cobertura: Medellin y area metropolitana.",
+            "Ubicación: Bello, Antioquia. Cobertura: Medellín y área metropolitana.",
             "Estilo: cercano, premium, delicado y orientado a detalles personalizados.",
-            "Flujo de compra: el cliente explora referencias, agrega al carrito y finaliza por WhatsApp para confirmar disponibilidad y pago.",
-            "Pagos habituales: Nequi y Bancolombia. La confirmacion final se hace por WhatsApp.",
-            "Politica comercial: personalizacion segun ocasion, presupuesto, colores y mensaje.",
-            "Categorias activas:",
-            category_lines and "\n".join(category_lines) or "- Sin categorias cargadas.",
-            "Referencias destacadas del catalogo:",
+            "Flujo de compra: el cliente explora referencias, guarda detalles para cotizar y finaliza por WhatsApp para confirmar disponibilidad y pago.",
+            "Pagos habituales: Nequi y Bancolombia. La confirmación final se hace por WhatsApp.",
+            "Política comercial: personalización según ocasión, presupuesto, colores y mensaje.",
+            "Categorías activas:",
+            category_lines and "\n".join(category_lines) or "- Sin categorías cargadas.",
+            "Referencias destacadas del catálogo:",
             featured_lines and "\n".join(featured_lines) or "- Sin productos destacados disponibles.",
         ]
     )
@@ -90,12 +90,12 @@ def _serialize_catalog_context():
 def _build_system_prompt():
     return (
         "Eres la asesora virtual oficial de Casita de Regalos. "
-        "Respondes en espanol natural, calido, claro y muy comercial. "
+        "Respondes en español natural, cálido, claro y muy comercial. "
         "Tu objetivo es ayudar al cliente a elegir un detalle, resolver dudas y llevarlo con confianza a WhatsApp cuando ya quiera confirmar. "
         "No inventes productos inexistentes ni precios no vistos en el contexto. "
-        "Si no estas completamente segura de algo, dilo con honestidad y sugiere confirmar por WhatsApp. "
+        "Si no estás completamente segura de algo, dilo con honestidad y sugiere confirmar por WhatsApp. "
         "Mantente breve: entre 45 y 110 palabras. "
-        "Contexto real del negocio y catalogo:\n"
+        "Contexto real del negocio y catálogo:\n"
         f"{_serialize_catalog_context()}"
     )
 
@@ -396,7 +396,7 @@ def _find_recommended_products(context_data, limit=3):
 
 
 def _build_product_line(product):
-    category_name = product.categoria.nombre if product.categoria else "catalogo general"
+    category_name = product.categoria.nombre if product.categoria else "catálogo general"
     return f"{product.nombre} en {category_name} por {_format_cop(product.precio)}"
 
 
@@ -426,11 +426,11 @@ def _build_fallback_actions(context_data):
     if "compra" in intents:
         actions.append({"label": "Ir al carrito", "href": reverse("ver_carrito")})
     elif "pago" in intents or "entrega" in intents:
-        actions.append({"label": "Como comprar", "href": f"{reverse('inicio')}#como-comprar"})
+        actions.append({"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"})
     elif not actions:
-        actions.append({"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"})
+        actions.append({"label": "Ver catálogo", "href": f"{reverse('inicio')}#catalogo"})
 
-    whatsapp_text = "Hola%20quiero%20asesoria%20para%20elegir%20un%20detalle"
+    whatsapp_text = "Hola%20quiero%20asesor%C3%ADa%20para%20elegir%20un%20detalle"
     if products:
         whatsapp_text = f"Hola%20quiero%20cotizar%20{products[0].nombre.replace(' ', '%20')}"
     elif category:
@@ -468,14 +468,14 @@ def _build_fallback_message(context_data):
     greeting = "Hola, te ayudo a encontrar un detalle lindo y bien pensado."
     if "saludo" in intents and not intents - {"saludo"}:
         return (
-            f"{greeting} Puedes preguntarme por categoria, presupuesto, pagos, personalizacion o entrega, "
-            "y te guio rapido con opciones claras."
+            f"{greeting} Puedes preguntarme por categoría, presupuesto, pagos, personalización o entrega, "
+            "y te guío rápido con opciones claras."
         )
 
     if products and category and "infantil" in intents:
         product_lines = "; ".join(_build_product_line(product) for product in products[:2])
         return (
-            f"Para una linea tematica e infantil te recomiendo empezar por {product_lines}. "
+            f"Para una línea temática e infantil te recomiendo empezar por {product_lines}. "
             "Si quieres, puedes abrir una referencia ahora mismo y luego cerrar la compra por WhatsApp."
         )
 
@@ -490,12 +490,12 @@ def _build_fallback_message(context_data):
         product_lines = "; ".join(_build_product_line(product) for product in products[:2])
         return (
             f"Con ese presupuesto hay opciones que se ven muy bien, por ejemplo {product_lines}. "
-            "Si me dices para quien es o la ocasion, te afino mejor la recomendacion."
+            "Si me dices para quién es o la ocasión, te afino mejor la recomendación."
         )
 
     if "infantil" in intents:
         base_text = (
-            "Para una linea tematica e infantil tenemos propuestas con personajes, colores, desayunos y detalles personalizados. "
+            "Para una línea temática e infantil tenemos propuestas con personajes, colores, desayunos y detalles personalizados. "
         )
         if products:
             sample = "; ".join(_build_product_line(product) for product in products[:2])
@@ -504,54 +504,54 @@ def _build_fallback_message(context_data):
 
     if "pago" in intents:
         return (
-            "El pago normalmente se confirma despues de validar disponibilidad y personalizacion. "
+            "El pago normalmente se confirma después de validar disponibilidad y personalización. "
             "Casita trabaja sobre todo con Nequi y Bancolombia, y el cierre final se hace por WhatsApp."
         )
 
     if "entrega" in intents:
         return (
-            "La cobertura principal es Bello, Medellin y el area metropolitana. "
-            "El tiempo exacto y el costo de entrega se confirman por WhatsApp segun la zona y el tipo de detalle."
+            "La cobertura principal es Bello, Medellín y el área metropolitana. "
+            "El tiempo exacto y el costo de entrega se confirman por WhatsApp según la zona y el tipo de detalle."
         )
 
     if "personalizacion" in intents:
         return (
-            "Si, se puede personalizar segun ocasion, colores, mensaje, nombre o estilo del regalo. "
-            "Lo ideal es elegir una base del catalogo y luego ajustar los detalles finos por WhatsApp."
+            "Sí, se puede personalizar según ocasión, colores, mensaje, nombre o estilo del regalo. "
+            "Lo ideal es elegir una base del catálogo y luego ajustar los detalles finos por WhatsApp."
         )
 
     if "compra" in intents:
         return (
-            "Puedes explorar el catalogo, agregar productos al carrito y cerrar el pedido por WhatsApp. "
-            "Asi se confirma disponibilidad, personalizacion y pago sin perder tiempo."
+            "Puedes explorar el catálogo, guardar detalles para cotizar y cerrar el pedido por WhatsApp. "
+            "Así se confirma disponibilidad, personalización y pago sin perder tiempo."
         )
 
     if "consulta" in intents or category:
         if category:
             return (
-                f"En {category.nombre} hay varias referencias activas y se pueden adaptar segun presupuesto o estilo. "
-                "Abre la categoria y desde ahi revisamos juntos la mejor opcion."
+                f"En {category.nombre} hay varias referencias activas y se pueden adaptar según presupuesto o estilo. "
+                "Abre la categoría y desde ahí revisamos juntos la mejor opción."
             )
         return (
-            "El catalogo esta organizado por categorias para que encuentres rapido detalles romanticos, infantiles, premium y opciones express. "
-            "Si me dices la ocasion, te llevo mas directo."
+            "El catálogo está organizado por categorías para que encuentres rápido detalles románticos, infantiles, premium y opciones express. "
+            "Si me dices la ocasión, te llevo más directo."
         )
 
     if "ocasion" in intents and price_range:
         return (
-            f"Para esa ocasion se puede trabajar muy bien entre {_format_cop(price_range[0])} y {_format_cop(price_range[1])}. "
-            "Si me dices si buscas algo romantico, infantil o premium, te aterrizo mejores referencias."
+            f"Para esa ocasión se puede trabajar muy bien entre {_format_cop(price_range[0])} y {_format_cop(price_range[1])}. "
+            "Si me dices si buscas algo romántico, infantil o premium, te aterrizo mejores referencias."
         )
 
     if "ocasion" in intents:
         return (
-            "Tenemos detalles muy bonitos para cumpleanos, aniversarios, desayunos sorpresa y momentos especiales. "
-            "Si me dices para quien es y cuanto quieres invertir, te recomiendo algo mas preciso."
+            "Tenemos detalles muy bonitos para cumpleaños, aniversarios, desayunos sorpresa y momentos especiales. "
+            "Si me dices para quién es y cuánto quieres invertir, te recomiendo algo más preciso."
         )
 
     return (
-        f"{greeting} Puedo orientarte por categoria, presupuesto, pagos, personalizacion o entrega, "
-        "y despues llevarte directo al catalogo o a WhatsApp para cerrar."
+        f"{greeting} Puedo orientarte por categoría, presupuesto, pagos, personalización o entrega, "
+        "y después llevarte directo al catálogo o a WhatsApp para cerrar."
     )
 
 
@@ -569,15 +569,15 @@ def get_assistant_reply(message, history=None):
     clean_message = (message or "").strip()
     if not clean_message:
         return {
-            "message": "Escribeme algo y te ayudo a elegir un detalle lindo, segun ocasion, presupuesto o estilo.",
+            "message": "Escríbeme algo y te ayudo a elegir un detalle lindo, según ocasión, presupuesto o estilo.",
             "mode": "fallback",
             "configured": False,
             "actions": [
-                {"label": "Ver catalogo", "href": f"{reverse('inicio')}#catalogo"},
-                {"label": "Como comprar", "href": f"{reverse('inicio')}#como-comprar"},
+                {"label": "Ver catálogo", "href": f"{reverse('inicio')}#catalogo"},
+                {"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"},
                 {
                     "label": "WhatsApp",
-                    "href": "https://wa.me/573116262155?text=Hola%20quiero%20asesoria%20para%20elegir%20un%20detalle",
+                    "href": "https://wa.me/573116262155?text=Hola%20quiero%20asesor%C3%ADa%20para%20elegir%20un%20detalle",
                     "external": True,
                 },
             ],

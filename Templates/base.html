@@ -1,10 +1,19 @@
+{% load media_optimization %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
-    <title>{% block title %}Casita de Regalos{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Regalos personalizados, desayunos sorpresa y detalles especiales en Bello, Medellín y área metropolitana. Cotiza por WhatsApp con Casita de Regalos.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}regalos personalizados Bello, regalos personalizados Medellín, desayunos sorpresa Medellín, desayunos sorpresa Bello, detalles románticos, regalos de cumpleaños, regalos personalizados área metropolitana{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Desayunos sorpresa, detalles románticos y regalos de cumpleaños personalizados para Bello, Medellín y el área metropolitana.{% endblock %}">
+    <meta property="og:locale" content="es_CO">
+    <title>{% block title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}</title>
+    {% block structured_data %}{% endblock %}
     <style>
         :root {
             --rose-25: #fffaf9;
@@ -509,6 +518,34 @@
             background: linear-gradient(135deg, #1fa971, #25d366);
         }
 
+        .floating-whatsapp {
+            position: fixed;
+            right: 18px;
+            bottom: 92px;
+            z-index: 84;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            color: #fff;
+            background: linear-gradient(135deg, #1fa971, #25d366);
+            border: 2px solid rgba(255, 255, 255, 0.94);
+            box-shadow: 0 18px 34px rgba(31, 169, 113, 0.28);
+        }
+
+        .floating-whatsapp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 42px rgba(31, 169, 113, 0.34);
+        }
+
+        .floating-whatsapp svg {
+            width: 30px;
+            height: 30px;
+            fill: currentColor;
+        }
+
         .footer-bottom {
             padding: 0 0 34px;
             text-align: center;
@@ -920,6 +957,18 @@
                 width: 100%;
             }
 
+            .floating-whatsapp {
+                right: 14px;
+                bottom: 82px;
+                width: 52px;
+                height: 52px;
+            }
+
+            .floating-whatsapp svg {
+                width: 27px;
+                height: 27px;
+            }
+
             .assistant-shell {
                 right: 12px;
                 left: 12px;
@@ -983,7 +1032,7 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="{% url 'inicio' %}" class="brand">
-                <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos" class="brand-mark">
+                <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos" class="brand-mark">
                 <div class="brand-copy">
                     <small>ACOMPA&Ntilde;ANDO TUS SENTIMIENTOS</small>
                     <strong>Casita de Regalos</strong>
@@ -1033,7 +1082,7 @@
         <div class="footer-inner">
             <div class="footer-card">
                 <div class="footer-brand">
-                    <img src="{{ MEDIA_URL }}branding/logo-casita.jpeg" alt="Logo Casita de Regalos">
+                    <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos">
                     <div>
                         <h3>Casita de Regalos</h3>
                         <p>acompa&ntilde;ando tus sentimientos</p>
@@ -1057,6 +1106,7 @@
 
             <div class="footer-card">
                 <h4>Legal</h4>
+                <a href="{% url 'preguntas_frecuentes' %}">Preguntas frecuentes</a>
                 <a href="{% url 'terminos_condiciones' %}">T&eacute;rminos y condiciones</a>
                 <a href="{% url 'aviso_privacidad' %}">Aviso de privacidad</a>
             </div>
@@ -1064,7 +1114,7 @@
             <div class="footer-card">
                 <h4>Redes</h4>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" target="_blank" rel="noopener noreferrer external" class="social-link instagram" aria-label="Abrir Instagram de Casita de Regalos" title="Instagram">
+                    <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" target="_blank" rel="noopener noreferrer external" class="social-link instagram" aria-label="Abrir Instagram de Casita de Regalos" title="Instagram" data-track-click="instagram" data-track-label="footer_instagram">
                         <span class="social-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
                                 <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.75A4 4 0 0 0 3.75 7.75v8.5a4 4 0 0 0 4 4h8.5a4 4 0 0 0 4-4v-8.5a4 4 0 0 0-4-4h-8.5Zm8.88 1.5a1.12 1.12 0 1 1 0 2.24 1.12 1.12 0 0 1 0-2.24ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.75A3.25 3.25 0 1 0 12 15.25 3.25 3.25 0 0 0 12 8.75Z"/>
@@ -1072,7 +1122,7 @@
                         </span>
                         <span>Instagram</span>
                     </a>
-                    <a href="https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20un%20detalle" target="_blank" rel="noopener noreferrer" class="social-link whatsapp">
+                    <a href="https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20un%20detalle" target="_blank" rel="noopener noreferrer" class="social-link whatsapp" data-track-click="whatsapp" data-track-label="footer_whatsapp">
                         <span class="social-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
                                 <path d="M12.04 2A9.93 9.93 0 0 0 3.5 17.07L2 22l5.08-1.46A9.96 9.96 0 1 0 12.04 2Zm5.82 14.06c-.25.7-1.46 1.34-2.02 1.4-.52.05-1.18.08-1.9-.15-.44-.14-1.02-.33-1.76-.65-3.08-1.34-5.08-4.46-5.24-4.67-.16-.22-1.25-1.66-1.25-3.16 0-1.5.79-2.23 1.07-2.54.28-.3.61-.38.82-.38.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.61.85 2.11.92 2.27.07.16.12.35.02.57-.09.22-.14.35-.28.54-.14.19-.29.42-.41.56-.14.16-.28.34-.12.66.17.31.73 1.2 1.56 1.95 1.08.96 1.99 1.26 2.3 1.4.31.13.49.11.68-.06.19-.18.79-.92 1-1.24.21-.31.42-.26.71-.16.29.1 1.84.87 2.15 1.03.31.16.52.23.59.36.07.13.07.75-.18 1.45Z"/>
@@ -1089,6 +1139,21 @@
         </div>
     </footer>
 
+    <a
+        href="https://wa.me/573116262155?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20de%20Casita%20de%20Regalos.%20Quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F"
+        class="floating-whatsapp"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Cotizar por WhatsApp"
+        title="Cotizar por WhatsApp"
+        data-track-click="whatsapp"
+        data-track-label="floating_whatsapp"
+    >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12.04 2A9.93 9.93 0 0 0 3.5 17.07L2 22l5.08-1.46A9.96 9.96 0 1 0 12.04 2Zm5.82 14.06c-.25.7-1.46 1.34-2.02 1.4-.52.05-1.18.08-1.9-.15-.44-.14-1.02-.33-1.76-.65-3.08-1.34-5.08-4.46-5.24-4.67-.16-.22-1.25-1.66-1.25-3.16 0-1.5.79-2.23 1.07-2.54.28-.3.61-.38.82-.38.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.61.85 2.11.92 2.27.07.16.12.35.02.57-.09.22-.14.35-.28.54-.14.19-.29.42-.41.56-.14.16-.28.34-.12.66.17.31.73 1.2 1.56 1.95 1.08.96 1.99 1.26 2.3 1.4.31.13.49.11.68-.06.19-.18.79-.92 1-1.24.21-.31.42-.26.71-.16.29.1 1.84.87 2.15 1.03.31.16.52.23.59.36.07.13.07.75-.18 1.45Z"/>
+        </svg>
+    </a>
+
     <div class="assistant-shell" data-assistant data-assistant-endpoint="{% url 'assistant_chat' %}">
         <section class="assistant-panel" data-assistant-panel hidden>
             <header class="assistant-header">
@@ -1101,13 +1166,13 @@
 
             <div class="assistant-body">
                 <div class="assistant-context">
-                    Puedo orientarte por categoria, presupuesto, personalizacion, pagos y cierre por WhatsApp.
+                    Puedo orientarte por categoría, presupuesto, personalización, pagos y cierre por WhatsApp.
                 </div>
 
                 <div class="assistant-messages" data-assistant-messages></div>
 
                 <div class="assistant-suggestions" data-assistant-suggestions>
-                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Quiero ver el catalogo">Ver catálogo</button>
+                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Quiero ver el catálogo">Ver catálogo</button>
                     <button type="button" class="assistant-suggestion" data-assistant-prompt="Como comprar">Cómo comprar</button>
                     <button type="button" class="assistant-suggestion" data-assistant-prompt="Medios de pago">Pagos</button>
                     <button type="button" class="assistant-suggestion" data-assistant-prompt="Hablar por whatsapp">WhatsApp</button>
@@ -1118,7 +1183,7 @@
                         type="text"
                         class="assistant-input"
                         data-assistant-input
-                        placeholder="Escribe: pagos, catalogo, tematicos, whatsapp..."
+                        placeholder="Escribe: pagos, catálogo, temáticos, whatsapp..."
                         maxlength="220"
                     >
                     <button type="submit" class="assistant-send" aria-label="Enviar mensaje">→</button>
@@ -1162,6 +1227,38 @@
                 node.textContent = value;
             });
         };
+
+        const trackClickEndpoint = "{% url 'registrar_interaccion' %}";
+        const getGlobalCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+        const trackClientClick = (node) => {
+            if (!node || !trackClickEndpoint) return;
+
+            const payload = {
+                tipo: node.dataset.trackClick || 'otro',
+                etiqueta: node.dataset.trackLabel || node.textContent.trim().slice(0, 80),
+                destino: node.href || '',
+                pagina: window.location.pathname,
+            };
+
+            fetch(trackClickEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getGlobalCsrfToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                credentials: 'same-origin',
+                keepalive: true,
+                body: JSON.stringify(payload),
+            }).catch(() => {});
+        };
+
+        document.addEventListener('click', (event) => {
+            const trackedNode = event.target.closest('[data-track-click]');
+            if (!trackedNode) return;
+            trackClientClick(trackedNode);
+        }, { capture: true });
 
         const syncCarousel = (shell) => {
             const track = shell.querySelector('.js-carousel-track');
@@ -1340,11 +1437,11 @@
         };
 
         const getAssistantWelcome = () => ({
-            text: 'Hola, soy el asistente de Casita. Te ayudo a elegir mejor, resolver dudas del catalogo y llevarte a WhatsApp cuando ya quieras confirmar.',
+            text: 'Hola, soy el asistente de Casita. Te ayudo a elegir mejor, resolver dudas del catálogo y llevarte a WhatsApp cuando ya quieras confirmar.',
             actions: [
                 { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
                 { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "inicio" %}'}#como-comprar` },
-                { label: 'WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle', external: true },
+                { label: 'WhatsApp', href: 'https://wa.me/573116262155?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20de%20Casita%20de%20Regalos.%20Quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F', external: true },
             ],
         });
 
@@ -1363,7 +1460,7 @@
                     text: `Te llevo a ${matchedCategory.label}. Ahí podrás ver las referencias disponibles y elegir la que mejor conecte con tu ocasión.`,
                     actions: [
                         { label: `Abrir ${matchedCategory.label}`, href: matchedCategory.href },
-                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle%20de%20esa%20categoria', external: true },
+                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20un%20detalle%20de%20esa%20categor%C3%ADa', external: true },
                     ],
                 };
             }
@@ -1373,7 +1470,7 @@
                     text: 'Puedes recorrer el catálogo completo o entrar por categoría si ya tienes una idea más clara del tipo de detalle que buscas.',
                     actions: [
                         { label: 'Ir al catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
-                        { label: 'Explorar categorías', prompt: 'Que categorias hay' },
+                        { label: 'Explorar categorías', prompt: 'Qué categorías hay' },
                     ],
                 };
             }
@@ -1423,7 +1520,7 @@
                 return {
                     text: 'Perfecto. Si ya quieres una atención más directa, te llevo al WhatsApp de Casita para cotizar, confirmar o resolver una duda puntual.',
                     actions: [
-                        { label: 'Abrir WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20un%20detalle', external: true },
+                        { label: 'Abrir WhatsApp', href: 'https://wa.me/573116262155?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20de%20Casita%20de%20Regalos.%20Quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F', external: true },
                         { label: 'Ir a contacto', href: '#footer' },
                     ],
                 };
@@ -1431,7 +1528,7 @@
 
             if (input.includes('carrito') || input.includes('agregar')) {
                 return {
-                    text: 'Puedes agregar productos desde el catálogo o desde la ficha del producto. Luego revisas el carrito y finalizas por WhatsApp.',
+                    text: 'Puedes guardar detalles desde el catálogo o desde la ficha del producto. Luego revisas tu selección y finalizas por WhatsApp.',
                     actions: [
                         { label: 'Ir al carrito', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
                         { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
@@ -1444,7 +1541,7 @@
                     text: 'Casita de Regalos atiende desde Bello, Antioquia, con cobertura en Medellín y el área metropolitana.',
                     actions: [
                         { label: 'Ver contacto', href: '#footer' },
-                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informacion%20sobre%20la%20cobertura', external: true },
+                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20la%20cobertura', external: true },
                     ],
                 };
             }
@@ -1452,7 +1549,7 @@
             return {
                 text: 'Puedo ayudarte con catálogo, categorías, pagos, personalización, carrito o WhatsApp. Si quieres, prueba escribiendo algo como "pagos", "catálogo" o "temáticos".',
                 actions: [
-                    { label: 'Ver catálogo', prompt: 'Quiero ver el catalogo' },
+                    { label: 'Ver catálogo', prompt: 'Quiero ver el catálogo' },
                     { label: 'Pagos', prompt: 'Medios de pago' },
                     { label: 'WhatsApp', prompt: 'Hablar por whatsapp' },
                 ],
@@ -1724,7 +1821,7 @@
             button.dataset.loading = 'true';
             button.style.pointerEvents = 'none';
             button.style.opacity = '0.72';
-            button.textContent = 'Agregando...';
+            button.textContent = 'Guardando...';
 
             try {
                 const response = await fetch(form.action, {
@@ -1743,7 +1840,7 @@
                     updateCartCount(data.cart_total);
                 }
             } catch (error) {
-                showToast('No pudimos agregar el producto en este momento.', 'error');
+                showToast('No pudimos guardar el detalle en este momento.', 'error');
             } finally {
                 button.dataset.loading = 'false';
                 button.style.pointerEvents = '';

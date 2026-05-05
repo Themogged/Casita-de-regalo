@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load moneda %}
+{% load moneda media_optimization %}
 
 {% block title %}Carrito | Casita de Regalos{% endblock %}
 
@@ -527,7 +527,7 @@
                             <div class="product-info">
                                 <div class="product-thumb">
                                     {% if item.producto.imagen %}
-                                        <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                                        <img src="{{ item.producto.imagen.url|optimized_image_url }}" alt="{{ item.producto.nombre }}" loading="lazy" decoding="async">
                                     {% else %}
                                         <div class="thumb-placeholder">Sin imagen</div>
                                     {% endif %}
@@ -632,10 +632,10 @@
         </form>
     {% else %}
         <div class="empty-cart">
-            <h2>Tu carrito está vacío</h2>
+            <h2>Aún no has guardado detalles para cotizar</h2>
             <p>
-                Todavía no agregas productos. Vuelve al catálogo, prueba los filtros y selecciona artículos
-                para revisar el flujo completo.
+                Explora el catálogo y arma una selección con tus favoritos para recibir
+                asesoría por WhatsApp.
             </p>
             <a href="{% url 'inicio' %}" class="btn-secondary">Ir al catálogo</a>
         </div>

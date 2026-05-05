@@ -151,7 +151,7 @@ def agregar_al_carrito(request, producto_id):
     carrito[str(producto_id)] = cantidad_actual + 1
     _set_carrito(request, carrito)
 
-    mensaje = f"{producto.nombre} agregado al carrito."
+    mensaje = f"{producto.nombre} guardado para cotizar."
 
     if _es_ajax(request):
         return JsonResponse(
@@ -263,7 +263,7 @@ def enviar_carrito_whatsapp(request):
     request.session.modified = True
 
     if not carrito:
-        mensaje = "Tu carrito esta vacio."
+        mensaje = "Aún no has guardado detalles para cotizar."
         if _es_ajax(request):
             return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
         messages.warning(request, mensaje)

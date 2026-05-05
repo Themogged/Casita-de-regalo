@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
-{% load moneda static %}
+{% load moneda static media_optimization %}
 
-{% block title %}Catálogo | Casita de Regalos{% endblock %}
+{% block title %}Regalos personalizados en Bello y Medellín | Casita de Regalos{% endblock %}
+{% block meta_description %}Regalos personalizados, desayunos sorpresa, detalles románticos y regalos de cumpleaños en Bello, Medellín y área metropolitana. Cotiza por WhatsApp con Casita de Regalos.{% endblock %}
+{% block meta_keywords %}regalos personalizados Bello, regalos personalizados Medellín, desayunos sorpresa Medellín, desayunos sorpresa Bello, detalles románticos, regalos de cumpleaños, detalles personalizados Medellín, regalos área metropolitana{% endblock %}
+{% block og_title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}
+{% block og_description %}Cotiza desayunos sorpresa, detalles románticos y regalos de cumpleaños personalizados para Bello, Medellín y el área metropolitana.{% endblock %}
+{% block structured_data %}
+    {% if seo_schema_json %}
+        <script type="application/ld+json">{{ seo_schema_json|safe }}</script>
+    {% endif %}
+{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -449,6 +458,38 @@
         border: 1px solid rgba(198, 68, 125, 0.1);
     }
 
+    .instagram-card {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        background:
+            radial-gradient(circle at 92% 12%, rgba(255, 255, 255, 0.86), transparent 24%),
+            linear-gradient(135deg, rgba(255, 247, 251, 0.98) 0%, rgba(255, 252, 247, 0.98) 100%);
+    }
+
+    .instagram-card::after {
+        content: "";
+        position: absolute;
+        inset: auto -38px -54px auto;
+        width: 170px;
+        height: 170px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(131, 58, 180, 0.12), rgba(253, 29, 29, 0.1), rgba(252, 176, 69, 0.12));
+        pointer-events: none;
+    }
+
+    .instagram-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .instagram-card .btn-secondary {
+        flex: 0 0 auto;
+    }
+
     .sidebar {
         position: sticky;
         top: 126px;
@@ -675,6 +716,8 @@
     .product-media {
         position: relative;
         min-height: 340px;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
         background:
             radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8), transparent 28%),
             linear-gradient(180deg, #fffafc, #fff0f6);
@@ -706,6 +749,7 @@
         width: 100%;
         height: 100%;
         object-fit: contain;
+        object-position: center;
         padding: 14px;
     }
 
@@ -923,6 +967,7 @@
         .hero-actions a,
         .filter-actions a,
         .filter-actions button,
+        .instagram-card .btn-secondary,
         .cta-band .btn {
             width: 100%;
         }
@@ -1002,6 +1047,11 @@
 
         .cta-band {
             padding: 16px;
+        }
+
+        .instagram-card {
+            align-items: flex-start;
+            flex-direction: column;
         }
 
         .sidebar {
@@ -1201,7 +1251,7 @@
 
             <div class="hero-actions">
                 <a href="#catalogo" class="btn">Ver cat&aacute;logo</a>
-                <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
+                <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="hero_whatsapp">Quiero cotizar</a>
             </div>
 
             <div class="hero-stats">
@@ -1312,8 +1362,18 @@
             <strong>&iquest;Ya tienes una idea en mente?</strong>
             <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a convertirla en un detalle bien presentado y a tu estilo.</p>
         </div>
-        <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn" target="_blank" rel="noopener noreferrer">Pedir asesor&iacute;a ahora</a>
+        <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="cta_inicio_asesoria">Pedir asesor&iacute;a ahora</a>
     </section>
+
+    <section class="instagram-card section-card page-card">
+        <div>
+            <span class="section-kicker">Instagram</span>
+            <h2>Mira m&aacute;s entregas reales en Instagram</h2>
+            <p class="meta-copy">En nuestro Instagram compartimos detalles entregados, ideas nuevas y resultados reales de clientes.</p>
+        </div>
+        <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" class="btn-secondary" target="_blank" rel="noopener noreferrer external" data-track-click="instagram" data-track-label="inicio_trabajos_reales">Ver trabajos reales</a>
+    </section>
+
 </div>
 
 <section class="catalog-layout" id="catalogo">
@@ -1323,7 +1383,7 @@
                 <div class="catalog-toolbar-copy">
                     <span class="section-kicker">Catálogo</span>
                     <strong>Explora por categoría</strong>
-                    <p>Filtra por ocasión, estilo o presupuesto y arma una selección para cotizar por WhatsApp.</p>
+                    <p>Filtra por ocasi&oacute;n, estilo o tipo de detalle y arma una selecci&oacute;n para cotizar por WhatsApp.</p>
                 </div>
                 <div class="results-counter">
                     <strong>{{ page_obj.paginator.count }}</strong>
@@ -1371,7 +1431,7 @@
                                 <span class="product-ribbon">Top regalo</span>
                             {% endif %}
                             {% if producto.imagen %}
-                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                                <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="lazy" decoding="async">
                             {% else %}
                                 <div class="product-placeholder">Imagen pendiente de cargar</div>
                             {% endif %}
@@ -1406,7 +1466,7 @@
                                 {% if producto.disponible %}
                                     <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar favorito</button>
+                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar para cotizar</button>
                                     </form>
                                 {% else %}
                                     <span class="btn-disabled">Agotado</span>
