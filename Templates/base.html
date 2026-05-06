@@ -418,14 +418,21 @@
 
         .footer-inner {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            padding: 34px 0;
+            grid-template-columns:
+                minmax(220px, 1.35fr)
+                minmax(112px, 0.65fr)
+                minmax(178px, 0.95fr)
+                minmax(128px, 0.7fr)
+                minmax(144px, 0.75fr)
+                minmax(126px, 0.65fr);
+            align-items: start;
+            gap: 18px;
+            padding: 26px 0 14px;
         }
 
         .footer-card {
             min-width: 0;
-            padding: 18px 0;
+            padding: 8px 0;
         }
 
         .footer-card h3,
@@ -471,8 +478,8 @@
 
         .social-links {
             display: grid;
-            gap: 12px;
-            margin-top: 8px;
+            gap: 10px;
+            margin-top: 4px;
         }
 
         .social-link {
@@ -547,7 +554,7 @@
         }
 
         .footer-bottom {
-            padding: 0 0 34px;
+            padding: 0 0 22px;
             text-align: center;
             color: var(--ink-500);
             font-size: 0.95rem;
@@ -808,6 +815,10 @@
             .hero-card {
                 padding: 30px 24px;
             }
+
+            .footer-inner {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
 
         @media (max-width: 640px) {
@@ -949,8 +960,13 @@
             }
 
             .footer-inner {
-                gap: 16px;
-                padding: 26px 0;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px 18px;
+                padding: 22px 0 12px;
+            }
+
+            .footer-card {
+                padding: 6px 0;
             }
 
             .social-link {
@@ -996,6 +1012,10 @@
             .page-shell,
             .footer-inner {
                 width: min(var(--max-width), calc(100% - 18px));
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
             }
 
             .brand-mark {
