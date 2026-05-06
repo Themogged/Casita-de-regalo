@@ -85,10 +85,14 @@ class CatalogoViewsTests(TestCase):
         self.assertIn('Permissions-Policy', response.headers)
 
     def test_paginas_legales_cargan_correctamente(self):
+        como_comprar = self.client.get(reverse('como_comprar'), secure=True)
         terminos = self.client.get(reverse('terminos_condiciones'), secure=True)
         privacidad = self.client.get(reverse('aviso_privacidad'), secure=True)
         preguntas = self.client.get(reverse('preguntas_frecuentes'), secure=True)
 
+        self.assertEqual(como_comprar.status_code, 200)
+        self.assertContains(como_comprar, 'C&oacute;mo comprar')
+        self.assertContains(como_comprar, 'HowTo')
         self.assertEqual(terminos.status_code, 200)
         self.assertContains(terminos, 'T&eacute;rminos y condiciones')
         self.assertEqual(privacidad.status_code, 200)
@@ -109,6 +113,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(sitemap.status_code, 200)
         self.assertContains(sitemap, '<urlset')
         self.assertContains(sitemap, reverse('inicio'))
+        self.assertContains(sitemap, reverse('como_comprar'))
         self.assertContains(sitemap, reverse('preguntas_frecuentes'))
         self.assertContains(sitemap, reverse('detalle_producto', args=[self.producto_principal.id]))
 

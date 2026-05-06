@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}C&oacute;mo comprar | Casita de Regalos{% endblock %}
+{% block meta_description %}Conoce c&oacute;mo comprar regalos personalizados, desayunos sorpresa y detalles especiales en Casita de Regalos. Proceso, pagos, reserva y confirmaci&oacute;n por WhatsApp.{% endblock %}
+{% block meta_keywords %}como comprar regalos personalizados, proceso de compra Casita de Regalos, pagos Nequi Bancolombia, desayunos sorpresa Medellin, regalos personalizados Bello{% endblock %}
+{% block og_title %}C&oacute;mo comprar | Casita de Regalos{% endblock %}
+{% block og_description %}Explora el proceso para elegir, personalizar, reservar y confirmar tu detalle personalizado por WhatsApp.{% endblock %}
+
+{% block structured_data %}
+    {% if how_to_schema_json %}
+        <script type="application/ld+json">{{ how_to_schema_json|safe }}</script>
+    {% endif %}
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .buy-hero h1 {
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.15rem, 5vw, 3.6rem);
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .buy-hero p,
+    .buy-card p,
+    .buy-note {
+        color: var(--ink-700);
+        line-height: 1.72;
+    }
+
+    .buy-layout {
+        display: grid;
+        gap: 20px;
+    }
+
+    .buy-card {
+        padding: clamp(22px, 4vw, 34px);
+    }
+
+    .buy-grid,
+    .payment-grid,
+    .rules-grid {
+        display: grid;
+        gap: 14px;
+    }
+
+    .buy-grid {
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    .payment-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .rules-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    }
+
+    .buy-step,
+    .payment-item,
+    .rule-item {
+        border-radius: 24px;
+        background: linear-gradient(180deg, #fffafc, #fffefe);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        box-shadow: 0 14px 28px rgba(75, 24, 46, 0.05);
+    }
+
+    .buy-step {
+        padding: 20px;
+    }
+
+    .buy-step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-bottom: 14px;
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(135deg, #d75991, #a12c60);
+        font-weight: 800;
+    }
+
+    .buy-step h3,
+    .payment-item strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--ink-900);
+    }
+
+    .payment-item {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .payment-logo-frame {
+        width: 142px;
+        min-width: 142px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        padding: 10px 14px;
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 246, 251, 0.9));
+        border: 1px solid rgba(233, 72, 134, 0.14);
+        box-shadow: 0 12px 24px rgba(75, 24, 46, 0.08);
+    }
+
+    .payment-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .rule-item {
+        padding: 16px;
+    }
+
+    .buy-cta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 22px;
+        border-radius: 26px;
+        background:
+            radial-gradient(circle at right center, rgba(255, 230, 238, 0.9), transparent 26%),
+            linear-gradient(135deg, #fffaf8 0%, #fff1f6 100%);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+    }
+
+    .btn,
+    .btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 999px;
+        font-weight: 800;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #d74f8a 0%, #b93167 70%, #98285b 100%);
+        color: #fff;
+        box-shadow: 0 16px 28px rgba(185, 45, 99, 0.18);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.88);
+        color: var(--rose-700);
+        border: 1px solid rgba(198, 68, 125, 0.12);
+    }
+
+    @media (max-width: 640px) {
+        .payment-item {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-logo-frame,
+        .buy-cta .btn,
+        .buy-cta .btn-secondary {
+            width: 100%;
+        }
+
+        .buy-cta {
+            align-items: stretch;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card buy-hero">
+    <h1>C&oacute;mo comprar</h1>
+    <p>
+        En Casita de Regalos la compra se confirma por WhatsApp para validar disponibilidad,
+        personalizaci&oacute;n, domicilio, precio final y forma de pago antes de elaborar tu detalle.
+    </p>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="buy-layout">
+    <section class="page-card buy-card">
+        <span class="section-kicker">Proceso de compra</span>
+        <h2>Elige, personaliza y confirma sin confusiones</h2>
+        <div class="buy-grid">
+            {% for paso in pasos_compra %}
+                <article class="buy-step">
+                    <span class="buy-step-number">{{ paso.numero }}</span>
+                    <h3>{{ paso.titulo }}</h3>
+                    <p>{{ paso.descripcion }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="page-card buy-card">
+        <span class="section-kicker">Medios de pago</span>
+        <h2>Reserva tu detalle de forma segura</h2>
+        <p class="buy-note">
+            Los datos de pago se usan cuando el detalle ya est&aacute; definido. Primero confirmamos
+            disponibilidad, personalizaci&oacute;n y valor final por WhatsApp.
+        </p>
+        <div class="payment-grid">
+            {% for metodo in metodos_pago %}
+                <article class="payment-item">
+                    <span class="payment-logo-frame">
+                        <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo">
+                    </span>
+                    <span><strong>{{ metodo.titulo }}</strong>{{ metodo.descripcion }}</span>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="page-card buy-card">
+        <span class="section-kicker">Antes de confirmar</span>
+        <h2>Informaci&oacute;n importante</h2>
+        <div class="rules-grid">
+            {% for politica in politicas_clave %}
+                <article class="rule-item">
+                    <p>{{ politica }}</p>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="buy-cta">
+        <div>
+            <strong>&iquest;Ya tienes una referencia o idea?</strong>
+            <p class="buy-note">Guarda tus favoritos o escr&iacute;benos directo para cotizar un detalle personalizado.</p>
+        </div>
+        <a href="{% url 'inicio' %}#catalogo" class="btn-secondary">Ver cat&aacute;logo</a>
+        <a href="https://wa.me/573116262155?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20de%20Casita%20de%20Regalos.%20Quiero%20cotizar%20un%20detalle%20personalizado.%20%C2%BFMe%20puedes%20asesorar%3F" class="btn" target="_blank" rel="noopener noreferrer external" data-track-click="whatsapp" data-track-label="como_comprar_whatsapp">
+            Pedir asesor&iacute;a
+        </a>
+    </section>
+</div>
+{% endblock %}

@@ -3,6 +3,7 @@ import json
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
 
 from .models import Categoria, Producto
 
@@ -464,6 +465,30 @@ def _build_faq_schema():
     return json.dumps(schema, ensure_ascii=False)
 
 
+def _build_how_to_schema(request):
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        'name': 'Cómo comprar en Casita de Regalos',
+        'description': (
+            'Proceso para elegir, personalizar y confirmar un regalo personalizado '
+            'en Bello, Medellín y el área metropolitana.'
+        ),
+        'totalTime': 'P1D',
+        'step': [
+            {
+                '@type': 'HowToStep',
+                'position': index,
+                'name': paso['titulo'],
+                'text': paso['descripcion'],
+                'url': request.build_absolute_uri(reverse('como_comprar')),
+            }
+            for index, paso in enumerate(PASOS_COMPRA, start=1)
+        ],
+    }
+    return json.dumps(schema, ensure_ascii=False)
+
+
 def inicio(request):
     busqueda = request.GET.get('q', '').strip()
     categoria_id = request.GET.get('categoria', '').strip()
@@ -608,6 +633,19 @@ def preguntas_frecuentes(request):
         {
             'preguntas_frecuentes': PREGUNTAS_FRECUENTES,
             'faq_schema_json': _build_faq_schema(),
+        },
+    )
+
+
+def como_comprar(request):
+    return render(
+        request,
+        'como_comprar.html',
+        {
+            'pasos_compra': PASOS_COMPRA,
+            'metodos_pago': METODOS_PAGO,
+            'politicas_clave': POLITICAS_CLAVE,
+            'how_to_schema_json': _build_how_to_schema(request),
         },
     )
 
