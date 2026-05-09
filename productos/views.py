@@ -5,7 +5,7 @@ from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from .models import Categoria, Producto
+from .models import Categoria, Producto, VideoElaboracion
 
 
 QUIENES_SOMOS = {
@@ -517,9 +517,23 @@ def inicio(request):
 
     productos = productos.order_by(*ORDENES_CATALOGO.get(orden, ORDENES_CATALOGO['destacados']))
 
-    destacados = productos.filter(destacado=True)[:3]
-    if not destacados and not (busqueda or categoria_actual):
-        destacados = Producto.objects.select_related('categoria').filter(destacado=True)[:3]
+    if busqueda or categoria_actual:
+        destacados = list(productos.filter(destacado=True)[:6])
+        if not destacados:
+            destacados = list(productos[:6])
+    else:
+        destacados = list(
+            Producto.objects.select_related('categoria')
+            .filter(destacado=True)
+            .order_by('-destacado', 'nombre')[:6]
+        )
+        if not destacados:
+            destacados = list(
+                Producto.objects.select_related('categoria')
+                .order_by('-destacado', 'nombre')[:6]
+            )
+
+    videos_elaboracion = VideoElaboracion.objects.filter(activo=True)[:4]
 
     resumen = {
         'total_productos': productos.count(),
@@ -556,6 +570,7 @@ def inicio(request):
         'metodos_pago': METODOS_PAGO,
         'politicas_clave': POLITICAS_CLAVE,
         'terminos_condiciones': TERMINOS_CONDICIONES,
+        'videos_elaboracion': videos_elaboracion,
         'seo_schema_json': _build_home_schema(request),
         'resumen': resumen,
     }

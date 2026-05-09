@@ -6,7 +6,12 @@ __pycache__/
 *.log
 .DS_Store
 Thumbs.db
+.tmp-test-media/
 
 media/referencias/originales/
 media/productos/*.gif
 media/productos/galeria/
+media/procesos/*
+!media/procesos/videos/
+media/procesos/videos/*
+!media/procesos/videos/elaboracion-casita-*.mp4

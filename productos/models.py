@@ -1,4 +1,13 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
+
+MAX_VIDEO_SIZE_MB = 30
+
+
+def validate_video_size(video_file):
+    if video_file.size > MAX_VIDEO_SIZE_MB * 1024 * 1024:
+        raise ValidationError(f'El video no debe superar {MAX_VIDEO_SIZE_MB} MB.')
 
 
 class Categoria(models.Model):
@@ -68,6 +77,40 @@ class ProductoImagen(models.Model):
 
     class Meta:
         ordering = ['orden', 'id']
+
+
+class VideoElaboracion(models.Model):
+    titulo = models.CharField(max_length=120)
+    descripcion = models.TextField(blank=True)
+    video = models.FileField(
+        upload_to='procesos/videos/',
+        validators=[FileExtensionValidator(['mp4', 'webm', 'mov']), validate_video_size],
+        help_text=f'Formatos permitidos: MP4, WEBM o MOV. Tamaño máximo: {MAX_VIDEO_SIZE_MB} MB.',
+    )
+    portada = models.ImageField(upload_to='procesos/portadas/', blank=True, null=True)
+    activo = models.BooleanField(default=True)
+    destacado = models.BooleanField(default=False)
+    orden = models.PositiveIntegerField(default=0)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.titulo
+
+    @property
+    def mime_type(self):
+        extension = self.video.name.rsplit('.', 1)[-1].lower()
+        return {
+            'webm': 'video/webm',
+            'mov': 'video/quicktime',
+        }.get(extension, 'video/mp4')
+
+    class Meta:
+        ordering = ['orden', '-destacado', '-fecha_creacion']
+        indexes = [
+            models.Index(fields=['activo', 'orden']),
+        ]
+        verbose_name = 'video de elaboracion'
+        verbose_name_plural = 'videos de elaboracion'
 
 
 class InteraccionCliente(models.Model):

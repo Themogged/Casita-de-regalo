@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from unittest import mock
 
-from .models import Categoria, InteraccionCliente, Producto, ProductoImagen
+from .models import Categoria, InteraccionCliente, Producto, ProductoImagen, VideoElaboracion
 
 
 class CatalogoViewsTests(TestCase):
@@ -74,7 +74,31 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Cómo comprar')
         self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Explora por categoría')
+        self.assertContains(response, 'hero-product-card')
         self.assertContains(response, 'data-track-click="instagram"')
+
+    def test_inicio_muestra_videos_de_elaboracion_activos(self):
+        VideoElaboracion.objects.create(
+            titulo='Armado de detalle personalizado',
+            descripcion='Proceso real de decoracion y empaque.',
+            video='procesos/videos/proceso.mp4',
+            destacado=True,
+        )
+        VideoElaboracion.objects.create(
+            titulo='Video oculto',
+            descripcion='No debe aparecer si esta inactivo.',
+            video='procesos/videos/oculto.mp4',
+            activo=False,
+        )
+
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'process-video-card')
+        self.assertContains(response, 'Armado de detalle personalizado')
+        self.assertContains(response, '<video controls preload="metadata" playsinline')
+        self.assertContains(response, 'type="video/mp4"')
+        self.assertNotContains(response, 'Video oculto')
 
     def test_inicio_envia_headers_de_seguridad(self):
         response = self.client.get(reverse('inicio'), secure=True)
