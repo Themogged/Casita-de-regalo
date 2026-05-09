@@ -30,7 +30,7 @@
     }
 
     .about-grid {
-        grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .meta-grid {
@@ -1595,31 +1595,41 @@
         }
 
         .catalog-grid {
-            gap: 14px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
         }
 
         .product-card {
             grid-template-columns: 1fr;
             grid-template-rows: auto 1fr;
-            border-radius: 24px;
+            border-radius: 22px;
             align-items: stretch;
         }
 
         .product-media {
-            min-height: 260px;
+            min-height: 210px;
+            aspect-ratio: 1 / 1.18;
             height: auto;
         }
 
+        .product-ribbon {
+            top: 10px;
+            left: 10px;
+            padding: 6px 9px;
+            font-size: 0.62rem;
+            letter-spacing: 0.02em;
+        }
+
         .product-body {
-            gap: 10px;
-            padding: 16px;
+            gap: 8px;
+            padding: 12px;
             align-content: start;
         }
 
         .product-description {
             min-height: 0;
-            font-size: 0.92rem;
-            line-height: 1.55;
+            font-size: 0.82rem;
+            line-height: 1.42;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -1627,8 +1637,8 @@
         }
 
         .product-body h3 {
-            font-size: 1rem;
-            line-height: 1.3;
+            font-size: 0.9rem;
+            line-height: 1.22;
         }
 
         .line-card h3,
@@ -1647,7 +1657,7 @@
         }
 
         .product-price {
-            font-size: 1.22rem;
+            font-size: 1.02rem;
         }
 
         .product-copy {
@@ -1655,16 +1665,16 @@
         }
 
         .product-actions {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
+            grid-template-columns: 1fr;
+            gap: 7px;
         }
 
         .product-actions .btn,
         .product-actions .btn-outline,
         .btn-disabled {
-            min-height: 42px;
-            padding: 0 12px;
-            font-size: 0.92rem;
+            min-height: 38px;
+            padding: 0 10px;
+            font-size: 0.78rem;
         }
 
         .product-topline,
@@ -1680,15 +1690,16 @@
         }
 
         .catalog-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
         }
 
         .product-body {
-            padding: 12px;
+            padding: 10px;
         }
 
         .product-media {
-            min-height: 290px;
+            min-height: 170px;
         }
 
         .product-topline {
@@ -1703,6 +1714,34 @@
 
         .pagination {
             gap: 8px;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .catalog-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .product-media {
+            min-height: 250px;
+        }
+
+        .product-body {
+            padding: 12px;
+        }
+
+        .product-body h3 {
+            font-size: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.15rem;
+        }
+
+        .product-actions .btn,
+        .product-actions .btn-outline,
+        .btn-disabled {
+            font-size: 0.88rem;
         }
     }
 </style>
@@ -1734,24 +1773,24 @@
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>ideas para inspirarte</span>
+                    <span>detalles listos para cotizar</span>
                 </div>
                 <div class="hero-stat">
                     <strong>1-2 d&iacute;as</strong>
-                    <span>para preparar con calma</span>
+                    <span>tiempo recomendado de reserva</span>
                 </div>
                 <div class="hero-stat">
-                    <strong>WhatsApp</strong>
-                    <span>te acompa&ntilde;amos al elegir</span>
+                    <strong>Asesor&iacute;a</strong>
+                    <span>confirmaci&oacute;n directa por WhatsApp</span>
                 </div>
             </div>
         </div>
 
         <aside class="hero-panel hero-gallery-panel">
             <div class="hero-gallery-copy">
-                <span class="section-kicker">Selecci&oacute;n destacada</span>
-                <h2>Referencias listas para personalizar</h2>
-                <p>Desliza detalles reales, revisa el precio base y abre el producto que quieras cotizar por WhatsApp.</p>
+                <span class="section-kicker">Inspiraci&oacute;n para regalar</span>
+                <h2>Detalles pensados para emocionar</h2>
+                <p>Desliza ideas especiales, elige una base que conecte con la ocasi&oacute;n y cotizamos juntos el acabado por WhatsApp.</p>
             </div>
 
             {% if destacados %}
@@ -1795,24 +1834,6 @@
 {% block content %}
 <div class="home-flow">
 <div class="section-stack">
-    <section class="about-grid">
-        <article class="section-card page-card">
-            <span class="section-kicker">Casita de Regalos</span>
-            <h2>{{ quienes_somos.titulo }}</h2>
-            <p>{{ quienes_somos.descripcion }}</p>
-        </article>
-
-        <article class="section-card page-card">
-            <span class="section-kicker">Cobertura</span>
-            <h2>Atención cercana con acabado especial</h2>
-            <ul class="meta-list">
-                <li><strong>Ubicación</strong><br>{{ quienes_somos.cobertura }}</li>
-                <li><strong>Personalización</strong><br>{{ quienes_somos.promesa }}</li>
-                <li><strong>Asesoría</strong><br>Te ayudamos a elegir el detalle ideal según la ocasión.</li>
-            </ul>
-        </article>
-    </section>
-
     <section class="section-card page-card" id="como-comprar">
         <span class="section-kicker">Cómo comprar</span>
         <h2>Un proceso simple, claro y acompañado</h2>
@@ -1873,7 +1894,7 @@
                 {% for video_item in videos_elaboracion %}
                     <article class="process-video-item">
                         <div class="process-video-media">
-                            <video controls preload="metadata" playsinline {% if video_item.portada %}poster="{{ video_item.portada.url }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
+                            <video controls muted preload="metadata" playsinline data-autoplay-video {% if video_item.portada %}poster="{{ video_item.portada.url }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
                                 <source src="{{ video_item.video.url }}" type="{{ video_item.mime_type }}">
                                 Tu navegador no soporta video HTML5.
                             </video>
