@@ -39,7 +39,7 @@ class Producto(models.Model):
         if self.stock <= 0:
             return 'Agotado'
         if self.stock <= 3:
-            return f'Ultimas {self.stock} unidades'
+            return f'Últimas {self.stock} unidades'
         return 'Disponible'
 
     @property
@@ -109,8 +109,8 @@ class VideoElaboracion(models.Model):
         indexes = [
             models.Index(fields=['activo', 'orden']),
         ]
-        verbose_name = 'video de elaboracion'
-        verbose_name_plural = 'videos de elaboracion'
+        verbose_name = 'video de elaboración'
+        verbose_name_plural = 'videos de elaboración'
 
 
 class InteraccionCliente(models.Model):
@@ -124,7 +124,7 @@ class InteraccionCliente(models.Model):
         (TIPO_WHATSAPP, 'WhatsApp'),
         (TIPO_INSTAGRAM, 'Instagram'),
         (TIPO_CARRITO, 'Carrito'),
-        (TIPO_CATALOGO, 'Catalogo'),
+        (TIPO_CATALOGO, 'Catálogo'),
         (TIPO_OTRO, 'Otro'),
     ]
 

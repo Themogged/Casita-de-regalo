@@ -24,9 +24,9 @@
     }
 
     .hero-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(300px, 0.78fr);
-        align-items: center;
-        gap: clamp(18px, 3vw, 34px);
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+        align-items: stretch;
+        gap: clamp(20px, 3.4vw, 40px);
     }
 
     .about-grid {
@@ -52,7 +52,14 @@
     }
 
     .hero-card {
-        padding: clamp(22px, 4vw, 42px);
+        padding: clamp(22px, 4.4vw, 48px);
+        background:
+            radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.94), transparent 19%),
+            radial-gradient(circle at 88% 14%, rgba(255, 221, 235, 0.82), transparent 24%),
+            radial-gradient(circle at 50% 100%, rgba(255, 246, 236, 0.9), transparent 32%),
+            linear-gradient(138deg, #fffdfb 0%, #fff3f8 44%, #fff9fc 100%);
+        border-color: rgba(198, 68, 125, 0.1);
+        box-shadow: 0 24px 64px rgba(77, 26, 50, 0.07);
     }
 
     .section-stack {
@@ -102,11 +109,12 @@
 
     .hero-copy h1 {
         font-family: Georgia, "Palatino Linotype", serif;
-        font-size: clamp(2.45rem, 4.9vw, 4.2rem);
-        line-height: 0.98;
+        font-size: clamp(2.35rem, 4.55vw, 3.95rem);
+        line-height: 1.02;
         margin-bottom: 16px;
         text-wrap: balance;
-        max-width: 13ch;
+        letter-spacing: -0.025em;
+        max-width: 14.4ch;
     }
 
     .hero-copy p,
@@ -119,8 +127,9 @@
     }
 
     .hero-copy p {
-        max-width: 56ch;
+        max-width: 58ch;
         font-size: 1rem;
+        line-height: 1.82;
     }
 
     .hero-tags {
@@ -135,8 +144,8 @@
         align-items: center;
         padding: 8px 12px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid rgba(198, 68, 125, 0.1);
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(198, 68, 125, 0.11);
         color: var(--ink-700);
         font-size: 0.84rem;
         font-weight: 700;
@@ -170,16 +179,39 @@
         box-shadow: 0 18px 36px rgba(75, 24, 46, 0.05);
     }
 
+    .section-card,
+    .product-card,
+    .step-card,
+    .line-card,
+    .process-video-item {
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .section-card:hover,
+    .step-card:hover,
+    .line-card:hover {
+        border-color: rgba(198, 68, 125, 0.14);
+        box-shadow: 0 22px 46px rgba(75, 24, 46, 0.075);
+    }
+
     .hero-stat {
         padding: 14px 16px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 247, 250, 0.96) 100%);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.97) 0%, rgba(255, 247, 250, 0.97) 100%);
+        min-height: 88px;
     }
 
     .hero-stat strong {
         display: block;
         margin-bottom: 6px;
         color: var(--rose-700);
-        font-size: 1.5rem;
+        font-size: 1.38rem;
+        line-height: 1;
+    }
+
+    .hero-stat span {
+        display: block;
+        line-height: 1.32;
     }
 
     .hero-panel,
@@ -193,11 +225,12 @@
         position: relative;
         overflow: hidden;
         background:
-            radial-gradient(circle at top right, rgba(255, 255, 255, 0.18), transparent 28%),
-            linear-gradient(165deg, #8b2f5e 0%, #71224b 58%, #541834 100%);
-        color: #fff5fa;
-        border: 0;
-        box-shadow: 0 28px 54px rgba(88, 24, 55, 0.2);
+            radial-gradient(circle at 20% 14%, rgba(255, 255, 255, 0.98), transparent 22%),
+            radial-gradient(circle at 92% 8%, rgba(255, 225, 238, 0.86), transparent 24%),
+            linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 252, 0.98) 55%, rgba(255, 243, 248, 0.96) 100%);
+        color: var(--ink-900);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        box-shadow: 0 18px 46px rgba(77, 26, 50, 0.08);
     }
 
     .hero-panel::after {
@@ -207,41 +240,43 @@
         width: 180px;
         height: 180px;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+        background: radial-gradient(circle, rgba(215, 79, 138, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
         pointer-events: none;
     }
 
     .hero-gallery-panel {
         display: grid;
-        gap: 14px;
-        padding: 18px;
+        gap: 18px;
+        padding: clamp(18px, 2.6vw, 30px);
         align-self: stretch;
-        align-content: start;
+        align-content: center;
     }
 
     .hero-gallery-copy {
         position: relative;
         z-index: 1;
         display: grid;
-        gap: 7px;
+        gap: 8px;
     }
 
     .hero-gallery-copy .section-kicker {
         justify-self: start;
         margin-bottom: 2px;
-        background: rgba(255, 255, 255, 0.92);
+        background: rgba(255, 244, 248, 0.96);
     }
 
     .hero-gallery-copy h2 {
         margin-bottom: 0;
-        max-width: 19ch;
-        font-size: clamp(1.35rem, 2.25vw, 1.78rem);
+        max-width: 23ch;
+        color: var(--ink-900);
+        font-size: clamp(1.42rem, 2.35vw, 1.95rem);
         line-height: 1.04;
     }
 
     .hero-gallery-copy p {
-        max-width: 36ch;
+        max-width: 42ch;
         margin: 0;
+        color: var(--ink-700);
         font-size: 0.88rem;
         line-height: 1.5;
     }
@@ -256,37 +291,37 @@
     .hero-product-carousel .carousel-btn {
         width: 36px;
         height: 36px;
-        background: rgba(255, 255, 255, 0.94);
+        background: rgba(255, 255, 255, 0.98);
         color: var(--rose-700);
-        border-color: rgba(255, 255, 255, 0.34);
-        box-shadow: 0 12px 22px rgba(32, 8, 21, 0.16);
+        border-color: rgba(198, 68, 125, 0.12);
+        box-shadow: 0 12px 24px rgba(77, 26, 50, 0.1);
     }
 
     .hero-product-track {
-        gap: 12px;
-        padding: 4px 2px 8px;
+        gap: 14px;
+        padding: 4px 2px 10px;
     }
 
     .hero-product-card {
-        width: min(218px, 72vw);
+        width: min(250px, 74vw);
         overflow: hidden;
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.97);
-        border: 1px solid rgba(255, 255, 255, 0.42);
+        border-radius: 28px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 100%);
+        border: 1px solid rgba(198, 68, 125, 0.1);
         color: var(--ink-900);
         text-decoration: none;
-        box-shadow: 0 18px 32px rgba(36, 9, 24, 0.18);
+        box-shadow: 0 16px 34px rgba(77, 26, 50, 0.1);
         transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
     .hero-product-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 24px 42px rgba(36, 9, 24, 0.22);
+        box-shadow: 0 22px 42px rgba(77, 26, 50, 0.15);
     }
 
     .hero-product-media {
         position: relative;
-        aspect-ratio: 4 / 3.05;
+        aspect-ratio: 1 / 0.86;
         overflow: hidden;
         background:
             radial-gradient(circle at top, rgba(255, 229, 239, 0.96), transparent 60%),
@@ -314,7 +349,28 @@
     .hero-product-info {
         display: grid;
         gap: 8px;
-        padding: 14px;
+        padding: 15px;
+    }
+
+    .hero-panel-note {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.74);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--ink-700);
+        font-size: 0.84rem;
+        line-height: 1.4;
+    }
+
+    .hero-panel-note strong {
+        color: var(--rose-700);
+        white-space: nowrap;
     }
 
     .hero-product-category {
@@ -334,6 +390,10 @@
     }
 
     .hero-product-title {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         color: var(--ink-900);
         font-size: 1rem;
         font-weight: 900;
@@ -360,8 +420,8 @@
         z-index: 1;
         padding: 14px;
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff8fb;
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--rose-700);
     }
 
     .hero-panel h2,
@@ -435,11 +495,34 @@
         box-shadow: 0 16px 28px rgba(185, 45, 99, 0.18);
     }
 
+    .btn,
+    .btn-secondary,
+    .btn-outline,
+    .catalog-chip,
+    .pagination a {
+        transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover,
+    .btn-secondary:hover,
+    .btn-outline:hover,
+    .catalog-chip:hover,
+    .pagination a:hover {
+        transform: translateY(-1px);
+    }
+
     .btn-secondary,
     .btn-outline {
         background: rgba(255, 255, 255, 0.88);
         color: var(--rose-700);
         border: 1px solid rgba(198, 68, 125, 0.12);
+    }
+
+    .btn-secondary:hover,
+    .btn-outline:hover {
+        background: rgba(255, 248, 251, 0.98);
+        border-color: rgba(198, 68, 125, 0.2);
+        box-shadow: 0 12px 22px rgba(75, 24, 46, 0.08);
     }
 
     .btn-disabled {
@@ -470,6 +553,13 @@
         background: #fffafc;
         border: 1px solid rgba(198, 68, 125, 0.08);
         color: var(--ink-700);
+        transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease, background 160ms ease;
+    }
+
+    .feature-item:hover,
+    .category-link:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 28px rgba(75, 24, 46, 0.055);
     }
 
     .hero-panel .feature-item {
@@ -502,7 +592,9 @@
     .line-card,
     .step-card {
         padding: 24px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 251, 0.98) 100%);
+        background:
+            radial-gradient(circle at 90% 0%, rgba(255, 230, 239, 0.44), transparent 26%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 251, 0.98) 100%);
     }
 
     .about-grid .section-card:first-child {
@@ -549,7 +641,7 @@
     .meta-list li {
         padding: 14px 16px;
         border-radius: 18px;
-        background: var(--rose-50);
+        background: rgba(255, 248, 251, 0.86);
         color: var(--ink-700);
         line-height: 1.7;
         border: 1px solid rgba(233, 72, 134, 0.08);
@@ -569,10 +661,18 @@
         align-items: center;
         padding: 14px 16px;
         border-radius: 18px;
-        background: var(--rose-50);
+        background: rgba(255, 248, 251, 0.86);
         color: var(--ink-700);
         line-height: 1.65;
         border: 1px solid rgba(233, 72, 134, 0.08);
+        transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .payment-list li:hover,
+    .meta-list li:hover {
+        border-color: rgba(233, 72, 134, 0.14);
+        box-shadow: 0 14px 26px rgba(75, 24, 46, 0.055);
+        transform: translateY(-1px);
     }
 
     .payment-logo-frame {
@@ -650,6 +750,12 @@
         background: rgba(255, 255, 255, 0.88);
         border: 1px solid rgba(198, 68, 125, 0.12);
         box-shadow: 0 18px 38px rgba(75, 24, 46, 0.08);
+    }
+
+    .process-video-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 44px rgba(75, 24, 46, 0.11);
+        border-color: rgba(198, 68, 125, 0.18);
     }
 
     .process-video-media {
@@ -863,11 +969,13 @@
     .catalog-toolbar {
         display: grid;
         gap: 12px;
-        padding: 18px 20px;
+        padding: 20px 22px;
         border-radius: 24px;
         background:
-            linear-gradient(135deg, rgba(255, 249, 251, 0.96) 0%, rgba(255, 241, 246, 0.96) 100%);
+            radial-gradient(circle at 92% 0%, rgba(255, 228, 238, 0.72), transparent 24%),
+            linear-gradient(135deg, rgba(255, 252, 253, 0.98) 0%, rgba(255, 243, 248, 0.98) 100%);
         border: 1px solid rgba(198, 68, 125, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
     }
 
     .catalog-toolbar-top {
@@ -929,6 +1037,7 @@
         background: linear-gradient(135deg, #d75991, #b93167);
         border-color: transparent;
         color: #fff;
+        box-shadow: 0 12px 22px rgba(185, 45, 99, 0.12);
     }
 
     .results-header {
@@ -957,6 +1066,12 @@
         background:
             linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 100%);
         position: relative;
+    }
+
+    .product-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(198, 68, 125, 0.16);
+        box-shadow: 0 24px 48px rgba(75, 24, 46, 0.09);
     }
 
     .product-card::after {
@@ -1007,6 +1122,11 @@
         object-fit: contain;
         object-position: center;
         padding: 14px;
+        transition: transform 220ms ease;
+    }
+
+    .product-card:hover .product-media img {
+        transform: scale(1.018);
     }
 
     .product-placeholder {
@@ -1071,6 +1191,7 @@
 
     .product-title-link {
         color: var(--ink-900);
+        text-decoration: none;
     }
 
     .product-title-link:hover {
@@ -1099,6 +1220,7 @@
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 10px;
+        align-self: end;
     }
 
     .product-card .btn,
@@ -1200,8 +1322,8 @@
         }
 
         .hero-copy h1 {
-            font-size: clamp(2rem, 9.5vw, 2.75rem);
-            line-height: 1;
+            font-size: clamp(2.05rem, 8.8vw, 2.55rem);
+            line-height: 1.04;
             max-width: none;
         }
 
@@ -1270,6 +1392,7 @@
             justify-content: space-between;
             gap: 14px;
             padding: 12px 14px;
+            min-height: auto;
         }
 
         .hero-stat strong {
@@ -1302,6 +1425,11 @@
             max-width: none;
         }
 
+        .hero-panel-note {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
         .hero-product-carousel {
             gap: 8px;
             margin-inline: -6px;
@@ -1319,7 +1447,7 @@
         }
 
         .hero-product-card {
-            width: min(70vw, 260px);
+            width: min(72vw, 280px);
             border-radius: 20px;
         }
 
@@ -1374,6 +1502,29 @@
         .instagram-card {
             align-items: flex-start;
             flex-direction: column;
+        }
+
+        .catalog-toolbar {
+            padding: 16px;
+            border-radius: 20px;
+        }
+
+        .catalog-chip {
+            min-height: 38px;
+            padding: 0 13px;
+            font-size: 0.88rem;
+        }
+
+        .results-counter {
+            justify-items: start;
+        }
+
+        .product-card:hover,
+        .section-card:hover,
+        .step-card:hover,
+        .line-card:hover,
+        .process-video-item:hover {
+            transform: none;
         }
 
         .sidebar {
@@ -1536,6 +1687,10 @@
             padding: 12px;
         }
 
+        .product-media {
+            min-height: 290px;
+        }
+
         .product-topline {
             flex-direction: column;
             align-items: flex-start;
@@ -1554,21 +1709,21 @@
 {% endblock %}
 
 {% block hero %}
-<section class="hero-card">
+<section class="hero-card home-hero">
     <div class="hero-grid">
         <div class="hero-copy">
-            <span class="section-kicker">Detalles con presencia</span>
-            <h1>Regalos personalizados para fechas que se sienten especiales.</h1>
+            <span class="section-kicker">Acompa&ntilde;ando tus sentimientos</span>
+            <h1>Regalos con amor para momentos que se quedan en el coraz&oacute;n.</h1>
             <p>
-                Desayunos sorpresa, cajas personalizadas y detalles rom&aacute;nticos o tem&aacute;ticos
-                hechos en Bello para celebrar cumplea&ntilde;os, aniversarios y sorpresas en Medell&iacute;n
-                y el &aacute;rea metropolitana.
+                Preparamos detalles personalizados con cuidado, color y amor: desayunos sorpresa,
+                cajas tem&aacute;ticas y regalos rom&aacute;nticos pensados para hacer sentir especial
+                a quien los recibe en Bello, Medell&iacute;n y el &aacute;rea metropolitana.
             </p>
 
             <div class="hero-tags">
-                <span class="hero-tag">Desayunos sorpresa</span>
-                <span class="hero-tag">Tem&aacute;ticos personalizados</span>
-                <span class="hero-tag">Regalos premium</span>
+                <span class="hero-tag">Hechos con amor</span>
+                <span class="hero-tag">Personalizados para cada ocasi&oacute;n</span>
+                <span class="hero-tag">Presentaci&oacute;n cuidada</span>
             </div>
 
             <div class="hero-actions">
@@ -1579,30 +1734,30 @@
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>ideas para regalar</span>
+                    <span>ideas para inspirarte</span>
                 </div>
                 <div class="hero-stat">
                     <strong>1-2 d&iacute;as</strong>
-                    <span>reserva recomendada</span>
+                    <span>para preparar con calma</span>
                 </div>
                 <div class="hero-stat">
                     <strong>WhatsApp</strong>
-                    <span>confirmaci&oacute;n personalizada</span>
+                    <span>te acompa&ntilde;amos al elegir</span>
                 </div>
             </div>
         </div>
 
         <aside class="hero-panel hero-gallery-panel">
             <div class="hero-gallery-copy">
-                <span class="section-kicker">Vista r&aacute;pida</span>
-                <h2>Desliza referencias destacadas</h2>
-                <p>Explora ideas con imagen, precio base y acceso directo al detalle antes de cotizar por WhatsApp.</p>
+                <span class="section-kicker">Selecci&oacute;n destacada</span>
+                <h2>Referencias listas para personalizar</h2>
+                <p>Desliza detalles reales, revisa el precio base y abre el producto que quieras cotizar por WhatsApp.</p>
             </div>
 
             {% if destacados %}
                 <div class="hero-product-carousel carousel-shell js-carousel">
                     <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver referencia anterior">&lsaquo;</button>
-                    <div class="hero-product-track carousel-track js-carousel-track" aria-label="Vista rapida de productos destacados">
+                    <div class="hero-product-track carousel-track js-carousel-track" aria-label="Vista rápida de productos destacados">
                         {% for producto in destacados %}
                             <a href="{% url 'detalle_producto' producto.id %}" class="hero-product-card" data-track-click="catalogo" data-track-label="hero_producto_destacado_{{ producto.id }}">
                                 <div class="hero-product-media">
@@ -1628,6 +1783,10 @@
             {% else %}
                 <p class="hero-product-empty">No hay productos destacados todav&iacute;a.</p>
             {% endif %}
+            <div class="hero-panel-note">
+                <span>Los precios son base y pueden variar seg&uacute;n personalizaci&oacute;n.</span>
+                <strong>Cotiza antes de pagar</strong>
+            </div>
         </aside>
     </div>
 </section>
@@ -1709,8 +1868,8 @@
         </div>
 
         <div class="process-video-carousel carousel-shell js-carousel">
-            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver elaboracion anterior">&lsaquo;</button>
-            <div class="process-video-grid carousel-track js-carousel-track" aria-label="Videos de elaboracion de regalos">
+            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver elaboración anterior">&lsaquo;</button>
+            <div class="process-video-grid carousel-track js-carousel-track" aria-label="Videos de elaboración de regalos">
                 {% for video_item in videos_elaboracion %}
                     <article class="process-video-item">
                         <div class="process-video-media">
@@ -1729,7 +1888,7 @@
                     </article>
                 {% endfor %}
             </div>
-            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver siguiente elaboracion">&rsaquo;</button>
+            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver siguiente elaboración">&rsaquo;</button>
         </div>
     </section>
     {% endif %}
@@ -1745,10 +1904,10 @@
     <section class="instagram-card section-card page-card">
         <div>
             <span class="section-kicker">Instagram</span>
-            <h2>Mira m&aacute;s entregas reales en Instagram</h2>
-            <p class="meta-copy">En nuestro Instagram compartimos detalles entregados, ideas nuevas y resultados reales de clientes.</p>
+            <h2>Insp&iacute;rate con resultados reales</h2>
+            <p class="meta-copy">En Instagram compartimos detalles entregados, ideas nuevas y acabados reales para que elijas con m&aacute;s confianza.</p>
         </div>
-        <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" class="btn-secondary" target="_blank" rel="noopener noreferrer external" data-track-click="instagram" data-track-label="inicio_trabajos_reales">Ver trabajos reales</a>
+        <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" class="btn-secondary" target="_blank" rel="noopener noreferrer external" data-track-click="instagram" data-track-label="inicio_trabajos_reales">Ver ideas en Instagram</a>
     </section>
 
 </div>
