@@ -1,0 +1,22 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+{% block title %}{{ title }} | Casita de Regalos{% endblock %}
+
+{% block branding %}
+<a href="{% url 'admin:index' %}" class="casita-admin-brand" aria-label="Inicio del panel de Casita de Regalos">
+    <img src="{% static 'productos/img/logo-casita-admin.webp' %}" alt="" width="42" height="42">
+    <span>
+        <strong>Casita de Regalos</strong>
+        <small>Panel de gestión</small>
+    </span>
+</a>
+{% endblock %}
+
+{% block nav-global %}
+<a href="/" class="casita-admin-public-link" target="_blank" rel="noopener">Ver tienda</a>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/casita_admin.css' %}">
+{% endblock %}

@@ -6,6 +6,11 @@ from django.urls import include, path
 from .seo_views import robots_txt, sitemap_xml
 
 
+admin.site.site_header = "Casita de Regalos"
+admin.site.site_title = "Casita de Regalos"
+admin.site.index_title = "Panel de gestión"
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("robots.txt", robots_txt, name="robots_txt"),

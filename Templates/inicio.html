@@ -1005,8 +1005,9 @@
 
     .catalog-chip-row {
         display: flex;
+        flex-wrap: wrap;
         gap: 8px;
-        overflow-x: auto;
+        overflow-x: visible;
         padding: 2px 2px 6px;
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -1577,6 +1578,8 @@
         }
 
         .catalog-chip-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
             padding-bottom: 4px;
         }
 

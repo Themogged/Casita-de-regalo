@@ -1,0 +1,654 @@
+:root {
+    --primary: #81214e;
+    --secondary: #c53d7e;
+    --accent: #fff2f7;
+    --primary-fg: #fff;
+    --body-fg: #55213c;
+    --body-bg: #fff8fb;
+    --body-quiet-color: #916078;
+    --body-loud-color: #58193a;
+    --header-color: #5c1d3d;
+    --header-branding-color: #5c1d3d;
+    --header-bg: rgba(255, 251, 253, 0.9);
+    --header-link-color: #7e2a50;
+    --breadcrumbs-bg: transparent;
+    --breadcrumbs-fg: #a2597c;
+    --link-fg: #b73270;
+    --link-hover-color: #741f49;
+    --hairline-color: rgba(198, 68, 125, 0.14);
+    --border-color: rgba(198, 68, 125, 0.16);
+    --selected-row: #fff0f6;
+    --button-bg: #c53d7e;
+    --button-hover-bg: #9e2d64;
+    --default-button-bg: #81214e;
+    --default-button-hover-bg: #65193d;
+    --delete-button-bg: #9f3144;
+    --delete-button-hover-bg: #812536;
+    --object-tools-bg: #c53d7e;
+    --object-tools-hover-bg: #9e2d64;
+    --font-family-primary: "Segoe UI", "Montserrat", Arial, sans-serif;
+    --font-family-monospace: "Cascadia Mono", Consolas, monospace;
+    --casita-card: rgba(255, 255, 255, 0.88);
+    --casita-card-strong: rgba(255, 255, 255, 0.96);
+    --casita-border: rgba(198, 68, 125, 0.14);
+    --casita-shadow: 0 30px 70px rgba(92, 33, 62, 0.12);
+    --casita-shadow-soft: 0 18px 42px rgba(92, 33, 62, 0.08);
+}
+
+html[data-theme="dark"] {
+    --primary: #f8b7cf;
+    --secondary: #ff7eb2;
+    --body-bg: #24101b;
+    --body-fg: #ffeef5;
+    --body-quiet-color: #f1bed2;
+    --body-loud-color: #fff7fb;
+    --header-bg: rgba(45, 16, 31, 0.88);
+    --header-color: #fff4f8;
+    --header-branding-color: #fff4f8;
+    --header-link-color: #ffeaf3;
+    --breadcrumbs-fg: #f3bfd2;
+    --hairline-color: rgba(255, 214, 231, 0.16);
+    --border-color: rgba(255, 214, 231, 0.18);
+    --selected-row: rgba(255, 126, 178, 0.14);
+    --casita-card: rgba(57, 22, 40, 0.86);
+    --casita-card-strong: rgba(67, 26, 47, 0.96);
+    --casita-border: rgba(255, 214, 231, 0.16);
+    --casita-shadow: 0 30px 80px rgba(0, 0, 0, 0.38);
+    --casita-shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.28);
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 9% -8%, rgba(255, 211, 229, 0.95), transparent 28%),
+        radial-gradient(circle at 98% 4%, rgba(255, 241, 247, 0.95), transparent 30%),
+        radial-gradient(circle at 22% 100%, rgba(255, 234, 242, 0.9), transparent 36%),
+        linear-gradient(145deg, #fffbfd 0%, #fff1f7 48%, #fff9fc 100%);
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 999px;
+    filter: blur(2px);
+}
+
+body::before {
+    width: 520px;
+    height: 520px;
+    right: -210px;
+    top: 120px;
+    background: radial-gradient(circle, rgba(211, 76, 137, 0.16), transparent 66%);
+}
+
+body::after {
+    width: 420px;
+    height: 420px;
+    left: -180px;
+    bottom: -150px;
+    background: radial-gradient(circle, rgba(255, 188, 215, 0.22), transparent 66%);
+}
+
+html[data-theme="dark"] body {
+    background:
+        radial-gradient(circle at 8% -8%, rgba(154, 45, 91, 0.42), transparent 30%),
+        radial-gradient(circle at 100% 10%, rgba(96, 32, 68, 0.48), transparent 30%),
+        linear-gradient(145deg, #1d0c16 0%, #2a1020 56%, #20111a 100%);
+}
+
+a:link,
+a:visited {
+    transition: color 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+#header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    min-height: 78px;
+    padding: 14px 30px;
+    border-bottom: 1px solid var(--casita-border);
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 246, 250, 0.86)),
+        var(--header-bg);
+    box-shadow: 0 18px 46px rgba(92, 33, 62, 0.08);
+    backdrop-filter: blur(22px);
+}
+
+html[data-theme="dark"] #header {
+    background:
+        linear-gradient(135deg, rgba(65, 24, 45, 0.92), rgba(39, 14, 29, 0.88)),
+        var(--header-bg);
+}
+
+#branding {
+    display: flex;
+    align-items: center;
+}
+
+#branding h1 {
+    margin: 0;
+}
+
+.casita-admin-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 13px;
+    color: var(--header-branding-color);
+    text-decoration: none;
+}
+
+.casita-admin-brand:hover {
+    color: var(--header-branding-color);
+}
+
+.casita-admin-brand img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    box-shadow:
+        0 16px 30px rgba(185, 45, 99, 0.18),
+        0 0 0 1px rgba(198, 68, 125, 0.15);
+}
+
+.casita-admin-brand span {
+    display: grid;
+    gap: 3px;
+}
+
+.casita-admin-brand strong {
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: 1.34rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+
+.casita-admin-brand small {
+    color: var(--body-quiet-color);
+    font-size: 0.71rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+}
+
+#user-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border: 1px solid var(--casita-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.62);
+    color: var(--body-quiet-color);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+html[data-theme="dark"] #user-tools {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+#user-tools a,
+#user-tools button {
+    color: var(--header-link-color);
+    font-weight: 800;
+}
+
+#nav-global {
+    display: flex;
+    align-items: center;
+    margin-left: 18px;
+}
+
+.casita-admin-public-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 19px;
+    border-radius: 999px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.22), transparent),
+        linear-gradient(135deg, #d94b8a, #8d2455);
+    color: #fff !important;
+    font-weight: 900;
+    text-decoration: none;
+    box-shadow: 0 16px 30px rgba(185, 45, 99, 0.24);
+}
+
+.casita-admin-public-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(185, 45, 99, 0.3);
+}
+
+div.breadcrumbs {
+    padding: 16px 30px 0;
+    color: var(--breadcrumbs-fg);
+    background: transparent;
+    font-weight: 700;
+}
+
+div.breadcrumbs a {
+    color: var(--link-fg);
+}
+
+#content {
+    padding: 28px 30px 44px;
+}
+
+#content h1 {
+    margin: 0 0 22px;
+    color: var(--body-loud-color);
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: clamp(1.85rem, 3vw, 2.7rem);
+    letter-spacing: -0.035em;
+}
+
+.dashboard #content {
+    display: grid;
+    grid-template-columns: minmax(560px, 1fr) minmax(320px, 360px);
+    gap: 32px 40px;
+    max-width: 1240px;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+.dashboard #content h1 {
+    grid-column: 1 / -1;
+}
+
+.dashboard #content-main,
+.dashboard #content-related {
+    float: none;
+    width: auto;
+    min-width: 0;
+    margin: 0;
+}
+
+.module,
+.inline-group,
+#content-related,
+#changelist,
+#changelist-filter,
+.paginator,
+.submit-row,
+.messagelist li,
+.object-tools a,
+.dashboard .module {
+    border-radius: 24px;
+}
+
+.module,
+.inline-group,
+#content-related,
+#changelist,
+#changelist-filter,
+.submit-row {
+    overflow: hidden;
+    background: var(--casita-card);
+    border: 1px solid var(--casita-border);
+    box-shadow: var(--casita-shadow-soft);
+}
+
+.dashboard .module,
+#content-related {
+    box-shadow: var(--casita-shadow);
+}
+
+.dashboard .module {
+    margin-bottom: 22px;
+}
+
+.module table {
+    width: 100%;
+    overflow: hidden;
+}
+
+.dashboard .module table th {
+    width: 100%;
+}
+
+.dashboard .module table th,
+.dashboard .module table td {
+    white-space: nowrap;
+}
+
+.module caption,
+.inline-group h2,
+#changelist-filter h2 {
+    padding: 14px 18px;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.8), transparent),
+        linear-gradient(135deg, #fff1f7, #ffe4ef);
+    color: var(--body-loud-color);
+    font-size: 0.85rem;
+    font-weight: 950;
+    letter-spacing: 0.065em;
+    text-transform: uppercase;
+}
+
+html[data-theme="dark"] .module caption,
+html[data-theme="dark"] .inline-group h2,
+html[data-theme="dark"] #changelist-filter h2 {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent),
+        rgba(255, 126, 178, 0.13);
+    color: #fff4f8;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+thead th {
+    background: rgba(255, 247, 250, 0.94);
+    color: var(--body-loud-color);
+    font-weight: 900;
+}
+
+tbody tr,
+.row1,
+.row2 {
+    transition: background 140ms ease;
+}
+
+tbody tr:hover {
+    background: rgba(255, 231, 241, 0.72);
+}
+
+tr:nth-child(even),
+.row2 {
+    background: rgba(255, 246, 250, 0.64);
+}
+
+html[data-theme="dark"] thead th {
+    background: rgba(255, 126, 178, 0.12);
+}
+
+html[data-theme="dark"] tbody tr:hover {
+    background: rgba(255, 126, 178, 0.12);
+}
+
+html[data-theme="dark"] tr:nth-child(even),
+html[data-theme="dark"] .row2 {
+    background: rgba(255, 126, 178, 0.06);
+}
+
+#content-related h2,
+#content-related h3 {
+    color: var(--body-loud-color);
+}
+
+#content-related .module {
+    margin: 0;
+    box-shadow: none;
+    border: 0;
+    background: transparent;
+}
+
+#content-related .actionlist {
+    margin: 0;
+    padding: 6px 0 0;
+}
+
+#content-related .actionlist li {
+    margin: 0 0 10px;
+    padding: 10px 12px;
+    border: 1px solid var(--casita-border);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.58);
+}
+
+html[data-theme="dark"] #content-related .actionlist li {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="number"],
+input[type="search"],
+textarea,
+select,
+.vTextField {
+    border-radius: 15px;
+    border: 1px solid rgba(198, 68, 125, 0.22);
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--body-fg);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+html[data-theme="dark"] input[type="text"],
+html[data-theme="dark"] input[type="password"],
+html[data-theme="dark"] input[type="email"],
+html[data-theme="dark"] input[type="url"],
+html[data-theme="dark"] input[type="number"],
+html[data-theme="dark"] input[type="search"],
+html[data-theme="dark"] textarea,
+html[data-theme="dark"] select,
+html[data-theme="dark"] .vTextField {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: rgba(200, 63, 130, 0.58);
+    box-shadow: 0 0 0 4px rgba(200, 63, 130, 0.14);
+    outline: none;
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.object-tools a {
+    border-radius: 999px;
+    font-weight: 900;
+    box-shadow: 0 14px 26px rgba(185, 45, 99, 0.14);
+    transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover,
+.submit-row input:hover,
+a.button:hover,
+.object-tools a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 18px 34px rgba(185, 45, 99, 0.2);
+}
+
+.object-tools {
+    margin-top: -6px;
+}
+
+.object-tools a {
+    padding: 10px 18px;
+}
+
+#nav-sidebar {
+    background: rgba(255, 250, 252, 0.78);
+    border-right: 1px solid var(--casita-border);
+    backdrop-filter: blur(16px);
+}
+
+html[data-theme="dark"] #nav-sidebar {
+    background: rgba(34, 13, 25, 0.88);
+}
+
+#nav-sidebar .current-app .section,
+#nav-sidebar .current-model {
+    background: rgba(255, 232, 242, 0.9);
+}
+
+html[data-theme="dark"] #nav-sidebar .current-app .section,
+html[data-theme="dark"] #nav-sidebar .current-model {
+    background: rgba(255, 126, 178, 0.14);
+}
+
+.login {
+    background:
+        radial-gradient(circle at 50% 12%, rgba(255, 225, 238, 0.28), transparent 28%),
+        linear-gradient(135deg, #1b0b14, #321326 52%, #21101a);
+}
+
+.login #container {
+    width: min(460px, calc(100% - 28px));
+    margin-top: 8vh;
+    overflow: hidden;
+    border: 1px solid rgba(255, 224, 236, 0.22);
+    border-radius: 32px;
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 246, 250, 0.95));
+    box-shadow:
+        0 34px 90px rgba(0, 0, 0, 0.34),
+        0 0 0 1px rgba(255, 255, 255, 0.58) inset;
+}
+
+.login #header {
+    justify-content: center;
+    padding: 28px 24px 26px;
+    background:
+        radial-gradient(circle at 18% 15%, rgba(255, 221, 236, 0.84), transparent 34%),
+        linear-gradient(135deg, #fff9fc, #fff0f6);
+    box-shadow: none;
+}
+
+.login .casita-admin-brand {
+    gap: 15px;
+}
+
+.login .casita-admin-brand img {
+    width: 54px;
+    height: 54px;
+}
+
+.login .casita-admin-brand strong {
+    font-size: 1.46rem;
+}
+
+.login #content {
+    padding: 30px;
+}
+
+.login .form-row {
+    display: grid;
+    gap: 9px;
+    padding: 0 0 16px;
+}
+
+.login .form-row label {
+    color: var(--body-loud-color);
+    font-weight: 800;
+}
+
+.login input[type="text"],
+.login input[type="password"] {
+    min-height: 42px;
+    padding-inline: 14px;
+    font-size: 1rem;
+}
+
+.login .submit-row {
+    padding: 4px 0 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.login .submit-row input {
+    width: 100%;
+    min-height: 46px;
+}
+
+.messagelist li {
+    border: 1px solid var(--casita-border);
+    box-shadow: var(--casita-shadow-soft);
+}
+
+@media (max-width: 1024px) {
+    .dashboard #content {
+        display: block;
+        max-width: none;
+    }
+
+    .dashboard #content-related {
+        margin-top: 24px;
+    }
+}
+
+@media (max-width: 767px) {
+    #header {
+        min-height: auto;
+        padding: 10px 14px;
+        gap: 10px;
+    }
+
+    .casita-admin-brand {
+        gap: 9px;
+    }
+
+    .casita-admin-brand img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .casita-admin-brand strong {
+        font-size: 1rem;
+    }
+
+    .casita-admin-brand small {
+        display: none;
+    }
+
+    #user-tools {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        border-radius: 20px;
+    }
+
+    #nav-global {
+        margin-left: 0;
+    }
+
+    .casita-admin-public-link {
+        min-height: 34px;
+        padding: 0 13px;
+        font-size: 0.78rem;
+    }
+
+    #content {
+        padding: 18px 12px 30px;
+    }
+
+    div.breadcrumbs {
+        padding: 12px 14px 0;
+    }
+
+    .module,
+    .inline-group,
+    #content-related,
+    #changelist,
+    #changelist-filter,
+    .submit-row {
+        border-radius: 18px;
+    }
+
+    .login #container {
+        margin-top: 5vh;
+        border-radius: 26px;
+    }
+
+    .login #content {
+        padding: 24px;
+    }
+}

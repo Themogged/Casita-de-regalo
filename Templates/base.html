@@ -318,12 +318,13 @@
 
         .category-strip-inner {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            overflow-x: auto;
+            overflow-x: visible;
             padding: 4px;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            border-radius: 999px;
+            border-radius: 28px;
             background: rgba(255, 255, 255, 0.68);
             border: 1px solid rgba(198, 68, 125, 0.1);
             box-shadow: 0 12px 24px rgba(94, 35, 63, 0.04);
@@ -1002,6 +1003,12 @@
 
             .category-strip {
                 padding: 4px 0 8px;
+            }
+
+            .category-strip-inner {
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                border-radius: 999px;
             }
 
             .category-pill {
