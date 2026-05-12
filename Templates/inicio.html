@@ -949,10 +949,26 @@
         display: grid;
         gap: 4px;
         justify-items: end;
-        padding: 8px 12px;
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.9);
-        border: 1px solid rgba(233, 72, 134, 0.1);
+        min-width: 118px;
+        padding: 11px 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(233, 72, 134, 0.12);
+        box-shadow: 0 12px 28px rgba(75, 24, 46, 0.055);
+    }
+
+    .results-counter strong {
+        color: var(--rose-700);
+        font-size: 1.28rem;
+        line-height: 1;
+    }
+
+    .results-counter span {
+        color: var(--ink-700);
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
     }
 
     .category-link--active,
@@ -963,19 +979,31 @@
 
     .catalog-main {
         display: grid;
-        gap: 20px;
+        gap: 22px;
     }
 
     .catalog-toolbar {
+        position: relative;
+        overflow: hidden;
         display: grid;
-        gap: 12px;
-        padding: 20px 22px;
-        border-radius: 24px;
+        gap: 16px;
+        padding: 22px 24px;
+        border-radius: 26px;
         background:
-            radial-gradient(circle at 92% 0%, rgba(255, 228, 238, 0.72), transparent 24%),
-            linear-gradient(135deg, rgba(255, 252, 253, 0.98) 0%, rgba(255, 243, 248, 0.98) 100%);
-        border: 1px solid rgba(198, 68, 125, 0.1);
+            radial-gradient(circle at 94% 0%, rgba(255, 224, 237, 0.82), transparent 28%),
+            radial-gradient(circle at 0% 100%, rgba(255, 246, 236, 0.88), transparent 30%),
+            linear-gradient(135deg, rgba(255, 253, 254, 0.99) 0%, rgba(255, 246, 250, 0.99) 100%);
+        border: 1px solid rgba(198, 68, 125, 0.11);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    }
+
+    .catalog-toolbar::before {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 5px;
+        background: linear-gradient(180deg, var(--rose-500), var(--rose-700));
+        opacity: 0.82;
     }
 
     .catalog-toolbar-top {
@@ -998,17 +1026,18 @@
     }
 
     .catalog-toolbar-copy strong {
-        font-size: 1.2rem;
+        font-size: clamp(1.25rem, 2.2vw, 1.55rem);
         color: var(--ink-900);
         font-family: Georgia, "Palatino Linotype", serif;
+        line-height: 1.08;
     }
 
     .catalog-chip-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 9px;
         overflow-x: visible;
-        padding: 2px 2px 6px;
+        padding: 2px 2px 8px;
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
@@ -1025,12 +1054,14 @@
         padding: 0 16px;
         border-radius: 999px;
         border: 1px solid rgba(198, 68, 125, 0.1);
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.88);
         color: var(--ink-700);
         font-weight: 700;
         font-size: 0.93rem;
         white-space: nowrap;
         flex: 0 0 auto;
+        scroll-snap-align: start;
+        box-shadow: 0 8px 18px rgba(75, 24, 46, 0.035);
     }
 
     .catalog-chip.is-active,
@@ -1047,6 +1078,7 @@
         gap: 20px;
         align-items: end;
         flex-wrap: wrap;
+        padding: 2px 4px 0;
     }
 
     .results-header h2 {
@@ -1056,8 +1088,8 @@
     }
 
     .catalog-grid {
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
     }
 
     .product-card {
@@ -1065,7 +1097,8 @@
         display: grid;
         grid-template-rows: auto 1fr;
         background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 100%);
+            radial-gradient(circle at 92% 8%, rgba(255, 228, 238, 0.7), transparent 22%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.995) 0%, rgba(255, 250, 252, 0.995) 100%);
         position: relative;
     }
 
@@ -1087,7 +1120,7 @@
 
     .product-media {
         position: relative;
-        min-height: 340px;
+        min-height: 320px;
         aspect-ratio: 4 / 5;
         overflow: hidden;
         background:
@@ -1098,11 +1131,21 @@
         justify-content: center;
     }
 
+    .product-media::before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        z-index: 1;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.78);
+        pointer-events: none;
+    }
+
     .product-ribbon {
         position: absolute;
         top: 14px;
         left: 14px;
-        z-index: 1;
+        z-index: 2;
         display: inline-flex;
         align-items: center;
         padding: 8px 12px;
@@ -1143,8 +1186,8 @@
 
     .product-body {
         display: grid;
-        gap: 14px;
-        padding: 22px;
+        gap: 13px;
+        padding: 20px;
     }
 
     .product-topline,
@@ -1158,6 +1201,8 @@
 
     .product-price-row {
         align-items: end;
+        padding-top: 10px;
+        border-top: 1px solid rgba(233, 72, 134, 0.1);
     }
 
     .stock-badge {
@@ -1201,8 +1246,12 @@
 
     .product-description {
         color: var(--ink-700);
-        line-height: 1.7;
-        min-height: 74px;
+        line-height: 1.62;
+        min-height: 72px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 
     .product-price {
@@ -1219,7 +1268,7 @@
 
     .product-actions {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: 0.9fr 1.1fr;
         gap: 10px;
         align-self: end;
     }
@@ -1243,7 +1292,8 @@
         justify-content: center;
         gap: 10px;
         flex-wrap: wrap;
-        margin-top: 8px;
+        margin-top: 10px;
+        padding-top: 4px;
     }
 
     .pagination a,
@@ -1251,12 +1301,12 @@
         min-width: 42px;
         min-height: 42px;
         padding: 0 14px;
-        border-radius: 12px;
+        border-radius: 999px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        background: #fff7fb;
-        border: 1px solid rgba(233, 72, 134, 0.1);
+        background: rgba(255, 247, 251, 0.95);
+        border: 1px solid rgba(233, 72, 134, 0.12);
         color: var(--rose-700);
         font-weight: 700;
     }
@@ -1506,8 +1556,13 @@
         }
 
         .catalog-toolbar {
-            padding: 16px;
+            padding: 17px 16px 16px;
             border-radius: 20px;
+        }
+
+        .catalog-toolbar-copy p {
+            font-size: 0.92rem;
+            line-height: 1.55;
         }
 
         .catalog-chip {
@@ -1580,7 +1635,9 @@
         .catalog-chip-row {
             flex-wrap: nowrap;
             overflow-x: auto;
-            padding-bottom: 4px;
+            margin-inline: -16px;
+            padding: 0 16px 6px;
+            scroll-snap-type: x proximity;
         }
 
         .results-header h2 {
@@ -1590,11 +1647,12 @@
 
         .results-counter {
             justify-items: start;
-            width: 100%;
-            max-width: 100%;
+            width: auto;
+            max-width: max-content;
+            min-width: 0;
             padding: 8px 12px;
             border-radius: 16px;
-            background: var(--rose-50);
+            background: rgba(255, 241, 245, 0.92);
         }
 
         .catalog-grid {
@@ -1605,7 +1663,7 @@
         .product-card {
             grid-template-columns: 1fr;
             grid-template-rows: auto 1fr;
-            border-radius: 22px;
+            border-radius: 20px;
             align-items: stretch;
         }
 
@@ -1613,6 +1671,11 @@
             min-height: 210px;
             aspect-ratio: 1 / 1.18;
             height: auto;
+        }
+
+        .product-media::before {
+            inset: 8px;
+            border-radius: 16px;
         }
 
         .product-ribbon {
@@ -1683,6 +1746,10 @@
         .product-topline,
         .product-price-row {
             align-items: flex-start;
+        }
+
+        .product-topline {
+            gap: 7px;
         }
     }
 
@@ -1942,8 +2009,8 @@
             <div class="catalog-toolbar-top">
                 <div class="catalog-toolbar-copy">
                     <span class="section-kicker">Catálogo</span>
-                    <strong>Explora por categoría</strong>
-                    <p>Filtra por ocasi&oacute;n, estilo o tipo de detalle y arma una selecci&oacute;n para cotizar por WhatsApp.</p>
+                    <strong>Elige el detalle ideal</strong>
+                    <p>Explora por ocasión, estilo o tipo de detalle. Guarda tus favoritos y cotizamos el acabado final por WhatsApp.</p>
                 </div>
                 <div class="results-counter">
                     <strong>{{ page_obj.paginator.count }}</strong>
@@ -1951,31 +2018,31 @@
                 </div>
             </div>
 
-            <div class="catalog-chip-row">
+            <nav class="catalog-chip-row" aria-label="Categorías del catálogo">
                 <a href="{% url 'inicio' %}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}">Todos</a>
                 {% for categoria in categorias %}
                     <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}">
                         {{ categoria.nombre }}
                     </a>
                 {% endfor %}
-            </div>
+            </nav>
         </div>
 
         <div class="results-header">
             <div>
-                <span class="section-kicker">Catálogo disponible</span>
+                <span class="section-kicker">Detalles disponibles</span>
                 <h2>
                     {% if categoria_actual %}
                         {{ categoria_actual.nombre }}
                     {% else %}
-                        Todos los productos
+                        Todos los detalles
                     {% endif %}
                 </h2>
                 <p>
                     {% if filtros.q %}
                         Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
                     {% else %}
-                        Descubre ideas disponibles y elige la que mejor conecte con la ocasi&oacute;n que quieres celebrar.
+                        Descubre referencias listas para personalizar y elige la que mejor conecte con la ocasión que quieres celebrar.
                     {% endif %}
                 </p>
             </div>
