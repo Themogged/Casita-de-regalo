@@ -1,9 +1,11 @@
 import json
 import os
 import shutil
+from io import StringIO
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
@@ -243,6 +245,9 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Kit cumpleañero')
         self.assertContains(response, 'Siguiente')
         self.assertContains(response, reverse('detalle_producto', args=[self.relacionado.id]))
+        self.assertContains(response, '<meta property="og:type" content="product">', html=True)
+        self.assertContains(response, '"@type": "Product"')
+        self.assertContains(response, '"priceCurrency": "COP"')
 
     def test_detalle_producto_muestra_galeria_cuando_hay_varias_imagenes(self):
         ProductoImagen.objects.create(
@@ -362,3 +367,33 @@ class CatalogoViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertFalse(response.json()["ok"])
+
+
+class CatalogManagementCommandTests(TestCase):
+    def test_import_catalog_products_dry_run_no_escribe_en_db(self):
+        temp_path = Path('.tmp-test-media') / 'catalog-import' / 'productos.json'
+        temp_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            temp_path.write_text(
+                json.dumps(
+                    [
+                        {
+                            'nombre': 'Detalle temporal',
+                            'categoria': 'Pruebas',
+                            'descripcion': 'Producto de prueba.',
+                            'precio': '45000.00',
+                            'stock': 7,
+                            'imagen': 'productos/prueba.jpeg',
+                        }
+                    ]
+                ),
+                encoding='utf-8',
+            )
+
+            output = StringIO()
+            call_command('import_catalog_products', str(temp_path), '--dry-run', stdout=output)
+
+            self.assertIn('DRY RUN', output.getvalue())
+            self.assertFalse(Producto.objects.filter(nombre='Detalle temporal').exists())
+        finally:
+            shutil.rmtree(temp_path.parent.parent, ignore_errors=True)

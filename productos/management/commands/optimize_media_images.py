@@ -34,6 +34,11 @@ class Command(BaseCommand):
             action='store_true',
             help='Regenera archivos WebP aunque ya existan.',
         )
+        parser.add_argument(
+            '--dry-run',
+            action='store_true',
+            help='Muestra cuantas imagenes se optimizarian sin escribir archivos.',
+        )
 
     def handle(self, *args, **options):
         source_dir = Path(options['path'])
@@ -47,6 +52,7 @@ class Command(BaseCommand):
         quality = max(1, min(100, options['quality']))
         max_width = max(320, options['max_width'])
         force = options['force']
+        dry_run = options['dry_run']
 
         total = 0
         created = 0
@@ -72,8 +78,9 @@ class Command(BaseCommand):
                     if optimized.mode not in {'RGB', 'RGBA'}:
                         optimized = optimized.convert('RGBA' if 'A' in optimized.getbands() else 'RGB')
 
-                    webp_path.parent.mkdir(parents=True, exist_ok=True)
-                    optimized.save(webp_path, 'WEBP', quality=quality, method=6)
+                    if not dry_run:
+                        webp_path.parent.mkdir(parents=True, exist_ok=True)
+                        optimized.save(webp_path, 'WEBP', quality=quality, method=6)
                     created += 1
             except (OSError, UnidentifiedImageError) as exc:
                 failed += 1
@@ -81,6 +88,7 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f'Imagenes revisadas: {total}. WebP creadas: {created}. Omitidas: {skipped}. Errores: {failed}.'
+                f'Imagenes revisadas: {total}. WebP {"por crear" if dry_run else "creadas"}: {created}. '
+                f'Omitidas: {skipped}. Errores: {failed}.'
             )
         )

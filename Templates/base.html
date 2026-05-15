@@ -8,10 +8,12 @@
     <meta name="description" content="{% block meta_description %}Regalos personalizados, desayunos sorpresa y detalles especiales en Bello, Medellín y área metropolitana. Cotiza por WhatsApp con Casita de Regalos.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}regalos personalizados Bello, regalos personalizados Medellín, desayunos sorpresa Medellín, desayunos sorpresa Bello, detalles románticos, regalos de cumpleaños, regalos personalizados área metropolitana{% endblock %}">
     <meta name="robots" content="index, follow">
-    <meta property="og:type" content="website">
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Desayunos sorpresa, detalles románticos y regalos de cumpleaños personalizados para Bello, Medellín y el área metropolitana.{% endblock %}">
     <meta property="og:locale" content="es_CO">
+    {% block og_image %}{% endblock %}
     <title>{% block title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}</title>
     {% block structured_data %}{% endblock %}
     <style>

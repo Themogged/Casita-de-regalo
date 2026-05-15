@@ -485,6 +485,49 @@ def _build_how_to_schema(request):
     return json.dumps(schema, ensure_ascii=False)
 
 
+def _truncate_text(value, limit=155):
+    text = ' '.join(str(value or '').split())
+    if len(text) <= limit:
+        return text
+    return f'{text[: limit - 1].rstrip()}…'
+
+
+def _build_product_schema(request, producto):
+    product_url = request.build_absolute_uri(reverse('detalle_producto', args=[producto.id]))
+    schema = {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': producto.nombre,
+        'description': _truncate_text(
+            producto.descripcion
+            or 'Detalle personalizado de Casita de Regalos para Bello, Medellín y el área metropolitana.',
+            300,
+        ),
+        'brand': {
+            '@type': 'Brand',
+            'name': 'Casita de Regalos',
+        },
+        'category': producto.categoria.nombre if producto.categoria else 'Regalos personalizados',
+        'url': product_url,
+        'offers': {
+            '@type': 'Offer',
+            'url': product_url,
+            'priceCurrency': 'COP',
+            'price': str(producto.precio),
+            'availability': 'https://schema.org/InStock' if producto.disponible else 'https://schema.org/OutOfStock',
+            'itemCondition': 'https://schema.org/NewCondition',
+        },
+        'areaServed': [
+            {'@type': 'City', 'name': 'Bello'},
+            {'@type': 'City', 'name': 'Medellín'},
+            {'@type': 'AdministrativeArea', 'name': 'Área metropolitana del Valle de Aburrá'},
+        ],
+    }
+    if producto.imagen:
+        schema['image'] = [request.build_absolute_uri(producto.imagen.url)]
+    return json.dumps(schema, ensure_ascii=False)
+
+
 def inicio(request):
     busqueda = request.GET.get('q', '').strip()
     categoria_id = request.GET.get('categoria', '').strip()
@@ -586,6 +629,13 @@ def detalle_producto(request, producto_id):
             }
         )
 
+    product_meta_description = _truncate_text(
+        producto.descripcion
+        or f'{producto.nombre} en Casita de Regalos. Cotiza regalos personalizados en Bello, Medellín y el área metropolitana.',
+        155,
+    )
+    product_og_image_url = request.build_absolute_uri(producto.imagen.url) if producto.imagen else ''
+
     return render(
         request,
         'producto_detalle.html',
@@ -597,6 +647,9 @@ def detalle_producto(request, producto_id):
             'total_en_navegacion': total_en_navegacion,
             'relacionados': relacionados,
             'galeria_imagenes': galeria_imagenes,
+            'product_meta_description': product_meta_description,
+            'product_og_image_url': product_og_image_url,
+            'product_schema_json': _build_product_schema(request, producto),
         },
     )
 

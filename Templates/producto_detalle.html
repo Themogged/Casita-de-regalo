@@ -2,6 +2,21 @@
 {% load moneda media_optimization %}
 
 {% block title %}{{ producto.nombre }} | Casita de Regalos{% endblock %}
+{% block meta_description %}{{ product_meta_description }}{% endblock %}
+{% block meta_keywords %}{{ producto.nombre }}, {{ producto.categoria.nombre|default:"regalos personalizados" }}, regalos personalizados Bello, desayunos sorpresa Medellín, detalles personalizados{% endblock %}
+{% block og_type %}product{% endblock %}
+{% block og_title %}{{ producto.nombre }} | Casita de Regalos{% endblock %}
+{% block og_description %}{{ product_meta_description }}{% endblock %}
+{% block og_image %}
+    {% if product_og_image_url %}
+        <meta property="og:image" content="{{ product_og_image_url }}">
+    {% endif %}
+{% endblock %}
+{% block structured_data %}
+    {% if product_schema_json %}
+        <script type="application/ld+json">{{ product_schema_json|safe }}</script>
+    {% endif %}
+{% endblock %}
 
 {% block extra_head %}
 <style>
