@@ -250,6 +250,20 @@
         padding: clamp(18px, 2.6vw, 30px);
         align-self: stretch;
         align-content: center;
+        isolation: isolate;
+    }
+
+    .hero-gallery-panel::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        z-index: 0;
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.7);
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.48), rgba(255, 247, 251, 0.18)),
+            radial-gradient(circle at 88% 34%, rgba(255, 216, 232, 0.46), transparent 32%);
+        pointer-events: none;
     }
 
     .hero-gallery-copy {
@@ -286,31 +300,42 @@
         z-index: 1;
         align-items: center;
         min-width: 0;
+        gap: 10px;
     }
 
     .hero-product-carousel .carousel-btn {
-        width: 36px;
-        height: 36px;
-        background: rgba(255, 255, 255, 0.98);
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
         color: var(--rose-700);
-        border-color: rgba(198, 68, 125, 0.12);
-        box-shadow: 0 12px 24px rgba(77, 26, 50, 0.1);
+        border-color: rgba(198, 68, 125, 0.14);
+        box-shadow: 0 14px 28px rgba(77, 26, 50, 0.13);
+    }
+
+    .hero-product-carousel .carousel-btn:not(:disabled):hover {
+        transform: translateY(-1px);
+        background: var(--rose-700);
+        color: #fff;
+        border-color: transparent;
     }
 
     .hero-product-track {
-        gap: 14px;
-        padding: 4px 2px 10px;
+        gap: 16px;
+        padding: 6px 2px 14px;
+        scroll-padding-inline: 2px;
     }
 
     .hero-product-card {
-        width: min(250px, 74vw);
+        width: min(276px, 74vw);
         overflow: hidden;
-        border-radius: 28px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 100%);
-        border: 1px solid rgba(198, 68, 125, 0.1);
+        border-radius: 30px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 250, 252, 0.96) 100%);
+        border: 1px solid rgba(198, 68, 125, 0.12);
         color: var(--ink-900);
         text-decoration: none;
-        box-shadow: 0 16px 34px rgba(77, 26, 50, 0.1);
+        box-shadow: 0 18px 38px rgba(77, 26, 50, 0.11);
         transition: transform 160ms ease, box-shadow 160ms ease;
     }
 
@@ -321,18 +346,40 @@
 
     .hero-product-media {
         position: relative;
-        aspect-ratio: 1 / 0.86;
+        aspect-ratio: 4 / 5;
         overflow: hidden;
+        padding: 10px;
         background:
-            radial-gradient(circle at top, rgba(255, 229, 239, 0.96), transparent 60%),
-            linear-gradient(135deg, #fff8fb, #ffe8f0);
+            radial-gradient(circle at 18% 12%, rgba(255, 218, 232, 0.95), transparent 30%),
+            radial-gradient(circle at 86% 18%, rgba(255, 245, 221, 0.8), transparent 34%),
+            linear-gradient(145deg, #fff8fb 0%, #ffeaf2 52%, #fffdf9 100%);
+    }
+
+    .hero-product-media::after {
+        content: "";
+        position: absolute;
+        inset: 10px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.78);
+        pointer-events: none;
     }
 
     .hero-product-media img {
+        position: relative;
+        z-index: 1;
         width: 100%;
         height: 100%;
         display: block;
-        object-fit: cover;
+        object-fit: contain;
+        object-position: center;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.74);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+        transition: transform 180ms ease;
+    }
+
+    .hero-product-card:hover .hero-product-media img {
+        transform: scale(1.015);
     }
 
     .hero-product-placeholder {
@@ -348,8 +395,8 @@
 
     .hero-product-info {
         display: grid;
-        gap: 8px;
-        padding: 15px;
+        gap: 9px;
+        padding: 14px 15px 16px;
     }
 
     .hero-panel-note {
@@ -381,7 +428,7 @@
         white-space: nowrap;
         padding: 5px 9px;
         border-radius: 999px;
-        background: var(--rose-50);
+        background: linear-gradient(135deg, #fff3f7, #fffaf7);
         color: var(--rose-700);
         font-size: 0.68rem;
         font-weight: 800;
@@ -405,14 +452,24 @@
         justify-content: space-between;
         align-items: center;
         gap: 10px;
+        padding-top: 3px;
         color: var(--ink-700);
         font-size: 0.83rem;
         font-weight: 800;
     }
 
-    .hero-product-meta span:last-child {
+    .hero-product-price {
         color: var(--rose-700);
-        white-space: nowrap;
+        line-height: 1.22;
+    }
+
+    .hero-product-cta {
+        padding: 7px 10px;
+        border-radius: 999px;
+        background: var(--rose-700);
+        color: #fff;
+        font-size: 0.72rem;
+        box-shadow: 0 10px 20px rgba(125, 35, 76, 0.14);
     }
 
     .hero-product-empty {
@@ -1472,6 +1529,11 @@
             gap: 14px;
         }
 
+        .hero-gallery-panel::before {
+            inset: 8px;
+            border-radius: 20px;
+        }
+
         .hero-gallery-copy h2 {
             max-width: none;
         }
@@ -1490,6 +1552,7 @@
             width: 34px;
             height: 34px;
             font-size: 1rem;
+            box-shadow: 0 10px 20px rgba(77, 26, 50, 0.1);
         }
 
         .hero-product-track {
@@ -1498,8 +1561,36 @@
         }
 
         .hero-product-card {
-            width: min(72vw, 280px);
-            border-radius: 20px;
+            width: min(70vw, 248px);
+            border-radius: 24px;
+        }
+
+        .hero-product-media {
+            padding: 8px;
+        }
+
+        .hero-product-media img {
+            border-radius: 18px;
+        }
+
+        .hero-product-media::after {
+            inset: 8px;
+            border-radius: 18px;
+        }
+
+        .hero-product-info {
+            padding: 12px 12px 14px;
+        }
+
+        .hero-product-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .hero-product-cta {
+            width: 100%;
+            text-align: center;
         }
 
         .hero-panel p,
@@ -1837,7 +1928,7 @@
 
             <div class="hero-actions">
                 <a href="#catalogo" class="btn">Ver cat&aacute;logo</a>
-                <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20de%20Casita%20de%20Regalos.%20Me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20para%20elegir%20una%20opci%C3%B3n%20seg%C3%BAn%20la%20ocasi%C3%B3n." class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="hero_whatsapp">Quiero cotizar</a>
+                <a href="{{ whatsapp_assistance_url }}" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="hero_whatsapp">Quiero cotizar</a>
             </div>
 
             <div class="hero-stats">
@@ -1880,8 +1971,8 @@
                                     <span class="hero-product-category">{{ producto.categoria.nombre|default:"Detalle" }}</span>
                                     <strong class="hero-product-title">{{ producto.nombre }}</strong>
                                     <span class="hero-product-meta">
-                                        <span>Ver detalle</span>
-                                        <span>Desde {{ producto.precio|cop }} COP</span>
+                                        <span class="hero-product-price">Desde {{ producto.precio|cop }} COP</span>
+                                        <span class="hero-product-cta">Ver detalle</span>
                                     </span>
                                 </div>
                             </a>
@@ -1989,7 +2080,7 @@
             <strong>&iquest;Ya tienes una idea en mente?</strong>
             <p class="meta-copy">Escr&iacute;benos por WhatsApp y te ayudamos a convertirla en un detalle bien presentado y a tu estilo.</p>
         </div>
-        <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20de%20Casita%20de%20Regalos.%20Me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20para%20elegir%20una%20opci%C3%B3n%20seg%C3%BAn%20la%20ocasi%C3%B3n." class="btn" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="cta_inicio_asesoria">Pedir asesor&iacute;a ahora</a>
+        <a href="{{ whatsapp_assistance_url }}" class="btn" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="cta_inicio_asesoria">Pedir asesor&iacute;a ahora</a>
     </section>
 
     <section class="instagram-card section-card page-card">

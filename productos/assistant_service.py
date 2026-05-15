@@ -8,6 +8,7 @@ from django.db.models import Count, Q
 from django.urls import reverse
 
 from .models import Categoria, Producto
+from .whatsapp import DEFAULT_ASSISTANCE_MESSAGE, PAYMENT_DATA_MESSAGE, build_whatsapp_url
 
 
 class AssistantProviderError(Exception):
@@ -430,20 +431,20 @@ def _build_fallback_actions(context_data):
     elif not actions:
         actions.append({"label": "Ver catálogo", "href": f"{reverse('inicio')}#catalogo"})
 
-    whatsapp_text = "Hola%20quiero%20asesor%C3%ADa%20para%20elegir%20un%20detalle"
+    whatsapp_message = DEFAULT_ASSISTANCE_MESSAGE
     if products:
-        whatsapp_text = f"Hola%20quiero%20cotizar%20{products[0].nombre.replace(' ', '%20')}"
+        whatsapp_message = f"Hola quiero cotizar {products[0].nombre}"
     elif category:
-        whatsapp_text = f"Hola%20quiero%20cotizar%20algo%20de%20{category.nombre.replace(' ', '%20')}"
+        whatsapp_message = f"Hola quiero cotizar algo de {category.nombre}"
     elif "pago" in intents:
-        whatsapp_text = "Hola%20quiero%20los%20datos%20de%20pago"
+        whatsapp_message = PAYMENT_DATA_MESSAGE
     elif "compra" in intents:
-        whatsapp_text = "Hola%20quiero%20finalizar%20mi%20pedido"
+        whatsapp_message = "Hola quiero finalizar mi pedido"
 
     actions.append(
         {
             "label": "WhatsApp",
-            "href": f"https://wa.me/573116262155?text={whatsapp_text}",
+            "href": build_whatsapp_url(whatsapp_message),
             "external": True,
         }
     )
@@ -577,7 +578,7 @@ def get_assistant_reply(message, history=None):
                 {"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"},
                 {
                     "label": "WhatsApp",
-                    "href": "https://wa.me/573116262155?text=Hola%20quiero%20asesor%C3%ADa%20para%20elegir%20un%20detalle",
+                    "href": build_whatsapp_url(DEFAULT_ASSISTANCE_MESSAGE),
                     "external": True,
                 },
             ],

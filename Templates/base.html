@@ -1451,7 +1451,7 @@
                         </span>
                         <span>Instagram</span>
                     </a>
-                    <a href="https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20un%20detalle" target="_blank" rel="noopener noreferrer" class="social-link whatsapp" data-track-click="whatsapp" data-track-label="footer_whatsapp">
+                    <a href="{{ whatsapp_general_info_url }}" target="_blank" rel="noopener noreferrer" class="social-link whatsapp" data-track-click="whatsapp" data-track-label="footer_whatsapp">
                         <span class="social-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
                                 <path d="M12.04 2A9.93 9.93 0 0 0 3.5 17.07L2 22l5.08-1.46A9.96 9.96 0 1 0 12.04 2Zm5.82 14.06c-.25.7-1.46 1.34-2.02 1.4-.52.05-1.18.08-1.9-.15-.44-.14-1.02-.33-1.76-.65-3.08-1.34-5.08-4.46-5.24-4.67-.16-.22-1.25-1.66-1.25-3.16 0-1.5.79-2.23 1.07-2.54.28-.3.61-.38.82-.38.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.61.85 2.11.92 2.27.07.16.12.35.02.57-.09.22-.14.35-.28.54-.14.19-.29.42-.41.56-.14.16-.28.34-.12.66.17.31.73 1.2 1.56 1.95 1.08.96 1.99 1.26 2.3 1.4.31.13.49.11.68-.06.19-.18.79-.92 1-1.24.21-.31.42-.26.71-.16.29.1 1.84.87 2.15 1.03.31.16.52.23.59.36.07.13.07.75-.18 1.45Z"/>
@@ -1469,7 +1469,7 @@
     </footer>
 
     <a
-        href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20de%20Casita%20de%20Regalos.%20Me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20para%20elegir%20una%20opci%C3%B3n%20seg%C3%BAn%20la%20ocasi%C3%B3n."
+        href="{{ whatsapp_assistance_url }}"
         class="floating-whatsapp"
         target="_blank"
         rel="noopener noreferrer"
@@ -1865,7 +1865,7 @@
             actions: [
                 { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
                 { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
-                { label: 'WhatsApp', href: 'https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20de%20Casita%20de%20Regalos.%20Me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20para%20elegir%20una%20opci%C3%B3n%20seg%C3%BAn%20la%20ocasi%C3%B3n.', external: true },
+                { label: 'WhatsApp', href: '{{ whatsapp_assistance_url|escapejs }}', external: true },
             ],
         });
 
@@ -1884,7 +1884,7 @@
                     text: `Te llevo a ${matchedCategory.label}. Ahí podrás ver las referencias disponibles y elegir la que mejor conecte con tu ocasión.`,
                     actions: [
                         { label: `Abrir ${matchedCategory.label}`, href: matchedCategory.href },
-                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20un%20detalle%20de%20esa%20categor%C3%ADa', external: true },
+                        { label: 'Hablar por WhatsApp', href: '{{ whatsapp_category_info_url|escapejs }}', external: true },
                     ],
                 };
             }
@@ -1925,7 +1925,7 @@
                     text: 'Puedes confirmar tu pedido por Nequi o Bancolombia. Primero se valida disponibilidad y personalización, y luego se coordina el pago.',
                     actions: [
                         { label: 'Ir a medios de pago', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
-                        { label: 'Pedir datos por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20los%20datos%20de%20pago', external: true },
+                        { label: 'Pedir datos por WhatsApp', href: '{{ whatsapp_payment_url|escapejs }}', external: true },
                     ],
                 };
             }
@@ -1935,7 +1935,7 @@
                     text: 'Sí, la mayoría de los detalles se pueden personalizar según la ocasión, colores, mensaje, temática o presupuesto.',
                     actions: [
                         { label: 'Ver temáticos', prompt: 'Quiero ver tematicos e infantiles' },
-                        { label: 'Cotizar personalización', href: 'https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20un%20detalle%20personalizado', external: true },
+                        { label: 'Cotizar personalización', href: '{{ whatsapp_personalization_url|escapejs }}', external: true },
                     ],
                 };
             }
@@ -1944,7 +1944,7 @@
                 return {
                     text: 'Perfecto. Si ya quieres una atención más directa, te llevo al WhatsApp de Casita para cotizar, confirmar o resolver una duda puntual.',
                     actions: [
-                        { label: 'Abrir WhatsApp', href: 'https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20un%20detalle%20de%20Casita%20de%20Regalos.%20Me%20gustar%C3%ADa%20recibir%20asesor%C3%ADa%20para%20elegir%20una%20opci%C3%B3n%20seg%C3%BAn%20la%20ocasi%C3%B3n.', external: true },
+                        { label: 'Abrir WhatsApp', href: '{{ whatsapp_assistance_url|escapejs }}', external: true },
                         { label: 'Ir a contacto', href: '#footer' },
                     ],
                 };
@@ -1965,7 +1965,7 @@
                     text: 'Casita de Regalos atiende desde Bello, Antioquia, con cobertura en Medellín y el área metropolitana.',
                     actions: [
                         { label: 'Ver contacto', href: '#footer' },
-                        { label: 'Hablar por WhatsApp', href: 'https://wa.me/573116262155?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20la%20cobertura', external: true },
+                        { label: 'Hablar por WhatsApp', href: '{{ whatsapp_coverage_url|escapejs }}', external: true },
                     ],
                 };
             }

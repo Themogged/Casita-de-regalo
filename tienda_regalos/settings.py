@@ -95,6 +95,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "carrito.context_processors.carrito_total",
                 "productos.context_processors.categorias_menu",
+                "productos.context_processors.business_links",
             ],
         },
     },

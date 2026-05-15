@@ -1,11 +1,68 @@
 import json
 import os
+import shutil
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
+from PIL import Image
 from unittest import mock
 
+from .image_frames import generate_yellow_child_frame, slugify_filename
 from .models import Categoria, InteraccionCliente, Producto, ProductoImagen, VideoElaboracion
+from .whatsapp import build_whatsapp_url
+
+
+class ProductFrameTests(SimpleTestCase):
+    def test_slugify_filename_normaliza_nombre_de_producto(self):
+        self.assertEqual(
+            slugify_filename('Caja Stitch cumpleaños deluxe'),
+            'caja-stitch-cumpleanos-deluxe',
+        )
+
+    def test_generate_yellow_child_frame_crea_webp_vertical(self):
+        temp_path = Path('.tmp-test-media') / 'product-frame'
+        if temp_path.exists():
+            shutil.rmtree(temp_path)
+        temp_path.mkdir(parents=True)
+        try:
+            source_path = temp_path / 'producto.jpg'
+            logo_path = temp_path / 'logo.webp'
+            output_path = temp_path / 'producto-marco.webp'
+
+            Image.new('RGB', (420, 300), (40, 150, 220)).save(source_path)
+            Image.new('RGBA', (90, 90), (255, 255, 255, 0)).save(logo_path)
+
+            result = generate_yellow_child_frame(
+                source_path,
+                logo_path,
+                output_path,
+                'Producto infantil',
+            )
+
+            self.assertEqual(result, output_path)
+            self.assertTrue(output_path.exists())
+            with Image.open(output_path) as generated:
+                self.assertEqual(generated.size, (1080, 1350))
+                self.assertEqual(generated.format, 'WEBP')
+        finally:
+            shutil.rmtree(temp_path, ignore_errors=True)
+
+
+class WhatsappUrlTests(TestCase):
+    @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
+    def test_build_whatsapp_url_usa_numero_configurado_y_codifica_mensaje(self):
+        url = build_whatsapp_url('Hola, quiero asesoría para una ocasión especial.')
+        parsed = urlparse(url)
+
+        self.assertEqual(parsed.netloc, 'wa.me')
+        self.assertEqual(parsed.path, '/570000000000')
+        self.assertEqual(
+            parse_qs(parsed.query)['text'][0],
+            'Hola, quiero asesoría para una ocasión especial.',
+        )
 
 
 class CatalogoViewsTests(TestCase):
@@ -73,9 +130,16 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Bello, Antioquia')
         self.assertContains(response, 'Cómo comprar')
         self.assertContains(response, 'Medios de pago')
-        self.assertContains(response, 'Explora por categoría')
+        self.assertContains(response, 'Elige el detalle ideal')
         self.assertContains(response, 'hero-product-card')
         self.assertContains(response, 'data-track-click="instagram"')
+
+    @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
+    def test_inicio_usa_numero_whatsapp_configurado(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'https://wa.me/570000000000')
 
     def test_inicio_muestra_videos_de_elaboracion_activos(self):
         VideoElaboracion.objects.create(
@@ -96,7 +160,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'process-video-card')
         self.assertContains(response, 'Armado de detalle personalizado')
-        self.assertContains(response, '<video controls preload="metadata" playsinline')
+        self.assertContains(response, '<video controls muted preload="metadata" playsinline')
         self.assertContains(response, 'type="video/mp4"')
         self.assertNotContains(response, 'Video oculto')
 

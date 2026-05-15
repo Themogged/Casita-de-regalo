@@ -1,7 +1,6 @@
 from decimal import Decimal
-from urllib.parse import quote, urlparse
+from urllib.parse import urlparse
 
-from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse
@@ -11,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from pedidos.models import Pedido, PedidoItem
 from productos.models import Producto
+from productos.whatsapp import build_whatsapp_url
 
 
 def _format_cop(valor):
@@ -105,8 +105,7 @@ def _build_whatsapp_url_for_pedido(pedido, checkout_data=None):
         ]
     )
 
-    mensaje = "\n".join(lineas)
-    return f"https://wa.me/{settings.BUSINESS_WHATSAPP_NUMBER}?text={quote(mensaje)}"
+    return build_whatsapp_url("\n".join(lineas))
 
 
 def _redirect_despues_de_agregar(request):

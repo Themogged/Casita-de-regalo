@@ -1,11 +1,16 @@
 import json
 
-from django.core.paginator import Paginator
-from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
-from .models import Categoria, Producto, VideoElaboracion
+from .models import Producto
+from .selectors import (
+    CATALOG_ORDER_OPTIONS,
+    get_active_process_videos,
+    get_catalog_queryset,
+    get_featured_products,
+    paginate_products,
+)
 
 
 QUIENES_SOMOS = {
@@ -400,15 +405,6 @@ TERMINOS_CONDICIONES = [
 ]
 
 
-ORDENES_CATALOGO = {
-    'destacados': ('-destacado', 'nombre'),
-    'precio_asc': ('precio', 'nombre'),
-    'precio_desc': ('-precio', 'nombre'),
-    'recientes': ('-fecha_creacion', 'nombre'),
-    'nombre': ('nombre',),
-}
-
-
 def _build_home_schema(request):
     site_url = request.build_absolute_uri('/')
     schema = {
@@ -494,54 +490,24 @@ def inicio(request):
     categoria_id = request.GET.get('categoria', '').strip()
     orden = request.GET.get('orden', 'destacados')
 
-    productos = Producto.objects.select_related('categoria').all()
-    categorias = (
-        Categoria.objects.annotate(total_productos=Count('producto'))
-        .filter(total_productos__gt=0)
-        .order_by('nombre')
+    productos, categorias, categoria_actual = get_catalog_queryset(
+        search=busqueda,
+        category_id=categoria_id,
+        order=orden,
     )
-
-    categoria_actual = None
-
-    if busqueda:
-        productos = productos.filter(
-            Q(nombre__icontains=busqueda)
-            | Q(descripcion__icontains=busqueda)
-            | Q(categoria__nombre__icontains=busqueda)
-        )
-
-    if categoria_id.isdigit():
-        categoria_actual = categorias.filter(id=int(categoria_id)).first()
-        if categoria_actual:
-            productos = productos.filter(categoria=categoria_actual)
-
-    productos = productos.order_by(*ORDENES_CATALOGO.get(orden, ORDENES_CATALOGO['destacados']))
-
-    if busqueda or categoria_actual:
-        destacados = list(productos.filter(destacado=True)[:6])
-        if not destacados:
-            destacados = list(productos[:6])
-    else:
-        destacados = list(
-            Producto.objects.select_related('categoria')
-            .filter(destacado=True)
-            .order_by('-destacado', 'nombre')[:6]
-        )
-        if not destacados:
-            destacados = list(
-                Producto.objects.select_related('categoria')
-                .order_by('-destacado', 'nombre')[:6]
-            )
-
-    videos_elaboracion = VideoElaboracion.objects.filter(activo=True)[:4]
+    destacados = get_featured_products(
+        productos,
+        search=busqueda,
+        current_category=categoria_actual,
+    )
+    videos_elaboracion = get_active_process_videos()
 
     resumen = {
         'total_productos': productos.count(),
         'categorias': categorias.count(),
     }
 
-    paginator = Paginator(productos, 9)
-    page_obj = paginator.get_page(request.GET.get('page'))
+    page_obj = paginate_products(productos, request.GET.get('page'))
 
     contexto = {
         'categorias': categorias,
@@ -552,13 +518,7 @@ def inicio(request):
             'categoria_id': categoria_actual.id if categoria_actual else '',
             'orden': orden,
         },
-        'opciones_orden': [
-            ('destacados', 'Destacados'),
-            ('precio_asc', 'Precio: menor a mayor'),
-            ('precio_desc', 'Precio: mayor a menor'),
-            ('recientes', 'Más recientes'),
-            ('nombre', 'Nombre'),
-        ],
+        'opciones_orden': CATALOG_ORDER_OPTIONS,
         'page_obj': page_obj,
         'productos': page_obj.object_list,
         'quienes_somos': QUIENES_SOMOS,
