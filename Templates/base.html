@@ -1309,11 +1309,8 @@
             }
 
             .brand-copy strong {
-                max-width: 150px;
-                overflow: hidden;
-                text-overflow: ellipsis;
                 white-space: nowrap;
-                font-size: 0.86rem;
+                font-size: 0.84rem;
             }
 
             .header-link {
@@ -1337,13 +1334,36 @@
         }
 
         @media (max-width: 360px) {
+            .header-inner {
+                gap: 6px;
+            }
+
+            .brand {
+                gap: 6px;
+                padding: 4px 7px 4px 4px;
+            }
+
+            .brand-mark {
+                width: 32px;
+                height: 32px;
+            }
+
             .brand-copy strong {
-                max-width: 108px;
-                font-size: 0.82rem;
+                font-size: 0.78rem;
+                letter-spacing: -0.01em;
             }
 
             .cart-btn span:first-child {
                 display: none;
+            }
+
+            .cart-btn {
+                padding: 7px 8px;
+            }
+
+            .menu-toggle {
+                width: 32px;
+                height: 32px;
             }
         }
     </style>
