@@ -12,13 +12,13 @@ from productos.models import Producto
 
 
 class Command(BaseCommand):
-    help = "Genera marcos amarillos para productos de la categoria Tematicos e infantiles."
+    help = "Genera marcos amarillos para productos de la categoría Temáticos e infantiles."
 
     def add_arguments(self, parser):
         parser.add_argument(
             "--category",
             default="Temáticos e infantiles",
-            help="Nombre exacto de la categoria que se va a procesar.",
+            help="Nombre exacto de la categoría que se va a procesar.",
         )
         parser.add_argument(
             "--dry-run",
@@ -55,7 +55,7 @@ class Command(BaseCommand):
             .order_by("id")
         )
         if not products:
-            raise CommandError(f"No se encontraron productos en la categoria: {category_name}")
+            raise CommandError(f"No se encontraron productos en la categoría: {category_name}")
 
         logo_path = Path(settings.MEDIA_ROOT) / "branding" / "logo-casita.webp"
         output_dir = Path(settings.MEDIA_ROOT) / "productos" / "tematicos" / "enmarcados"

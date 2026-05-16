@@ -146,7 +146,7 @@ class CatalogoViewsTests(TestCase):
     def test_inicio_muestra_videos_de_elaboracion_activos(self):
         VideoElaboracion.objects.create(
             titulo='Armado de detalle personalizado',
-            descripcion='Proceso real de decoracion y empaque.',
+            descripcion='Proceso real de decoración y empaque.',
             video='procesos/videos/proceso.mp4',
             destacado=True,
         )
@@ -335,7 +335,7 @@ class CatalogoViewsTests(TestCase):
                 "message": "Te recomiendo revisar tematicos e infantiles y luego confirmar por WhatsApp.",
                 "mode": "ai",
                 "configured": True,
-                "actions": [{"label": "Ver catalogo", "href": "/#catalogo"}],
+                "actions": [{"label": "Ver catálogo", "href": "/#catalogo"}],
             },
         ):
             response = self.client.post(

@@ -283,7 +283,7 @@ def enviar_carrito_whatsapp(request):
                 producto = productos.get(int(producto_id))
 
                 if not producto:
-                    mensaje = "Uno de los productos ya no esta disponible."
+                    mensaje = "Uno de los productos ya no está disponible."
                     if _es_ajax(request):
                         return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
                     messages.error(request, mensaje)

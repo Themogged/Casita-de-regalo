@@ -132,7 +132,7 @@ def _extract_output_text(payload):
 def _call_openai_responses_api(message, history):
     api_key = _get_openai_api_key()
     if not api_key:
-        raise AssistantProviderError("OPENAI_API_KEY no esta configurada.")
+        raise AssistantProviderError("OPENAI_API_KEY no está configurada.")
 
     inputs = [
         {
@@ -178,13 +178,13 @@ def _call_openai_responses_api(message, history):
             data = json.loads(response.read().decode("utf-8"))
     except error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
-        raise AssistantProviderError(f"OpenAI respondio con error {exc.code}: {body[:240]}")
+        raise AssistantProviderError(f"OpenAI respondió con error {exc.code}: {body[:240]}")
     except error.URLError as exc:
         raise AssistantProviderError(f"No se pudo conectar con OpenAI: {exc.reason}")
 
     text = _extract_output_text(data)
     if not text:
-        raise AssistantProviderError("La respuesta del modelo llego vacia.")
+        raise AssistantProviderError("La respuesta del modelo llegó vacía.")
     return text
 
 
