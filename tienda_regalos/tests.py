@@ -2,7 +2,10 @@ import os
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
-from django.test import TestCase
+from django.http import HttpResponse
+from django.test import RequestFactory, SimpleTestCase, TestCase
+
+from tienda_regalos.middleware import SecurityHeadersMiddleware
 
 
 class EnsureSuperuserCommandTests(TestCase):
@@ -43,3 +46,27 @@ class EnsureSuperuserCommandTests(TestCase):
 
         user_model = get_user_model()
         self.assertEqual(user_model.objects.count(), 0)
+
+
+class SecurityHeadersMiddlewareTests(SimpleTestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+
+    def _get_response(self, path="/"):
+        middleware = SecurityHeadersMiddleware(lambda request: HttpResponse("ok"))
+        return middleware(self.factory.get(path))
+
+    def test_agrega_headers_defensivos(self):
+        response = self._get_response("/")
+
+        self.assertIn("Content-Security-Policy", response)
+        self.assertEqual(response["X-Content-Type-Options"], "nosniff")
+        self.assertEqual(response["X-Frame-Options"], "DENY")
+        self.assertEqual(response["Origin-Agent-Cluster"], "?1")
+
+    def test_admin_no_debe_quedar_cacheado(self):
+        response = self._get_response("/admin/")
+
+        self.assertEqual(response["Cache-Control"], "no-store, no-cache, must-revalidate, max-age=0")
+        self.assertEqual(response["Pragma"], "no-cache")
+        self.assertEqual(response["Expires"], "0")

@@ -40,7 +40,7 @@ class AdminRateLimitMiddleware:
             attempts = cache.get(cache_key, 0)
             if attempts >= settings.ADMIN_LOGIN_MAX_ATTEMPTS:
                 return HttpResponse(
-                    "Demasiados intentos de inicio de sesion. Espera unos minutos e intenta de nuevo.",
+                    "Demasiados intentos de inicio de sesión. Espera unos minutos e intenta de nuevo.",
                     status=429,
                 )
 
@@ -74,8 +74,17 @@ class SecurityHeadersMiddleware:
         ]
 
         response.setdefault("Content-Security-Policy", "; ".join(csp_parts))
+        response.setdefault("Referrer-Policy", settings.SECURE_REFERRER_POLICY)
+        response.setdefault("X-Content-Type-Options", "nosniff")
+        response.setdefault("X-Frame-Options", "DENY")
         response.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
         response.setdefault("Cross-Origin-Resource-Policy", "same-site")
         response.setdefault("X-Permitted-Cross-Domain-Policies", "none")
+        response.setdefault("Origin-Agent-Cluster", "?1")
+
+        if request.path.startswith("/admin/"):
+            response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+            response["Pragma"] = "no-cache"
+            response["Expires"] = "0"
 
         return response
