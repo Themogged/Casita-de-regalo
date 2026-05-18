@@ -1147,17 +1147,9 @@
     .catalog-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap: 20px;
-        perspective: 1100px;
     }
 
     .product-card {
-        --card-motion-y: 0px;
-        --card-media-y: 0px;
-        --card-motion-scale: 1;
-        --card-motion-depth: 0;
-        --card-motion-tilt: 0deg;
-        --card-motion-shadow: 0 18px 36px rgba(75, 24, 46, 0.05);
-        --card-motion-border: rgba(198, 68, 125, 0.09);
         overflow: hidden;
         display: grid;
         grid-template-rows: auto 1fr;
@@ -1165,46 +1157,12 @@
             radial-gradient(circle at 92% 8%, rgba(255, 228, 238, 0.7), transparent 22%),
             linear-gradient(180deg, rgba(255, 255, 255, 0.995) 0%, rgba(255, 250, 252, 0.995) 100%);
         position: relative;
-        isolation: isolate;
-        transform-origin: center 88%;
-        transform: translate3d(0, var(--card-motion-y), 0) scale(var(--card-motion-scale)) rotateX(var(--card-motion-tilt));
-        transition:
-            transform 160ms ease-out,
-            border-color 180ms ease,
-            box-shadow 180ms ease;
-        box-shadow: var(--card-motion-shadow);
-        border-color: var(--card-motion-border);
-    }
-
-    .product-motion-ready .catalog-grid .product-card {
-        will-change: transform;
-    }
-
-    .product-card::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        background:
-            radial-gradient(circle at 78% 10%, rgba(255, 255, 255, 0.82), transparent 26%),
-            linear-gradient(135deg, rgba(255, 255, 255, 0.32), rgba(255, 221, 235, 0.16));
-        opacity: calc(var(--card-motion-depth, 0) * 0.62);
-        transform: none;
-        pointer-events: none;
-        transition: opacity 180ms ease-out;
     }
 
     .product-card:hover {
-        transform: translate3d(0, calc(var(--card-motion-y, 0px) - 3px), 0) scale(var(--card-motion-scale, 1)) rotateX(var(--card-motion-tilt, 0deg));
+        transform: translateY(-2px);
         border-color: rgba(198, 68, 125, 0.16);
         box-shadow: 0 24px 48px rgba(75, 24, 46, 0.09);
-    }
-
-    .product-card.is-motion-active {
-        background:
-            radial-gradient(circle at 78% 8%, rgba(255, 236, 244, 0.92), transparent 24%),
-            radial-gradient(circle at 18% 96%, rgba(255, 250, 243, 0.9), transparent 28%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.998) 0%, rgba(255, 247, 250, 0.998) 100%);
     }
 
     .product-card::after {
@@ -1238,8 +1196,6 @@
         border-radius: 22px;
         border: 1px solid rgba(255, 255, 255, 0.78);
         pointer-events: none;
-        opacity: calc(0.7 + (var(--card-motion-depth, 0) * 0.3));
-        transition: opacity 180ms ease-out, border-color 180ms ease-out;
     }
 
     .product-ribbon {
@@ -1267,12 +1223,11 @@
         object-fit: contain;
         object-position: center;
         padding: 14px;
-        transform: translate3d(0, var(--card-media-y), 0) scale(calc(1 + (var(--card-motion-depth, 0) * 0.028)));
-        transition: transform 180ms ease-out;
+        transition: transform 220ms ease;
     }
 
     .product-card:hover .product-media img {
-        transform: translate3d(0, var(--card-media-y), 0) scale(calc(1.018 + (var(--card-motion-depth, 0) * 0.028)));
+        transform: scale(1.018);
     }
 
     .product-placeholder {
@@ -1290,11 +1245,6 @@
         display: grid;
         gap: 13px;
         padding: 20px;
-        position: relative;
-        z-index: 1;
-        background:
-            linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 243, 248, calc(var(--card-motion-depth, 0) * 0.45)));
-        transition: background 180ms ease-out;
     }
 
     .product-topline,
@@ -1463,20 +1413,24 @@
         }
 
         .catalog-layout {
-            order: 1;
+            order: 2;
         }
 
         .section-stack {
-            order: 2;
+            display: contents;
+        }
+
+        .section-stack > * {
+            order: 3;
+        }
+
+        .section-stack > .process-video-card {
+            order: 1;
         }
 
         .hero-copy p {
             font-size: 0.98rem;
             line-height: 1.65;
-        }
-
-        .section-stack {
-            gap: 16px;
         }
 
         .hero-copy h1 {
@@ -1658,6 +1612,11 @@
         .process-video-header {
             align-items: flex-start;
             flex-direction: column;
+            gap: 12px;
+        }
+
+        .process-video-header > div {
+            max-width: none;
         }
 
         .process-video-header .btn-secondary {
@@ -1689,6 +1648,18 @@
 
         .process-video-media {
             aspect-ratio: 9 / 12.5;
+        }
+
+        .process-video-copy {
+            gap: 7px;
+            padding: 12px 13px 14px;
+        }
+
+        .process-video-copy p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .instagram-card {
@@ -1962,15 +1933,6 @@
         .btn-disabled {
             min-height: 36px;
             font-size: 0.74rem;
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .product-card,
-        .product-media img {
-            transform: none;
-            transition: none;
-            will-change: auto;
         }
     }
 </style>

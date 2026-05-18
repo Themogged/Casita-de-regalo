@@ -1761,60 +1761,6 @@
             videos.forEach((video) => observer.observe(video));
         };
 
-        let productMotionFrame = null;
-
-        const updateProductCardMotion = () => {
-            productMotionFrame = null;
-            const cards = document.querySelectorAll('.catalog-grid .product-card');
-            if (!cards.length) return;
-
-            const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
-            const centerLine = viewportHeight * 0.54;
-            const isCompact = window.matchMedia('(max-width: 640px)').matches;
-            const motionY = isCompact ? 12 : 18;
-            const motionScale = isCompact ? 0.014 : 0.022;
-
-            cards.forEach((card) => {
-                const rect = card.getBoundingClientRect();
-                if (rect.bottom < -80 || rect.top > viewportHeight + 80) return;
-
-                const cardCenter = rect.top + rect.height / 2;
-                const distance = (cardCenter - centerLine) / centerLine;
-                const clamped = Math.max(-1, Math.min(1, distance));
-                const presence = Math.max(0, 1 - Math.abs(clamped));
-                const y = Math.round(clamped * -motionY);
-                const mediaY = Math.round(clamped * -8);
-                const scale = 1 + presence * motionScale;
-                const tilt = isCompact ? 0 : clamped * -1.4;
-                const shadowY = 18 + Math.round(presence * 14);
-                const shadowBlur = 36 + Math.round(presence * 28);
-                const shadowAlpha = (0.05 + presence * 0.08).toFixed(3);
-                const borderAlpha = (0.09 + presence * 0.14).toFixed(3);
-
-                card.style.setProperty('--card-motion-y', `${y}px`);
-                card.style.setProperty('--card-media-y', `${mediaY}px`);
-                card.style.setProperty('--card-motion-scale', scale.toFixed(3));
-                card.style.setProperty('--card-motion-depth', presence.toFixed(3));
-                card.style.setProperty('--card-motion-tilt', `${tilt.toFixed(2)}deg`);
-                card.style.setProperty('--card-motion-shadow', `0 ${shadowY}px ${shadowBlur}px rgba(75, 24, 46, ${shadowAlpha})`);
-                card.style.setProperty('--card-motion-border', `rgba(198, 68, 125, ${borderAlpha})`);
-                card.classList.toggle('is-motion-active', presence > 0.46);
-            });
-        };
-
-        const requestProductCardMotion = () => {
-            if (productMotionFrame !== null) return;
-            productMotionFrame = window.requestAnimationFrame(updateProductCardMotion);
-        };
-
-        const initProductCardMotion = () => {
-            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReducedMotion) return;
-
-            document.documentElement.classList.add('product-motion-ready');
-            requestProductCardMotion();
-        };
-
         const normalizeAssistantText = (value) => (
             (value || '')
                 .toLowerCase()
@@ -2207,7 +2153,6 @@
                 currentCatalog.replaceWith(nextCatalog);
                 initMobileCatalogPanels(nextCatalog);
                 initCarousels(nextCatalog);
-                initProductCardMotion();
                 if (options.pushState !== false) {
                     window.history.pushState({ catalog: true }, '', url);
                 }
@@ -2360,16 +2305,12 @@
 
         window.addEventListener('resize', () => {
             document.querySelectorAll('.js-carousel').forEach((shell) => syncCarousel(shell));
-            requestProductCardMotion();
         });
-        window.addEventListener('scroll', requestProductCardMotion, { passive: true });
-        window.addEventListener('orientationchange', requestProductCardMotion);
 
         initCarousels();
         initMobileMenu();
         initMobileCatalogPanels();
         initAutoplayVideos();
-        initProductCardMotion();
         initAssistant();
     </script>
 </body>
