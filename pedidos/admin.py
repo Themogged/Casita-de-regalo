@@ -20,6 +20,7 @@ from .reporting import (
     pedido_to_pdf_lines,
     pedido_unidades_totales,
     pedidos_to_pdf_lines,
+    pedidos_to_product_rows,
     pedidos_to_rows,
 )
 
@@ -267,8 +268,8 @@ class PedidoAdmin(admin.ModelAdmin):
         filename = build_filename("pedido", f"#{pedido.pk}", "pdf")
         pdf_bytes = build_pdf_bytes(
             f"Pedido #{pedido.pk}",
-            "Casita de Regalos",
-            pedido_to_pdf_lines(pedido),
+            f"Casita de Regalos - Generado {format_fecha(timezone.localtime(timezone.now()))}",
+            pedido_to_pdf_lines(pedido, include_heading=False),
         )
         response = HttpResponse(pdf_bytes, content_type="application/pdf")
         response["Content-Disposition"] = f'attachment; filename="{filename}"'
@@ -276,11 +277,38 @@ class PedidoAdmin(admin.ModelAdmin):
 
     def _build_excel_response(self, queryset, prefix):
         queryset = queryset.prefetch_related("items")
+        resumen = self._build_resumen(queryset)
         rows = pedidos_to_rows(queryset)
+        product_rows = pedidos_to_product_rows(queryset)
+        ticket_promedio = (
+            resumen["ventas_totales"] / resumen["pedidos_total"]
+            if resumen["pedidos_total"]
+            else Decimal("0")
+        )
+        title = "Pedidos seleccionados" if prefix == "pedidos-seleccion" else "Reporte de pedidos"
         excel_bytes = build_excel_bytes(
             "Pedidos",
             ["Pedido", "Fecha", "Estado", "Unidades", "Total COP", "Items"],
             rows,
+            title=title,
+            subtitle=f"Casita de Regalos - Generado {format_fecha(timezone.localtime(timezone.now()))}",
+            summary=[
+                ("Pedidos", resumen["pedidos_total"]),
+                ("Ventas", resumen["ventas_totales"]),
+                ("Unidades", resumen["unidades_totales"]),
+                ("Ticket promedio", ticket_promedio),
+            ],
+            status_breakdown=resumen["estado_totales"],
+            top_items=self._top_productos(queryset),
+            item_headers=[
+                "Producto",
+                "Unidades",
+                "Ingresos COP",
+                "Precio promedio COP",
+                "Pedidos",
+                "% ventas",
+            ],
+            item_rows=product_rows,
         )
         filename = build_filename(prefix, timezone.localdate().isoformat(), "xlsx")
         response = HttpResponse(
@@ -296,16 +324,46 @@ class PedidoAdmin(admin.ModelAdmin):
         queryset = queryset.prefetch_related("items")
         resumen = self._build_resumen(queryset)
         lines = [
+            (13, "Resumen comercial"),
             f"Pedidos encontrados: {resumen['pedidos_total']}",
             f"Ventas totales: {format_cop(resumen['ventas_totales'])}",
             f"Unidades vendidas: {resumen['unidades_totales']}",
             "",
+            (13, "Estado de pedidos"),
         ]
+        lines.extend(
+            f"- {estado['label']}: {estado['count']}"
+            for estado in resumen["estado_totales"]
+        )
+        lines.extend(
+            [
+                "",
+                (13, "Top productos"),
+            ]
+        )
+        top_productos = self._top_productos(queryset)
+        if top_productos:
+            lines.extend(
+                (
+                    f"- {producto['producto_nombre']}: {producto['unidades']} unidades, "
+                    f"{format_cop(producto['ingresos'])}"
+                )
+                for producto in top_productos
+            )
+        else:
+            lines.append("Sin productos para mostrar.")
+
+        lines.extend(
+            [
+                "",
+                (13, "Detalle de pedidos"),
+            ]
+        )
         lines.extend(pedidos_to_pdf_lines(queryset))
 
         pdf_bytes = build_pdf_bytes(
             "Reporte de pedidos",
-            "Casita de Regalos",
+            f"Casita de Regalos - Generado {format_fecha(timezone.localtime(timezone.now()))}",
             lines,
         )
         filename = build_filename(prefix, timezone.localdate().isoformat(), "pdf")
@@ -366,8 +424,13 @@ class PedidoAdmin(admin.ModelAdmin):
         )
 
         max_unidades = max((producto["unidades"] for producto in top_productos), default=1)
+        ingresos_totales = sum(
+            (producto["ingresos"] or Decimal("0")) for producto in top_productos
+        ) or Decimal("0")
         for producto in top_productos:
             producto["barra"] = max(12, round((producto["unidades"] / max_unidades) * 100))
+            ingresos = producto["ingresos"] or Decimal("0")
+            producto["participacion"] = ingresos / ingresos_totales if ingresos_totales else Decimal("0")
         return top_productos
 
     def _build_export_url(self, name, query_string):

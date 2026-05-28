@@ -18,27 +18,29 @@
     {% block structured_data %}{% endblock %}
     <style>
         :root {
-            --rose-25: #fffaf9;
-            --rose-50: #fff1f5;
-            --rose-100: #ffdce8;
-            --rose-200: #ffc8da;
-            --rose-300: #f5abc6;
-            --rose-400: #eb80a8;
-            --rose-500: #db5b92;
-            --rose-600: #c6447d;
-            --rose-700: #96275c;
+            --rose-25: #fff8fa;
+            --rose-50: #ffeaf2;
+            --rose-100: #ffd3e3;
+            --rose-200: #ffb2cf;
+            --rose-300: #ff82b1;
+            --rose-400: #f45898;
+            --rose-500: #e73683;
+            --rose-600: #d7266d;
+            --rose-700: #841244;
+            --coral-500: #ff6b4a;
+            --coral-600: #ea5034;
             --mint-100: #edf8f4;
             --mint-300: #c8e7db;
             --sage-100: #edf4ee;
             --sand-100: #fff6ed;
-            --ink-900: #5f1c3d;
-            --ink-700: #8a5a74;
-            --ink-500: #b08ba0;
+            --ink-900: #3b1728;
+            --ink-700: #735064;
+            --ink-500: #a17e91;
             --white: #ffffff;
-            --hero-text: #5f1c3d;
-            --hero-text-soft: rgba(95, 28, 61, 0.78);
-            --shadow-lg: 0 34px 80px rgba(94, 35, 63, 0.12);
-            --shadow-md: 0 20px 48px rgba(94, 35, 63, 0.08);
+            --hero-text: #3b1728;
+            --hero-text-soft: rgba(59, 23, 40, 0.78);
+            --shadow-lg: 0 34px 80px rgba(94, 20, 58, 0.14);
+            --shadow-md: 0 20px 48px rgba(94, 20, 58, 0.09);
             --radius-xl: 32px;
             --max-width: 1240px;
             --soft-line: rgba(198, 68, 125, 0.12);
@@ -120,9 +122,9 @@
             z-index: 30;
             background:
                 radial-gradient(circle at 12% 20%, rgba(255, 228, 238, 0.72), transparent 24%),
-                linear-gradient(180deg, rgba(255, 253, 252, 0.94) 0%, rgba(255, 248, 251, 0.9) 100%);
-            border-bottom: 1px solid rgba(198, 68, 125, 0.09);
-            box-shadow: 0 18px 46px rgba(92, 33, 62, 0.07);
+                linear-gradient(180deg, rgba(255, 253, 252, 0.97) 0%, rgba(255, 243, 248, 0.93) 100%);
+            border-bottom: 1px solid rgba(215, 38, 109, 0.12);
+            box-shadow: 0 18px 46px rgba(92, 20, 58, 0.09);
             backdrop-filter: blur(18px);
         }
 
@@ -133,7 +135,7 @@
             right: 0;
             bottom: -1px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(198, 68, 125, 0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(215, 38, 109, 0.32), rgba(255, 107, 74, 0.24), transparent);
             pointer-events: none;
         }
 
@@ -247,14 +249,14 @@
             border-radius: 999px;
             background:
                 radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.26), transparent 28%),
-                linear-gradient(135deg, #d84d88, #b83167 68%, #8d2154 100%);
+                linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 48%, var(--rose-700) 100%);
             color: var(--white);
             font-size: 0.92rem;
             font-weight: 900;
             flex-shrink: 0;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.25),
-                0 16px 28px rgba(185, 45, 99, 0.2);
+                0 16px 28px rgba(215, 38, 109, 0.24);
         }
 
         .cart-count {
@@ -412,8 +414,8 @@
         }
 
         .category-pill:hover {
-            background: linear-gradient(135deg, #fff9fb, #fff0f6);
-            border-color: rgba(198, 68, 125, 0.18);
+            background: linear-gradient(135deg, #fff8fb, #ffe8f0);
+            border-color: rgba(215, 38, 109, 0.22);
             color: var(--rose-700);
         }
 
@@ -465,10 +467,10 @@
         .page-card {
             background:
                 linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 252, 253, 0.98) 100%);
-            border: 1px solid rgba(198, 68, 125, 0.08);
+            border: 1px solid rgba(215, 38, 109, 0.1);
             border-radius: var(--radius-xl);
             box-shadow:
-                0 20px 40px rgba(77, 26, 50, 0.05),
+                0 20px 40px rgba(77, 20, 50, 0.065),
                 inset 0 1px 0 rgba(255, 255, 255, 0.75);
             overflow: hidden;
         }
@@ -797,9 +799,9 @@
             min-height: 58px;
             padding: 0 20px;
             border-radius: 999px;
-            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            background: linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 58%, var(--rose-700) 100%);
             color: #fff;
-            box-shadow: 0 18px 38px rgba(145, 38, 86, 0.28);
+            box-shadow: 0 18px 38px rgba(215, 38, 109, 0.28);
             cursor: pointer;
         }
 
@@ -836,7 +838,7 @@
             padding: 18px 18px 14px;
             background:
                 radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 28%),
-                linear-gradient(135deg, #7a244a 0%, #5f1c3d 60%, #45152d 100%);
+                linear-gradient(135deg, #8d1b4e 0%, var(--rose-700) 58%, #4b102b 100%);
             color: #fff8fb;
         }
 
@@ -961,7 +963,7 @@
         }
 
         .assistant-message.is-user .assistant-bubble {
-            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            background: linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 58%, var(--rose-700) 100%);
             color: #fff;
         }
 
@@ -1018,7 +1020,7 @@
             min-width: 52px;
             min-height: 48px;
             border-radius: 16px;
-            background: linear-gradient(135deg, #d84d88, #b93167 68%, #96275c 100%);
+            background: linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 58%, var(--rose-700) 100%);
             color: #fff;
             cursor: pointer;
             box-shadow: 0 12px 24px rgba(145, 38, 86, 0.18);
@@ -1458,7 +1460,7 @@
             <div class="footer-card">
                 <h4>Redes</h4>
                 <div class="social-links">
-                    <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" target="_blank" rel="noopener noreferrer external" class="social-link instagram" aria-label="Abrir Instagram de Casita de Regalos" title="Instagram" data-track-click="instagram" data-track-label="footer_instagram">
+                    <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" target="_blank" rel="noopener noreferrer external" class="social-link instagram" aria-label="Abrir Instagram de Casita de Regalos" title="Instagram">
                         <span class="social-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
                                 <path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2Zm0 1.75A4 4 0 0 0 3.75 7.75v8.5a4 4 0 0 0 4 4h8.5a4 4 0 0 0 4-4v-8.5a4 4 0 0 0-4-4h-8.5Zm8.88 1.5a1.12 1.12 0 1 1 0 2.24 1.12 1.12 0 0 1 0-2.24ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.75A3.25 3.25 0 1 0 12 15.25 3.25 3.25 0 0 0 12 8.75Z"/>
@@ -1466,7 +1468,7 @@
                         </span>
                         <span>Instagram</span>
                     </a>
-                    <a href="{{ whatsapp_general_info_url }}" target="_blank" rel="noopener noreferrer" class="social-link whatsapp" data-track-click="whatsapp" data-track-label="footer_whatsapp">
+                    <a href="{{ whatsapp_general_info_url }}" target="_blank" rel="noopener noreferrer" class="social-link whatsapp">
                         <span class="social-icon" aria-hidden="true">
                             <svg viewBox="0 0 24 24">
                                 <path d="M12.04 2A9.93 9.93 0 0 0 3.5 17.07L2 22l5.08-1.46A9.96 9.96 0 1 0 12.04 2Zm5.82 14.06c-.25.7-1.46 1.34-2.02 1.4-.52.05-1.18.08-1.9-.15-.44-.14-1.02-.33-1.76-.65-3.08-1.34-5.08-4.46-5.24-4.67-.16-.22-1.25-1.66-1.25-3.16 0-1.5.79-2.23 1.07-2.54.28-.3.61-.38.82-.38.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.61.85 2.11.92 2.27.07.16.12.35.02.57-.09.22-.14.35-.28.54-.14.19-.29.42-.41.56-.14.16-.28.34-.12.66.17.31.73 1.2 1.56 1.95 1.08.96 1.99 1.26 2.3 1.4.31.13.49.11.68-.06.19-.18.79-.92 1-1.24.21-.31.42-.26.71-.16.29.1 1.84.87 2.15 1.03.31.16.52.23.59.36.07.13.07.75-.18 1.45Z"/>
@@ -1490,8 +1492,6 @@
         rel="noopener noreferrer"
         aria-label="Pedir asesoría por WhatsApp"
         title="Pedir asesoría por WhatsApp"
-        data-track-click="whatsapp"
-        data-track-label="floating_whatsapp"
     >
         <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12.04 2A9.93 9.93 0 0 0 3.5 17.07L2 22l5.08-1.46A9.96 9.96 0 1 0 12.04 2Zm5.82 14.06c-.25.7-1.46 1.34-2.02 1.4-.52.05-1.18.08-1.9-.15-.44-.14-1.02-.33-1.76-.65-3.08-1.34-5.08-4.46-5.24-4.67-.16-.22-1.25-1.66-1.25-3.16 0-1.5.79-2.23 1.07-2.54.28-.3.61-.38.82-.38.2 0 .41 0 .59.01.19.01.44-.07.69.53.25.61.85 2.11.92 2.27.07.16.12.35.02.57-.09.22-.14.35-.28.54-.14.19-.29.42-.41.56-.14.16-.28.34-.12.66.17.31.73 1.2 1.56 1.95 1.08.96 1.99 1.26 2.3 1.4.31.13.49.11.68-.06.19-.18.79-.92 1-1.24.21-.31.42-.26.71-.16.29.1 1.84.87 2.15 1.03.31.16.52.23.59.36.07.13.07.75-.18 1.45Z"/>
@@ -1617,38 +1617,6 @@
                 node.textContent = value;
             });
         };
-
-        const trackClickEndpoint = "{% url 'registrar_interaccion' %}";
-        const getGlobalCsrfToken = () => document.querySelector('meta[name="csrf-token"]')?.content || '';
-
-        const trackClientClick = (node) => {
-            if (!node || !trackClickEndpoint) return;
-
-            const payload = {
-                tipo: node.dataset.trackClick || 'otro',
-                etiqueta: node.dataset.trackLabel || node.textContent.trim().slice(0, 80),
-                destino: node.href || '',
-                pagina: window.location.pathname,
-            };
-
-            fetch(trackClickEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getGlobalCsrfToken(),
-                    'X-Requested-With': 'XMLHttpRequest',
-                },
-                credentials: 'same-origin',
-                keepalive: true,
-                body: JSON.stringify(payload),
-            }).catch(() => {});
-        };
-
-        document.addEventListener('click', (event) => {
-            const trackedNode = event.target.closest('[data-track-click]');
-            if (!trackedNode) return;
-            trackClientClick(trackedNode);
-        }, { capture: true });
 
         const syncCarousel = (shell) => {
             const track = shell.querySelector('.js-carousel-track');

@@ -5,6 +5,7 @@ from io import StringIO
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from django.contrib.admin.sites import AdminSite
 from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase, TestCase, override_settings
@@ -12,8 +13,9 @@ from django.urls import reverse
 from PIL import Image
 from unittest import mock
 
+from .admin import CategoriaAdmin, GaleriaProductoFilter, ImagenProductoFilter, ProductoAdmin, VideoElaboracionAdmin
 from .image_frames import generate_yellow_child_frame, slugify_filename
-from .models import Categoria, InteraccionCliente, Producto, ProductoImagen, VideoElaboracion
+from .models import Categoria, Producto, ProductoImagen, VideoElaboracion
 from .whatsapp import build_whatsapp_url
 
 
@@ -65,6 +67,151 @@ class WhatsappUrlTests(TestCase):
             parse_qs(parsed.query)['text'][0],
             'Hola, quiero asesoría para una ocasión especial.',
         )
+
+
+class CatalogoAdminTests(TestCase):
+    def setUp(self):
+        self.site = AdminSite()
+        self.categoria = Categoria.objects.create(nombre='Regalos')
+        self.producto = Producto.objects.create(
+            nombre='Caja sorpresa',
+            descripcion='Detalle personalizado',
+            precio='45000.00',
+            stock=8,
+            categoria=self.categoria,
+            destacado=True,
+            imagen='productos/caja-sorpresa.jpeg',
+        )
+
+    def test_producto_admin_exporta_productos_a_csv(self):
+        producto_admin = ProductoAdmin(Producto, self.site)
+
+        response = producto_admin.exportar_productos_csv(
+            None,
+            Producto.objects.filter(pk=self.producto.pk),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'text/csv; charset=utf-8')
+        content = response.content.decode('utf-8')
+        self.assertIn('Caja sorpresa', content)
+        self.assertIn('Regalos', content)
+        self.assertIn('Estado', content)
+        self.assertIn('Imagen principal', content)
+        self.assertIn('Imagenes galeria', content)
+        self.assertIn('disponible', content)
+
+    def test_categoria_admin_muestra_resumen_operativo(self):
+        Producto.objects.create(
+            nombre='Detalle agotado',
+            descripcion='Sin stock',
+            precio='22000.00',
+            stock=0,
+            categoria=self.categoria,
+        )
+        categoria_admin = CategoriaAdmin(Categoria, self.site)
+
+        categoria = categoria_admin.get_queryset(None).get(pk=self.categoria.pk)
+
+        self.assertIn('casita-admin-count', str(categoria_admin.total_productos(categoria)))
+        self.assertIn('is-success', str(categoria_admin.productos_disponibles(categoria)))
+        self.assertIn('is-danger', str(categoria_admin.productos_agotados(categoria)))
+
+    def test_producto_admin_muestra_estado_y_galeria_con_badges(self):
+        ProductoImagen.objects.create(
+            producto=self.producto,
+            imagen='productos/galeria/caja-extra.jpeg',
+            titulo='Detalle lateral',
+        )
+        producto_admin = ProductoAdmin(Producto, self.site)
+
+        producto = producto_admin.get_queryset(None).get(pk=self.producto.pk)
+
+        self.assertIn('casita-admin-badge is-success', str(producto_admin.estado_publico(producto)))
+        self.assertIn('Principal + 1', str(producto_admin.galeria_estado(producto)))
+
+    def test_admin_incluye_enlaces_publicos_de_catalogo(self):
+        producto_admin = ProductoAdmin(Producto, self.site)
+        categoria_admin = CategoriaAdmin(Categoria, self.site)
+
+        self.assertIn(
+            reverse('detalle_producto', args=[self.producto.pk]),
+            str(producto_admin.ver_en_tienda(self.producto)),
+        )
+        self.assertIn(
+            f"{reverse('inicio')}?categoria={self.categoria.pk}#catalogo",
+            str(categoria_admin.ver_catalogo(self.categoria)),
+        )
+
+    def test_admin_filtra_productos_sin_imagen(self):
+        producto_sin_imagen = Producto.objects.create(
+            nombre='Detalle sin foto',
+            descripcion='Pendiente de imagen',
+            precio='25000.00',
+            stock=4,
+            categoria=self.categoria,
+        )
+        producto_admin = ProductoAdmin(Producto, self.site)
+        filtro = ImagenProductoFilter(
+            None,
+            {'imagen_estado': 'sin_imagen'},
+            Producto,
+            producto_admin,
+        )
+        filtro.value = mock.Mock(return_value='sin_imagen')
+
+        resultados = filtro.queryset(None, Producto.objects.all())
+
+        self.assertIn(producto_sin_imagen, resultados)
+        self.assertNotIn(self.producto, resultados)
+
+    def test_admin_filtra_productos_sin_galeria(self):
+        ProductoImagen.objects.create(
+            producto=self.producto,
+            imagen='productos/galeria/caja-extra.jpeg',
+            titulo='Detalle lateral',
+        )
+        producto_sin_galeria = Producto.objects.create(
+            nombre='Detalle sin galeria',
+            descripcion='Producto con imagen principal solamente',
+            precio='28000.00',
+            stock=5,
+            categoria=self.categoria,
+            imagen='productos/detalle-sin-galeria.jpeg',
+        )
+        producto_admin = ProductoAdmin(Producto, self.site)
+        filtro = GaleriaProductoFilter(
+            None,
+            {'galeria_estado': 'sin_galeria'},
+            Producto,
+            producto_admin,
+        )
+        filtro.value = mock.Mock(return_value='sin_galeria')
+
+        resultados = filtro.queryset(None, Producto.objects.all())
+
+        self.assertIn(producto_sin_galeria, resultados)
+        self.assertNotIn(self.producto, resultados)
+
+    def test_video_admin_acciones_masivas(self):
+        video = VideoElaboracion.objects.create(
+            titulo='Armado de prueba',
+            descripcion='Proceso',
+            video='procesos/videos/prueba.mp4',
+            activo=False,
+            destacado=False,
+        )
+        video_admin = VideoElaboracionAdmin(VideoElaboracion, self.site)
+        video_admin.message_user = mock.Mock()
+
+        video_admin.activar_videos(None, VideoElaboracion.objects.filter(pk=video.pk))
+        video_admin.marcar_destacados(None, VideoElaboracion.objects.filter(pk=video.pk))
+
+        video.refresh_from_db()
+        self.assertTrue(video.activo)
+        self.assertTrue(video.destacado)
+        self.assertIn('Activo', str(video_admin.estado_publicacion(video)))
+        self.assertIn('MP4', str(video_admin.archivo_video(video)))
 
 
 class CatalogoViewsTests(TestCase):
@@ -134,7 +281,8 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Elige el detalle ideal')
         self.assertContains(response, 'hero-product-card')
-        self.assertContains(response, 'data-track-click="instagram"')
+        self.assertNotContains(response, 'data-track-click')
+        self.assertNotContains(response, 'registrar_interaccion')
 
     @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
     def test_inicio_usa_numero_whatsapp_configurado(self):
@@ -206,29 +354,6 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(sitemap, reverse('como_comprar'))
         self.assertContains(sitemap, reverse('preguntas_frecuentes'))
         self.assertContains(sitemap, reverse('detalle_producto', args=[self.producto_principal.id]))
-
-    def test_registra_interaccion_de_cliente(self):
-        response = self.client.post(
-            reverse('registrar_interaccion'),
-            data=json.dumps(
-                {
-                    'tipo': 'whatsapp',
-                    'etiqueta': 'hero_whatsapp',
-                    'destino': 'https://wa.me/573116262155',
-                    'pagina': '/',
-                }
-            ),
-            content_type='application/json',
-            secure=True,
-            HTTP_USER_AGENT='CatalogoTest/1.0',
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['ok'])
-        evento = InteraccionCliente.objects.get()
-        self.assertEqual(evento.tipo, 'whatsapp')
-        self.assertEqual(evento.etiqueta, 'hero_whatsapp')
-        self.assertEqual(evento.pagina, '/')
 
     def test_catalogo_filtra_por_categoria(self):
         response = self.client.get(reverse('inicio'), {'categoria': self.categoria_flores.id}, secure=True)

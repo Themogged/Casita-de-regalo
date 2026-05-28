@@ -645,7 +645,7 @@
             {% else %}
                 <span class="btn-disabled">Producto agotado</span>
             {% endif %}
-            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="detalle_producto_whatsapp">Quiero cotizar</a>
+            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
         </div>
 
         <div class="detail-note">
@@ -704,7 +704,7 @@
         {% else %}
             <span class="btn-disabled">Agotado</span>
         {% endif %}
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer" data-track-click="whatsapp" data-track-label="detalle_mobile_whatsapp">WhatsApp</a>
+        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </div>
 </div>
 <script>
