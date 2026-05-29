@@ -301,6 +301,8 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Persona')
         self.assertContains(response, 'Arma tu regalo a medida en una vista dedicada')
         self.assertContains(response, reverse('disena_regalo'))
+        self.assertContains(response, 'floating-designer')
+        self.assertContains(response, 'aria-label="Armar regalo a medida"')
         self.assertNotContains(response, 'Beta sin API')
         self.assertNotContains(response, 'data-gift-designer')
         self.assertContains(response, 'Agregar a mi cotización')
