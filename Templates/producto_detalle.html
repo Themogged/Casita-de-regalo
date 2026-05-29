@@ -232,6 +232,37 @@
         margin-bottom: 22px;
     }
 
+    .detail-selling-points {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        margin: 20px 0 24px;
+    }
+
+    .detail-selling-point {
+        display: grid;
+        gap: 6px;
+        min-height: 106px;
+        padding: 15px;
+        border-radius: 22px;
+        background: linear-gradient(135deg, rgba(255, 244, 247, 0.92), rgba(255, 252, 247, 0.92));
+        border: 1px solid rgba(198, 68, 125, 0.09);
+    }
+
+    .detail-selling-point span {
+        color: var(--rose-700);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+    }
+
+    .detail-selling-point strong {
+        color: var(--ink-900);
+        font-size: 0.94rem;
+        line-height: 1.42;
+    }
+
     .detail-price {
         font-size: 2.35rem;
         color: var(--rose-700);
@@ -425,6 +456,17 @@
             grid-template-columns: 1fr;
         }
 
+        .detail-selling-points {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .detail-selling-point {
+            min-height: auto;
+            padding: 14px;
+            border-radius: 18px;
+        }
+
         .detail-card,
         .related-card {
             padding: 20px;
@@ -537,8 +579,8 @@
 
     <h1>{{ producto.nombre }}</h1>
     <p>
-        Explora su presentación, revisa qué incluye y decide si quieres guardarlo para cotizar o
-        cotizarlo por WhatsApp con un acabado mucho más personalizado.
+        Explora su presentaci&oacute;n, revisa qu&eacute; incluye y agr&eacute;galo a tu cotizaci&oacute;n
+        para confirmar colores, mensaje, entrega y disponibilidad por WhatsApp.
     </p>
 
     {% if producto_anterior or producto_siguiente %}
@@ -621,6 +663,25 @@
             {% endif %}
         </div>
 
+        <div class="detail-selling-points" aria-label="Información clave del producto">
+            <div class="detail-selling-point">
+                <span>Incluye</span>
+                <strong>La referencia base y los elementos descritos en la ficha del producto.</strong>
+            </div>
+            <div class="detail-selling-point">
+                <span>Personalizable</span>
+                <strong>Colores, mensaje, tem&aacute;tica y acabados se validan antes de elaborar.</strong>
+            </div>
+            <div class="detail-selling-point">
+                <span>Tiempo recomendado</span>
+                <strong>Reserva con 1 a 2 d&iacute;as de anticipaci&oacute;n para asegurar disponibilidad.</strong>
+            </div>
+            <div class="detail-selling-point">
+                <span>Entrega</span>
+                <strong>Coordinamos zona, horario y domicilio directamente por WhatsApp.</strong>
+            </div>
+        </div>
+
         <div class="detail-meta">
             <div class="detail-meta-row">
                 <span>Disponibilidad</span>
@@ -640,12 +701,12 @@
             {% if producto.disponible %}
                 <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                     {% csrf_token %}
-                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar para cotizar</button>
+                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar a mi cotizaci&oacute;n</button>
                 </form>
             {% else %}
                 <span class="btn-disabled">Producto agotado</span>
             {% endif %}
-            <a href="https://wa.me/573116262155?text=Hola%2C%20quiero%20cotizar%20el%20producto%20%22{{ producto.nombre|urlencode }}%22.%20%C2%BFEst%C3%A1%20disponible%3F" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
+            <a href="{{ producto_whatsapp_url }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar por WhatsApp</a>
         </div>
 
         <div class="detail-note">
@@ -699,12 +760,12 @@
         {% if producto.disponible %}
             <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                 {% csrf_token %}
-                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar</button>
+                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar a lista</button>
             </form>
         {% else %}
             <span class="btn-disabled">Agotado</span>
         {% endif %}
-        <a href="https://wa.me/573116262155?text=Hola%20quiero%20cotizar%20la%20referencia%20{{ producto.nombre|urlencode }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a href="{{ producto_whatsapp_url }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </div>
 </div>
 <script>

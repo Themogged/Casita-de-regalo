@@ -1384,7 +1384,7 @@
 
             <div class="header-actions">
                 <a href="{% url 'ver_carrito' %}" class="cart-btn">
-                    <span>Carrito</span>
+                    <span>Lista</span>
                     <span class="cart-count">{{ carrito_total }}</span>
                 </a>
                 <button class="menu-toggle" type="button" aria-label="Abrir men&uacute;" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
@@ -1436,7 +1436,7 @@
             <div class="footer-card">
                 <h4>Explorar</h4>
                 <a href="{% url 'inicio' %}#catalogo">Ver cat&aacute;logo</a>
-                <a href="{% url 'ver_carrito' %}">Ir al carrito</a>
+                <a href="{% url 'ver_carrito' %}">Lista para cotizar</a>
             </div>
 
             <div class="footer-card">
@@ -1898,7 +1898,7 @@
                     text: 'El proceso es simple: exploras el catálogo, eliges una referencia, la personalizas si quieres y luego confirmas todo por WhatsApp.',
                     actions: [
                         { label: 'Ver cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
-                        { label: 'Ir al carrito', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
+                        { label: 'Ver mi lista', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
                     ],
                 };
             }
@@ -1935,9 +1935,9 @@
 
             if (input.includes('carrito') || input.includes('agregar')) {
                 return {
-                    text: 'Puedes guardar detalles desde el catálogo o desde la ficha del producto. Luego revisas tu selección y finalizas por WhatsApp.',
+                    text: 'Puedes guardar detalles desde el catálogo o desde la ficha del producto. Luego revisas tu lista para cotizar y confirmas por WhatsApp.',
                     actions: [
-                        { label: 'Ir al carrito', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
+                        { label: 'Ver mi lista', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
                         { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
                     ],
                 };

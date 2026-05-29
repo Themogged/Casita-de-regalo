@@ -70,14 +70,24 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'js-whatsapp-checkout-form')
         self.assertContains(response, 'js-whatsapp-checkout-button')
+        self.assertContains(response, 'Lista para cotizar')
+        self.assertContains(response, 'Datos para personalizar')
         self.assertContains(response, 'name="ocasion"')
         self.assertContains(response, 'name="para_quien"')
         self.assertContains(response, 'name="mensaje_tarjeta"')
         self.assertContains(response, 'name="detalle_extra"')
-        self.assertContains(response, 'Confirmar por WhatsApp')
+        self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, 'mobile-checkout-panel')
         self.assertNotContains(response, 'Cotizaci&oacute;n premium')
         self.assertNotContains(response, 'brief')
+
+    def test_carrito_vacio_muestra_lista_para_cotizar(self):
+        response = self.client.get(reverse('ver_carrito'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'A&uacute;n no has elegido tu sorpresa')
+        self.assertContains(response, 'Explorar cat&aacute;logo')
+        self.assertNotContains(response, 'Tu carrito est&aacute; vac&iacute;o')
 
     def test_agregar_por_ajax_responde_sin_redireccion(self):
         response = self.client.post(

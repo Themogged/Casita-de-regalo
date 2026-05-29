@@ -11,6 +11,7 @@ from .selectors import (
     get_featured_products,
     paginate_products,
 )
+from .whatsapp import build_whatsapp_url
 
 
 QUIENES_SOMOS = {
@@ -37,7 +38,7 @@ PILARES_SERVICIO = [
         'etiqueta': 'Atención directa',
     },
     {
-        'titulo': 'Experiencia local premium',
+        'titulo': 'Experiencia local cuidada',
         'descripcion': 'Servicio pensado para Bello, Medellín y fechas especiales con presentación impecable.',
         'etiqueta': 'Cobertura cercana',
     },
@@ -102,12 +103,12 @@ COLECCIONES_REFERENCIA = [
         'mensaje': 'Hola, quiero cotizar una referencia de cumpleaños o desayuno sorpresa.',
         'items': [
             {
-                'titulo': 'Cumple azul premium',
+                'titulo': 'Cumple azul en madera',
                 'etiqueta': 'Cumpleaños',
                 'precio': '$81.000 COP',
                 'imagen': 'referencias/referencia-03.png',
                 'descripcion': 'Referencia con caja en madera, globos, mix de fruta, waffles, jugo y decoración para celebrar con tono elegante.',
-                'mensaje': 'Hola, quiero cotizar la referencia Cumple azul premium.',
+                'mensaje': 'Hola, quiero cotizar la referencia Cumple azul en madera.',
             },
             {
                 'titulo': 'Desayuno globos pastel',
@@ -135,10 +136,10 @@ COLECCIONES_REFERENCIA = [
             },
             {
                 'titulo': 'Black and gold deluxe',
-                'etiqueta': 'Premium',
+                'etiqueta': 'Selección especial',
                 'precio': '$94.000 COP',
                 'imagen': 'referencias/referencia-09.png',
-                'descripcion': 'Detalle premium con globos negro y dorado, fruta, cereal y presentación más sofisticada.',
+                'descripcion': 'Detalle con globos negro y dorado, fruta, cereal y una presentación más sofisticada.',
                 'mensaje': 'Hola, quiero cotizar la referencia Black and gold deluxe.',
             },
             {
@@ -200,12 +201,12 @@ COLECCIONES_REFERENCIA = [
                 'mensaje': 'Hola, quiero cotizar la referencia Buenos días con amor.',
             },
             {
-                'titulo': 'Caja corazón premium',
-                'etiqueta': 'Romántico premium',
+                'titulo': 'Caja corazón especial',
+                'etiqueta': 'Romántico',
                 'precio': '$122.000 COP',
                 'imagen': 'referencias/referencia-19.png',
-                'descripcion': 'Caja fina en forma de corazón con sándwich, jugo, rosas, chocolates o peluche para regalos premium.',
-                'mensaje': 'Hola, quiero cotizar la referencia Caja corazón premium.',
+                'descripcion': 'Caja fina en forma de corazón con sándwich, jugo, rosas, chocolates o peluche para un detalle romántico.',
+                'mensaje': 'Hola, quiero cotizar la referencia Caja corazón especial.',
             },
         ],
     },
@@ -244,20 +245,20 @@ COLECCIONES_REFERENCIA = [
         ],
     },
     {
-        'titulo': 'Frutales, flores y momentos premium',
+        'titulo': 'Frutales, flores y momentos especiales',
         'descripcion': (
-            'Referencias con más impacto visual para fechas premium, regalos gourmet, flores, fresas y '
+            'Referencias con más impacto visual para fechas especiales, regalos gourmet, flores, fresas y '
             'combinaciones memorables.'
         ),
-        'mensaje': 'Hola, quiero cotizar una referencia premium, frutal o con flores.',
+        'mensaje': 'Hola, quiero cotizar una referencia frutal, con flores o gourmet.',
         'items': [
             {
-                'titulo': 'Rosas y fresas premium',
-                'etiqueta': 'Premium floral',
+                'titulo': 'Rosas y fresas especiales',
+                'etiqueta': 'Flores y fresas',
                 'precio': '$173.000 COP',
                 'imagen': 'referencias/referencia-13.png',
-                'descripcion': 'Propuestas con rosas, fresas cubiertas, licor y presentaciones premium para sorprender con alto impacto.',
-                'mensaje': 'Hola, quiero cotizar la referencia Rosas y fresas premium.',
+                'descripcion': 'Propuestas con rosas, fresas cubiertas, licor y presentaciones cuidadas para sorprender con alto impacto.',
+                'mensaje': 'Hola, quiero cotizar la referencia Rosas y fresas especiales.',
             },
             {
                 'titulo': 'Bunny y corazón frutal',
@@ -546,7 +547,7 @@ def inicio(request):
     videos_elaboracion = get_active_process_videos()
 
     resumen = {
-        'total_productos': productos.count(),
+        'total_productos': Producto.objects.count(),
         'categorias': categorias.count(),
     }
 
@@ -635,6 +636,12 @@ def detalle_producto(request, producto_id):
         155,
     )
     product_og_image_url = request.build_absolute_uri(producto.imagen.url) if producto.imagen else ''
+    producto_whatsapp_url = build_whatsapp_url(
+        (
+            f'Hola, quiero cotizar la referencia "{producto.nombre}". '
+            'Me gustaría confirmar disponibilidad, personalización y entrega.'
+        )
+    )
 
     return render(
         request,
@@ -650,6 +657,7 @@ def detalle_producto(request, producto_id):
             'product_meta_description': product_meta_description,
             'product_og_image_url': product_og_image_url,
             'product_schema_json': _build_product_schema(request, producto),
+            'producto_whatsapp_url': producto_whatsapp_url,
         },
     )
 

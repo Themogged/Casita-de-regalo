@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load moneda media_optimization %}
 
-{% block title %}Carrito | Casita de Regalos{% endblock %}
+{% block title %}Lista para cotizar | Casita de Regalos{% endblock %}
 
 {% block extra_head %}
 <style>
@@ -1106,18 +1106,18 @@
 <section class="hero-card">
     <div class="cart-hero">
         <div class="cart-hero__copy">
-            <span class="cart-hero__eyebrow">Resumen de pedido</span>
-            <h1>Revisa tu pedido</h1>
+            <span class="cart-hero__eyebrow">Lista para cotizar</span>
+            <h1>Revisa tu lista antes de confirmar</h1>
             <p>
-                Verifica productos y cantidades. Al continuar, abriremos WhatsApp con el resumen
-                para confirmar disponibilidad, personalizaci&oacute;n, entrega y valor final.
+                Organiza las referencias que te gustan, ajusta cantidades y env&iacute;a el resumen
+                por WhatsApp para confirmar disponibilidad, personalizaci&oacute;n, entrega y valor final.
             </p>
         </div>
-        <div class="cart-hero__summary" aria-label="Resumen del carrito">
+        <div class="cart-hero__summary" aria-label="Resumen de la lista">
             <div class="cart-count-card">
                 <strong>{{ productos|length }}</strong>
-                <span>producto{% if productos|length != 1 %}s{% endif %} en revisi&oacute;n</span>
-                <small>La compra se confirma por WhatsApp antes de elaborar.</small>
+                <span>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</span>
+                <small>Confirmamos disponibilidad, personalizaci&oacute;n, domicilio y valor final por WhatsApp.</small>
             </div>
         </div>
     </div>
@@ -1126,20 +1126,20 @@
         <div class="cart-flow__step">
             <span>01</span>
             <em>Paso</em>
-            <strong>Pedido</strong>
-            <p>Productos y cantidades.</p>
+            <strong>Lista</strong>
+            <p>Referencias y cantidades.</p>
         </div>
         <div class="cart-flow__step">
             <span>02</span>
             <em>Paso</em>
-            <strong>Datos</strong>
-            <p>Mensaje y preferencias.</p>
+            <strong>Preferencias</strong>
+            <p>Mensaje, ocasi&oacute;n y detalles.</p>
         </div>
         <div class="cart-flow__step">
             <span>03</span>
             <em>Paso</em>
-            <strong>Confirmar</strong>
-            <p>Validaci&oacute;n final por WhatsApp.</p>
+            <strong>Cotizar</strong>
+            <p>Confirmaci&oacute;n final por WhatsApp.</p>
         </div>
     </div>
 </section>
@@ -1152,7 +1152,8 @@
             <div class="cart-notice">
                 <span class="cart-notice__icon">i</span>
                 <div>
-                    <strong>Importante:</strong> los precios son valores base. El total final puede variar
+                    <strong>Importante:</strong> esta lista no genera cobro autom&aacute;tico. Los precios son valores base
+                    y el total final puede variar
                     seg&uacute;n personalizaci&oacute;n, disponibilidad y domicilio.
                 </div>
             </div>
@@ -1161,7 +1162,7 @@
                 <div class="cart-section-head">
                     <div>
                         <span class="cart-eyebrow">Productos seleccionados</span>
-                        <h2 id="cart-items-title">Detalle del pedido</h2>
+                        <h2 id="cart-items-title">Lista para cotizar</h2>
                     </div>
                     <p>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para confirmar.</p>
                 </div>
@@ -1236,13 +1237,13 @@
                         <span>Total base</span>
                         <strong>{{ total|cop }}</strong>
                     </div>
-                    <button type="submit" class="btn js-whatsapp-checkout-button">Confirmar por WhatsApp</button>
+                    <button type="submit" class="btn js-whatsapp-checkout-button">Cotizar por WhatsApp</button>
                 </div>
 
                 <div class="checkout-experience">
                     <section class="checkout-card" aria-labelledby="checkout-details-title">
                         <span class="cart-eyebrow">Datos opcionales</span>
-                        <h2 id="checkout-details-title">Informaci&oacute;n para personalizar</h2>
+                        <h2 id="checkout-details-title">Datos para personalizar</h2>
                         <p>
                             Completa solo lo necesario. Esta informaci&oacute;n se incluye en el mensaje de
                             WhatsApp para agilizar la confirmaci&oacute;n.
@@ -1279,8 +1280,8 @@
                     <aside class="cart-summary-card" aria-label="Resumen de la cotizacion">
                         <div>
                             <span class="cart-eyebrow">Confirmaci&oacute;n</span>
-                            <h3>Resumen del pedido</h3>
-                            <p>Se abrir&aacute; WhatsApp con productos, cantidades, total base y datos opcionales.</p>
+                            <h3>Resumen de la lista</h3>
+                            <p>Se abrir&aacute; WhatsApp con referencias, cantidades, total base y datos opcionales.</p>
                         </div>
 
                         <div class="summary-lines">
@@ -1314,8 +1315,8 @@
                         </ul>
 
                         <div class="summary-actions">
-                            <button type="submit" class="btn js-whatsapp-checkout-button">Confirmar por WhatsApp</button>
-                            <a href="{% url 'inicio' %}" class="btn-secondary">Seguir comprando</a>
+                            <button type="submit" class="btn js-whatsapp-checkout-button">Cotizar por WhatsApp</button>
+                            <a href="{% url 'inicio' %}" class="btn-secondary">Seguir explorando</a>
                         </div>
                     </aside>
                 </div>
@@ -1325,12 +1326,12 @@
         <div class="empty-cart">
             <div class="empty-cart__content">
                 <span class="empty-cart__icon">0</span>
-                <h2>Tu carrito est&aacute; vac&iacute;o</h2>
+                <h2>A&uacute;n no has elegido tu sorpresa</h2>
                 <p>
-                    Explora el cat&aacute;logo, agrega los productos que te interesan y luego
-                    confirmamos el pedido por WhatsApp.
+                    Explora el cat&aacute;logo, guarda las referencias que te interesan y luego
+                    las revisamos por WhatsApp con colores, mensaje, entrega y valor final.
                 </p>
-                <a href="{% url 'inicio' %}" class="btn-secondary">Ir al cat&aacute;logo</a>
+                <a href="{% url 'inicio' %}" class="btn-secondary">Explorar cat&aacute;logo</a>
             </div>
         </div>
     {% endif %}

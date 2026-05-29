@@ -280,9 +280,13 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Cómo comprar')
         self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Elige el detalle ideal')
+        self.assertContains(response, 'Buscar detalle')
+        self.assertContains(response, 'Ordenar por')
+        self.assertContains(response, 'Agregar a mi cotización')
         self.assertContains(response, 'hero-product-card')
         self.assertNotContains(response, 'data-track-click')
         self.assertNotContains(response, 'registrar_interaccion')
+        self.assertNotContains(response, 'Premium floral')
 
     @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
     def test_inicio_usa_numero_whatsapp_configurado(self):
@@ -370,6 +374,9 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Kit cumpleañero')
         self.assertContains(response, 'Siguiente')
         self.assertContains(response, reverse('detalle_producto', args=[self.relacionado.id]))
+        self.assertContains(response, 'Tiempo recomendado')
+        self.assertContains(response, 'Agregar a mi cotizaci&oacute;n')
+        self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, '<meta property="og:type" content="product">', html=True)
         self.assertContains(response, '"@type": "Product"')
         self.assertContains(response, '"priceCurrency": "COP"')

@@ -1089,6 +1089,28 @@
         line-height: 1.08;
     }
 
+    .catalog-filter-form {
+        display: grid;
+        grid-template-columns: minmax(220px, 1.15fr) minmax(170px, 0.75fr) minmax(180px, 0.75fr) auto;
+        gap: 12px;
+        align-items: end;
+        padding: 14px;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+    }
+
+    .catalog-filter-form .field-group {
+        min-width: 0;
+    }
+
+    .catalog-filter-actions {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
     .catalog-chip-row {
         display: flex;
         flex-wrap: wrap;
@@ -1321,6 +1343,50 @@
         color: var(--ink-500);
         font-size: 0.92rem;
         letter-spacing: 0.02em;
+    }
+
+    .product-badge-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .product-mini-badge {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        min-height: 28px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: rgba(255, 244, 247, 0.92);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+        color: var(--rose-700);
+        font-size: 0.75rem;
+        font-weight: 800;
+    }
+
+    .product-mini-meta {
+        display: grid;
+        gap: 6px;
+        color: var(--ink-700);
+        font-size: 0.86rem;
+        line-height: 1.45;
+    }
+
+    .product-mini-meta span {
+        display: flex;
+        gap: 7px;
+        align-items: flex-start;
+    }
+
+    .product-mini-meta span::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        margin-top: 0.48em;
+        border-radius: 50%;
+        background: var(--rose-500);
+        flex: 0 0 auto;
     }
 
     .product-actions {
@@ -1677,6 +1743,17 @@
             line-height: 1.55;
         }
 
+        .catalog-filter-form {
+            grid-template-columns: 1fr;
+            padding: 12px;
+            border-radius: 18px;
+        }
+
+        .catalog-filter-actions {
+            display: grid;
+            grid-template-columns: 1fr auto;
+        }
+
         .catalog-chip {
             min-height: 38px;
             padding: 0 13px;
@@ -1842,6 +1919,10 @@
             display: none;
         }
 
+        .product-mini-meta {
+            font-size: 0.8rem;
+        }
+
         .product-actions {
             grid-template-columns: 1fr;
             gap: 7px;
@@ -1872,8 +1953,8 @@
         }
 
         .catalog-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr;
+            gap: 14px;
         }
 
         .product-body {
@@ -1901,8 +1982,8 @@
 
     @media (max-width: 360px) {
         .catalog-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 8px;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
         .product-media {
@@ -1943,7 +2024,7 @@
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="section-kicker">Acompa&ntilde;ando tus sentimientos</span>
-            <h1>Regalos con amor para momentos que se quedan en el coraz&oacute;n.</h1>
+            <h1>Detalles personalizados para celebrar momentos que merecen ser recordados.</h1>
             <p>
                 Preparamos detalles personalizados con cuidado, color y amor: desayunos sorpresa,
                 cajas tem&aacute;ticas y regalos rom&aacute;nticos pensados para hacer sentir especial
@@ -1958,13 +2039,13 @@
 
             <div class="hero-actions">
                 <a href="#catalogo" class="btn">Ver cat&aacute;logo</a>
-                <a href="{{ whatsapp_assistance_url }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">Quiero cotizar</a>
+                <a href="{{ whatsapp_assistance_url }}" class="btn-secondary" target="_blank" rel="noopener noreferrer">Cotizar mi regalo por WhatsApp</a>
             </div>
 
             <div class="hero-stats">
                 <div class="hero-stat">
                     <strong>{{ resumen.total_productos }}</strong>
-                    <span>detalles listos para cotizar</span>
+                    <span>referencias en cat&aacute;logo</span>
                 </div>
                 <div class="hero-stat">
                     <strong>1-2 d&iacute;as</strong>
@@ -2139,6 +2220,34 @@
                 </div>
             </div>
 
+            <form method="get" action="{% url 'inicio' %}" class="catalog-filter-form filter-form js-catalog-form" aria-label="Buscar y ordenar catálogo">
+                <div class="field-group">
+                    <label for="catalog-search">Buscar detalle</label>
+                    <input type="search" id="catalog-search" name="q" value="{{ filtros.q }}" placeholder="Stitch, rosas, desayuno, cumpleaños">
+                </div>
+                <div class="field-group">
+                    <label for="catalog-category">Categoría</label>
+                    <select id="catalog-category" name="categoria">
+                        <option value="">Todas</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {% if filtros.categoria_id == categoria.id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="catalog-order">Ordenar por</label>
+                    <select id="catalog-order" name="orden">
+                        {% for value, label in opciones_orden %}
+                            <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="catalog-filter-actions">
+                    <button type="submit" class="btn">Buscar</button>
+                    <a href="{% url 'inicio' %}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
+                </div>
+            </form>
+
             <nav class="catalog-chip-row" aria-label="Categorías del catálogo">
                 <a href="{% url 'inicio' %}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}">Todos</a>
                 {% for categoria in categorias %}
@@ -2202,6 +2311,14 @@
                                 </p>
                             </div>
 
+                            <div class="product-badge-row" aria-label="Etiquetas del producto">
+                                <span class="product-mini-badge">Personalizable</span>
+                                <span class="product-mini-badge">1-2 días</span>
+                                {% if producto.destacado %}
+                                    <span class="product-mini-badge">Más pedido</span>
+                                {% endif %}
+                            </div>
+
                             <div class="product-price-row">
                                 <div>
                                     <div class="product-price">Desde {{ producto.precio|cop }} COP</div>
@@ -2209,12 +2326,17 @@
                                 </div>
                             </div>
 
+                            <div class="product-mini-meta">
+                                <span>Incluye una base según la referencia y acabados decorativos.</span>
+                                <span>Confirmamos colores, mensaje, entrega y disponibilidad por WhatsApp.</span>
+                            </div>
+
                             <div class="product-actions">
                                 <a href="{% url 'detalle_producto' producto.id %}" class="btn-outline">Ver detalle</a>
                                 {% if producto.disponible %}
                                     <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Guardar para cotizar</button>
+                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar a mi cotización</button>
                                     </form>
                                 {% else %}
                                     <span class="btn-disabled">Agotado</span>

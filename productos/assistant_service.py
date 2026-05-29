@@ -73,7 +73,7 @@ def _serialize_catalog_context():
         [
             "Marca: Casita de Regalos.",
             "Ubicación: Bello, Antioquia. Cobertura: Medellín y área metropolitana.",
-            "Estilo: cercano, premium, delicado y orientado a detalles personalizados.",
+            "Estilo: cercano, cuidado, delicado y orientado a detalles personalizados.",
             "Flujo de compra: el cliente explora referencias, guarda detalles para cotizar y finaliza por WhatsApp para confirmar disponibilidad y pago.",
             "Pagos habituales: Nequi y Bancolombia. La confirmación final se hace por WhatsApp.",
             "Política comercial: personalización según ocasión, presupuesto, colores y mensaje.",
@@ -425,7 +425,7 @@ def _build_fallback_actions(context_data):
         )
 
     if "compra" in intents:
-        actions.append({"label": "Ir al carrito", "href": reverse("ver_carrito")})
+        actions.append({"label": "Ver mi lista", "href": reverse("ver_carrito")})
     elif "pago" in intents or "entrega" in intents:
         actions.append({"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"})
     elif not actions:
@@ -534,14 +534,14 @@ def _build_fallback_message(context_data):
                 "Abre la categoría y desde ahí revisamos juntos la mejor opción."
             )
         return (
-            "El catálogo está organizado por categorías para que encuentres rápido detalles románticos, infantiles, premium y opciones express. "
+            "El catálogo está organizado por categorías para que encuentres rápido detalles románticos, infantiles, especiales y opciones express. "
             "Si me dices la ocasión, te llevo más directo."
         )
 
     if "ocasion" in intents and price_range:
         return (
             f"Para esa ocasión se puede trabajar muy bien entre {_format_cop(price_range[0])} y {_format_cop(price_range[1])}. "
-            "Si me dices si buscas algo romántico, infantil o premium, te aterrizo mejores referencias."
+            "Si me dices si buscas algo romántico, infantil o más elaborado, te aterrizo mejores referencias."
         )
 
     if "ocasion" in intents:
