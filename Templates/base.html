@@ -1682,6 +1682,71 @@
             });
         };
 
+        const updateCartPageState = (data) => {
+            if (!data || typeof data !== 'object') return;
+
+            if (typeof data.cart_total !== 'undefined') {
+                updateCartCount(data.cart_total);
+            }
+
+            if (data.total_label) {
+                document.querySelectorAll('[data-cart-total-label]').forEach((node) => {
+                    node.textContent = data.total_label;
+                });
+            }
+
+            if (typeof data.references_count !== 'undefined') {
+                const count = Number(data.references_count) || 0;
+                const plural = count === 1 ? '' : 's';
+                document.querySelectorAll('[data-cart-reference-count]').forEach((node) => {
+                    node.textContent = count;
+                });
+                document.querySelectorAll('[data-cart-reference-label]').forEach((node) => {
+                    node.textContent = `referencia${plural} para cotizar`;
+                });
+                document.querySelectorAll('[data-cart-reference-summary]').forEach((node) => {
+                    node.textContent = `${count} referencia${plural} lista${plural} para confirmar.`;
+                });
+            }
+
+            const row = data.product_id
+                ? document.querySelector(`[data-cart-row="${data.product_id}"]`)
+                : null;
+
+            if (row && data.item_removed) {
+                row.remove();
+            } else if (row) {
+                row.classList.remove('is-updating');
+                const quantityNode = row.querySelector('[data-cart-item-qty]');
+                const subtotalNode = row.querySelector('[data-cart-item-subtotal]');
+                const increaseButton = row.querySelector('[data-cart-increase-button]');
+
+                if (quantityNode && typeof data.item_quantity !== 'undefined') {
+                    quantityNode.textContent = data.item_quantity;
+                }
+                if (subtotalNode && data.item_subtotal_label) {
+                    subtotalNode.textContent = data.item_subtotal_label;
+                }
+
+                row.querySelectorAll('.qty-btn, .remove-btn').forEach((button) => {
+                    button.disabled = false;
+                    button.classList.remove('is-disabled');
+                });
+
+                if (increaseButton) {
+                    const shouldDisable = Number(data.item_quantity) >= Number(data.item_stock);
+                    increaseButton.disabled = shouldDisable;
+                    increaseButton.classList.toggle('is-disabled', shouldDisable);
+                }
+            }
+
+            if (data.is_empty && data.cart_url) {
+                window.setTimeout(() => {
+                    window.location.assign(data.cart_url);
+                }, 420);
+            }
+        };
+
         const syncCarousel = (shell) => {
             const track = shell.querySelector('.js-carousel-track');
             const prev = shell.querySelector('[data-carousel-prev]');
@@ -2221,6 +2286,49 @@
                 const baseUrl = catalogForm.action.split('#', 1)[0];
                 const targetUrl = `${baseUrl}?${params.toString()}#catalogo`;
                 await fetchCatalogSection(targetUrl);
+                return;
+            }
+
+            const cartUpdateForm = event.target.closest('.js-cart-update-form');
+            if (cartUpdateForm) {
+                event.preventDefault();
+
+                const button = event.submitter || cartUpdateForm.querySelector('button');
+                const row = cartUpdateForm.closest('[data-cart-row]');
+                if (!button || button.dataset.loading === 'true') return;
+
+                const originalText = button.textContent;
+                button.dataset.loading = 'true';
+                button.disabled = true;
+                button.textContent = '...';
+                row?.classList.add('is-updating');
+
+                try {
+                    const response = await fetch(cartUpdateForm.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': getCsrfToken(cartUpdateForm),
+                        },
+                        credentials: 'same-origin',
+                        body: new FormData(cartUpdateForm),
+                    });
+
+                    const data = await response.json();
+                    updateCartPageState(data);
+                    showToast(
+                        data.message || 'Lista actualizada.',
+                        data.level || (response.ok ? 'success' : 'warning'),
+                    );
+                } catch (error) {
+                    row?.classList.remove('is-updating');
+                    button.disabled = false;
+                    showToast('No pudimos actualizar la lista en este momento.', 'error');
+                } finally {
+                    button.dataset.loading = 'false';
+                    button.textContent = originalText;
+                }
+
                 return;
             }
 

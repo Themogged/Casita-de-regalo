@@ -50,8 +50,71 @@ def _carrito_total_items(carrito):
     return sum(carrito.values())
 
 
+def _build_cart_items(carrito):
+    productos_ids = [int(producto_id) for producto_id in carrito.keys()]
+    productos_map = {
+        producto.id: producto for producto in Producto.objects.filter(id__in=productos_ids)
+    }
+
+    productos = []
+    total = Decimal("0.00")
+    carrito_actualizado = {}
+
+    for producto_id, cantidad in carrito.items():
+        producto = productos_map.get(int(producto_id))
+        if not producto:
+            continue
+
+        subtotal = producto.precio * cantidad
+        total += subtotal
+        carrito_actualizado[str(producto.id)] = cantidad
+        productos.append(
+            {
+                "producto": producto,
+                "cantidad": cantidad,
+                "subtotal": subtotal,
+            }
+        )
+
+    return productos, total, carrito_actualizado
+
+
 def _es_ajax(request):
     return request.headers.get("x-requested-with") == "XMLHttpRequest"
+
+
+def _json_cart_update(request, producto_id, message, level="success", status=200):
+    carrito = _get_carrito(request)
+    productos, total, carrito_actualizado = _build_cart_items(carrito)
+
+    if carrito_actualizado != carrito:
+        _set_carrito(request, carrito_actualizado)
+        carrito = carrito_actualizado
+
+    item_actual = next(
+        (
+            item for item in productos
+            if item["producto"].id == producto_id
+        ),
+        None,
+    )
+
+    payload = {
+        "ok": status < 400,
+        "level": level,
+        "message": message,
+        "product_id": producto_id,
+        "cart_total": _carrito_total_items(carrito),
+        "references_count": len(productos),
+        "total_label": _format_cop(total),
+        "cart_url": reverse("ver_carrito"),
+        "is_empty": not productos,
+        "item_removed": item_actual is None,
+        "item_quantity": item_actual["cantidad"] if item_actual else 0,
+        "item_subtotal_label": _format_cop(item_actual["subtotal"]) if item_actual else _format_cop(0),
+        "item_stock": item_actual["producto"].stock if item_actual else 0,
+    }
+    return JsonResponse(payload, status=status)
 
 
 def _json_checkout_error(message, status=400, redirect_url=None):
@@ -170,30 +233,7 @@ def agregar_al_carrito(request, producto_id):
 @require_GET
 def ver_carrito(request):
     carrito = _get_carrito(request)
-    productos_ids = [int(producto_id) for producto_id in carrito.keys()]
-    productos_map = {
-        producto.id: producto for producto in Producto.objects.filter(id__in=productos_ids)
-    }
-
-    productos = []
-    total = Decimal("0.00")
-    carrito_actualizado = {}
-
-    for producto_id, cantidad in carrito.items():
-        producto = productos_map.get(int(producto_id))
-        if not producto:
-            continue
-
-        subtotal = producto.precio * cantidad
-        total += subtotal
-        carrito_actualizado[str(producto.id)] = cantidad
-        productos.append(
-            {
-                "producto": producto,
-                "cantidad": cantidad,
-                "subtotal": subtotal,
-            }
-        )
+    productos, total, carrito_actualizado = _build_cart_items(carrito)
 
     if carrito_actualizado != carrito:
         _set_carrito(request, carrito_actualizado)
@@ -217,11 +257,22 @@ def sumar_producto(request, producto_id):
     cantidad_actual = carrito.get(str(producto_id), 0)
 
     if cantidad_actual >= producto.stock:
-        messages.warning(request, "Stock maximo alcanzado.")
+        mensaje = "Stock maximo alcanzado."
+        if _es_ajax(request):
+            return _json_cart_update(
+                request,
+                producto.id,
+                mensaje,
+                level="warning",
+                status=400,
+            )
+        messages.warning(request, mensaje)
         return redirect("ver_carrito")
 
     carrito[str(producto_id)] = cantidad_actual + 1
     _set_carrito(request, carrito)
+    if _es_ajax(request):
+        return _json_cart_update(request, producto.id, "Cantidad actualizada.")
     return redirect("ver_carrito")
 
 
@@ -235,6 +286,8 @@ def restar_producto(request, producto_id):
             del carrito[str(producto_id)]
 
     _set_carrito(request, carrito)
+    if _es_ajax(request):
+        return _json_cart_update(request, producto_id, "Cantidad actualizada.")
     return redirect("ver_carrito")
 
 
@@ -246,6 +299,8 @@ def eliminar_producto(request, producto_id):
         del carrito[str(producto_id)]
 
     _set_carrito(request, carrito)
+    if _es_ajax(request):
+        return _json_cart_update(request, producto_id, "Producto retirado de la lista.")
     return redirect("ver_carrito")
 
 

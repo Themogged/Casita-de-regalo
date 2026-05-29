@@ -78,6 +78,9 @@ class CarritoViewsTests(TestCase):
         self.assertContains(response, 'name="detalle_extra"')
         self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, 'mobile-checkout-panel')
+        self.assertContains(response, 'js-cart-update-form')
+        self.assertContains(response, 'data-cart-total-label')
+        self.assertContains(response, 'data-cart-row')
         self.assertNotContains(response, 'Cotizaci&oacute;n premium')
         self.assertNotContains(response, 'brief')
 
@@ -112,6 +115,48 @@ class CarritoViewsTests(TestCase):
         response = self.client.get(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
 
         self.assertEqual(response.status_code, 405)
+
+    def test_sumar_producto_por_ajax_actualiza_totales(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        response = self.client.post(
+            reverse('sumar_producto', args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['ok'], True)
+        self.assertEqual(data['cart_total'], 2)
+        self.assertEqual(data['references_count'], 1)
+        self.assertEqual(data['item_quantity'], 2)
+        self.assertEqual(data['total_label'], '$162.000')
+        self.assertEqual(data['item_subtotal_label'], '$162.000')
+        self.assertEqual(self.client.session['carrito'][str(self.producto.id)], 2)
+
+    def test_restar_producto_por_ajax_informa_carrito_vacio(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        response = self.client.post(
+            reverse('restar_producto', args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['ok'], True)
+        self.assertEqual(data['cart_total'], 0)
+        self.assertEqual(data['references_count'], 0)
+        self.assertEqual(data['item_quantity'], 0)
+        self.assertEqual(data['item_removed'], True)
+        self.assertEqual(data['is_empty'], True)
+        self.assertEqual(self.client.session.get('carrito'), {})
 
     def test_finalizar_compra_redirige_a_whatsapp_y_descuenta_stock(self):
         session = self.client.session

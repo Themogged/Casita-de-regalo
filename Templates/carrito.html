@@ -377,6 +377,13 @@
         opacity: 0.35;
     }
 
+    .qty-btn:disabled,
+    .remove-btn:disabled,
+    .btn:disabled {
+        cursor: wait;
+        opacity: 0.62;
+    }
+
     .qty-value {
         display: inline-flex;
         min-width: 26px;
@@ -397,6 +404,10 @@
     .remove-form,
     .checkout-form {
         margin: 0;
+    }
+
+    .cart-table tr.is-updating {
+        opacity: 0.68;
     }
 
     .checkout-experience {
@@ -638,7 +649,7 @@
         }
 
         .cart-wrapper {
-            padding-bottom: 84px;
+            padding-bottom: 118px;
         }
 
         .assistant-shell,
@@ -986,13 +997,16 @@
 
         .mobile-checkout-panel {
             display: grid;
-            position: sticky;
+            position: fixed;
+            left: 50%;
             bottom: calc(10px + env(safe-area-inset-bottom));
+            width: min(520px, calc(100% - 20px));
+            transform: translateX(-50%);
             z-index: 25;
             grid-template-columns: minmax(0, 0.78fr) minmax(142px, 1fr);
             gap: 10px;
             align-items: center;
-            margin: 0 0 14px;
+            margin: 0;
             padding: 14px;
             border-radius: 22px;
             background:
@@ -1093,6 +1107,7 @@
 
         .mobile-checkout-panel {
             grid-template-columns: 1fr;
+            width: min(360px, calc(100% - 18px));
         }
 
         .mobile-checkout-panel .btn {
@@ -1115,8 +1130,8 @@
         </div>
         <div class="cart-hero__summary" aria-label="Resumen de la lista">
             <div class="cart-count-card">
-                <strong>{{ productos|length }}</strong>
-                <span>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</span>
+                <strong data-cart-reference-count>{{ productos|length }}</strong>
+                <span data-cart-reference-label>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</span>
                 <small>Confirmamos disponibilidad, personalizaci&oacute;n, domicilio y valor final por WhatsApp.</small>
             </div>
         </div>
@@ -1164,7 +1179,7 @@
                         <span class="cart-eyebrow">Productos seleccionados</span>
                         <h2 id="cart-items-title">Lista para cotizar</h2>
                     </div>
-                    <p>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para confirmar.</p>
+                    <p data-cart-reference-summary>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para confirmar.</p>
                 </div>
 
                 <table class="cart-table">
@@ -1179,7 +1194,7 @@
                     </thead>
                     <tbody>
                         {% for item in productos %}
-                            <tr>
+                            <tr data-cart-row="{{ item.producto.id }}">
                                 <td data-label="Producto">
                                     <div class="product-info">
                                         <div class="product-thumb">
@@ -1198,24 +1213,26 @@
                                 <td data-label="Precio base"><span class="line-price">{{ item.producto.precio|cop }}</span></td>
                                 <td data-label="Cantidad">
                                     <div class="qty-controls" aria-label="Cantidad de {{ item.producto.nombre }}">
-                                        <form method="post" action="{% url 'restar_producto' item.producto.id %}" class="qty-form">
+                                        <form method="post" action="{% url 'restar_producto' item.producto.id %}" class="qty-form js-cart-update-form">
                                             {% csrf_token %}
                                             <button type="submit" class="qty-btn" aria-label="Restar {{ item.producto.nombre }}">-</button>
                                         </form>
-                                        <strong class="qty-value">{{ item.cantidad }}</strong>
-                                        {% if item.cantidad < item.producto.stock %}
-                                            <form method="post" action="{% url 'sumar_producto' item.producto.id %}" class="qty-form">
-                                                {% csrf_token %}
-                                                <button type="submit" class="qty-btn" aria-label="Sumar {{ item.producto.nombre }}">+</button>
-                                            </form>
-                                        {% else %}
-                                            <span class="qty-btn is-disabled" aria-label="Cantidad maxima">+</span>
-                                        {% endif %}
+                                        <strong class="qty-value" data-cart-item-qty>{{ item.cantidad }}</strong>
+                                        <form method="post" action="{% url 'sumar_producto' item.producto.id %}" class="qty-form js-cart-update-form">
+                                            {% csrf_token %}
+                                            <button
+                                                type="submit"
+                                                class="qty-btn {% if item.cantidad >= item.producto.stock %}is-disabled{% endif %}"
+                                                aria-label="Sumar {{ item.producto.nombre }}"
+                                                data-cart-increase-button
+                                                {% if item.cantidad >= item.producto.stock %}disabled{% endif %}
+                                            >+</button>
+                                        </form>
                                     </div>
                                 </td>
-                                <td data-label="Subtotal"><span class="line-subtotal">{{ item.subtotal|cop }}</span></td>
+                                <td data-label="Subtotal"><span class="line-subtotal" data-cart-item-subtotal>{{ item.subtotal|cop }}</span></td>
                                 <td data-label="Quitar">
-                                    <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form">
+                                    <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form js-cart-update-form">
                                         {% csrf_token %}
                                         <button type="submit" class="remove-btn" aria-label="Quitar {{ item.producto.nombre }}">
                                             <span aria-hidden="true">&times;</span>
@@ -1235,7 +1252,7 @@
                 <div class="mobile-checkout-panel" aria-label="Resumen movil del pedido">
                     <div>
                         <span>Total base</span>
-                        <strong>{{ total|cop }}</strong>
+                        <strong data-cart-total-label>{{ total|cop }}</strong>
                     </div>
                     <button type="submit" class="btn js-whatsapp-checkout-button">Cotizar por WhatsApp</button>
                 </div>
@@ -1287,7 +1304,7 @@
                         <div class="summary-lines">
                             <div class="summary-line">
                                 <span>Referencias</span>
-                                <strong>{{ productos|length }}</strong>
+                                <strong data-cart-reference-count>{{ productos|length }}</strong>
                             </div>
                             <div class="summary-line">
                                 <span>Atenci&oacute;n</span>
@@ -1295,7 +1312,7 @@
                             </div>
                             <div class="summary-total">
                                 <span>Total base</span>
-                                <strong>{{ total|cop }}</strong>
+                                <strong data-cart-total-label>{{ total|cop }}</strong>
                             </div>
                         </div>
 
