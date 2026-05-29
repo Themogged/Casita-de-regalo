@@ -2677,8 +2677,9 @@
                             </div>
 
                             <div class="product-mini-meta">
-                                <span>Incluye una base según la referencia y acabados decorativos.</span>
-                                <span>Confirmamos colores, mensaje, entrega y disponibilidad por WhatsApp.</span>
+                                {% for item in producto.catalog_microcopy %}
+                                    <span>{{ item }}</span>
+                                {% endfor %}
                             </div>
 
                             <div class="product-actions">

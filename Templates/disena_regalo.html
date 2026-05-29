@@ -206,6 +206,10 @@
         cursor: pointer;
     }
 
+    .designer-product[hidden] {
+        display: none;
+    }
+
     .designer-product.is-active {
         background: #fff;
         border-color: rgba(215, 38, 109, 0.25);
@@ -254,6 +258,22 @@
         font-size: 0.76rem;
         font-weight: 900;
         white-space: nowrap;
+    }
+
+    .designer-more-bases {
+        justify-self: start;
+        min-height: 38px;
+        padding: 0 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(198, 68, 125, 0.14);
+        color: var(--rose-700);
+        font-weight: 900;
+        cursor: pointer;
+    }
+
+    .designer-more-bases:hover {
+        background: var(--rose-50);
     }
 
     .designer-preview {
@@ -509,6 +529,12 @@
             justify-self: start;
         }
 
+        .designer-more-bases {
+            flex: 0 0 auto;
+            align-self: center;
+            white-space: nowrap;
+        }
+
         .designer-preview-frame {
             min-height: 330px;
         }
@@ -534,9 +560,9 @@
             Luego la llevamos a WhatsApp para ajustar disponibilidad, entrega y valor final.
         </p>
         <div style="margin-top:18px">
-            <a href="{{ whatsapp_assistance_url }}" class="designer-gift-cta" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>
+            <a href="#designer-options" class="designer-gift-cta">
                 <span class="designer-gift-cta-mark" aria-hidden="true"></span>
-                <span>Llevar idea a WhatsApp</span>
+                <span>Empezar a crear mi regalo</span>
             </a>
         </div>
     </div>
@@ -552,7 +578,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="designer-page" data-gift-designer>
+<div class="designer-page" id="designer-options" data-gift-designer>
     <section class="designer-layout">
         <div class="designer-card page-card">
             <div class="designer-form" aria-label="Opciones para diseñar un regalo personalizado">
@@ -634,6 +660,7 @@
                                     data-price-label="{{ producto.precio|cop }} COP"
                                     data-url="{% url 'detalle_producto' producto.id %}"
                                     data-tags="{{ producto.designer_tags }}"
+                                    {% if forloop.counter > 3 %}hidden data-designer-extra="true"{% endif %}
                                     {% if producto.imagen %}data-image="{{ producto.imagen.url|optimized_image_url }}"{% endif %}
                                 >
                                     {% if producto.imagen %}
@@ -645,9 +672,18 @@
                                         <strong>{{ producto.nombre }}</strong>
                                         <small>{{ producto.categoria.nombre|default:"Detalle" }} · Desde {{ producto.precio|cop }} COP</small>
                                     </span>
-                                    <span class="designer-match-score" data-match-score>Base</span>
+                                    <span
+                                        class="designer-match-score"
+                                        data-match-score
+                                        {% if forloop.counter == 1 %}data-guide-label="Recomendada"{% elif forloop.counter == 2 %}data-guide-label="Más económica"{% elif forloop.counter == 3 %}data-guide-label="Más especial"{% endif %}
+                                    >
+                                        {% if forloop.counter == 1 %}Recomendada{% elif forloop.counter == 2 %}Más económica{% elif forloop.counter == 3 %}Más especial{% else %}Base{% endif %}
+                                    </span>
                                 </button>
                             {% endfor %}
+                            {% if disenador_productos|length > 3 %}
+                                <button type="button" class="designer-more-bases" data-designer-more-bases>Ver más bases</button>
+                            {% endif %}
                         </div>
                     </div>
                 {% endif %}
@@ -679,7 +715,7 @@
             <div class="designer-actions">
                 <a href="{{ whatsapp_assistance_url }}" class="designer-gift-cta" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>
                     <span class="designer-gift-cta-mark" aria-hidden="true"></span>
-                    <span>Llevar idea a WhatsApp</span>
+                    <span>Enviar idea por WhatsApp</span>
                 </a>
                 <a href="{% url 'inicio' %}#catalogo" class="btn-secondary" data-designer-catalog>Ver bases parecidas</a>
             </div>
@@ -712,6 +748,7 @@
         const briefExtras = designer.querySelector('[data-designer-brief-extras]');
         const whatsappLinks = Array.from(document.querySelectorAll('[data-designer-whatsapp]'));
         const catalogLink = designer.querySelector('[data-designer-catalog]');
+        const moreBasesButton = designer.querySelector('[data-designer-more-bases]');
         let manualProduct = null;
 
         const checked = (name) => designer.querySelector(`[name="${name}"]:checked`);
@@ -776,7 +813,7 @@
                 const score = scores.get(product) || 0;
                 const scoreNode = product.querySelector('[data-match-score]');
                 if (scoreNode) {
-                    scoreNode.textContent = score >= 8 ? 'Ideal' : score >= 5 ? 'Afinada' : 'Base';
+                    scoreNode.textContent = scoreNode.dataset.guideLabel || (score >= 8 ? 'Ideal' : score >= 5 ? 'Afinada' : 'Base');
                 }
             });
         };
@@ -784,7 +821,9 @@
         const updatePreview = () => {
             const state = currentState();
             const scores = new Map(products.map((product) => [product, scoreProduct(product, state)]));
-            const recommended = products
+            const availableProducts = products.filter((product) => !product.hidden);
+            const recommendationPool = availableProducts.length ? availableProducts : products;
+            const recommended = recommendationPool
                 .slice()
                 .sort((a, b) => (scores.get(b) || 0) - (scores.get(a) || 0) || productPrice(a) - productPrice(b))[0];
             const activeProduct = manualProduct || recommended;
@@ -858,6 +897,16 @@
                 updatePreview();
             });
         });
+
+        if (moreBasesButton) {
+            moreBasesButton.addEventListener('click', () => {
+                designer.querySelectorAll('[data-designer-extra]').forEach((product) => {
+                    product.hidden = false;
+                });
+                moreBasesButton.hidden = true;
+                updatePreview();
+            });
+        }
 
         updatePreview();
     })();

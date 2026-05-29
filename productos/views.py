@@ -578,6 +578,34 @@ def _build_product_badges(producto):
     return unique_badges[:5]
 
 
+def _build_product_microcopy(producto):
+    text = _product_text(producto)
+    include_rules = [
+        (('desayuno', 'waffle', 'wafle', 'jugo', 'milo', 'bonyurt'), 'Incluye base de desayuno, bebida y presentación decorada.'),
+        (('flor', 'flores', 'rosa', 'rosas', 'girasol', 'ramo'), 'Incluye flores de temporada y acabado decorativo según disponibilidad.'),
+        (('stitch', 'toy story', 'hello kitty', 'bob esponja', 'kuromi', 'infantil'), 'Incluye decoración temática y detalles personalizados para la ocasión.'),
+        (('globo', 'globos', 'burbuja', 'arco'), 'Incluye globos decorativos y composición visual lista para sorprender.'),
+        (('fruta', 'frutas', 'fresas', 'manzana', 'pera'), 'Incluye fruta seleccionada y presentación cuidada para entrega.'),
+        (('caja', 'cajita', 'madera', 'acetato'), 'Incluye base tipo caja y acabados decorativos a juego.'),
+    ]
+    include = 'Incluye base decorada y detalles ajustados a la referencia.'
+    for tokens, copy in include_rules:
+        if any(token in text for token in tokens):
+            include = copy
+            break
+
+    if any(token in text for token in ('desayuno', 'waffle', 'wafle', 'jugo')):
+        timing = 'Preparación sugerida: reservar con 1-2 días.'
+    elif producto.destacado:
+        timing = 'Referencia destacada: confirmar agenda y personalización por WhatsApp.'
+    elif producto.disponible:
+        timing = 'Precio base sujeto a personalización y disponibilidad.'
+    else:
+        timing = 'Disponibilidad por confirmar antes de tomar el pedido.'
+
+    return [include, timing]
+
+
 def _build_designer_tags(producto):
     text = _product_text(producto)
     tag_rules = [
@@ -678,6 +706,7 @@ def inicio(request):
     productos_pagina = list(page_obj.object_list)
     for producto in productos_pagina:
         producto.catalog_badges = _build_product_badges(producto)
+        producto.catalog_microcopy = _build_product_microcopy(producto)
 
     query_params = request.GET.copy()
     query_params.pop('page', None)
