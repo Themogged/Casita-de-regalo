@@ -116,6 +116,20 @@
             font: inherit;
         }
 
+        .soft-emoji {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.38em;
+            line-height: 1;
+            transform: translateY(-0.02em);
+        }
+
+        .soft-emoji--after {
+            margin-right: 0;
+            margin-left: 0.36em;
+        }
+
         .site-header {
             position: sticky;
             top: 0;
@@ -1432,7 +1446,7 @@
 
             <div class="header-actions">
                 <a href="{% url 'ver_carrito' %}" class="cart-btn">
-                    <span>Lista</span>
+                    <span><span class="soft-emoji" aria-hidden="true">🧺</span>Lista</span>
                     <span class="cart-count">{{ carrito_total }}</span>
                 </a>
                 <button class="menu-toggle" type="button" aria-label="Abrir men&uacute;" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
@@ -1545,7 +1559,7 @@
         </div>
 
         <div class="footer-bottom">
-            2026 Casita de Regalos. Hecho con amor.
+            2026 Casita de Regalos. Hecho con amor <span class="soft-emoji soft-emoji--after" aria-hidden="true">💗</span>
         </div>
     </footer>
 
@@ -1566,7 +1580,7 @@
         <section class="assistant-panel" data-assistant-panel hidden>
             <header class="assistant-header">
                 <div class="assistant-header-copy">
-                    <strong>Asistente Casita</strong>
+                    <strong><span class="soft-emoji" aria-hidden="true">💬</span>Asistente Casita</strong>
                     <span data-assistant-status class="assistant-status">Asistente inteligente</span>
                 </div>
                 <button type="button" class="assistant-close" data-assistant-close aria-label="Cerrar asistente">×</button>

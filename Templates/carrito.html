@@ -1121,7 +1121,7 @@
 <section class="hero-card">
     <div class="cart-hero">
         <div class="cart-hero__copy">
-            <span class="cart-hero__eyebrow">Lista para cotizar</span>
+            <span class="cart-hero__eyebrow"><span class="soft-emoji" aria-hidden="true">🧺</span>Lista para cotizar</span>
             <h1>Revisa tu lista antes de confirmar</h1>
             <p>
                 Organiza las referencias que te gustan, ajusta cantidades y env&iacute;a el resumen
@@ -1141,19 +1141,19 @@
         <div class="cart-flow__step">
             <span>01</span>
             <em>Paso</em>
-            <strong>Lista</strong>
+            <strong><span class="soft-emoji" aria-hidden="true">🎁</span>Lista</strong>
             <p>Referencias y cantidades.</p>
         </div>
         <div class="cart-flow__step">
             <span>02</span>
             <em>Paso</em>
-            <strong>Preferencias</strong>
+            <strong><span class="soft-emoji" aria-hidden="true">💌</span>Preferencias</strong>
             <p>Mensaje, ocasi&oacute;n y detalles.</p>
         </div>
         <div class="cart-flow__step">
             <span>03</span>
             <em>Paso</em>
-            <strong>Cotizar</strong>
+            <strong><span class="soft-emoji" aria-hidden="true">💬</span>Cotizar</strong>
             <p>Confirmaci&oacute;n final por WhatsApp.</p>
         </div>
     </div>
@@ -1165,7 +1165,7 @@
     {% if productos %}
         <div class="cart-layout">
             <div class="cart-notice">
-                <span class="cart-notice__icon">i</span>
+                <span class="cart-notice__icon" aria-hidden="true">💡</span>
                 <div>
                     <strong>Importante:</strong> esta lista no genera cobro autom&aacute;tico. Los precios son valores base
                     y el total final puede variar
@@ -1176,7 +1176,7 @@
             <section class="cart-items-card" aria-labelledby="cart-items-title">
                 <div class="cart-section-head">
                     <div>
-                        <span class="cart-eyebrow">Productos seleccionados</span>
+                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">💝</span>Productos seleccionados</span>
                         <h2 id="cart-items-title">Lista para cotizar</h2>
                     </div>
                     <p data-cart-reference-summary>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para confirmar.</p>
@@ -1206,7 +1206,7 @@
                                         </div>
                                         <div class="product-copy">
                                             <strong>{{ item.producto.nombre }}</strong>
-                                            <span class="product-tag">Seleccionado</span>
+                                            <span class="product-tag"><span class="soft-emoji" aria-hidden="true">💗</span>Seleccionado</span>
                                         </div>
                                     </div>
                                 </td>
@@ -1254,12 +1254,12 @@
                         <span>Total base</span>
                         <strong data-cart-total-label>{{ total|cop }}</strong>
                     </div>
-                    <button type="submit" class="btn js-whatsapp-checkout-button">Cotizar por WhatsApp</button>
+                    <button type="submit" class="btn js-whatsapp-checkout-button"><span class="soft-emoji" aria-hidden="true">💬</span>Cotizar por WhatsApp</button>
                 </div>
 
                 <div class="checkout-experience">
                     <section class="checkout-card" aria-labelledby="checkout-details-title">
-                        <span class="cart-eyebrow">Datos opcionales</span>
+                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">💌</span>Datos opcionales</span>
                         <h2 id="checkout-details-title">Datos para personalizar</h2>
                         <p>
                             Completa solo lo necesario. Esta informaci&oacute;n se incluye en el mensaje de
@@ -1296,7 +1296,7 @@
 
                     <aside class="cart-summary-card" aria-label="Resumen de la cotizacion">
                         <div>
-                            <span class="cart-eyebrow">Confirmaci&oacute;n</span>
+                            <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">✨</span>Confirmaci&oacute;n</span>
                             <h3>Resumen de la lista</h3>
                             <p>Se abrir&aacute; WhatsApp con referencias, cantidades, total base y datos opcionales.</p>
                         </div>
@@ -1332,8 +1332,8 @@
                         </ul>
 
                         <div class="summary-actions">
-                            <button type="submit" class="btn js-whatsapp-checkout-button">Cotizar por WhatsApp</button>
-                            <a href="{% url 'inicio' %}" class="btn-secondary">Seguir explorando</a>
+                            <button type="submit" class="btn js-whatsapp-checkout-button"><span class="soft-emoji" aria-hidden="true">💬</span>Cotizar por WhatsApp</button>
+                            <a href="{% url 'inicio' %}" class="btn-secondary"><span class="soft-emoji" aria-hidden="true">🌸</span>Seguir explorando</a>
                         </div>
                     </aside>
                 </div>
@@ -1342,13 +1342,13 @@
     {% else %}
         <div class="empty-cart">
             <div class="empty-cart__content">
-                <span class="empty-cart__icon">&hearts;</span>
+                <span class="empty-cart__icon" aria-hidden="true">💝</span>
                 <h2>A&uacute;n no has elegido tu sorpresa</h2>
                 <p>
                     Explora el cat&aacute;logo, guarda las referencias que te interesan y luego
                     las revisamos por WhatsApp con colores, mensaje, entrega y valor final.
                 </p>
-                <a href="{% url 'inicio' %}" class="btn-secondary">Explorar cat&aacute;logo</a>
+                <a href="{% url 'inicio' %}" class="btn-secondary"><span class="soft-emoji" aria-hidden="true">🎁</span>Explorar cat&aacute;logo</a>
             </div>
         </div>
     {% endif %}
