@@ -827,6 +827,39 @@
         text-transform: uppercase;
     }
 
+    .designer-highlights {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .designer-highlight {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        min-height: 100%;
+        padding: 12px 13px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(198, 68, 125, 0.09);
+        color: var(--ink-700);
+        line-height: 1.4;
+    }
+
+    .designer-highlight strong {
+        display: block;
+        color: var(--ink-900);
+        font-size: 0.94rem;
+        line-height: 1.18;
+    }
+
+    .designer-highlight small {
+        display: block;
+        margin-top: 3px;
+        font-size: 0.82rem;
+        line-height: 1.38;
+    }
+
     .gift-designer-layout {
         display: grid;
         grid-template-columns: minmax(0, 0.94fr) minmax(320px, 0.64fr);
@@ -960,6 +993,8 @@
         border-radius: 20px;
         background: rgba(255, 249, 252, 0.9);
         border: 1px solid rgba(198, 68, 125, 0.09);
+        appearance: none;
+        font: inherit;
         text-align: left;
         cursor: pointer;
     }
@@ -1045,6 +1080,24 @@
         pointer-events: none;
     }
 
+    .designer-preview-status {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 32px;
+        padding: 0 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--rose-700);
+        font-size: 0.78rem;
+        font-weight: 900;
+        box-shadow: 0 10px 20px rgba(75, 24, 46, 0.08);
+    }
+
     .designer-preview-image {
         position: absolute;
         inset: 18px 18px 90px;
@@ -1108,6 +1161,39 @@
         color: var(--rose-700);
         font-size: 0.76rem;
         font-weight: 900;
+    }
+
+    .designer-brief {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .designer-brief-item {
+        min-width: 0;
+        padding: 11px 12px;
+        border-radius: 16px;
+        background: rgba(255, 249, 252, 0.92);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }
+
+    .designer-brief-item span {
+        display: block;
+        color: var(--ink-500);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .designer-brief-item strong {
+        display: block;
+        margin-top: 5px;
+        color: var(--ink-900);
+        font-size: 0.9rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
     }
 
     .designer-actions {
@@ -2202,6 +2288,15 @@
             gap: 14px;
         }
 
+        .designer-highlights {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .designer-highlight {
+            padding: 11px 12px;
+        }
+
         .gift-designer-form,
         .gift-designer-preview {
             border-radius: 22px;
@@ -2260,9 +2355,18 @@
             border-radius: 22px;
         }
 
+        .designer-preview-status {
+            top: 14px;
+            left: 14px;
+        }
+
         .designer-preview-image {
             inset: 14px 14px 88px;
             border-radius: 18px;
+        }
+
+        .designer-brief {
+            grid-template-columns: 1fr;
         }
 
         .process-video-carousel {
@@ -2643,7 +2747,7 @@
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">✨</span>Acompa&ntilde;ando tus sentimientos</span>
-            <h1>Detalles personalizados para celebrar momentos que merecen ser recordados.</h1>
+            <h1>Regalos con amor para momentos que se quedan en el corazón.</h1>
             <p>
                 Preparamos detalles personalizados con cuidado, color y amor: desayunos sorpresa,
                 cajas tem&aacute;ticas y regalos rom&aacute;nticos pensados para hacer sentir especial
@@ -2772,14 +2876,29 @@
     <section class="gift-designer-card page-card" id="disena-tu-regalo" data-gift-designer>
         <div class="gift-designer-header">
             <div>
-                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">🧸</span>Beta sin API</span>
-                <h2>Diseña tu regalo personalizado</h2>
+                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">🧸</span>Diseño guiado</span>
+                <h2>Arma tu regalo a medida</h2>
                 <p>
-                    Arma una idea con ocasión, presupuesto, color y elementos. El sistema recomienda
-                    una base real del catálogo y prepara el mensaje para cotizar por WhatsApp.
+                    Elige la ocasión, el presupuesto, los tonos y los elementos. Te mostramos una base real
+                    del catálogo y dejamos la idea lista para cotizar por WhatsApp.
                 </p>
             </div>
-            <span class="gift-designer-badge"><span class="soft-emoji" aria-hidden="true">✨</span>Asistente creativo</span>
+            <span class="gift-designer-badge">Listo para cotizar</span>
+        </div>
+
+        <div class="designer-highlights" aria-label="Beneficios del diseño personalizado">
+            <div class="designer-highlight">
+                <span class="soft-emoji" aria-hidden="true">🎀</span>
+                <span><strong>Base del catálogo</strong><small>Parte de productos reales para evitar promesas imposibles.</small></span>
+            </div>
+            <div class="designer-highlight">
+                <span class="soft-emoji" aria-hidden="true">💌</span>
+                <span><strong>Mensaje preparado</strong><small>WhatsApp abre con tu idea, presupuesto y preferencias.</small></span>
+            </div>
+            <div class="designer-highlight">
+                <span class="soft-emoji" aria-hidden="true">🌷</span>
+                <span><strong>Acabado a medida</strong><small>Colores y detalles se confirman según disponibilidad.</small></span>
+            </div>
         </div>
 
         <div class="gift-designer-layout">
@@ -2886,7 +3005,7 @@
 
                 {% if disenador_productos %}
                     <div class="designer-step">
-                        <strong class="designer-step-title"><span>5</span> Base recomendada</strong>
+                        <strong class="designer-step-title"><span>5</span> Elige una base</strong>
                         <div class="designer-products" data-designer-products>
                             {% for producto in disenador_productos %}
                                 <button
@@ -2920,8 +3039,9 @@
 
             <aside class="gift-designer-preview" aria-label="Vista previa de regalo personalizado">
                 <div class="designer-preview-frame" data-designer-preview-frame>
+                    <span class="designer-preview-status" data-designer-status>Idea lista</span>
                     <div class="designer-preview-image" data-designer-preview-image>
-                        <span class="designer-preview-empty">Elige opciones para ver una idea basada en el catálogo</span>
+                        <span class="designer-preview-empty">Elige opciones para armar tu idea</span>
                     </div>
                     <div class="designer-preview-copy">
                         <strong data-designer-title>Detalle personalizado para cumpleaños</strong>
@@ -2929,13 +3049,31 @@
                         <div class="designer-preview-tags" data-designer-tags></div>
                     </div>
                 </div>
+                <div class="designer-brief" aria-label="Resumen de la idea personalizada">
+                    <div class="designer-brief-item">
+                        <span>Ocasión</span>
+                        <strong data-designer-brief-occasion>Cumpleaños</strong>
+                    </div>
+                    <div class="designer-brief-item">
+                        <span>Presupuesto</span>
+                        <strong data-designer-brief-budget>$65.000 - $100.000</strong>
+                    </div>
+                    <div class="designer-brief-item">
+                        <span>Color</span>
+                        <strong data-designer-brief-color>rosa suave</strong>
+                    </div>
+                    <div class="designer-brief-item">
+                        <span>Elementos</span>
+                        <strong data-designer-brief-elements>globos</strong>
+                    </div>
+                </div>
                 <div class="designer-actions">
-                    <a href="{{ whatsapp_assistance_url }}" class="btn" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>Cotizar esta idea por WhatsApp</a>
+                    <a href="{{ whatsapp_assistance_url }}" class="btn" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>Enviar idea por WhatsApp</a>
                     <a href="#catalogo" class="btn-secondary js-catalog-nav" data-designer-catalog>Ver bases parecidas</a>
                 </div>
                 <p class="designer-note">
-                    Esto no genera una imagen artificial ni cobra por IA. Es una guía visual basada en productos reales,
-                    útil para llegar a WhatsApp con una idea clara.
+                    La vista previa es una referencia de composición. En WhatsApp confirmamos disponibilidad,
+                    colores, mensaje personalizado y valor final antes de preparar el pedido.
                 </p>
             </aside>
         </div>
@@ -3258,6 +3396,11 @@
         const previewTitle = designer.querySelector('[data-designer-title]');
         const previewSummary = designer.querySelector('[data-designer-summary]');
         const previewTags = designer.querySelector('[data-designer-tags]');
+        const previewStatus = designer.querySelector('[data-designer-status]');
+        const briefOccasion = designer.querySelector('[data-designer-brief-occasion]');
+        const briefBudget = designer.querySelector('[data-designer-brief-budget]');
+        const briefColor = designer.querySelector('[data-designer-brief-color]');
+        const briefElements = designer.querySelector('[data-designer-brief-elements]');
         const whatsappLink = designer.querySelector('[data-designer-whatsapp]');
         const catalogLink = designer.querySelector('[data-designer-catalog]');
         let manualProduct = null;
@@ -3318,7 +3461,7 @@
                 const score = scores.get(product) || 0;
                 const scoreNode = product.querySelector('[data-match-score]');
                 if (scoreNode) {
-                    scoreNode.textContent = score >= 8 ? 'Muy afín' : score >= 5 ? 'Buena base' : 'Base';
+                    scoreNode.textContent = score >= 8 ? 'Ideal' : score >= 5 ? 'Afinada' : 'Base';
                 }
             });
         };
@@ -3347,7 +3490,7 @@
             }
             if (previewTitle) previewTitle.textContent = `${productName} personalizado`;
             if (previewSummary) {
-                previewSummary.textContent = `${state.occasionLabel} con ${elementText}, color ${state.colorLabel} y base desde ${productPriceLabel}.`;
+                previewSummary.textContent = `${state.occasionLabel} con ${elementText}, tonos ${state.colorLabel} y base desde ${productPriceLabel}.`;
             }
             if (previewTags) {
                 const tags = [state.occasionLabel, state.budgetLabel, state.colorLabel, ...state.elementLabels, productCategory]
@@ -3355,9 +3498,14 @@
                     .slice(0, 7);
                 previewTags.innerHTML = tags.map((tag) => `<span class="designer-preview-tag">${escapeHtml(tag)}</span>`).join('');
             }
+            if (previewStatus) previewStatus.textContent = activeProduct ? 'Idea lista' : 'Por armar';
+            if (briefOccasion) briefOccasion.textContent = state.occasionLabel || 'Por definir';
+            if (briefBudget) briefBudget.textContent = state.budgetLabel || 'Por definir';
+            if (briefColor) briefColor.textContent = state.colorLabel || 'Por definir';
+            if (briefElements) briefElements.textContent = elementText;
             if (whatsappLink) {
                 const message = [
-                    'Hola, quiero crear un regalo personalizado.',
+                    'Hola, quiero cotizar esta idea de regalo personalizado.',
                     `Ocasión: ${state.occasionLabel}.`,
                     `Presupuesto: ${state.budgetLabel}.`,
                     `Color principal: ${state.colorLabel}.`,
