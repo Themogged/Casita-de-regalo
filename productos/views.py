@@ -5,7 +5,14 @@ from django.urls import reverse
 
 from .models import Producto
 from .selectors import (
+    CATALOG_ATTRIBUTE_OPTIONS,
+    CATALOG_FILTER_LABELS,
+    CATALOG_OCCASION_OPTIONS,
     CATALOG_ORDER_OPTIONS,
+    CATALOG_PERSON_OPTIONS,
+    CATALOG_PRICE_OPTIONS,
+    CATALOG_TIME_OPTIONS,
+    CATALOG_TYPE_OPTIONS,
     get_active_process_videos,
     get_catalog_queryset,
     get_featured_products,
@@ -529,15 +536,98 @@ def _build_product_schema(request, producto):
     return json.dumps(schema, ensure_ascii=False)
 
 
+def _product_text(producto):
+    return ' '.join(
+        filter(
+            None,
+            [
+                producto.nombre,
+                producto.descripcion,
+                producto.categoria.nombre if producto.categoria else '',
+            ],
+        )
+    ).lower()
+
+
+def _build_product_badges(producto):
+    text = _product_text(producto)
+    badges = ['Personalizable']
+
+    if producto.destacado:
+        badges.append('Más pedido')
+    if producto.disponible:
+        badges.append('Pedido 1-2 días')
+
+    token_badges = [
+        (('flor', 'flores', 'rosa', 'girasol'), 'Con flores'),
+        (('peluche',), 'Con peluche'),
+        (('globo', 'globos', 'arco'), 'Con globos'),
+        (('desayuno', 'waffle', 'wafle', 'jugo'), 'Desayuno'),
+        (('fruta', 'fresas', 'manzana', 'pera'), 'Con frutas'),
+        (('luces', 'luz'), 'Con luces'),
+    ]
+
+    for tokens, label in token_badges:
+        if any(token in text for token in tokens):
+            badges.append(label)
+
+    unique_badges = []
+    for badge in badges:
+        if badge not in unique_badges:
+            unique_badges.append(badge)
+    return unique_badges[:5]
+
+
+def _option_label(options, selected_value):
+    return dict(options).get(selected_value, '')
+
+
+def _build_active_filter_labels(filters):
+    labels = []
+    if filters['q']:
+        labels.append(f'Búsqueda: {filters["q"]}')
+
+    option_groups = [
+        (CATALOG_PRICE_OPTIONS, filters['presupuesto']),
+        (CATALOG_OCCASION_OPTIONS, filters['ocasion']),
+        (CATALOG_PERSON_OPTIONS, filters['persona']),
+        (CATALOG_TYPE_OPTIONS, filters['tipo']),
+        (CATALOG_TIME_OPTIONS, filters['tiempo']),
+    ]
+    for options, selected_value in option_groups:
+        label = _option_label(options, selected_value)
+        if label:
+            labels.append(label)
+
+    for attribute in filters['atributos']:
+        label = CATALOG_FILTER_LABELS.get(attribute)
+        if label:
+            labels.append(label)
+
+    return labels
+
+
 def inicio(request):
     busqueda = request.GET.get('q', '').strip()
     categoria_id = request.GET.get('categoria', '').strip()
     orden = request.GET.get('orden', 'destacados')
+    presupuesto = request.GET.get('presupuesto', '').strip()
+    ocasion = request.GET.get('ocasion', '').strip()
+    persona = request.GET.get('persona', '').strip()
+    tipo = request.GET.get('tipo', '').strip()
+    tiempo = request.GET.get('tiempo', '').strip()
+    atributos = [value.strip() for value in request.GET.getlist('atributos') if value.strip()]
 
     productos, categorias, categoria_actual = get_catalog_queryset(
         search=busqueda,
         category_id=categoria_id,
         order=orden,
+        price_range=presupuesto,
+        occasion=ocasion,
+        person=persona,
+        product_type=tipo,
+        time_filter=tiempo,
+        attributes=atributos,
     )
     destacados = get_featured_products(
         productos,
@@ -552,6 +642,25 @@ def inicio(request):
     }
 
     page_obj = paginate_products(productos, request.GET.get('page'))
+    productos_pagina = list(page_obj.object_list)
+    for producto in productos_pagina:
+        producto.catalog_badges = _build_product_badges(producto)
+
+    query_params = request.GET.copy()
+    query_params.pop('page', None)
+    catalog_query_base = query_params.urlencode()
+    catalog_page_prefix = f'{catalog_query_base}&' if catalog_query_base else ''
+    active_filter_labels = _build_active_filter_labels(
+        {
+            'q': busqueda,
+            'presupuesto': presupuesto,
+            'ocasion': ocasion,
+            'persona': persona,
+            'tipo': tipo,
+            'tiempo': tiempo,
+            'atributos': atributos,
+        }
+    )
 
     contexto = {
         'categorias': categorias,
@@ -561,10 +670,24 @@ def inicio(request):
             'q': busqueda,
             'categoria_id': categoria_actual.id if categoria_actual else '',
             'orden': orden,
+            'presupuesto': presupuesto,
+            'ocasion': ocasion,
+            'persona': persona,
+            'tipo': tipo,
+            'tiempo': tiempo,
+            'atributos': atributos,
         },
         'opciones_orden': CATALOG_ORDER_OPTIONS,
+        'opciones_presupuesto': CATALOG_PRICE_OPTIONS,
+        'opciones_ocasion': CATALOG_OCCASION_OPTIONS,
+        'opciones_persona': CATALOG_PERSON_OPTIONS,
+        'opciones_tipo': CATALOG_TYPE_OPTIONS,
+        'opciones_tiempo': CATALOG_TIME_OPTIONS,
+        'opciones_atributos': CATALOG_ATTRIBUTE_OPTIONS,
+        'filtros_activos': active_filter_labels,
+        'catalog_page_prefix': catalog_page_prefix,
         'page_obj': page_obj,
-        'productos': page_obj.object_list,
+        'productos': productos_pagina,
         'quienes_somos': QUIENES_SOMOS,
         'pilares_servicio': PILARES_SERVICIO,
         'lineas_detalle': LINEAS_DETALLE,

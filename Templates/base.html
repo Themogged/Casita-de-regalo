@@ -419,6 +419,39 @@
             color: var(--rose-700);
         }
 
+        .category-more {
+            position: relative;
+            flex: 0 0 auto;
+        }
+
+        .category-more summary {
+            list-style: none;
+            cursor: pointer;
+        }
+
+        .category-more summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .category-more-panel {
+            position: absolute;
+            top: 46px;
+            right: 0;
+            z-index: 12;
+            display: grid;
+            gap: 8px;
+            min-width: 230px;
+            padding: 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.98);
+            border: 1px solid rgba(198, 68, 125, 0.12);
+            box-shadow: 0 22px 42px rgba(75, 24, 46, 0.12);
+        }
+
+        .category-more:not([open]) .category-more-panel {
+            display: none;
+        }
+
         .page-shell {
             padding: 26px 0 68px;
         }
@@ -1216,6 +1249,21 @@
                 padding: 3px;
             }
 
+            .category-more {
+                position: static;
+            }
+
+            .category-more-panel {
+                position: static;
+                display: inline-flex;
+                min-width: 0;
+                padding: 0;
+                gap: 8px;
+                background: transparent;
+                border: 0;
+                box-shadow: none;
+            }
+
             .category-pill {
                 padding: 6px 9px;
                 font-size: 0.74rem;
@@ -1399,10 +1447,26 @@
             <div class="category-strip-inner">
                 <a href="{% url 'inicio' %}" class="category-pill">Todos</a>
                 {% for categoria in categorias_menu %}
-                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
-                        {{ categoria.nombre }}
-                    </a>
+                    {% if forloop.counter <= 6 %}
+                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
+                            {{ categoria.nombre }}
+                        </a>
+                    {% endif %}
                 {% endfor %}
+                {% if categorias_menu|length > 6 %}
+                    <details class="category-more">
+                        <summary class="category-pill">Ver más</summary>
+                        <div class="category-more-panel">
+                            {% for categoria in categorias_menu %}
+                                {% if forloop.counter > 6 %}
+                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
+                                        {{ categoria.nombre }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endif %}
             </div>
         </div>
     {% endif %}

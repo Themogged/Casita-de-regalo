@@ -255,6 +255,20 @@ class CatalogoViewsTests(TestCase):
             stock=4,
             categoria=self.categoria_regalos,
         )
+        self.producto_elaborado = Producto.objects.create(
+            nombre='Caja grande con flores',
+            descripcion='Caja con rosas, flores, globos y chocolates para una sorpresa elaborada.',
+            precio='130000.00',
+            stock=4,
+            categoria=self.categoria_flores,
+        )
+        self.producto_hombre = Producto.objects.create(
+            nombre='Detalle para hombre',
+            descripcion='Detalle sobrio para hombres con snacks y bebida.',
+            precio='90000.00',
+            stock=4,
+            categoria=self.categoria_regalos,
+        )
 
         for indice in range(10):
             Producto.objects.create(
@@ -282,6 +296,9 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Elige el detalle ideal')
         self.assertContains(response, 'Buscar detalle')
         self.assertContains(response, 'Ordenar por')
+        self.assertContains(response, 'Filtros rápidos para encontrar mejor')
+        self.assertContains(response, 'Presupuesto')
+        self.assertContains(response, 'Persona')
         self.assertContains(response, 'Agregar a mi cotización')
         self.assertContains(response, 'hero-product-card')
         self.assertNotContains(response, 'data-track-click')
@@ -366,6 +383,44 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Ramo premium')
         self.assertNotContains(response, 'Caja sorpresa')
 
+    def test_catalogo_filtra_por_presupuesto_atributo_y_persona(self):
+        response = self.client.get(
+            reverse('inicio'),
+            {'presupuesto': '120_170', 'atributos': ['flores']},
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Caja grande con flores')
+        self.assertNotContains(
+            response,
+            f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="product-title-link">{self.producto_principal.nombre}</a>',
+            html=True,
+        )
+        self.assertContains(response, '$120.000 - $170.000')
+        self.assertContains(response, 'Con flores')
+
+        response = self.client.get(reverse('inicio'), {'persona': 'el'}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Detalle para hombre')
+        self.assertNotContains(
+            response,
+            f'<a href="{reverse("detalle_producto", args=[self.producto_agotado.id])}" class="product-title-link">{self.producto_agotado.nombre}</a>',
+            html=True,
+        )
+
+    def test_catalogo_interpreta_busqueda_por_presupuesto(self):
+        response = self.client.get(reverse('inicio'), {'q': 'menos de 100 mil'}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Caja sorpresa')
+        self.assertNotContains(
+            response,
+            f'<a href="{reverse("detalle_producto", args=[self.producto_elaborado.id])}" class="product-title-link">{self.producto_elaborado.nombre}</a>',
+            html=True,
+        )
+
     def test_detalle_producto_muestra_relacionados(self):
         response = self.client.get(reverse('detalle_producto', args=[self.producto_principal.id]), secure=True)
 
@@ -375,6 +430,8 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Siguiente')
         self.assertContains(response, reverse('detalle_producto', args=[self.relacionado.id]))
         self.assertContains(response, 'Tiempo recomendado')
+        self.assertContains(response, 'Ideal para')
+        self.assertContains(response, 'Puede variar')
         self.assertContains(response, 'Agregar a mi cotizaci&oacute;n')
         self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, '<meta property="og:type" content="product">', html=True)
@@ -432,7 +489,7 @@ class CatalogoViewsTests(TestCase):
         response = self.client.get(reverse('inicio'), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, '?q=&categoria=&orden=destacados&page=2#catalogo')
+        self.assertContains(response, '?page=2#catalogo')
         self.assertContains(
             response,
             f'{reverse("inicio")}?categoria={self.categoria_regalos.id}#catalogo',
