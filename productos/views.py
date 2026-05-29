@@ -578,6 +578,40 @@ def _build_product_badges(producto):
     return unique_badges[:5]
 
 
+def _build_designer_tags(producto):
+    text = _product_text(producto)
+    tag_rules = [
+        (('cumple', 'cumpleaños'), 'cumpleanos'),
+        (('aniversario', 'pareja', 'amor', 'romántico', 'romantico'), 'amor'),
+        (('niño', 'niños', 'infantil', 'stitch', 'toy story', 'hello kitty'), 'ninos'),
+        (('mamá', 'mama', 'madre'), 'mama'),
+        (('desayuno', 'waffle', 'jugo', 'milo', 'bonyurt'), 'desayuno'),
+        (('caja', 'cajita', 'madera', 'acetato'), 'caja'),
+        (('flor', 'flores', 'rosa', 'rosas', 'girasol'), 'flores'),
+        (('peluche',), 'peluche'),
+        (('globo', 'globos', 'arco'), 'globos'),
+        (('fruta', 'frutas', 'fresas'), 'frutas'),
+        (('luces', 'luz'), 'luces'),
+        (('hombre', 'hombres', 'sobrio'), 'hombre'),
+    ]
+    tags = []
+    for tokens, tag in tag_rules:
+        if any(token in text for token in tokens):
+            tags.append(tag)
+    return ' '.join(dict.fromkeys(tags))
+
+
+def _get_designer_products(limit=12):
+    products = list(
+        Producto.objects.select_related('categoria')
+        .filter(stock__gt=0)
+        .order_by('-destacado', 'precio', 'nombre')[:limit]
+    )
+    for producto in products:
+        producto.designer_tags = _build_designer_tags(producto)
+    return products
+
+
 def _option_label(options, selected_value):
     return dict(options).get(selected_value, '')
 
@@ -635,6 +669,19 @@ def inicio(request):
         current_category=categoria_actual,
     )
     videos_elaboracion = get_active_process_videos()
+    catalog_has_filters = any(
+        [
+            busqueda,
+            categoria_id,
+            presupuesto,
+            ocasion,
+            persona,
+            tipo,
+            tiempo,
+            atributos,
+        ]
+    ) or orden != 'destacados'
+    disenador_productos = [] if catalog_has_filters else _get_designer_products()
 
     resumen = {
         'total_productos': Producto.objects.count(),
@@ -698,6 +745,8 @@ def inicio(request):
         'politicas_clave': POLITICAS_CLAVE,
         'terminos_condiciones': TERMINOS_CONDICIONES,
         'videos_elaboracion': videos_elaboracion,
+        'disenador_productos': disenador_productos,
+        'mostrar_disenador': bool(disenador_productos),
         'seo_schema_json': _build_home_schema(request),
         'resumen': resumen,
     }

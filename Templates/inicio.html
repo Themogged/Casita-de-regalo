@@ -763,6 +763,364 @@
             linear-gradient(135deg, rgba(255, 252, 249, 0.98) 0%, rgba(255, 243, 248, 0.98) 100%);
     }
 
+    .gift-designer-card {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        gap: 24px;
+        padding: 28px;
+        background:
+            radial-gradient(circle at 95% 0%, rgba(255, 218, 232, 0.78), transparent 28%),
+            radial-gradient(circle at 0% 95%, rgba(255, 245, 221, 0.86), transparent 32%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.99), rgba(255, 247, 251, 0.99));
+    }
+
+    .gift-designer-card::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.74);
+        pointer-events: none;
+    }
+
+    .gift-designer-card > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    .gift-designer-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .gift-designer-header > div {
+        max-width: 720px;
+    }
+
+    .gift-designer-header h2 {
+        margin: 6px 0 10px;
+        font-size: clamp(1.85rem, 3.8vw, 2.75rem);
+        line-height: 1.02;
+    }
+
+    .gift-designer-header p {
+        color: var(--ink-700);
+        line-height: 1.65;
+    }
+
+    .gift-designer-badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 34px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--rose-700);
+        font-size: 0.8rem;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .gift-designer-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.94fr) minmax(320px, 0.64fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .gift-designer-form,
+    .gift-designer-preview {
+        min-width: 0;
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        box-shadow: 0 18px 34px rgba(75, 24, 46, 0.06);
+    }
+
+    .gift-designer-form {
+        display: grid;
+        gap: 18px;
+        padding: 20px;
+    }
+
+    .designer-step {
+        display: grid;
+        gap: 10px;
+    }
+
+    .designer-step-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--ink-900);
+        font-weight: 900;
+    }
+
+    .designer-step-title span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
+        color: #fff;
+        font-size: 0.78rem;
+    }
+
+    .designer-option-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 8px;
+    }
+
+    .designer-option {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 249, 252, 0.95);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--ink-700);
+        font-weight: 850;
+        cursor: pointer;
+    }
+
+    .designer-option input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .designer-option:has(input:checked) {
+        background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 12px 22px rgba(215, 38, 109, 0.16);
+    }
+
+    .designer-color-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .designer-color {
+        min-width: 48px;
+        min-height: 48px;
+        padding: 4px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid rgba(198, 68, 125, 0.12);
+        cursor: pointer;
+    }
+
+    .designer-color input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .designer-color span {
+        display: block;
+        width: 38px;
+        height: 38px;
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.92);
+        box-shadow: inset 0 0 0 1px rgba(75, 24, 46, 0.08);
+    }
+
+    .designer-color:has(input:checked) {
+        border-color: rgba(215, 38, 109, 0.42);
+        box-shadow: 0 10px 18px rgba(215, 38, 109, 0.12);
+    }
+
+    .designer-products {
+        display: grid;
+        gap: 10px;
+        max-height: 430px;
+        overflow: auto;
+        padding-right: 4px;
+    }
+
+    .designer-product {
+        display: grid;
+        grid-template-columns: 74px minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 20px;
+        background: rgba(255, 249, 252, 0.9);
+        border: 1px solid rgba(198, 68, 125, 0.09);
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .designer-product.is-active {
+        background: #fff;
+        border-color: rgba(215, 38, 109, 0.25);
+        box-shadow: 0 14px 24px rgba(75, 24, 46, 0.08);
+    }
+
+    .designer-product img,
+    .designer-product-placeholder {
+        width: 74px;
+        height: 74px;
+        border-radius: 16px;
+        object-fit: cover;
+        background: linear-gradient(180deg, #fff8fb, #ffe7f1);
+    }
+
+    .designer-product-placeholder {
+        display: grid;
+        place-items: center;
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .designer-product strong {
+        display: block;
+        color: var(--ink-900);
+        line-height: 1.2;
+    }
+
+    .designer-product small {
+        display: block;
+        margin-top: 4px;
+        color: var(--ink-700);
+        line-height: 1.25;
+    }
+
+    .designer-match-score {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: rgba(255, 234, 242, 0.88);
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .gift-designer-preview {
+        position: sticky;
+        top: 104px;
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+    }
+
+    .designer-preview-frame {
+        position: relative;
+        min-height: 350px;
+        overflow: hidden;
+        display: grid;
+        align-items: end;
+        border-radius: 26px;
+        padding: 18px;
+        background:
+            radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.84), transparent 24%),
+            linear-gradient(135deg, var(--designer-color, #f9a8c7), #fff8fc);
+        border: 1px solid rgba(255, 255, 255, 0.74);
+    }
+
+    .designer-preview-frame::before {
+        content: "";
+        position: absolute;
+        inset: 18px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        pointer-events: none;
+    }
+
+    .designer-preview-image {
+        position: absolute;
+        inset: 18px 18px 90px;
+        display: grid;
+        place-items: center;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.5);
+        overflow: hidden;
+    }
+
+    .designer-preview-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 8px;
+    }
+
+    .designer-preview-empty {
+        padding: 18px;
+        color: var(--rose-700);
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .designer-preview-copy {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 7px;
+        padding: 14px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 16px 30px rgba(75, 24, 46, 0.1);
+    }
+
+    .designer-preview-copy strong {
+        color: var(--ink-900);
+        font-size: 1.05rem;
+        line-height: 1.2;
+    }
+
+    .designer-preview-copy span {
+        color: var(--ink-700);
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .designer-preview-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .designer-preview-tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: rgba(255, 234, 242, 0.9);
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+    }
+
+    .designer-actions {
+        display: grid;
+        gap: 9px;
+    }
+
+    .designer-note {
+        color: var(--ink-500);
+        font-size: 0.86rem;
+        line-height: 1.55;
+    }
+
     .process-video-header {
         display: flex;
         justify-content: space-between;
@@ -1818,6 +2176,95 @@
             white-space: normal;
         }
 
+        .gift-designer-card {
+            padding: 20px 14px;
+            border-radius: 24px;
+        }
+
+        .gift-designer-card::before {
+            inset: 8px;
+            border-radius: 20px;
+        }
+
+        .gift-designer-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .gift-designer-header h2 {
+            font-size: clamp(1.55rem, 8vw, 2rem);
+            margin-bottom: 8px;
+        }
+
+        .gift-designer-layout {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .gift-designer-form,
+        .gift-designer-preview {
+            border-radius: 22px;
+            padding: 14px;
+        }
+
+        .designer-option-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .designer-option {
+            min-height: 40px;
+            padding: 0 9px;
+            font-size: 0.82rem;
+        }
+
+        .designer-products {
+            max-height: none;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 0 6px;
+            scrollbar-width: none;
+        }
+
+        .designer-products::-webkit-scrollbar {
+            display: none;
+        }
+
+        .designer-product {
+            grid-template-columns: 64px minmax(150px, 1fr);
+            grid-template-rows: auto auto;
+            width: min(78vw, 300px);
+            flex: 0 0 auto;
+            border-radius: 18px;
+        }
+
+        .designer-product img,
+        .designer-product-placeholder {
+            width: 64px;
+            height: 64px;
+        }
+
+        .designer-match-score {
+            grid-column: 1 / -1;
+            justify-self: start;
+        }
+
+        .gift-designer-preview {
+            position: static;
+        }
+
+        .designer-preview-frame {
+            min-height: 320px;
+            border-radius: 22px;
+        }
+
+        .designer-preview-image {
+            inset: 14px 14px 88px;
+            border-radius: 18px;
+        }
+
         .process-video-carousel {
             gap: 8px;
             margin-inline: -6px;
@@ -2308,6 +2755,180 @@
         </article>
     </section>
 
+    {% if mostrar_disenador %}
+    <section class="gift-designer-card page-card" id="disena-tu-regalo" data-gift-designer>
+        <div class="gift-designer-header">
+            <div>
+                <span class="section-kicker">Beta sin API</span>
+                <h2>Diseña tu regalo personalizado</h2>
+                <p>
+                    Arma una idea con ocasión, presupuesto, color y elementos. El sistema recomienda
+                    una base real del catálogo y prepara el mensaje para cotizar por WhatsApp.
+                </p>
+            </div>
+            <span class="gift-designer-badge">Asistente creativo</span>
+        </div>
+
+        <div class="gift-designer-layout">
+            <div class="gift-designer-form" aria-label="Opciones para diseñar un regalo personalizado">
+                <div class="designer-step">
+                    <strong class="designer-step-title"><span>1</span> Ocasión</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option">
+                            <input type="radio" name="designer_occasion" value="cumpleanos" data-label="Cumpleaños" checked>
+                            Cumpleaños
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_occasion" value="amor" data-label="Amor o aniversario">
+                            Amor
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_occasion" value="ninos" data-label="Niños o temática infantil">
+                            Niños
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_occasion" value="mama" data-label="Mamá o familia">
+                            Mamá
+                        </label>
+                    </div>
+                </div>
+
+                <div class="designer-step">
+                    <strong class="designer-step-title"><span>2</span> Presupuesto</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option">
+                            <input type="radio" name="designer_budget" value="65000" data-label="Hasta $65.000">
+                            Hasta $65.000
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_budget" value="100000" data-label="$65.000 - $100.000" checked>
+                            $65.000 - $100.000
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_budget" value="150000" data-label="$100.000 - $150.000">
+                            $100.000 - $150.000
+                        </label>
+                        <label class="designer-option">
+                            <input type="radio" name="designer_budget" value="220000" data-label="Más elaborado">
+                            Más elaborado
+                        </label>
+                    </div>
+                </div>
+
+                <div class="designer-step">
+                    <strong class="designer-step-title"><span>3</span> Color principal</strong>
+                    <div class="designer-color-row">
+                        <label class="designer-color" title="Rosa suave">
+                            <input type="radio" name="designer_color" value="#f9a8c7" data-label="rosa suave" checked>
+                            <span style="background:#f9a8c7"></span>
+                        </label>
+                        <label class="designer-color" title="Lila">
+                            <input type="radio" name="designer_color" value="#c4b5fd" data-label="lila">
+                            <span style="background:#c4b5fd"></span>
+                        </label>
+                        <label class="designer-color" title="Dorado">
+                            <input type="radio" name="designer_color" value="#f4c76a" data-label="dorado">
+                            <span style="background:#f4c76a"></span>
+                        </label>
+                        <label class="designer-color" title="Rojo amor">
+                            <input type="radio" name="designer_color" value="#ef5f73" data-label="rojo amor">
+                            <span style="background:#ef5f73"></span>
+                        </label>
+                        <label class="designer-color" title="Azul">
+                            <input type="radio" name="designer_color" value="#93c5fd" data-label="azul">
+                            <span style="background:#93c5fd"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="designer-step">
+                    <strong class="designer-step-title"><span>4</span> Elementos</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="flores" data-label="flores">
+                            Flores
+                        </label>
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="globos" data-label="globos" checked>
+                            Globos
+                        </label>
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="desayuno" data-label="desayuno">
+                            Desayuno
+                        </label>
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="peluche" data-label="peluche">
+                            Peluche
+                        </label>
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="frutas" data-label="frutas">
+                            Frutas
+                        </label>
+                        <label class="designer-option">
+                            <input type="checkbox" name="designer_elements" value="luces" data-label="luces">
+                            Luces
+                        </label>
+                    </div>
+                </div>
+
+                {% if disenador_productos %}
+                    <div class="designer-step">
+                        <strong class="designer-step-title"><span>5</span> Base recomendada</strong>
+                        <div class="designer-products" data-designer-products>
+                            {% for producto in disenador_productos %}
+                                <button
+                                    type="button"
+                                    class="designer-product"
+                                    data-designer-product
+                                    data-name="{{ producto.nombre }}"
+                                    data-category="{{ producto.categoria.nombre|default:'Detalle personalizado' }}"
+                                    data-price="{{ producto.precio }}"
+                                    data-price-label="{{ producto.precio|cop }} COP"
+                                    data-url="{% url 'detalle_producto' producto.id %}"
+                                    data-tags="{{ producto.designer_tags }}"
+                                    {% if producto.imagen %}data-image="{{ producto.imagen.url|optimized_image_url }}"{% endif %}
+                                >
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="lazy" decoding="async">
+                                    {% else %}
+                                        <span class="designer-product-placeholder">Sin foto</span>
+                                    {% endif %}
+                                    <span>
+                                        <strong>{{ producto.nombre }}</strong>
+                                        <small>{{ producto.categoria.nombre|default:"Detalle" }} · Desde {{ producto.precio|cop }} COP</small>
+                                    </span>
+                                    <span class="designer-match-score" data-match-score>Base</span>
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <aside class="gift-designer-preview" aria-label="Vista previa de regalo personalizado">
+                <div class="designer-preview-frame" data-designer-preview-frame>
+                    <div class="designer-preview-image" data-designer-preview-image>
+                        <span class="designer-preview-empty">Elige opciones para ver una idea basada en el catálogo</span>
+                    </div>
+                    <div class="designer-preview-copy">
+                        <strong data-designer-title>Detalle personalizado para cumpleaños</strong>
+                        <span data-designer-summary>Base con globos, color rosa suave y acabado personalizado.</span>
+                        <div class="designer-preview-tags" data-designer-tags></div>
+                    </div>
+                </div>
+                <div class="designer-actions">
+                    <a href="{{ whatsapp_assistance_url }}" class="btn" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>Cotizar esta idea por WhatsApp</a>
+                    <a href="#catalogo" class="btn-secondary js-catalog-nav" data-designer-catalog>Ver bases parecidas</a>
+                </div>
+                <p class="designer-note">
+                    Esto no genera una imagen artificial ni cobra por IA. Es una guía visual basada en productos reales,
+                    útil para llegar a WhatsApp con una idea clara.
+                </p>
+            </aside>
+        </div>
+    </section>
+    {% endif %}
+
     {% if videos_elaboracion %}
     <section class="process-video-card section-card page-card">
         <div class="process-video-header">
@@ -2612,4 +3233,149 @@
 </section>
 
 </div>
+<script>
+    (() => {
+        const designer = document.querySelector('[data-gift-designer]');
+        if (!designer) return;
+
+        const whatsappBase = '{{ whatsapp_assistance_url|escapejs }}'.split('?')[0];
+        const products = Array.from(designer.querySelectorAll('[data-designer-product]'));
+        const previewFrame = designer.querySelector('[data-designer-preview-frame]');
+        const previewImage = designer.querySelector('[data-designer-preview-image]');
+        const previewTitle = designer.querySelector('[data-designer-title]');
+        const previewSummary = designer.querySelector('[data-designer-summary]');
+        const previewTags = designer.querySelector('[data-designer-tags]');
+        const whatsappLink = designer.querySelector('[data-designer-whatsapp]');
+        const catalogLink = designer.querySelector('[data-designer-catalog]');
+        let manualProduct = null;
+
+        const checked = (name) => designer.querySelector(`[name="${name}"]:checked`);
+        const checkedValues = (name) => Array.from(designer.querySelectorAll(`[name="${name}"]:checked`));
+        const labelOf = (input) => input?.dataset.label || input?.value || '';
+        const productTags = (product) => (product.dataset.tags || '').split(/\s+/).filter(Boolean);
+        const productPrice = (product) => Number(product.dataset.price || 0);
+        const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (character) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;',
+        }[character]));
+
+        const priceRange = (budget) => {
+            const value = Number(budget || 0);
+            if (value <= 65000) return 'menos_80';
+            if (value <= 100000) return '80_120';
+            if (value <= 150000) return '120_170';
+            return 'mas_170';
+        };
+
+        const scoreProduct = (product, state) => {
+            const tags = productTags(product);
+            let score = 0;
+            if (tags.includes(state.occasion)) score += 5;
+            state.elements.forEach((element) => {
+                if (tags.includes(element.value)) score += 3;
+            });
+            if (productPrice(product) <= Number(state.budget.value || 0)) score += 3;
+            if ((product.dataset.category || '').toLowerCase().includes('cumple') && state.occasion === 'cumpleanos') score += 2;
+            return score;
+        };
+
+        const currentState = () => {
+            const occasion = checked('designer_occasion');
+            const budget = checked('designer_budget');
+            const color = checked('designer_color');
+            const elements = checkedValues('designer_elements');
+            return {
+                occasion: occasion?.value || 'cumpleanos',
+                occasionLabel: labelOf(occasion),
+                budget,
+                budgetLabel: labelOf(budget),
+                color: color?.value || '#f9a8c7',
+                colorLabel: labelOf(color),
+                elements,
+                elementLabels: elements.map(labelOf),
+            };
+        };
+
+        const setActiveProduct = (activeProduct, scores) => {
+            products.forEach((product) => {
+                product.classList.toggle('is-active', product === activeProduct);
+                const score = scores.get(product) || 0;
+                const scoreNode = product.querySelector('[data-match-score]');
+                if (scoreNode) {
+                    scoreNode.textContent = score >= 8 ? 'Muy afín' : score >= 5 ? 'Buena base' : 'Base';
+                }
+            });
+        };
+
+        const updatePreview = () => {
+            const state = currentState();
+            const scores = new Map(products.map((product) => [product, scoreProduct(product, state)]));
+            const recommended = products
+                .slice()
+                .sort((a, b) => (scores.get(b) || 0) - (scores.get(a) || 0) || productPrice(a) - productPrice(b))[0];
+            const activeProduct = manualProduct || recommended;
+
+            if (previewFrame) previewFrame.style.setProperty('--designer-color', state.color);
+            setActiveProduct(activeProduct, scores);
+
+            const productName = activeProduct?.dataset.name || 'Detalle personalizado';
+            const productCategory = activeProduct?.dataset.category || 'Detalle personalizado';
+            const productPriceLabel = activeProduct?.dataset.priceLabel || 'precio base por confirmar';
+            const imageUrl = activeProduct?.dataset.image || '';
+            const elementText = state.elementLabels.length ? state.elementLabels.join(', ') : 'acabados personalizados';
+
+            if (previewImage) {
+                previewImage.innerHTML = imageUrl
+                    ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}">`
+                    : '<span class="designer-preview-empty">Base visual pendiente de imagen</span>';
+            }
+            if (previewTitle) previewTitle.textContent = `${productName} personalizado`;
+            if (previewSummary) {
+                previewSummary.textContent = `${state.occasionLabel} con ${elementText}, color ${state.colorLabel} y base desde ${productPriceLabel}.`;
+            }
+            if (previewTags) {
+                const tags = [state.occasionLabel, state.budgetLabel, state.colorLabel, ...state.elementLabels, productCategory]
+                    .filter(Boolean)
+                    .slice(0, 7);
+                previewTags.innerHTML = tags.map((tag) => `<span class="designer-preview-tag">${escapeHtml(tag)}</span>`).join('');
+            }
+            if (whatsappLink) {
+                const message = [
+                    'Hola, quiero crear un regalo personalizado.',
+                    `Ocasión: ${state.occasionLabel}.`,
+                    `Presupuesto: ${state.budgetLabel}.`,
+                    `Color principal: ${state.colorLabel}.`,
+                    `Elementos: ${elementText}.`,
+                    `Base que me gustó: ${productName}.`,
+                    'Me gustaría confirmar disponibilidad, precio final y entrega.'
+                ].join(' ');
+                whatsappLink.href = `${whatsappBase}?text=${encodeURIComponent(message)}`;
+            }
+            if (catalogLink) {
+                const params = new URLSearchParams();
+                params.set('ocasion', state.occasion);
+                params.set('presupuesto', priceRange(state.budget?.value));
+                state.elements.forEach((element) => params.append('atributos', element.value));
+                catalogLink.href = `{% url 'inicio' %}?${params.toString()}#catalogo`;
+            }
+        };
+
+        designer.addEventListener('change', () => {
+            manualProduct = null;
+            updatePreview();
+        });
+
+        products.forEach((product) => {
+            product.addEventListener('click', () => {
+                manualProduct = product;
+                updatePreview();
+            });
+        });
+
+        updatePreview();
+    })();
+</script>
 {% endblock %}

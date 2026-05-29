@@ -299,6 +299,10 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Filtros rápidos para encontrar mejor')
         self.assertContains(response, 'Presupuesto')
         self.assertContains(response, 'Persona')
+        self.assertContains(response, 'Diseña tu regalo personalizado')
+        self.assertContains(response, 'Beta sin API')
+        self.assertContains(response, 'data-gift-designer')
+        self.assertContains(response, 'Cotizar esta idea por WhatsApp')
         self.assertContains(response, 'Agregar a mi cotización')
         self.assertContains(response, 'hero-product-card')
         self.assertNotContains(response, 'data-track-click')
@@ -382,6 +386,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Ramo premium')
         self.assertNotContains(response, 'Caja sorpresa')
+        self.assertNotContains(response, 'id="disena-tu-regalo" data-gift-designer')
 
     def test_catalogo_filtra_por_presupuesto_atributo_y_persona(self):
         response = self.client.get(
