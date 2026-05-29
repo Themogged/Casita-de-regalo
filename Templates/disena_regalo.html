@@ -1,0 +1,865 @@
+{% extends 'base.html' %}
+{% load moneda media_optimization %}
+
+{% block title %}Arma tu regalo a medida | Casita de Regalos{% endblock %}
+{% block meta_description %}Crea una idea de regalo personalizado con ocasión, estilo, presupuesto, colores, acabados y bases reales del catálogo de Casita de Regalos.{% endblock %}
+{% block meta_keywords %}diseñar regalo personalizado, regalos a medida Bello, regalos personalizados Medellín, cotizar regalo por WhatsApp, Casita de Regalos{% endblock %}
+{% block og_title %}Arma tu regalo a medida | Casita de Regalos{% endblock %}
+{% block og_description %}Configura una idea especial y llévala a WhatsApp para confirmar disponibilidad, detalles y precio final.{% endblock %}
+
+{% block extra_head %}
+<style>
+    .designer-page {
+        display: grid;
+        gap: 22px;
+    }
+
+    .designer-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+        gap: 22px;
+        align-items: center;
+    }
+
+    .designer-hero h1 {
+        max-width: 16ch;
+        margin: 8px 0 14px;
+        font-family: var(--font-display);
+        font-size: clamp(2.25rem, 5vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: -0.018em;
+    }
+
+    .designer-hero p,
+    .designer-card p,
+    .designer-note {
+        color: var(--ink-700);
+        line-height: 1.7;
+    }
+
+    .designer-hero-panel {
+        display: grid;
+        gap: 12px;
+        padding: 20px;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+    }
+
+    .designer-hero-list {
+        display: grid;
+        gap: 10px;
+        list-style: none;
+    }
+
+    .designer-hero-list li {
+        display: flex;
+        gap: 9px;
+        align-items: flex-start;
+        color: var(--ink-700);
+        line-height: 1.45;
+    }
+
+    .designer-hero-list li::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        margin-top: 0.48em;
+        border-radius: 50%;
+        background: var(--rose-500);
+        flex: 0 0 auto;
+    }
+
+    .designer-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.98fr) minmax(320px, 0.58fr);
+        gap: 20px;
+        align-items: start;
+    }
+
+    .designer-card {
+        min-width: 0;
+        padding: clamp(18px, 3vw, 26px);
+    }
+
+    .designer-form {
+        display: grid;
+        gap: 18px;
+    }
+
+    .designer-section {
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+        border-radius: 22px;
+        background: rgba(255, 249, 252, 0.86);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }
+
+    .designer-section-title {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        color: var(--ink-900);
+        font-weight: 900;
+    }
+
+    .designer-section-title span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
+        color: #fff;
+        font-size: 0.78rem;
+    }
+
+    .designer-option-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+        gap: 8px;
+    }
+
+    .designer-option {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: var(--ink-700);
+        font-weight: 850;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .designer-option input,
+    .designer-color input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .designer-option:has(input:checked) {
+        background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
+        border-color: transparent;
+        color: #fff;
+        box-shadow: 0 12px 22px rgba(215, 38, 109, 0.16);
+    }
+
+    .designer-color-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .designer-color {
+        position: relative;
+        min-width: 50px;
+        min-height: 50px;
+        padding: 4px;
+        border-radius: 999px;
+        background: #fff;
+        border: 1px solid rgba(198, 68, 125, 0.12);
+        cursor: pointer;
+    }
+
+    .designer-color span {
+        display: block;
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        border: 2px solid rgba(255, 255, 255, 0.92);
+        box-shadow: inset 0 0 0 1px rgba(75, 24, 46, 0.08);
+    }
+
+    .designer-color:has(input:checked) {
+        border-color: rgba(215, 38, 109, 0.42);
+        box-shadow: 0 10px 18px rgba(215, 38, 109, 0.12);
+    }
+
+    .designer-products {
+        display: grid;
+        gap: 10px;
+        max-height: 480px;
+        overflow: auto;
+        padding-right: 4px;
+    }
+
+    .designer-product {
+        display: grid;
+        grid-template-columns: 74px minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: center;
+        padding: 10px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 1px solid rgba(198, 68, 125, 0.09);
+        appearance: none;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .designer-product.is-active {
+        background: #fff;
+        border-color: rgba(215, 38, 109, 0.25);
+        box-shadow: 0 14px 24px rgba(75, 24, 46, 0.08);
+    }
+
+    .designer-product img,
+    .designer-product-placeholder {
+        width: 74px;
+        height: 74px;
+        border-radius: 16px;
+        object-fit: cover;
+        background: linear-gradient(180deg, #fff8fb, #ffe7f1);
+    }
+
+    .designer-product-placeholder {
+        display: grid;
+        place-items: center;
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .designer-product strong {
+        display: block;
+        color: var(--ink-900);
+        line-height: 1.2;
+    }
+
+    .designer-product small {
+        display: block;
+        margin-top: 4px;
+        color: var(--ink-700);
+        line-height: 1.28;
+    }
+
+    .designer-match-score {
+        display: inline-flex;
+        align-items: center;
+        min-height: 30px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: rgba(255, 234, 242, 0.88);
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .designer-preview {
+        position: sticky;
+        top: 104px;
+        display: grid;
+        gap: 14px;
+    }
+
+    .designer-preview-frame {
+        position: relative;
+        min-height: 380px;
+        overflow: hidden;
+        display: grid;
+        align-items: end;
+        border-radius: 28px;
+        padding: 18px;
+        background:
+            radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.84), transparent 24%),
+            linear-gradient(135deg, var(--designer-color, #f9a8c7), #fff8fc);
+        border: 1px solid rgba(255, 255, 255, 0.74);
+    }
+
+    .designer-preview-status {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 2;
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--rose-700);
+        font-size: 0.78rem;
+        font-weight: 900;
+        box-shadow: 0 10px 20px rgba(75, 24, 46, 0.08);
+    }
+
+    .designer-preview-image {
+        position: absolute;
+        inset: 18px 18px 98px;
+        display: grid;
+        place-items: center;
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.52);
+        overflow: hidden;
+    }
+
+    .designer-preview-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 8px;
+    }
+
+    .designer-preview-empty {
+        padding: 18px;
+        color: var(--rose-700);
+        font-weight: 900;
+        text-align: center;
+    }
+
+    .designer-preview-copy {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        gap: 7px;
+        padding: 14px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 16px 30px rgba(75, 24, 46, 0.1);
+    }
+
+    .designer-preview-copy strong {
+        color: var(--ink-900);
+        font-size: 1.08rem;
+        line-height: 1.2;
+    }
+
+    .designer-preview-copy span {
+        color: var(--ink-700);
+        font-size: 0.91rem;
+        line-height: 1.42;
+    }
+
+    .designer-tags,
+    .designer-brief {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .designer-tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        padding: 0 9px;
+        border-radius: 999px;
+        background: rgba(255, 234, 242, 0.9);
+        color: var(--rose-700);
+        font-size: 0.76rem;
+        font-weight: 900;
+    }
+
+    .designer-brief {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .designer-brief-item {
+        min-width: 0;
+        padding: 11px 12px;
+        border-radius: 16px;
+        background: rgba(255, 249, 252, 0.92);
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }
+
+    .designer-brief-item span {
+        display: block;
+        color: var(--ink-500);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        line-height: 1;
+        text-transform: uppercase;
+    }
+
+    .designer-brief-item strong {
+        display: block;
+        margin-top: 5px;
+        color: var(--ink-900);
+        font-size: 0.9rem;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .designer-actions {
+        display: grid;
+        gap: 9px;
+    }
+
+    .designer-gift-cta {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-height: 50px;
+        padding: 0 20px 0 15px;
+        border-radius: 999px;
+        background:
+            radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.32), transparent 28%),
+            linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 56%, var(--rose-700) 100%);
+        color: #fff;
+        font-weight: 900;
+        box-shadow: 0 18px 32px rgba(215, 38, 109, 0.22);
+    }
+
+    .designer-gift-cta-mark {
+        position: relative;
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: inset 0 -2px 0 rgba(215, 38, 109, 0.14);
+        flex: 0 0 auto;
+    }
+
+    .designer-gift-cta-mark::before,
+    .designer-gift-cta-mark::after {
+        content: "";
+        position: absolute;
+        background: var(--rose-600);
+        border-radius: 999px;
+    }
+
+    .designer-gift-cta-mark::before {
+        left: 12px;
+        top: 3px;
+        width: 4px;
+        height: 22px;
+    }
+
+    .designer-gift-cta-mark::after {
+        left: 3px;
+        top: 11px;
+        width: 22px;
+        height: 4px;
+    }
+
+    .designer-note {
+        font-size: 0.88rem;
+    }
+
+    @media (max-width: 920px) {
+        .designer-hero,
+        .designer-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .designer-preview {
+            position: static;
+        }
+    }
+
+    @media (max-width: 680px) {
+        .designer-card {
+            padding: 16px;
+            border-radius: 24px;
+        }
+
+        .designer-option-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .designer-option {
+            min-height: 40px;
+            padding: 0 9px;
+            font-size: 0.82rem;
+        }
+
+        .designer-products {
+            display: flex;
+            max-height: none;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 0 6px;
+            scrollbar-width: none;
+        }
+
+        .designer-products::-webkit-scrollbar {
+            display: none;
+        }
+
+        .designer-product {
+            grid-template-columns: 64px minmax(150px, 1fr);
+            grid-template-rows: auto auto;
+            width: min(78vw, 300px);
+            flex: 0 0 auto;
+        }
+
+        .designer-product img,
+        .designer-product-placeholder {
+            width: 64px;
+            height: 64px;
+        }
+
+        .designer-match-score {
+            grid-column: 1 / -1;
+            justify-self: start;
+        }
+
+        .designer-preview-frame {
+            min-height: 330px;
+        }
+
+        .designer-preview-image {
+            inset: 14px 14px 92px;
+        }
+
+        .designer-brief {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card designer-hero">
+    <div>
+        <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">🎀</span>Diseño personalizado</span>
+        <h1>Arma tu regalo a medida</h1>
+        <p>
+            Configura una idea completa con estilo, presupuesto, color, elementos y acabados especiales.
+            Luego la llevamos a WhatsApp para ajustar disponibilidad, entrega y valor final.
+        </p>
+        <div style="margin-top:18px">
+            <a href="{{ whatsapp_assistance_url }}" class="designer-gift-cta" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>
+                <span class="designer-gift-cta-mark" aria-hidden="true"></span>
+                <span>Llevar idea a WhatsApp</span>
+            </a>
+        </div>
+    </div>
+    <aside class="designer-hero-panel">
+        <strong>Flujo premium sin complicarte</strong>
+        <ul class="designer-hero-list">
+            <li>Elige una base real del catálogo.</li>
+            <li>Ajusta estilo, colores y acabados.</li>
+            <li>Envía la idea completa por WhatsApp.</li>
+        </ul>
+    </aside>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="designer-page" data-gift-designer>
+    <section class="designer-layout">
+        <div class="designer-card page-card">
+            <div class="designer-form" aria-label="Opciones para diseñar un regalo personalizado">
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>1</span> Ocasión</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option"><input type="radio" name="designer_occasion" value="cumpleanos" data-label="Cumpleaños" checked>Cumpleaños</label>
+                        <label class="designer-option"><input type="radio" name="designer_occasion" value="amor" data-label="Amor o aniversario">Amor</label>
+                        <label class="designer-option"><input type="radio" name="designer_occasion" value="ninos" data-label="Niños o temática infantil">Niños</label>
+                        <label class="designer-option"><input type="radio" name="designer_occasion" value="mama" data-label="Mamá o familia">Mamá</label>
+                    </div>
+                </div>
+
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>2</span> Presupuesto</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option"><input type="radio" name="designer_budget" value="65000" data-label="Hasta $65.000">Hasta $65.000</label>
+                        <label class="designer-option"><input type="radio" name="designer_budget" value="100000" data-label="$65.000 - $100.000" checked>$65.000 - $100.000</label>
+                        <label class="designer-option"><input type="radio" name="designer_budget" value="150000" data-label="$100.000 - $150.000">$100.000 - $150.000</label>
+                        <label class="designer-option"><input type="radio" name="designer_budget" value="220000" data-label="Más elaborado">Más elaborado</label>
+                    </div>
+                </div>
+
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>3</span> Estilo</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option"><input type="radio" name="designer_style" value="delicado" data-label="delicado y suave" checked>Delicado</label>
+                        <label class="designer-option"><input type="radio" name="designer_style" value="romantico" data-label="romántico">Romántico</label>
+                        <label class="designer-option"><input type="radio" name="designer_style" value="divertido" data-label="divertido y colorido">Divertido</label>
+                        <label class="designer-option"><input type="radio" name="designer_style" value="elegante" data-label="elegante">Elegante</label>
+                    </div>
+                </div>
+
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>4</span> Color principal</strong>
+                    <div class="designer-color-row">
+                        <label class="designer-color" title="Rosa suave"><input type="radio" name="designer_color" value="#f9a8c7" data-label="rosa suave" checked><span style="background:#f9a8c7"></span></label>
+                        <label class="designer-color" title="Lila"><input type="radio" name="designer_color" value="#c4b5fd" data-label="lila"><span style="background:#c4b5fd"></span></label>
+                        <label class="designer-color" title="Dorado"><input type="radio" name="designer_color" value="#f4c76a" data-label="dorado"><span style="background:#f4c76a"></span></label>
+                        <label class="designer-color" title="Rojo amor"><input type="radio" name="designer_color" value="#ef5f73" data-label="rojo amor"><span style="background:#ef5f73"></span></label>
+                        <label class="designer-color" title="Azul"><input type="radio" name="designer_color" value="#93c5fd" data-label="azul"><span style="background:#93c5fd"></span></label>
+                    </div>
+                </div>
+
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>5</span> Elementos</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="flores" data-label="flores">Flores</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="globos" data-label="globos" checked>Globos</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="desayuno" data-label="desayuno">Desayuno</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="peluche" data-label="peluche">Peluche</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="frutas" data-label="frutas">Frutas</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_elements" value="luces" data-label="luces">Luces</label>
+                    </div>
+                </div>
+
+                <div class="designer-section">
+                    <strong class="designer-section-title"><span>6</span> Acabados especiales</strong>
+                    <div class="designer-option-grid">
+                        <label class="designer-option"><input type="checkbox" name="designer_extras" value="mensaje" data-label="mensaje personalizado" checked>Mensaje</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_extras" value="empaque" data-label="empaque especial">Empaque especial</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_extras" value="foto" data-label="foto o pin decorativo">Foto / pin</label>
+                        <label class="designer-option"><input type="checkbox" name="designer_extras" value="topper" data-label="topper personalizado">Topper</label>
+                    </div>
+                </div>
+
+                {% if disenador_productos %}
+                    <div class="designer-section">
+                        <strong class="designer-section-title"><span>7</span> Base recomendada</strong>
+                        <div class="designer-products" data-designer-products>
+                            {% for producto in disenador_productos %}
+                                <button
+                                    type="button"
+                                    class="designer-product"
+                                    data-designer-product
+                                    data-name="{{ producto.nombre }}"
+                                    data-category="{{ producto.categoria.nombre|default:'Detalle personalizado' }}"
+                                    data-price="{{ producto.precio }}"
+                                    data-price-label="{{ producto.precio|cop }} COP"
+                                    data-url="{% url 'detalle_producto' producto.id %}"
+                                    data-tags="{{ producto.designer_tags }}"
+                                    {% if producto.imagen %}data-image="{{ producto.imagen.url|optimized_image_url }}"{% endif %}
+                                >
+                                    {% if producto.imagen %}
+                                        <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="lazy" decoding="async">
+                                    {% else %}
+                                        <span class="designer-product-placeholder">Sin foto</span>
+                                    {% endif %}
+                                    <span>
+                                        <strong>{{ producto.nombre }}</strong>
+                                        <small>{{ producto.categoria.nombre|default:"Detalle" }} · Desde {{ producto.precio|cop }} COP</small>
+                                    </span>
+                                    <span class="designer-match-score" data-match-score>Base</span>
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <aside class="designer-card designer-preview page-card" aria-label="Vista previa de regalo personalizado">
+            <div class="designer-preview-frame" data-designer-preview-frame>
+                <span class="designer-preview-status" data-designer-status>Idea lista</span>
+                <div class="designer-preview-image" data-designer-preview-image>
+                    <span class="designer-preview-empty">Elige opciones para armar tu idea</span>
+                </div>
+                <div class="designer-preview-copy">
+                    <strong data-designer-title>Detalle personalizado para cumpleaños</strong>
+                    <span data-designer-summary>Base con globos, tono rosa suave y acabado delicado.</span>
+                    <div class="designer-tags" data-designer-tags></div>
+                </div>
+            </div>
+
+            <div class="designer-brief" aria-label="Resumen de la idea personalizada">
+                <div class="designer-brief-item"><span>Ocasión</span><strong data-designer-brief-occasion>Cumpleaños</strong></div>
+                <div class="designer-brief-item"><span>Presupuesto</span><strong data-designer-brief-budget>$65.000 - $100.000</strong></div>
+                <div class="designer-brief-item"><span>Estilo</span><strong data-designer-brief-style>delicado y suave</strong></div>
+                <div class="designer-brief-item"><span>Color</span><strong data-designer-brief-color>rosa suave</strong></div>
+                <div class="designer-brief-item"><span>Elementos</span><strong data-designer-brief-elements>globos</strong></div>
+                <div class="designer-brief-item"><span>Acabados</span><strong data-designer-brief-extras>mensaje personalizado</strong></div>
+            </div>
+
+            <div class="designer-actions">
+                <a href="{{ whatsapp_assistance_url }}" class="designer-gift-cta" target="_blank" rel="noopener noreferrer" data-designer-whatsapp>
+                    <span class="designer-gift-cta-mark" aria-hidden="true"></span>
+                    <span>Llevar idea a WhatsApp</span>
+                </a>
+                <a href="{% url 'inicio' %}#catalogo" class="btn-secondary" data-designer-catalog>Ver bases parecidas</a>
+            </div>
+            <p class="designer-note">
+                La vista previa es una referencia de composición. En WhatsApp confirmamos disponibilidad,
+                colores, mensaje personalizado y valor final antes de preparar el pedido.
+            </p>
+        </aside>
+    </section>
+</div>
+
+<script>
+    (() => {
+        const designer = document.querySelector('[data-gift-designer]');
+        if (!designer) return;
+
+        const whatsappBase = '{{ whatsapp_assistance_url|escapejs }}'.split('?')[0];
+        const products = Array.from(designer.querySelectorAll('[data-designer-product]'));
+        const previewFrame = designer.querySelector('[data-designer-preview-frame]');
+        const previewImage = designer.querySelector('[data-designer-preview-image]');
+        const previewTitle = designer.querySelector('[data-designer-title]');
+        const previewSummary = designer.querySelector('[data-designer-summary]');
+        const previewTags = designer.querySelector('[data-designer-tags]');
+        const previewStatus = designer.querySelector('[data-designer-status]');
+        const briefOccasion = designer.querySelector('[data-designer-brief-occasion]');
+        const briefBudget = designer.querySelector('[data-designer-brief-budget]');
+        const briefStyle = designer.querySelector('[data-designer-brief-style]');
+        const briefColor = designer.querySelector('[data-designer-brief-color]');
+        const briefElements = designer.querySelector('[data-designer-brief-elements]');
+        const briefExtras = designer.querySelector('[data-designer-brief-extras]');
+        const whatsappLinks = Array.from(document.querySelectorAll('[data-designer-whatsapp]'));
+        const catalogLink = designer.querySelector('[data-designer-catalog]');
+        let manualProduct = null;
+
+        const checked = (name) => designer.querySelector(`[name="${name}"]:checked`);
+        const checkedValues = (name) => Array.from(designer.querySelectorAll(`[name="${name}"]:checked`));
+        const labelOf = (input) => input?.dataset.label || input?.value || '';
+        const productTags = (product) => (product.dataset.tags || '').split(/\s+/).filter(Boolean);
+        const productPrice = (product) => Number(product.dataset.price || 0);
+        const escapeHtml = (value) => String(value || '').replace(/[&<>"']/g, (character) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;',
+        }[character]));
+
+        const priceRange = (budget) => {
+            const value = Number(budget || 0);
+            if (value <= 65000) return 'menos_80';
+            if (value <= 100000) return '80_120';
+            if (value <= 150000) return '120_170';
+            return 'mas_170';
+        };
+
+        const scoreProduct = (product, state) => {
+            const tags = productTags(product);
+            let score = 0;
+            if (tags.includes(state.occasion)) score += 5;
+            state.elements.forEach((element) => {
+                if (tags.includes(element.value)) score += 3;
+            });
+            if (productPrice(product) <= Number(state.budget.value || 0)) score += 3;
+            if (state.style === 'elegante' && tags.includes('hombre')) score += 1;
+            return score;
+        };
+
+        const currentState = () => {
+            const occasion = checked('designer_occasion');
+            const budget = checked('designer_budget');
+            const style = checked('designer_style');
+            const color = checked('designer_color');
+            const elements = checkedValues('designer_elements');
+            const extras = checkedValues('designer_extras');
+            return {
+                occasion: occasion?.value || 'cumpleanos',
+                occasionLabel: labelOf(occasion),
+                budget,
+                budgetLabel: labelOf(budget),
+                style: style?.value || 'delicado',
+                styleLabel: labelOf(style),
+                color: color?.value || '#f9a8c7',
+                colorLabel: labelOf(color),
+                elements,
+                elementLabels: elements.map(labelOf),
+                extras,
+                extraLabels: extras.map(labelOf),
+            };
+        };
+
+        const setActiveProduct = (activeProduct, scores) => {
+            products.forEach((product) => {
+                product.classList.toggle('is-active', product === activeProduct);
+                const score = scores.get(product) || 0;
+                const scoreNode = product.querySelector('[data-match-score]');
+                if (scoreNode) {
+                    scoreNode.textContent = score >= 8 ? 'Ideal' : score >= 5 ? 'Afinada' : 'Base';
+                }
+            });
+        };
+
+        const updatePreview = () => {
+            const state = currentState();
+            const scores = new Map(products.map((product) => [product, scoreProduct(product, state)]));
+            const recommended = products
+                .slice()
+                .sort((a, b) => (scores.get(b) || 0) - (scores.get(a) || 0) || productPrice(a) - productPrice(b))[0];
+            const activeProduct = manualProduct || recommended;
+
+            if (previewFrame) previewFrame.style.setProperty('--designer-color', state.color);
+            setActiveProduct(activeProduct, scores);
+
+            const productName = activeProduct?.dataset.name || 'Detalle personalizado';
+            const productCategory = activeProduct?.dataset.category || 'Detalle personalizado';
+            const productPriceLabel = activeProduct?.dataset.priceLabel || 'precio base por confirmar';
+            const imageUrl = activeProduct?.dataset.image || '';
+            const elementText = state.elementLabels.length ? state.elementLabels.join(', ') : 'acabados personalizados';
+            const extrasText = state.extraLabels.length ? state.extraLabels.join(', ') : 'acabados por definir';
+
+            if (previewImage) {
+                previewImage.innerHTML = imageUrl
+                    ? `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(productName)}">`
+                    : '<span class="designer-preview-empty">Base visual pendiente de imagen</span>';
+            }
+            if (previewTitle) previewTitle.textContent = `${productName} personalizado`;
+            if (previewSummary) {
+                previewSummary.textContent = `${state.occasionLabel} con ${elementText}, estilo ${state.styleLabel}, tonos ${state.colorLabel} y base desde ${productPriceLabel}.`;
+            }
+            if (previewTags) {
+                const tags = [state.occasionLabel, state.budgetLabel, state.styleLabel, state.colorLabel, ...state.elementLabels, ...state.extraLabels, productCategory]
+                    .filter(Boolean)
+                    .slice(0, 9);
+                previewTags.innerHTML = tags.map((tag) => `<span class="designer-tag">${escapeHtml(tag)}</span>`).join('');
+            }
+            if (previewStatus) previewStatus.textContent = activeProduct ? 'Idea lista' : 'Por armar';
+            if (briefOccasion) briefOccasion.textContent = state.occasionLabel || 'Por definir';
+            if (briefBudget) briefBudget.textContent = state.budgetLabel || 'Por definir';
+            if (briefStyle) briefStyle.textContent = state.styleLabel || 'Por definir';
+            if (briefColor) briefColor.textContent = state.colorLabel || 'Por definir';
+            if (briefElements) briefElements.textContent = elementText;
+            if (briefExtras) briefExtras.textContent = extrasText;
+
+            if (whatsappLinks.length) {
+                const message = [
+                    'Hola, quiero cotizar esta idea de regalo personalizado.',
+                    `Ocasión: ${state.occasionLabel}.`,
+                    `Presupuesto: ${state.budgetLabel}.`,
+                    `Estilo: ${state.styleLabel}.`,
+                    `Color principal: ${state.colorLabel}.`,
+                    `Elementos: ${elementText}.`,
+                    `Acabados especiales: ${extrasText}.`,
+                    `Base que me gustó: ${productName}.`,
+                    'Me gustaría confirmar disponibilidad, precio final y entrega.'
+                ].join(' ');
+                whatsappLinks.forEach((link) => {
+                    link.href = `${whatsappBase}?text=${encodeURIComponent(message)}`;
+                });
+            }
+            if (catalogLink) {
+                const params = new URLSearchParams();
+                params.set('ocasion', state.occasion);
+                params.set('presupuesto', priceRange(state.budget?.value));
+                state.elements.forEach((element) => params.append('atributos', element.value));
+                catalogLink.href = `{% url 'inicio' %}?${params.toString()}#catalogo`;
+            }
+        };
+
+        designer.addEventListener('change', () => {
+            manualProduct = null;
+            updatePreview();
+        });
+
+        products.forEach((product) => {
+            product.addEventListener('click', () => {
+                manualProduct = product;
+                updatePreview();
+            });
+        });
+
+        updatePreview();
+    })();
+</script>
+{% endblock %}

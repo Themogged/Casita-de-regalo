@@ -299,16 +299,26 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Filtros rápidos para encontrar mejor')
         self.assertContains(response, 'Presupuesto')
         self.assertContains(response, 'Persona')
-        self.assertContains(response, 'Arma tu regalo a medida')
-        self.assertContains(response, 'Listo para cotizar')
+        self.assertContains(response, 'Arma tu regalo a medida en una vista dedicada')
+        self.assertContains(response, reverse('disena_regalo'))
         self.assertNotContains(response, 'Beta sin API')
-        self.assertContains(response, 'data-gift-designer')
-        self.assertContains(response, 'Enviar idea por WhatsApp')
+        self.assertNotContains(response, 'data-gift-designer')
         self.assertContains(response, 'Agregar a mi cotización')
         self.assertContains(response, 'hero-product-card')
         self.assertNotContains(response, 'data-track-click')
         self.assertNotContains(response, 'registrar_interaccion')
         self.assertNotContains(response, 'Premium floral')
+
+    def test_disena_regalo_muestra_configurador_completo(self):
+        response = self.client.get(reverse('disena_regalo'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Arma tu regalo a medida')
+        self.assertContains(response, 'data-gift-designer')
+        self.assertContains(response, 'Acabados especiales')
+        self.assertContains(response, 'Llevar idea a WhatsApp')
+        self.assertContains(response, 'designer-gift-cta')
+        self.assertNotContains(response, 'Beta sin API')
 
     @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
     def test_inicio_usa_numero_whatsapp_configurado(self):
@@ -377,6 +387,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(sitemap.status_code, 200)
         self.assertContains(sitemap, '<urlset')
         self.assertContains(sitemap, reverse('inicio'))
+        self.assertContains(sitemap, reverse('disena_regalo'))
         self.assertContains(sitemap, reverse('como_comprar'))
         self.assertContains(sitemap, reverse('preguntas_frecuentes'))
         self.assertContains(sitemap, reverse('detalle_producto', args=[self.producto_principal.id]))

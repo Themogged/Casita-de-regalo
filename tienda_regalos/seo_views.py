@@ -7,6 +7,7 @@ from productos.models import Producto
 
 SITEMAP_STATIC_ROUTES = [
     ('inicio', 'daily', '1.0'),
+    ('disena_regalo', 'weekly', '0.9'),
     ('como_comprar', 'monthly', '0.8'),
     ('preguntas_frecuentes', 'monthly', '0.7'),
     ('terminos_condiciones', 'yearly', '0.4'),

@@ -669,20 +669,6 @@ def inicio(request):
         current_category=categoria_actual,
     )
     videos_elaboracion = get_active_process_videos()
-    catalog_has_filters = any(
-        [
-            busqueda,
-            categoria_id,
-            presupuesto,
-            ocasion,
-            persona,
-            tipo,
-            tiempo,
-            atributos,
-        ]
-    ) or orden != 'destacados'
-    disenador_productos = [] if catalog_has_filters else _get_designer_products()
-
     resumen = {
         'total_productos': Producto.objects.count(),
         'categorias': categorias.count(),
@@ -745,12 +731,18 @@ def inicio(request):
         'politicas_clave': POLITICAS_CLAVE,
         'terminos_condiciones': TERMINOS_CONDICIONES,
         'videos_elaboracion': videos_elaboracion,
-        'disenador_productos': disenador_productos,
-        'mostrar_disenador': bool(disenador_productos),
         'seo_schema_json': _build_home_schema(request),
         'resumen': resumen,
     }
     return render(request, 'inicio.html', contexto)
+
+
+def disena_regalo(request):
+    disenador_productos = _get_designer_products(limit=16)
+    contexto = {
+        'disenador_productos': disenador_productos,
+    }
+    return render(request, 'disena_regalo.html', contexto)
 
 
 def detalle_producto(request, producto_id):
