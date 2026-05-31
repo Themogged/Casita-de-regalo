@@ -302,29 +302,6 @@
             outline: none;
         }
 
-        .cart-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 27px;
-            height: 27px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.93);
-            color: var(--rose-700);
-            box-shadow: 0 8px 16px rgba(92, 20, 58, 0.12);
-            flex: 0 0 auto;
-        }
-
-        .cart-icon svg {
-            width: 16px;
-            height: 16px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
         .cart-label {
             line-height: 1;
             white-space: nowrap;
@@ -1400,10 +1377,6 @@
                     0 10px 20px rgba(185, 45, 99, 0.2);
             }
 
-            .cart-icon {
-                display: none;
-            }
-
             .cart-label {
                 display: inline-flex;
                 align-items: center;
@@ -1632,14 +1605,6 @@
 
             <div class="header-actions">
                 <a href="{% url 'ver_carrito' %}" class="cart-btn" aria-label="Ver lista para cotizar">
-                    <span class="cart-icon" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" focusable="false">
-                            <path d="M7 7.5h10l-1 9H8L7 7.5Z"></path>
-                            <path d="M9 7.5 10.4 4h3.2L15 7.5"></path>
-                            <path d="M9.5 11h5"></path>
-                            <path d="M9.5 14h3.5"></path>
-                        </svg>
-                    </span>
                     <span class="cart-label">Lista</span>
                     <span class="cart-count">{{ carrito_total }}</span>
                 </a>
