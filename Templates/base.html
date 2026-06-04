@@ -39,14 +39,20 @@
             --white: #ffffff;
             --hero-text: #3b1728;
             --hero-text-soft: rgba(59, 23, 40, 0.78);
-            --shadow-lg: 0 34px 80px rgba(94, 20, 58, 0.14);
-            --shadow-md: 0 20px 48px rgba(94, 20, 58, 0.09);
+            --surface: rgba(255, 255, 255, 0.94);
+            --surface-strong: #ffffff;
+            --surface-soft: rgba(255, 248, 251, 0.9);
+            --surface-border: rgba(198, 68, 125, 0.11);
+            --shadow-lg: 0 34px 80px rgba(94, 20, 58, 0.12);
+            --shadow-md: 0 20px 48px rgba(94, 20, 58, 0.08);
+            --shadow-card: 0 18px 42px rgba(77, 26, 50, 0.075);
+            --shadow-card-hover: 0 24px 54px rgba(77, 26, 50, 0.105);
             --radius-xl: 32px;
             --max-width: 1240px;
             --soft-line: rgba(198, 68, 125, 0.12);
-            --font-sans: Aptos, "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            --font-display: "Aptos Display", "Segoe UI Variable Display", "Segoe UI", Aptos, "Helvetica Neue", Arial, sans-serif;
-            --font-brand: Cambria, Georgia, "Times New Roman", serif;
+            --font-sans: "Inter", "Segoe UI Variable Text", Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            --font-display: "Inter Tight", "Segoe UI Variable Display", "Aptos Display", "Segoe UI", Aptos, "Helvetica Neue", Arial, sans-serif;
+            --font-brand: "Segoe UI Variable Display", "Aptos Display", "Inter Tight", "Segoe UI", Aptos, "Helvetica Neue", Arial, sans-serif;
         }
 
         *,
@@ -68,15 +74,15 @@
             min-height: 100vh;
             font-family: var(--font-sans);
             font-size: 16px;
-            line-height: 1.5;
+            line-height: 1.56;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
             color: var(--ink-900);
             background:
-                radial-gradient(circle at 10% 8%, rgba(255, 214, 228, 0.86), transparent 20%),
-                radial-gradient(circle at 88% 10%, rgba(255, 242, 225, 0.8), transparent 24%),
-                radial-gradient(circle at 50% 100%, rgba(242, 223, 235, 0.8), transparent 24%),
-                linear-gradient(180deg, #fffdfc 0%, #fff7fa 48%, #ffffff 100%);
+                radial-gradient(circle at 9% 7%, rgba(255, 221, 234, 0.72), transparent 21%),
+                radial-gradient(circle at 88% 10%, rgba(255, 238, 224, 0.66), transparent 24%),
+                radial-gradient(circle at 50% 100%, rgba(247, 225, 236, 0.62), transparent 24%),
+                linear-gradient(180deg, #fffdfc 0%, #fff8fb 48%, #ffffff 100%);
             position: relative;
             overflow-x: hidden;
         }
@@ -87,9 +93,9 @@
             position: fixed;
             z-index: -1;
             border-radius: 50%;
-            filter: blur(24px);
+            filter: blur(28px);
             pointer-events: none;
-            opacity: 0.72;
+            opacity: 0.56;
         }
 
         body::before {
@@ -142,10 +148,10 @@
             top: 0;
             z-index: 30;
             background:
-                radial-gradient(circle at 12% 20%, rgba(255, 228, 238, 0.72), transparent 24%),
-                linear-gradient(180deg, rgba(255, 253, 252, 0.97) 0%, rgba(255, 243, 248, 0.93) 100%);
-            border-bottom: 1px solid rgba(215, 38, 109, 0.12);
-            box-shadow: 0 18px 46px rgba(92, 20, 58, 0.09);
+                radial-gradient(circle at 12% 20%, rgba(255, 231, 241, 0.62), transparent 24%),
+                linear-gradient(180deg, rgba(255, 253, 252, 0.98) 0%, rgba(255, 247, 250, 0.96) 100%);
+            border-bottom: 1px solid rgba(215, 38, 109, 0.1);
+            box-shadow: 0 14px 36px rgba(92, 20, 58, 0.075);
             backdrop-filter: blur(18px);
         }
 
@@ -183,9 +189,9 @@
             min-width: 0;
             padding: 8px 12px 8px 8px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.58);
-            border: 1px solid rgba(198, 68, 125, 0.08);
-            box-shadow: 0 12px 28px rgba(92, 33, 62, 0.045);
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(198, 68, 125, 0.075);
+            box-shadow: 0 10px 24px rgba(92, 33, 62, 0.04);
             flex: 0 1 auto;
         }
 
@@ -216,9 +222,10 @@
 
         .brand strong {
             font-family: var(--font-brand);
-            font-size: 1.42rem;
-            letter-spacing: -0.01em;
-            line-height: 1.05;
+            font-size: 1.32rem;
+            font-weight: 860;
+            letter-spacing: -0.035em;
+            line-height: 1.02;
         }
 
         .header-links {
@@ -232,11 +239,11 @@
             padding: 7px;
             border-radius: 999px;
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(255, 249, 251, 0.9) 100%);
-            border: 1px solid rgba(198, 68, 125, 0.12);
+                linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 250, 252, 0.92) 100%);
+            border: 1px solid var(--surface-border);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.84),
-                0 14px 30px rgba(94, 35, 63, 0.07);
+                0 12px 26px rgba(94, 35, 63, 0.055);
         }
 
         .header-actions {
@@ -247,12 +254,12 @@
         }
 
         .header-link {
-            padding: 11px 15px;
+            padding: 10px 15px;
             border-radius: 999px;
             border: 1px solid transparent;
             color: var(--ink-700);
             font-size: 0.92rem;
-            font-weight: 800;
+            font-weight: 760;
         }
 
         .header-link:hover {
@@ -269,19 +276,20 @@
             position: relative;
             isolation: isolate;
             overflow: hidden;
-            padding: 11px 17px;
+            min-height: 43px;
+            padding: 0 16px;
             border-radius: 999px;
             background:
                 radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.26), transparent 28%),
-                linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 48%, var(--rose-700) 100%);
+                linear-gradient(135deg, #ff7658 0%, var(--rose-600) 50%, #b91c5d 100%);
             color: var(--white);
             border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 0.92rem;
-            font-weight: 900;
+            font-weight: 850;
             flex-shrink: 0;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.25),
-                0 16px 28px rgba(215, 38, 109, 0.24);
+                0 14px 26px rgba(215, 38, 109, 0.22);
         }
 
         .cart-btn::before {
@@ -308,10 +316,10 @@
         }
 
         .cart-count {
-            min-width: 27px;
+            min-width: 26px;
             padding: 5px 8px;
             border-radius: 999px;
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.95);
             border: 1px solid rgba(255, 255, 255, 0.42);
             color: var(--rose-700);
             text-align: center;
@@ -328,7 +336,7 @@
             justify-content: center;
             border: 1px solid rgba(198, 68, 125, 0.14);
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.94);
+            background: rgba(255, 255, 255, 0.96);
             color: var(--rose-700);
             box-shadow: 0 10px 20px rgba(185, 45, 99, 0.08);
             cursor: pointer;
@@ -443,9 +451,9 @@
             scrollbar-width: none;
             -ms-overflow-style: none;
             border-radius: 28px;
-            background: rgba(255, 255, 255, 0.68);
-            border: 1px solid rgba(198, 68, 125, 0.1);
-            box-shadow: 0 12px 24px rgba(94, 35, 63, 0.04);
+            background: rgba(255, 255, 255, 0.74);
+            border: 1px solid rgba(198, 68, 125, 0.09);
+            box-shadow: 0 10px 22px rgba(94, 35, 63, 0.035);
         }
 
         .category-strip-inner::-webkit-scrollbar {
@@ -454,13 +462,13 @@
 
         .category-pill {
             white-space: nowrap;
-            padding: 10px 16px;
+            padding: 9px 15px;
             border-radius: 999px;
             border: 1px solid transparent;
             background: rgba(255, 255, 255, 0.92);
             color: var(--ink-700);
-            font-weight: 600;
-            font-size: 0.94rem;
+            font-weight: 690;
+            font-size: 0.92rem;
             flex: 0 0 auto;
         }
 
@@ -514,12 +522,12 @@
             padding: 40px;
             border-radius: var(--radius-xl);
             background:
-                radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.88), transparent 18%),
-                radial-gradient(circle at 12% 82%, rgba(255, 255, 255, 0.54), transparent 22%),
-                linear-gradient(135deg, #fff6f2 0%, #ffe7f1 38%, #fff9fd 100%);
-            border: 1px solid rgba(198, 68, 125, 0.12);
+                radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.82), transparent 18%),
+                radial-gradient(circle at 12% 82%, rgba(255, 255, 255, 0.48), transparent 22%),
+                linear-gradient(135deg, #fff8f4 0%, #ffe9f1 40%, #fffafb 100%);
+            border: 1px solid var(--surface-border);
             color: var(--hero-text);
-            box-shadow: 0 30px 70px rgba(77, 26, 50, 0.09);
+            box-shadow: var(--shadow-card);
         }
 
         .hero-card::before {
@@ -550,11 +558,11 @@
 
         .page-card {
             background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 252, 253, 0.98) 100%);
-            border: 1px solid rgba(215, 38, 109, 0.1);
+                linear-gradient(180deg, var(--surface-strong) 0%, rgba(255, 252, 253, 0.98) 100%);
+            border: 1px solid var(--surface-border);
             border-radius: var(--radius-xl);
             box-shadow:
-                0 20px 40px rgba(77, 20, 50, 0.065),
+                var(--shadow-card),
                 inset 0 1px 0 rgba(255, 255, 255, 0.75);
             overflow: hidden;
         }
@@ -1243,13 +1251,13 @@
                 align-items: center;
                 justify-content: space-between;
                 gap: 7px;
-                padding: 8px;
-                border-radius: 25px;
-                background: rgba(255, 255, 255, 0.72);
+                padding: 7px;
+                border-radius: 23px;
+                background: rgba(255, 255, 255, 0.78);
                 border: 1px solid rgba(198, 68, 125, 0.1);
                 box-shadow:
                     inset 0 1px 0 rgba(255, 255, 255, 0.85),
-                    0 12px 28px rgba(92, 33, 62, 0.075);
+                    0 10px 24px rgba(92, 33, 62, 0.065);
             }
 
             .header-actions {
@@ -1367,14 +1375,14 @@
                 flex: 0 0 auto;
                 justify-content: center;
                 margin-left: auto;
-                padding: 0 10px 0 14px;
-                min-width: 84px;
-                min-height: 40px;
-                font-size: 0.78rem;
+                padding: 0 9px 0 13px;
+                min-width: 80px;
+                min-height: 38px;
+                font-size: 0.76rem;
                 gap: 7px;
                 box-shadow:
                     inset 0 1px 0 rgba(255, 255, 255, 0.24),
-                    0 10px 20px rgba(185, 45, 99, 0.2);
+                    0 9px 18px rgba(185, 45, 99, 0.18);
             }
 
             .cart-label {
@@ -1388,9 +1396,9 @@
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 22px;
+                min-width: 21px;
                 padding: 3px 6px;
-                font-size: 0.72rem;
+                font-size: 0.7rem;
             }
 
             .category-strip {
@@ -1401,7 +1409,7 @@
                 flex-wrap: nowrap;
                 overflow-x: auto;
                 border-radius: 999px;
-                padding: 3px;
+                padding: 4px;
             }
 
             .category-more {
@@ -1420,8 +1428,8 @@
             }
 
             .category-pill {
-                padding: 6px 9px;
-                font-size: 0.74rem;
+                padding: 6px 10px;
+                font-size: 0.73rem;
             }
 
             .hero-card {
@@ -1489,18 +1497,31 @@
 
             .assistant-shell {
                 right: 12px;
-                left: 12px;
-                bottom: 12px;
-                justify-items: stretch;
+                left: auto;
+                bottom: 14px;
+                justify-items: end;
             }
 
             .assistant-toggle {
-                width: 100%;
+                width: auto;
+                min-height: 48px;
+                padding: 0 15px;
                 justify-content: center;
+                gap: 8px;
+                box-shadow: 0 14px 28px rgba(215, 38, 109, 0.24);
+            }
+
+            .assistant-toggle-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            .assistant-toggle strong {
+                font-size: 0.88rem;
             }
 
             .assistant-panel {
-                width: 100%;
+                width: min(360px, calc(100vw - 24px));
             }
         }
 
@@ -1527,7 +1548,7 @@
 
             .brand-copy strong {
                 white-space: nowrap;
-                font-size: 0.84rem;
+                font-size: 0.82rem;
             }
 
             .header-link {
@@ -1536,9 +1557,9 @@
             }
 
             .cart-btn {
-                padding: 0 9px 0 12px;
-                min-width: 80px;
-                font-size: 0.72rem;
+                padding: 0 8px 0 11px;
+                min-width: 76px;
+                font-size: 0.71rem;
             }
 
             .menu-toggle {
@@ -1572,8 +1593,8 @@
             }
 
             .cart-btn {
-                min-width: 76px;
-                padding: 0 8px 0 11px;
+                min-width: 72px;
+                padding: 0 7px 0 10px;
                 gap: 6px;
             }
 

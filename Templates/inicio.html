@@ -54,12 +54,12 @@
     .hero-card {
         padding: clamp(22px, 4.4vw, 48px);
         background:
-            radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.94), transparent 19%),
-            radial-gradient(circle at 88% 14%, rgba(255, 179, 205, 0.7), transparent 24%),
-            radial-gradient(circle at 50% 100%, rgba(255, 220, 201, 0.78), transparent 32%),
-            linear-gradient(138deg, #fffdfb 0%, #fff0f6 42%, #fff8fb 100%);
+            radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.88), transparent 19%),
+            radial-gradient(circle at 88% 14%, rgba(255, 190, 211, 0.52), transparent 24%),
+            radial-gradient(circle at 50% 100%, rgba(255, 229, 213, 0.62), transparent 32%),
+            linear-gradient(138deg, #fffefd 0%, #fff2f7 42%, #fffafb 100%);
         border-color: rgba(215, 38, 109, 0.14);
-        box-shadow: 0 24px 64px rgba(117, 24, 66, 0.09);
+        box-shadow: 0 22px 58px rgba(117, 24, 66, 0.08);
     }
 
     .section-stack {
@@ -113,8 +113,9 @@
         line-height: 1.02;
         margin-bottom: 16px;
         text-wrap: balance;
-        letter-spacing: -0.018em;
-        max-width: 14.4ch;
+        letter-spacing: -0.04em;
+        font-weight: 860;
+        max-width: 15.4ch;
     }
 
     .hero-copy p,
@@ -144,11 +145,11 @@
         align-items: center;
         padding: 8px 12px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.82);
+        background: rgba(255, 255, 255, 0.86);
         border: 1px solid rgba(198, 68, 125, 0.11);
         color: var(--ink-700);
         font-size: 0.84rem;
-        font-weight: 700;
+        font-weight: 760;
     }
 
     .hero-actions {
@@ -174,9 +175,9 @@
     .step-card,
     .line-card {
         border-radius: 26px;
-        border: 1px solid rgba(215, 38, 109, 0.1);
+        border: 1px solid var(--surface-border);
         background: rgba(255, 255, 255, 0.98);
-        box-shadow: 0 18px 36px rgba(75, 24, 46, 0.065);
+        box-shadow: var(--shadow-card);
     }
 
     .section-card,
@@ -191,7 +192,7 @@
     .step-card:hover,
     .line-card:hover {
         border-color: rgba(198, 68, 125, 0.14);
-        box-shadow: 0 22px 46px rgba(75, 24, 46, 0.075);
+        box-shadow: var(--shadow-card-hover);
     }
 
     .hero-stat {
@@ -205,7 +206,8 @@
         display: block;
         margin-bottom: 6px;
         color: var(--rose-700);
-        font-size: 1.38rem;
+        font-size: 1.32rem;
+        font-weight: 850;
         line-height: 1;
     }
 
@@ -543,13 +545,13 @@
         min-height: 48px;
         padding: 0 20px;
         border-radius: 999px;
-        font-weight: 700;
+        font-weight: 760;
     }
 
     .btn {
-        background: linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 58%, var(--rose-700) 100%);
+        background: linear-gradient(135deg, #ff7658 0%, var(--rose-600) 58%, #b91c5d 100%);
         color: #fff;
-        box-shadow: 0 16px 28px rgba(215, 38, 109, 0.22);
+        box-shadow: 0 14px 26px rgba(215, 38, 109, 0.2);
     }
 
     .btn,
@@ -570,7 +572,7 @@
 
     .btn-secondary,
     .btn-outline {
-        background: rgba(255, 255, 255, 0.88);
+        background: rgba(255, 255, 255, 0.92);
         color: var(--rose-700);
         border: 1px solid rgba(198, 68, 125, 0.12);
     }
@@ -1372,8 +1374,8 @@
     }
 
     .catalog-grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(292px, 1fr));
+        gap: 22px;
     }
 
     .product-card {
@@ -1381,15 +1383,16 @@
         display: grid;
         grid-template-rows: auto 1fr;
         background:
-            radial-gradient(circle at 92% 8%, rgba(255, 228, 238, 0.7), transparent 22%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.995) 0%, rgba(255, 250, 252, 0.995) 100%);
+            radial-gradient(circle at 88% 8%, rgba(255, 231, 241, 0.58), transparent 23%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.995) 0%, rgba(255, 251, 253, 0.995) 100%);
         position: relative;
+        min-width: 0;
     }
 
     .product-card:hover {
         transform: translateY(-2px);
         border-color: rgba(215, 38, 109, 0.2);
-        box-shadow: 0 24px 48px rgba(75, 24, 46, 0.11);
+        box-shadow: var(--shadow-card-hover);
     }
 
     .product-card::after {
@@ -1404,12 +1407,12 @@
 
     .product-media {
         position: relative;
-        min-height: 320px;
-        aspect-ratio: 4 / 5;
+        min-height: 308px;
+        aspect-ratio: 1 / 1.16;
         overflow: hidden;
         background:
-            radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8), transparent 28%),
-            linear-gradient(180deg, #fffafc, #fff0f6);
+            radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.86), transparent 28%),
+            linear-gradient(180deg, #fffafd, #fff2f7);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1418,9 +1421,9 @@
     .product-media::before {
         content: "";
         position: absolute;
-        inset: 14px;
+        inset: 12px;
         z-index: 1;
-        border-radius: 22px;
+        border-radius: 24px;
         border: 1px solid rgba(255, 255, 255, 0.78);
         pointer-events: none;
     }
@@ -1449,7 +1452,7 @@
         height: 100%;
         object-fit: contain;
         object-position: center;
-        padding: 14px;
+        padding: 12px;
         transition: transform 220ms ease;
     }
 
@@ -1470,8 +1473,9 @@
 
     .product-body {
         display: grid;
-        gap: 13px;
-        padding: 20px;
+        gap: 12px;
+        padding: 19px;
+        min-width: 0;
     }
 
     .product-topline,
@@ -1485,7 +1489,7 @@
 
     .product-price-row {
         align-items: end;
-        padding-top: 10px;
+        padding-top: 9px;
         border-top: 1px solid rgba(233, 72, 134, 0.1);
     }
 
@@ -1495,7 +1499,7 @@
         padding: 7px 11px;
         border-radius: 999px;
         font-size: 0.78rem;
-        font-weight: 700;
+        font-weight: 760;
     }
 
     .stock-badge--ok {
@@ -1514,9 +1518,12 @@
     }
 
     .product-body h3 {
-        font-size: 1.25rem;
+        font-family: var(--font-display);
+        font-size: 1.22rem;
+        font-weight: 830;
         text-wrap: pretty;
-        line-height: 1.16;
+        letter-spacing: -0.018em;
+        line-height: 1.14;
     }
 
     .product-title-link {
@@ -1530,8 +1537,8 @@
 
     .product-description {
         color: var(--ink-700);
-        line-height: 1.62;
-        min-height: 72px;
+        line-height: 1.58;
+        min-height: 68px;
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
@@ -1539,9 +1546,11 @@
     }
 
     .product-price {
-        color: var(--rose-600);
-        font-size: 1.55rem;
-        font-weight: 800;
+        color: #c91f65;
+        font-family: var(--font-display);
+        font-size: 1.46rem;
+        font-weight: 860;
+        letter-spacing: -0.025em;
     }
 
     .product-copy {
@@ -1599,12 +1608,13 @@
         grid-template-columns: 0.9fr 1.1fr;
         gap: 10px;
         align-self: end;
+        min-width: 0;
     }
 
     .product-card .btn,
     .product-card .btn-outline,
     .catalog-main .btn-outline {
-        min-height: 46px;
+        min-height: 44px;
     }
 
     .empty-state {
@@ -1700,12 +1710,12 @@
         }
 
         .hero-copy p {
-            font-size: 0.98rem;
-            line-height: 1.65;
+            font-size: 0.96rem;
+            line-height: 1.64;
         }
 
         .hero-copy h1 {
-            font-size: clamp(2.05rem, 8.8vw, 2.55rem);
+            font-size: clamp(2rem, 8.5vw, 2.48rem);
             line-height: 1.04;
             max-width: none;
         }
@@ -1793,7 +1803,7 @@
         .section-card,
         .sidebar,
         .catalog-main {
-            padding: 18px;
+            padding: 17px;
         }
 
         .hero-panel {
@@ -2098,19 +2108,20 @@
         .product-card {
             grid-template-columns: 1fr;
             grid-template-rows: auto 1fr;
-            border-radius: 20px;
+            border-radius: 19px;
             align-items: stretch;
+            box-shadow: 0 12px 26px rgba(75, 24, 46, 0.065);
         }
 
         .product-media {
-            min-height: 210px;
-            aspect-ratio: 1 / 1.18;
+            min-height: 196px;
+            aspect-ratio: 1 / 1.08;
             height: auto;
         }
 
         .product-media::before {
             inset: 8px;
-            border-radius: 16px;
+            border-radius: 15px;
         }
 
         .product-ribbon {
@@ -2123,7 +2134,7 @@
 
         .product-body {
             gap: 8px;
-            padding: 12px;
+            padding: 11px;
             align-content: start;
         }
 
@@ -2138,8 +2149,8 @@
         }
 
         .product-body h3 {
-            font-size: 0.9rem;
-            line-height: 1.22;
+            font-size: 0.88rem;
+            line-height: 1.18;
         }
 
         .line-card h3,
@@ -2158,7 +2169,7 @@
         }
 
         .product-price {
-            font-size: 1.02rem;
+            font-size: 1rem;
         }
 
         .product-copy {
@@ -2171,15 +2182,16 @@
 
         .product-actions {
             grid-template-columns: 1fr;
-            gap: 7px;
+            gap: 6px;
         }
 
         .product-actions .btn,
         .product-actions .btn-outline,
         .btn-disabled {
-            min-height: 38px;
-            padding: 0 10px;
-            font-size: 0.78rem;
+            min-height: 36px;
+            padding: 0 9px;
+            font-size: 0.76rem;
+            line-height: 1.1;
         }
 
         .product-topline,
@@ -2204,12 +2216,12 @@
         }
 
         .product-body {
-            gap: 8px;
+            gap: 7px;
             padding: 10px;
         }
 
         .product-media {
-            min-height: 158px;
+            min-height: 148px;
         }
 
         .product-topline {
@@ -2226,6 +2238,10 @@
 
         .product-actions {
             grid-template-columns: 1fr;
+        }
+
+        .product-price-row {
+            padding-top: 7px;
         }
 
         .product-description,
@@ -2246,16 +2262,16 @@
         }
 
         .product-media {
-            min-height: 132px;
+            min-height: 124px;
         }
 
         .product-body {
             gap: 7px;
-            padding: 9px;
+            padding: 8px;
         }
 
         .product-body h3 {
-            font-size: 0.84rem;
+            font-size: 0.8rem;
             line-height: 1.18;
         }
 
@@ -2265,14 +2281,14 @@
         }
 
         .product-price {
-            font-size: 0.98rem;
+            font-size: 0.92rem;
         }
 
         .product-actions .btn,
         .product-actions .btn-outline,
         .btn-disabled {
-            min-height: 36px;
-            font-size: 0.74rem;
+            min-height: 34px;
+            font-size: 0.7rem;
         }
     }
 </style>
