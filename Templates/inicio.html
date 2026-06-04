@@ -1557,6 +1557,13 @@
         letter-spacing: -0.025em;
     }
 
+    .product-currency,
+    .hero-price-currency {
+        font-size: 0.78em;
+        font-weight: 760;
+        letter-spacing: -0.01em;
+    }
+
     .product-copy {
         color: var(--ink-500);
         font-size: 0.92rem;
@@ -2176,6 +2183,11 @@
             font-size: 1rem;
         }
 
+        .product-currency,
+        .hero-price-currency {
+            display: none;
+        }
+
         .product-copy {
             display: none;
         }
@@ -2369,7 +2381,7 @@
                                     <span class="hero-product-category">{{ producto.categoria.nombre|default:"Detalle" }}</span>
                                     <strong class="hero-product-title">{{ producto.nombre }}</strong>
                                     <span class="hero-product-meta">
-                                        <span class="hero-product-price">Desde {{ producto.precio|cop }} COP</span>
+                                        <span class="hero-product-price">Desde {{ producto.precio|cop }}<span class="hero-price-currency"> COP</span></span>
                                         <span class="hero-product-cta">Ver detalle</span>
                                     </span>
                                 </div>
@@ -2699,7 +2711,7 @@
 
                             <div class="product-price-row">
                                 <div>
-                                    <div class="product-price">Desde {{ producto.precio|cop }} COP</div>
+                                    <div class="product-price">Desde {{ producto.precio|cop }}<span class="product-currency"> COP</span></div>
                                     <div class="product-copy">Precio base, ajustable seg&uacute;n personalizaci&oacute;n</div>
                                 </div>
                             </div>
