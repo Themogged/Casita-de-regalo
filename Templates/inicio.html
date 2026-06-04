@@ -601,6 +601,10 @@
         border: 0;
     }
 
+    .product-action-label-short {
+        display: none;
+    }
+
     .feature-item,
     .category-link {
         display: flex;
@@ -2194,6 +2198,14 @@
             line-height: 1.1;
         }
 
+        .product-action-label-full {
+            display: none;
+        }
+
+        .product-action-label-short {
+            display: inline;
+        }
+
         .product-topline,
         .product-price-row {
             align-items: flex-start;
@@ -2703,7 +2715,10 @@
                                 {% if producto.disponible %}
                                     <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">Agregar a mi cotización</button>
+                                        <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">
+                                            <span class="product-action-label-full">Agregar a mi cotización</span>
+                                            <span class="product-action-label-short">Agregar</span>
+                                        </button>
                                     </form>
                                 {% else %}
                                     <span class="btn-disabled">Agotado</span>
