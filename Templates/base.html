@@ -1439,7 +1439,7 @@
             }
 
             .page-shell {
-                padding: 16px 0 54px;
+                padding: 16px 0 90px;
             }
 
             .messages {
@@ -1464,25 +1464,43 @@
             }
 
             .floating-whatsapp {
-                right: 14px;
-                bottom: 82px;
-                width: 54px;
-                height: 54px;
+                right: 72px;
+                bottom: 14px;
+                width: 48px;
+                height: 48px;
                 border-width: 3px;
+                box-shadow:
+                    0 10px 20px rgba(13, 126, 58, 0.2),
+                    0 0 0 6px rgba(37, 211, 102, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.54),
+                    inset 0 -8px 13px rgba(0, 91, 36, 0.16);
+            }
+
+            .floating-whatsapp::before {
+                inset: 4px;
+            }
+
+            .floating-whatsapp::after {
+                inset: -6px;
             }
 
             .floating-whatsapp svg {
-                width: 31px;
-                height: 31px;
+                width: 28px;
+                height: 28px;
             }
 
             .floating-designer {
-                right: 12px;
-                bottom: 146px;
+                right: 130px;
+                bottom: 14px;
                 width: 48px;
                 height: 48px;
                 border-radius: 17px;
                 border-width: 3px;
+                box-shadow:
+                    0 10px 20px rgba(215, 38, 109, 0.16),
+                    0 0 0 6px rgba(255, 214, 231, 0.16),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+                    inset 0 -7px 13px rgba(143, 16, 74, 0.1);
             }
 
             .floating-designer::before {
@@ -1496,7 +1514,7 @@
             }
 
             .assistant-shell {
-                right: 12px;
+                right: 14px;
                 left: auto;
                 bottom: 14px;
                 justify-items: end;
@@ -1608,6 +1626,18 @@
             .menu-toggle {
                 width: 32px;
                 height: 32px;
+            }
+
+            .floating-designer {
+                right: 118px;
+            }
+
+            .floating-whatsapp {
+                right: 65px;
+            }
+
+            .assistant-shell {
+                right: 12px;
             }
         }
     </style>
