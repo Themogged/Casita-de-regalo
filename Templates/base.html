@@ -1649,7 +1649,7 @@
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
     <header class="site-header">
         <div class="header-inner">
             <a href="{% url 'inicio' %}" class="brand">
