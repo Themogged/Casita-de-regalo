@@ -118,6 +118,7 @@ class CarritoViewsTests(TestCase):
         self.assertContains(response, 'confirmAddToCart')
         self.assertContains(response, 'is-confirmed')
         self.assertContains(response, 'message--cart-added')
+        self.assertContains(response, "'message message--cart-added'")
         self.assertContains(response, '.message.message--cart-added')
         self.assertContains(response, 'toast-action')
 

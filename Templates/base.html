@@ -2203,13 +2203,15 @@
         const showToast = (message, level = 'success', options = {}) => {
             const container = getMessagesContainer();
             const item = document.createElement('div');
-            item.className = `message ${level}`;
-            if (options.variant) {
+            const isCartAddedToast = options.variant === 'cart-added';
+
+            item.className = isCartAddedToast ? 'message message--cart-added' : `message ${level}`;
+            if (options.variant && !isCartAddedToast) {
                 item.classList.add(`message--${options.variant}`);
             }
             item.setAttribute('role', level === 'error' ? 'alert' : 'status');
 
-            if (options.variant === 'cart-added') {
+            if (isCartAddedToast) {
                 const icon = document.createElement('span');
                 icon.className = 'toast-check';
                 icon.setAttribute('aria-hidden', 'true');
