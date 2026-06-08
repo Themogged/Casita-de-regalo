@@ -659,8 +659,8 @@
 
         .message.message--cart-added {
             position: fixed;
-            left: 50%;
-            right: auto;
+            left: 0;
+            right: 0;
             top: auto;
             bottom: max(84px, calc(18px + env(safe-area-inset-bottom)));
             display: grid;
@@ -668,6 +668,7 @@
             gap: 11px;
             align-items: center;
             width: min(420px, calc(100vw - 28px));
+            margin-inline: auto;
             padding: 11px;
             color: #3f1f2d;
             background:
@@ -803,12 +804,12 @@
         @keyframes cartToastIn {
             0% {
                 opacity: 0;
-                transform: translate3d(-50%, 12px, 0) scale(0.98);
+                transform: translate3d(0, 12px, 0) scale(0.98);
                 filter: blur(3px);
             }
             100% {
                 opacity: 1;
-                transform: translate3d(-50%, 0, 0) scale(1);
+                transform: translate3d(0, 0, 0) scale(1);
                 filter: blur(0);
             }
         }
@@ -816,11 +817,11 @@
         @keyframes cartToastOut {
             0% {
                 opacity: 1;
-                transform: translate3d(-50%, 0, 0) scale(1);
+                transform: translate3d(0, 0, 0) scale(1);
             }
             100% {
                 opacity: 0;
-                transform: translate3d(-50%, 10px, 0) scale(0.98);
+                transform: translate3d(0, 10px, 0) scale(0.98);
             }
         }
 
@@ -841,35 +842,39 @@
 
         @media (max-width: 460px) {
             .message.message--cart-added {
-                grid-template-columns: auto minmax(0, 1fr);
-                top: 82px;
-                bottom: auto;
-                gap: 10px;
-                width: min(388px, calc(100vw - 18px));
-                border-radius: 22px;
-                padding: 10px;
+                grid-template-columns: auto minmax(0, 1fr) auto;
+                top: auto;
+                bottom: max(188px, calc(176px + env(safe-area-inset-bottom)));
+                gap: 8px;
+                width: min(326px, calc(100vw - 24px));
+                border-radius: 999px;
+                padding: 8px 9px 8px 8px;
+                box-shadow:
+                    0 14px 32px rgba(184, 56, 112, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.92);
             }
 
             .message.message--cart-added .toast-check {
-                width: 30px;
-                height: 30px;
-            }
-
-            .message.message--cart-added .toast-title {
+                width: 28px;
+                height: 28px;
                 font-size: 0.84rem;
             }
 
+            .message.message--cart-added .toast-title {
+                overflow: hidden;
+                font-size: 0.82rem;
+                line-height: 1;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
             .message.message--cart-added .toast-detail {
-                font-size: 0.72rem;
-                overflow: visible;
-                text-overflow: clip;
-                white-space: normal;
+                display: none;
             }
 
             .message.message--cart-added .toast-action {
-                grid-column: 2;
-                justify-self: start;
-                min-height: 28px;
+                grid-column: auto;
+                min-height: 30px;
                 padding: 0 10px;
                 font-size: 0.72rem;
             }
@@ -877,12 +882,20 @@
 
         @media (max-width: 360px) {
             .message.message--cart-added {
-                width: calc(100vw - 14px);
-                gap: 9px;
+                bottom: max(180px, calc(168px + env(safe-area-inset-bottom)));
+                width: min(306px, calc(100vw - 18px));
+                gap: 7px;
+                padding-right: 8px;
             }
 
-            .message.message--cart-added .toast-detail {
-                max-width: none;
+            .message.message--cart-added .toast-title {
+                font-size: 0.78rem;
+            }
+
+            .message.message--cart-added .toast-action {
+                min-height: 28px;
+                padding: 0 8px;
+                font-size: 0.68rem;
             }
         }
 
