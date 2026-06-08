@@ -111,6 +111,15 @@ class CarritoViewsTests(TestCase):
             },
         )
 
+    def test_catalogo_incluye_animacion_de_agregar_a_lista(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'confirmAddToCart')
+        self.assertContains(response, 'is-confirmed')
+        self.assertContains(response, 'message--cart-added')
+        self.assertContains(response, 'toast-action')
+
     def test_agregar_no_acepta_get(self):
         response = self.client.get(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
 
