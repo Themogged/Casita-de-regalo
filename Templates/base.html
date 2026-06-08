@@ -338,12 +338,12 @@
 
         .js-add-to-cart.is-confirmed {
             background:
-                radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.28), transparent 30%),
-                linear-gradient(135deg, #a94d6b, #742847);
+                radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.38), transparent 30%),
+                linear-gradient(135deg, #ff7eaa, #e54884);
             color: #fff;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.22),
-                0 12px 24px rgba(116, 40, 71, 0.18);
+                0 12px 24px rgba(229, 72, 132, 0.18);
         }
 
         @keyframes cartButtonReceive {
@@ -657,7 +657,7 @@
             background: #d65a5a;
         }
 
-        .message--cart-added {
+        .message.message--cart-added {
             position: fixed;
             left: 50%;
             right: auto;
@@ -668,25 +668,25 @@
             gap: 11px;
             align-items: center;
             width: min(420px, calc(100vw - 28px));
-            padding: 10px 11px;
-            color: #3f2630;
+            padding: 11px;
+            color: #3f1f2d;
             background:
-                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.96), transparent 32%),
-                linear-gradient(180deg, rgba(255, 254, 251, 0.98), rgba(255, 247, 242, 0.96));
-            border: 1px solid rgba(174, 96, 118, 0.16);
+                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.98), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 244, 250, 0.98));
+            border: 1px solid rgba(255, 168, 204, 0.54);
             border-radius: 999px;
             box-shadow:
-                0 18px 42px rgba(83, 46, 59, 0.14),
+                0 18px 42px rgba(184, 56, 112, 0.13),
                 inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            animation: cartToastIn 360ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
+            backdrop-filter: blur(14px);
+            animation: cartToastIn 440ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
         }
 
-        .message--cart-added::before {
+        .message.message--cart-added::before {
             display: none;
         }
 
-        .message--cart-added::after {
+        .message.message--cart-added::after {
             display: none;
         }
 
@@ -697,11 +697,16 @@
             width: 32px;
             height: 32px;
             border-radius: 999px;
-            background: linear-gradient(135deg, #9f3f63, #6f2442);
-            color: #fff;
+            background:
+                radial-gradient(circle at 28% 18%, #fff, transparent 34%),
+                linear-gradient(135deg, #ffe8f1, #ffc3db);
+            color: #d72d74;
             font-size: 0.96rem;
             font-weight: 900;
-            box-shadow: 0 9px 18px rgba(111, 36, 66, 0.2);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.86),
+                0 9px 18px rgba(215, 45, 116, 0.14);
+            animation: toastCheckSoft 560ms cubic-bezier(0.18, 0.88, 0.28, 1) 80ms both;
         }
 
         .toast-copy {
@@ -711,7 +716,7 @@
         }
 
         .toast-title {
-            color: #3a2430;
+            color: #3f1f2d;
             font-size: 0.9rem;
             font-weight: 900;
             line-height: 1.15;
@@ -719,7 +724,7 @@
 
         .toast-detail {
             overflow: hidden;
-            color: #7b5d66;
+            color: #8b5b70;
             font-size: 0.76rem;
             font-weight: 650;
             line-height: 1.2;
@@ -734,20 +739,23 @@
             min-height: 32px;
             padding: 0 12px;
             border-radius: 999px;
-            background: #fffdfb;
-            color: #7a2d4d;
-            border: 1px solid rgba(122, 45, 77, 0.14);
+            background: linear-gradient(135deg, #ff7eaa, #e54884);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.42);
             font-size: 0.78rem;
             font-weight: 850;
             white-space: nowrap;
-            box-shadow: 0 8px 16px rgba(83, 46, 59, 0.07);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.24),
+                0 8px 16px rgba(229, 72, 132, 0.17);
         }
 
         .toast-action:hover,
         .toast-action:focus-visible {
-            color: #61203c;
-            border-color: rgba(122, 45, 77, 0.24);
-            box-shadow: 0 10px 18px rgba(83, 46, 59, 0.1);
+            color: #fff;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.26),
+                0 10px 18px rgba(229, 72, 132, 0.22);
             outline: none;
         }
 
@@ -755,7 +763,7 @@
             animation: toastSoftOut 260ms ease-in forwards;
         }
 
-        .message--cart-added.is-leaving {
+        .message.message--cart-added.is-leaving {
             animation: cartToastOut 260ms ease-in forwards;
         }
 
@@ -795,8 +803,8 @@
         @keyframes cartToastIn {
             0% {
                 opacity: 0;
-                transform: translate3d(-50%, 14px, 0) scale(0.96);
-                filter: blur(5px);
+                transform: translate3d(-50%, 12px, 0) scale(0.98);
+                filter: blur(3px);
             }
             100% {
                 opacity: 1;
@@ -816,35 +824,65 @@
             }
         }
 
+        @keyframes toastCheckSoft {
+            0% {
+                opacity: 0;
+                transform: scale(0.82);
+            }
+            65% {
+                opacity: 1;
+                transform: scale(1.06);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         @media (max-width: 460px) {
-            .message--cart-added {
+            .message.message--cart-added {
                 grid-template-columns: auto minmax(0, 1fr);
-                bottom: max(78px, calc(12px + env(safe-area-inset-bottom)));
+                top: 82px;
+                bottom: auto;
                 gap: 10px;
                 width: min(388px, calc(100vw - 18px));
                 border-radius: 22px;
-                padding: 10px 11px;
+                padding: 10px;
             }
 
-            .message--cart-added .toast-check {
+            .message.message--cart-added .toast-check {
                 width: 30px;
                 height: 30px;
             }
 
-            .message--cart-added .toast-title {
+            .message.message--cart-added .toast-title {
                 font-size: 0.84rem;
             }
 
-            .message--cart-added .toast-detail {
+            .message.message--cart-added .toast-detail {
                 font-size: 0.72rem;
+                overflow: visible;
+                text-overflow: clip;
+                white-space: normal;
             }
 
-            .message--cart-added .toast-action {
+            .message.message--cart-added .toast-action {
                 grid-column: 2;
                 justify-self: start;
                 min-height: 28px;
                 padding: 0 10px;
                 font-size: 0.72rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .message.message--cart-added {
+                width: calc(100vw - 14px);
+                gap: 9px;
+            }
+
+            .message.message--cart-added .toast-detail {
+                max-width: none;
             }
         }
 
