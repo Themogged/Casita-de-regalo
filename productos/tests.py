@@ -533,6 +533,16 @@ class CatalogoViewsTests(TestCase):
         )
         self.assertContains(response, 'class="catalog-chip js-catalog-nav is-active"')
 
+    def test_barra_superior_marca_categoria_actual(self):
+        response = self.client.get(reverse('inicio'), {'categoria': self.categoria_flores.id}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            f'href="{reverse("inicio")}?categoria={self.categoria_flores.id}#catalogo" class="category-pill is-active" aria-current="page"',
+        )
+        self.assertNotContains(response, 'href="/#catalogo" class="category-pill is-active"')
+
     def test_asistente_devuelve_fallback_si_no_hay_api_key(self):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
             response = self.client.post(

@@ -549,7 +549,7 @@
     }
 
     .btn {
-        background: linear-gradient(135deg, #ff7658 0%, var(--rose-600) 58%, #b91c5d 100%);
+        background: linear-gradient(135deg, #ff9bc2 0%, var(--rose-600) 58%, #b92a68 100%);
         color: #fff;
         box-shadow: 0 14px 26px rgba(215, 38, 109, 0.2);
     }
@@ -1300,9 +1300,9 @@
     .catalog-chip-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 9px;
+        gap: 8px;
         overflow-x: visible;
-        padding: 2px 2px 8px;
+        padding: 4px 4px 10px;
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
@@ -1315,26 +1315,48 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 42px;
+        min-height: 37px;
         padding: 0 16px;
         border-radius: 999px;
-        border: 1px solid rgba(198, 68, 125, 0.1);
-        background: rgba(255, 255, 255, 0.88);
-        color: var(--ink-700);
-        font-weight: 700;
-        font-size: 0.93rem;
+        border: 1px solid rgba(255, 255, 255, 0.68);
+        background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+        color: #fff;
+        font-weight: 760;
+        font-size: 0.88rem;
+        letter-spacing: 0.01em;
+        text-shadow: 0 1px 0 rgba(129, 36, 74, 0.14);
         white-space: nowrap;
         flex: 0 0 auto;
         scroll-snap-align: start;
-        box-shadow: 0 8px 18px rgba(75, 24, 46, 0.035);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.62),
+            inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+            0 8px 16px rgba(229, 72, 132, 0.14);
+        transition:
+            background 160ms ease,
+            border-color 160ms ease,
+            color 160ms ease,
+            box-shadow 160ms ease,
+            transform 160ms ease;
     }
 
     .catalog-chip.is-active,
-    .catalog-chip:hover {
-        background: linear-gradient(135deg, var(--coral-500), var(--rose-600) 52%, var(--rose-700));
-        border-color: transparent;
+    .catalog-chip:hover,
+    .catalog-chip:focus-visible {
+        background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+        border-color: rgba(255, 255, 255, 0.78);
         color: #fff;
-        box-shadow: 0 12px 22px rgba(215, 38, 109, 0.16);
+        box-shadow:
+            0 0 0 3px rgba(255, 226, 238, 0.82),
+            inset 0 1px 0 rgba(255, 255, 255, 0.62),
+            inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+            0 11px 22px rgba(229, 72, 132, 0.2);
+        outline: none;
+    }
+
+    .catalog-chip:hover,
+    .catalog-chip:focus-visible {
+        transform: translateY(-1px);
     }
 
     .catalog-chip-more {
@@ -2019,9 +2041,10 @@
         }
 
         .catalog-chip {
-            min-height: 38px;
-            padding: 0 13px;
-            font-size: 0.88rem;
+            min-height: 34px;
+            padding: 0 12px;
+            font-size: 0.76rem;
+            box-shadow: 0 6px 12px rgba(75, 24, 46, 0.03);
         }
 
         .results-counter {
@@ -2089,8 +2112,9 @@
             flex-wrap: nowrap;
             overflow-x: auto;
             margin-inline: -16px;
-            padding: 0 16px 6px;
+            padding: 2px 16px 7px;
             scroll-snap-type: x proximity;
+            scroll-padding-inline: 16px;
         }
 
         .catalog-chip-more {
@@ -2656,10 +2680,10 @@
             </form>
 
             <nav class="catalog-chip-row" aria-label="Categorías del catálogo">
-                <a href="{% url 'inicio' %}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}">Todos</a>
+                <a href="{% url 'inicio' %}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}" {% if not categoria_actual %}aria-current="page"{% endif %}>Todos</a>
                 {% for categoria in categorias %}
                     {% if forloop.counter <= 6 %}
-                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}">
+                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}" {% if categoria_actual and categoria_actual.id == categoria.id %}aria-current="page"{% endif %}>
                             {{ categoria.nombre }}
                         </a>
                     {% endif %}
@@ -2670,7 +2694,7 @@
                         <div class="catalog-chip-more-panel">
                             {% for categoria in categorias %}
                                 {% if forloop.counter > 6 %}
-                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}">
+                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}" {% if categoria_actual and categoria_actual.id == categoria.id %}aria-current="page"{% endif %}>
                                         {{ categoria.nombre }}
                                     </a>
                                 {% endif %}

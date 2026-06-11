@@ -25,10 +25,10 @@
             --rose-300: #ff82b1;
             --rose-400: #f45898;
             --rose-500: #e73683;
-            --rose-600: #d7266d;
-            --rose-700: #841244;
-            --coral-500: #ff6b4a;
-            --coral-600: #ea5034;
+            --rose-600: #e54884;
+            --rose-700: #b92a68;
+            --coral-500: #ff9bc2;
+            --coral-600: #f176a6;
             --mint-100: #edf8f4;
             --mint-300: #c8e7db;
             --sage-100: #edf4ee;
@@ -162,7 +162,7 @@
             right: 0;
             bottom: -1px;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(215, 38, 109, 0.32), rgba(255, 107, 74, 0.24), transparent);
+            background: linear-gradient(90deg, transparent, rgba(229, 72, 132, 0.28), rgba(255, 155, 194, 0.26), transparent);
             pointer-events: none;
         }
 
@@ -281,7 +281,7 @@
             border-radius: 999px;
             background:
                 radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.26), transparent 28%),
-                linear-gradient(135deg, #ff7658 0%, var(--rose-600) 50%, #b91c5d 100%);
+                linear-gradient(135deg, #ff9bc2 0%, var(--rose-600) 54%, #b92a68 100%);
             color: var(--white);
             border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 0.92rem;
@@ -339,7 +339,7 @@
         .js-add-to-cart.is-confirmed {
             background:
                 radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.46), transparent 30%),
-                linear-gradient(135deg, #ff8fba 0%, #ec4f8a 58%, #c42169 100%);
+                linear-gradient(135deg, #ffc5dc 0%, #f176a6 56%, #d94b83 100%);
             color: #fff;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.3),
@@ -495,15 +495,17 @@
         .category-strip-inner {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             overflow-x: visible;
-            padding: 4px;
+            padding: 5px;
             scrollbar-width: none;
             -ms-overflow-style: none;
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.74);
-            border: 1px solid rgba(198, 68, 125, 0.09);
-            box-shadow: 0 10px 22px rgba(94, 35, 63, 0.035);
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 241, 248, 0.92));
+            border: 1px solid rgba(229, 72, 132, 0.12);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.94),
+                0 12px 24px rgba(185, 45, 99, 0.055);
         }
 
         .category-strip-inner::-webkit-scrollbar {
@@ -511,21 +513,51 @@
         }
 
         .category-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             white-space: nowrap;
-            padding: 9px 15px;
+            min-height: 37px;
+            padding: 0 16px;
             border-radius: 999px;
-            border: 1px solid transparent;
-            background: rgba(255, 255, 255, 0.92);
-            color: var(--ink-700);
-            font-weight: 690;
-            font-size: 0.92rem;
+            border: 1px solid rgba(255, 255, 255, 0.68);
+            background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+            color: var(--white);
+            font-weight: 760;
+            font-size: 0.88rem;
+            letter-spacing: 0.01em;
+            text-shadow: 0 1px 0 rgba(129, 36, 74, 0.14);
             flex: 0 0 auto;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 8px 16px rgba(229, 72, 132, 0.14);
+            transition:
+                background 160ms ease,
+                border-color 160ms ease,
+                color 160ms ease,
+                box-shadow 160ms ease,
+                transform 160ms ease;
         }
 
-        .category-pill:hover {
-            background: linear-gradient(135deg, #fff8fb, #ffe8f0);
-            border-color: rgba(215, 38, 109, 0.22);
-            color: var(--rose-700);
+        .category-pill:hover,
+        .category-pill:focus-visible,
+        .category-pill.is-active,
+        .category-pill[aria-current="page"] {
+            background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+            border-color: rgba(255, 255, 255, 0.78);
+            color: var(--white);
+            box-shadow:
+                0 0 0 3px rgba(255, 226, 238, 0.82),
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 11px 22px rgba(229, 72, 132, 0.2);
+            outline: none;
+        }
+
+        .category-pill:hover,
+        .category-pill:focus-visible {
+            transform: translateY(-1px);
         }
 
         .category-more {
@@ -740,7 +772,7 @@
             min-height: 32px;
             padding: 0 12px;
             border-radius: 999px;
-            background: linear-gradient(135deg, #ff7eaa, #e54884);
+            background: linear-gradient(135deg, #ff9bc2, #e54884);
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.42);
             font-size: 0.78rem;
@@ -1711,7 +1743,9 @@
                 flex-wrap: nowrap;
                 overflow-x: auto;
                 border-radius: 999px;
-                padding: 4px;
+                gap: 6px;
+                padding: 5px;
+                scroll-padding-inline: 10px;
             }
 
             .category-more {
@@ -1730,8 +1764,10 @@
             }
 
             .category-pill {
-                padding: 6px 10px;
-                font-size: 0.73rem;
+                min-height: 34px;
+                padding: 0 12px;
+                font-size: 0.74rem;
+                box-shadow: 0 6px 12px rgba(75, 24, 46, 0.03);
             }
 
             .hero-card {
@@ -1834,7 +1870,7 @@
                 border: 1px solid rgba(255, 255, 255, 0.34);
                 background:
                     radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.26), transparent 28%),
-                    linear-gradient(135deg, #ff7658 0%, var(--rose-600) 58%, #b91c5d 100%);
+                    linear-gradient(135deg, #ff9bc2 0%, var(--rose-600) 58%, #b92a68 100%);
                 box-shadow:
                     inset 0 1px 0 rgba(255, 255, 255, 0.28),
                     0 13px 26px rgba(215, 38, 109, 0.23);
@@ -1979,10 +2015,11 @@
     {% if categorias_menu %}
         <div class="category-strip">
             <div class="category-strip-inner">
-                <a href="{% url 'inicio' %}" class="category-pill">Todos</a>
+                {% with categoria_activa=request.GET.categoria|default:"" %}
+                <a href="{% url 'inicio' %}#catalogo" class="category-pill {% if not categoria_activa %}is-active{% endif %}" {% if not categoria_activa %}aria-current="page"{% endif %}>Todos</a>
                 {% for categoria in categorias_menu %}
                     {% if forloop.counter <= 6 %}
-                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
+                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
                             {{ categoria.nombre }}
                         </a>
                     {% endif %}
@@ -1993,7 +2030,7 @@
                         <div class="category-more-panel">
                             {% for categoria in categorias_menu %}
                                 {% if forloop.counter > 6 %}
-                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill">
+                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
                                         {{ categoria.nombre }}
                                     </a>
                                 {% endif %}
@@ -2001,6 +2038,7 @@
                         </div>
                     </details>
                 {% endif %}
+                {% endwith %}
             </div>
         </div>
     {% endif %}
