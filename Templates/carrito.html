@@ -10,7 +10,7 @@
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(240px, 0.36fr);
         gap: 24px;
-        align-items: end;
+        align-items: center;
         overflow: hidden;
     }
 
@@ -43,8 +43,8 @@
         border: 1px solid rgba(231, 54, 131, 0.12);
         color: var(--rose-700);
         font-size: 0.78rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
+        font-weight: 760;
+        letter-spacing: 0.055em;
         text-transform: uppercase;
     }
 
@@ -52,15 +52,16 @@
         max-width: 720px;
         margin-bottom: 14px;
         font-family: var(--font-display);
-        font-size: clamp(2.25rem, 5vw, 3.45rem);
-        line-height: 1.02;
-        letter-spacing: -0.018em;
+        font-size: clamp(2.16rem, 4.75vw, 3.28rem);
+        line-height: var(--leading-title);
+        letter-spacing: var(--tracking-tight);
+        font-weight: 600;
     }
 
     .cart-hero p {
         max-width: 680px;
         color: var(--hero-text-soft);
-        line-height: 1.72;
+        line-height: var(--leading-copy);
     }
 
     .cart-hero__summary {
@@ -69,29 +70,81 @@
     }
 
     .cart-count-card {
+        position: relative;
+        overflow: hidden;
         padding: 20px;
         border-radius: 26px;
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid rgba(255, 255, 255, 0.72);
-        box-shadow: 0 22px 42px rgba(75, 24, 46, 0.1);
+        background:
+            radial-gradient(circle at 92% 8%, rgba(255, 226, 238, 0.64), transparent 34%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 250, 252, 0.88));
+        border: 1px solid rgba(255, 255, 255, 0.86);
+        box-shadow:
+            0 18px 34px rgba(75, 24, 46, 0.075),
+            inset 0 1px 0 rgba(255, 255, 255, 0.92);
         backdrop-filter: blur(14px);
     }
 
-    .cart-count-card strong {
-        display: block;
+    .cart-count-card__eyebrow {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin-bottom: 14px;
+        padding: 7px 11px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(231, 54, 131, 0.12);
         color: var(--rose-700);
-        font-size: 2.6rem;
-        line-height: 1;
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.045em;
+        text-transform: uppercase;
+        box-shadow: 0 10px 20px rgba(75, 24, 46, 0.05);
     }
 
-    .cart-count-card span {
+    .cart-count-card__grid {
+        display: grid;
+        grid-template-columns: 0.72fr 1fr;
+        gap: 12px;
+    }
+
+    .cart-count-card__item {
+        min-width: 0;
+        padding: 14px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(231, 54, 131, 0.09);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .cart-count-card__item--strong {
+        background:
+            linear-gradient(135deg, rgba(255, 246, 250, 0.96), rgba(255, 255, 255, 0.82));
+    }
+
+    .cart-count-card::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 5px;
+        background: linear-gradient(90deg, #ffc5dc, var(--rose-600), #ffc5dc);
+    }
+
+    .cart-count-card__item strong {
         display: block;
-        margin-top: 6px;
+        color: var(--rose-700);
+        font-size: clamp(1.45rem, 2.7vw, 2.08rem);
+        line-height: 1.05;
+    }
+
+    .cart-count-card__item span {
+        display: block;
+        margin-bottom: 6px;
         color: var(--ink-700);
         font-weight: 700;
     }
 
-    .cart-count-card small {
+    .cart-count-card__item small,
+    .cart-count-card > small {
         display: block;
         margin-top: 12px;
         padding-top: 12px;
@@ -101,51 +154,76 @@
         line-height: 1.45;
     }
 
+    .cart-count-card__item small {
+        margin-top: 8px;
+        padding-top: 8px;
+        font-size: 0.78rem;
+    }
+
     .cart-flow {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-        margin-top: 28px;
+        gap: 10px;
+        margin-top: 24px;
+        padding: 8px;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.58);
+        border: 1px solid rgba(231, 54, 131, 0.08);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
     }
 
     .cart-flow__step {
-        min-height: 112px;
-        padding: 16px;
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.62);
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 10px;
+        align-items: center;
+        min-height: 74px;
+        padding: 12px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.82);
         border: 1px solid rgba(255, 255, 255, 0.72);
-        box-shadow: 0 16px 28px rgba(75, 24, 46, 0.07);
+        box-shadow: 0 10px 18px rgba(75, 24, 46, 0.04);
     }
 
     .cart-flow__step:nth-child(2) {
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 247, 250, 0.78));
+        background: rgba(255, 248, 251, 0.9);
         border-color: rgba(231, 54, 131, 0.14);
     }
 
-    .cart-flow__step span {
+    .cart-flow__step > span {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         width: 32px;
         height: 32px;
-        margin-bottom: 10px;
+        margin: 0;
         border-radius: 50%;
         background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
         color: #fff;
         font-size: 0.8rem;
         font-weight: 800;
+        grid-row: 1 / span 2;
+    }
+
+    .cart-flow__step strong,
+    .cart-flow__step p {
+        grid-column: 2;
     }
 
     .cart-flow__step strong {
         display: block;
-        margin-bottom: 5px;
+        margin-bottom: 2px;
         color: var(--ink-900);
+        font-weight: 800;
+        line-height: 1.24;
     }
 
     .cart-flow__step p {
         color: var(--ink-700);
-        font-size: 0.92rem;
-        line-height: 1.55;
+        font-size: 0.86rem;
+        line-height: 1.38;
     }
 
     .cart-flow__step em {
@@ -187,6 +265,9 @@
         align-items: flex-start;
         padding: 18px 20px;
         border-radius: 24px;
+        background:
+            radial-gradient(circle at 0% 0%, rgba(255, 234, 242, 0.64), transparent 30%),
+            rgba(255, 255, 255, 0.94);
         color: var(--ink-700);
         line-height: 1.65;
     }
@@ -233,7 +314,9 @@
     .checkout-card h2,
     .cart-summary-card h3 {
         font-family: var(--font-display);
-        line-height: 1.04;
+        font-weight: 600;
+        line-height: var(--leading-title);
+        letter-spacing: var(--tracking-tight);
     }
 
     .cart-section-head h2,
@@ -246,6 +329,21 @@
     .cart-summary-card p {
         color: var(--ink-700);
         line-height: 1.66;
+    }
+
+    .cart-section-head__summary {
+        display: inline-flex;
+        align-items: center;
+        width: fit-content;
+        margin: 0;
+        padding: 9px 14px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(255, 246, 250, 0.98), rgba(255, 255, 255, 0.96));
+        border: 1px solid rgba(231, 54, 131, 0.11);
+        box-shadow: 0 10px 22px rgba(75, 24, 46, 0.045);
+        color: var(--ink-700);
+        font-size: 0.9rem;
+        font-weight: 700;
     }
 
     .cart-table {
@@ -287,6 +385,10 @@
     .cart-table tbody tr:hover td {
         background: rgba(255, 252, 253, 0.99);
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    }
+
+    .cart-table tbody tr {
+        filter: drop-shadow(0 12px 18px rgba(75, 24, 46, 0.035));
     }
 
     .product-info {
@@ -337,13 +439,15 @@
     .product-copy strong {
         color: var(--ink-900);
         font-size: 1.02rem;
+        font-weight: 700;
+        line-height: 1.24;
     }
 
     .product-note {
         max-width: 420px;
         color: var(--ink-700);
         font-size: 0.88rem;
-        line-height: 1.45;
+        line-height: 1.5;
     }
 
     .product-meta-pills {
@@ -390,8 +494,9 @@
         gap: 8px;
         padding: 7px;
         border-radius: 999px;
-        background: linear-gradient(135deg, #fff8fa, #fffdf8);
-        border: 1px solid rgba(231, 54, 131, 0.1);
+        background: linear-gradient(135deg, #fff8fa, #fffdfc);
+        border: 1px solid rgba(231, 54, 131, 0.12);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
     }
 
     .qty-btn,
@@ -408,10 +513,11 @@
     }
 
     .qty-btn {
-        background: #fff;
+        background: rgba(255, 255, 255, 0.96);
         color: var(--rose-700);
         border: 1px solid rgba(231, 54, 131, 0.15);
         cursor: pointer;
+        box-shadow: 0 8px 14px rgba(75, 24, 46, 0.045);
     }
 
     .qty-btn.is-disabled {
@@ -437,8 +543,9 @@
     .remove-btn {
         gap: 8px;
         padding: 0 14px;
-        background: #fff1f1;
-        color: #a83f47;
+        background: #fff5f8;
+        color: #a93568;
+        border: 1px solid rgba(169, 53, 104, 0.12);
         cursor: pointer;
     }
 
@@ -496,7 +603,8 @@
         width: 100%;
         border: 1px solid rgba(231, 54, 131, 0.14);
         border-radius: 18px;
-        background: rgba(255, 255, 255, 0.96);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 252, 0.96));
         padding: 14px 15px;
         color: var(--ink-900);
         font: inherit;
@@ -531,6 +639,7 @@
         background:
             radial-gradient(circle at top right, rgba(255, 155, 194, 0.18), transparent 34%),
             linear-gradient(180deg, #fff, #fff7fa);
+        border-color: rgba(231, 54, 131, 0.13);
     }
 
     .cart-summary-card::before {
@@ -546,13 +655,25 @@
         z-index: 1;
     }
 
+    .cart-summary-card__lead {
+        margin: 12px 0 0;
+        padding: 14px 16px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.78);
+        border: 1px solid rgba(231, 54, 131, 0.1);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
     .summary-lines {
         display: grid;
         gap: 10px;
-        padding: 16px;
+        padding: 18px;
         border-radius: 22px;
         background: rgba(255, 255, 255, 0.72);
         border: 1px solid rgba(231, 54, 131, 0.08);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.82),
+            0 12px 22px rgba(75, 24, 46, 0.04);
     }
 
     .summary-line,
@@ -566,6 +687,11 @@
     .summary-line {
         color: var(--ink-700);
         font-size: 0.96rem;
+    }
+
+    .summary-line strong {
+        color: var(--ink-900);
+        font-weight: 800;
     }
 
     .summary-total {
@@ -592,6 +718,10 @@
         grid-template-columns: 30px minmax(0, 1fr);
         gap: 10px;
         align-items: start;
+        padding: 11px 12px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.68);
+        border: 1px solid rgba(231, 54, 131, 0.08);
         color: var(--ink-700);
         line-height: 1.55;
     }
@@ -619,6 +749,17 @@
     .summary-actions {
         display: grid;
         gap: 10px;
+        padding-top: 2px;
+    }
+
+    .summary-note {
+        padding: 13px 14px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(255, 248, 251, 0.96), rgba(255, 255, 255, 0.94));
+        border: 1px solid rgba(231, 54, 131, 0.08);
+        color: var(--ink-600);
+        font-size: 0.84rem;
+        line-height: 1.55;
     }
 
     .btn,
@@ -631,6 +772,7 @@
         border-radius: 999px;
         font: inherit;
         font-weight: 800;
+        letter-spacing: var(--tracking-soft);
         text-align: center;
     }
 
@@ -735,7 +877,7 @@
         .cart-hero h1 {
             margin-bottom: 10px;
             font-size: clamp(1.75rem, 8vw, 2.2rem);
-            line-height: 1.03;
+            line-height: var(--leading-title);
         }
 
         .cart-hero p {
@@ -745,55 +887,82 @@
 
         .cart-count-card {
             display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
-            column-gap: 12px;
-            align-items: center;
-            padding: 13px 14px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 12px;
             border-radius: 20px;
             box-shadow: 0 12px 24px rgba(75, 24, 46, 0.06);
         }
 
-        .cart-count-card strong {
-            font-size: 2rem;
+        .cart-count-card__grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
         }
 
-        .cart-count-card span {
+        .cart-count-card__item {
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        .cart-count-card__item strong {
+            font-size: 1.18rem;
+        }
+
+        .cart-count-card__eyebrow {
+            margin-bottom: 0;
+            font-size: 0.7rem;
+        }
+
+        .cart-count-card__item span {
+            margin: 0 0 5px;
+            font-size: 0.78rem;
+        }
+
+        .cart-count-card__item small,
+        .cart-count-card > small {
             margin-top: 0;
-        }
-
-        .cart-count-card small {
-            grid-column: 1 / -1;
-            margin-top: 10px;
-            padding-top: 10px;
+            padding-top: 8px;
             font-size: 0.82rem;
         }
 
+        .cart-count-card__item small {
+            padding-top: 6px;
+            font-size: 0.7rem;
+            line-height: 1.28;
+        }
+
+        .cart-count-card > small {
+            display: none;
+        }
+
         .cart-flow {
-            grid-template-columns: 1fr;
-            gap: 0;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
             margin-top: 16px;
-            padding: 8px;
+            padding: 7px;
             border-radius: 22px;
-            background: rgba(255, 255, 255, 0.62);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 247, 250, 0.76));
             border: 1px solid rgba(231, 54, 131, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
         }
 
         .cart-flow__step {
             display: grid;
-            grid-template-columns: 30px minmax(0, 1fr) auto;
-            gap: 10px;
-            align-items: center;
+            grid-template-columns: 1fr;
+            gap: 6px;
+            justify-items: center;
             min-height: auto;
-            padding: 10px;
+            padding: 9px 6px;
             border: 0;
             border-radius: 16px;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.68);
             box-shadow: none;
-            text-align: left;
+            text-align: center;
         }
 
         .cart-flow__step + .cart-flow__step {
-            border-top: 1px solid rgba(231, 54, 131, 0.08);
+            border-top: 0;
         }
 
         .cart-flow__step:nth-child(2) {
@@ -801,16 +970,18 @@
             border-color: rgba(231, 54, 131, 0.08);
         }
 
-        .cart-flow__step span {
-            width: 28px;
-            height: 28px;
+        .cart-flow__step > span {
+            width: 26px;
+            height: 26px;
             margin: 0;
-            font-size: 0.72rem;
+            font-size: 0.68rem;
+            grid-row: auto;
         }
 
         .cart-flow__step strong {
+            grid-column: auto;
             margin-bottom: 0;
-            font-size: 0.85rem;
+            font-size: 0.76rem;
             line-height: 1.2;
         }
 
@@ -819,7 +990,7 @@
         }
 
         .cart-flow__step em {
-            display: block;
+            display: none;
         }
 
         .cart-notice {
@@ -846,6 +1017,10 @@
         .cart-section-head h2,
         .checkout-card h2 {
             font-size: 1.45rem;
+        }
+
+        .cart-section-head__summary {
+            font-size: 0.82rem;
         }
 
         .cart-items-card,
@@ -891,12 +1066,14 @@
             gap: 10px;
             width: 100%;
             padding: 12px;
-            border-radius: 22px;
+            border-radius: 24px;
             background:
                 radial-gradient(circle at top right, rgba(255, 234, 242, 0.62), transparent 38%),
                 rgba(255, 255, 255, 0.99);
             border: 1px solid rgba(231, 54, 131, 0.1);
-            box-shadow: 0 12px 24px rgba(75, 24, 46, 0.045);
+            box-shadow:
+                0 13px 26px rgba(75, 24, 46, 0.055),
+                inset 0 1px 0 rgba(255, 255, 255, 0.84);
         }
 
         .cart-table td {
@@ -954,8 +1131,10 @@
             min-height: 62px;
             padding: 10px;
             border-radius: 16px;
-            background: linear-gradient(135deg, rgba(255, 248, 250, 0.95), rgba(255, 253, 248, 0.95));
+            background:
+                linear-gradient(135deg, rgba(255, 249, 252, 0.98), rgba(255, 255, 255, 0.94));
             border: 1px solid rgba(231, 54, 131, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
         }
 
         .cart-table td[data-label="Precio base"]::before,
@@ -1027,6 +1206,7 @@
             padding: 6px;
             min-height: 48px;
             border-radius: 16px;
+            background: rgba(255, 250, 252, 0.96);
         }
 
         .qty-btn {
@@ -1038,7 +1218,7 @@
             width: 100%;
             min-height: 48px;
             border-radius: 16px;
-            background: rgba(255, 241, 241, 0.78);
+            background: rgba(255, 245, 248, 0.92);
         }
 
         .checkout-card,
@@ -1068,6 +1248,12 @@
             border-radius: 18px;
         }
 
+        .cart-summary-card__lead,
+        .summary-note {
+            padding: 12px 13px;
+            border-radius: 16px;
+        }
+
         .mobile-checkout-panel {
             display: grid;
             position: fixed;
@@ -1080,13 +1266,15 @@
             gap: 10px;
             align-items: center;
             margin: 0;
-            padding: 14px;
-            border-radius: 22px;
+            padding: 11px;
+            border-radius: 21px;
             background:
                 radial-gradient(circle at top right, rgba(255, 155, 194, 0.18), transparent 34%),
                 linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 251, 0.96));
             border: 1px solid rgba(231, 54, 131, 0.13);
-            box-shadow: 0 18px 34px rgba(75, 24, 46, 0.13);
+            box-shadow:
+                0 18px 34px rgba(75, 24, 46, 0.13),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(16px);
         }
 
@@ -1094,23 +1282,23 @@
             display: block;
             margin-bottom: 3px;
             color: var(--ink-500);
-            font-size: 0.74rem;
-            font-weight: 900;
-            letter-spacing: 0.06em;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.045em;
             text-transform: uppercase;
         }
 
         .mobile-checkout-panel strong {
             color: var(--rose-700);
-            font-size: 1.32rem;
+            font-size: 1.22rem;
             line-height: 1;
             white-space: nowrap;
         }
 
         .mobile-checkout-panel .btn {
-            min-height: 46px;
+            min-height: 44px;
             padding: 0 12px;
-            font-size: 0.88rem;
+            font-size: 0.84rem;
             line-height: 1.1;
             box-shadow: 0 14px 24px rgba(185, 45, 99, 0.16);
         }
@@ -1179,12 +1367,17 @@
         }
 
         .mobile-checkout-panel {
-            grid-template-columns: 1fr;
+            grid-template-columns: minmax(0, 0.72fr) minmax(132px, 1fr);
             width: min(360px, calc(100% - 18px));
+            gap: 8px;
+            padding: 9px;
         }
 
         .mobile-checkout-panel .btn {
             width: 100%;
+            min-height: 42px;
+            padding: 0 10px;
+            font-size: 0.78rem;
         }
     }
 </style>
@@ -1194,18 +1387,29 @@
 <section class="hero-card">
     <div class="cart-hero">
         <div class="cart-hero__copy">
-            <span class="cart-hero__eyebrow"><span class="soft-emoji" aria-hidden="true">🧺</span>Lista para cotizar</span>
-            <h1>Revisa tu lista antes de confirmar</h1>
+            <span class="cart-hero__eyebrow"><span class="soft-emoji" aria-hidden="true">&#128722;</span>Lista para cotizar</span>
+            <h1>Revisa tu lista antes de cotizar</h1>
             <p>
-                Organiza las referencias que te gustan, ajusta cantidades y env&iacute;a el resumen
-                por WhatsApp para confirmar disponibilidad, personalizaci&oacute;n, entrega y valor final.
+                Confirma las referencias, cantidades y datos opcionales antes de abrir WhatsApp.
+                As&iacute; tu lista llega ordenada y podemos ajustar disponibilidad, entrega y valor final.
             </p>
         </div>
-        <div class="cart-hero__summary" aria-label="Resumen de la lista">
+        <div class="cart-hero__summary" aria-label="Lista para cotizar">
             <div class="cart-count-card">
-                <strong data-cart-reference-count>{{ productos|length }}</strong>
-                <span data-cart-reference-label>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</span>
-                <small>Confirmamos disponibilidad, personalizaci&oacute;n, domicilio y valor final por WhatsApp.</small>
+                <span class="cart-count-card__eyebrow">Listo para revisar</span>
+                <div class="cart-count-card__grid">
+                    <div class="cart-count-card__item">
+                        <span>Referencias</span>
+                        <strong data-cart-reference-count>{{ productos|length }}</strong>
+                        <small data-cart-reference-label>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</small>
+                    </div>
+                    <div class="cart-count-card__item cart-count-card__item--strong">
+                        <span>Base estimada</span>
+                        <strong data-cart-total-label>{{ total|cop }}</strong>
+                        <small>Antes de ajustes finales</small>
+                    </div>
+                </div>
+                <small>WhatsApp se abre con tu lista organizada para confirmar personalizaci&oacute;n, domicilio y disponibilidad.</small>
             </div>
         </div>
     </div>
@@ -1214,20 +1418,20 @@
         <div class="cart-flow__step">
             <span>01</span>
             <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">🎁</span>Lista</strong>
-            <p>Referencias y cantidades.</p>
+            <strong><span class="soft-emoji" aria-hidden="true">&#127873;</span>Referencias</strong>
+            <p>Cantidades y productos.</p>
         </div>
         <div class="cart-flow__step">
             <span>02</span>
             <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">💌</span>Preferencias</strong>
-            <p>Mensaje, ocasi&oacute;n y detalles.</p>
+            <strong><span class="soft-emoji" aria-hidden="true">&#128140;</span>Datos</strong>
+            <p>Ocasi&oacute;n, mensaje y ajustes.</p>
         </div>
         <div class="cart-flow__step">
             <span>03</span>
             <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">💬</span>Cotizar</strong>
-            <p>Confirmaci&oacute;n final por WhatsApp.</p>
+            <strong><span class="soft-emoji" aria-hidden="true">&#128172;</span>WhatsApp</strong>
+            <p>Confirmaci&oacute;n final.</p>
         </div>
     </div>
 </section>
@@ -1249,10 +1453,10 @@
             <section class="cart-items-card" aria-labelledby="cart-items-title">
                 <div class="cart-section-head">
                     <div>
-                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">💝</span>Productos seleccionados</span>
-                        <h2 id="cart-items-title">Lista para cotizar</h2>
+                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">&#128150;</span>Referencias elegidas</span>
+                        <h2 id="cart-items-title">Lista de referencias</h2>
                     </div>
-                    <p data-cart-reference-summary>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para confirmar.</p>
+                    <p class="cart-section-head__summary" data-cart-reference-summary>{{ productos|length }} referencia{% if productos|length != 1 %}s{% endif %} lista{% if productos|length != 1 %}s{% endif %} para cotizar.</p>
                 </div>
 
                 <table class="cart-table">
@@ -1332,7 +1536,7 @@
             <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form">
                 {% csrf_token %}
 
-                <div class="mobile-checkout-panel" aria-label="Resumen movil del pedido">
+                <div class="mobile-checkout-panel" aria-label="Lista m&oacute;vil para cotizar">
                     <div>
                         <span>Total base</span>
                         <strong data-cart-total-label>{{ total|cop }}</strong>
@@ -1377,11 +1581,11 @@
                         </p>
                     </section>
 
-                    <aside class="cart-summary-card" aria-label="Resumen de la cotizacion">
+                    <aside class="cart-summary-card" aria-label="Lista para cotizar">
                         <div>
-                            <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">✨</span>Confirmaci&oacute;n</span>
-                            <h3>Resumen de la lista</h3>
-                            <p>Se abrir&aacute; WhatsApp con referencias, cantidades, total base y datos opcionales.</p>
+                            <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Lista final</span>
+                            <h3>Cotizar por WhatsApp</h3>
+                            <p class="cart-summary-card__lead">Revisamos esta lista contigo antes de confirmar pago, elaboraci&oacute;n o entrega.</p>
                         </div>
 
                         <div class="summary-lines">
@@ -1390,11 +1594,11 @@
                                 <strong data-cart-reference-count>{{ productos|length }}</strong>
                             </div>
                             <div class="summary-line">
-                                <span>Atenci&oacute;n</span>
+                                <span>Canal</span>
                                 <strong>WhatsApp</strong>
                             </div>
                             <div class="summary-total">
-                                <span>Total base</span>
+                                <span>Base estimada</span>
                                 <strong data-cart-total-label>{{ total|cop }}</strong>
                             </div>
                         </div>
@@ -1417,6 +1621,10 @@
                         <div class="summary-actions">
                             <button type="submit" class="btn js-whatsapp-checkout-button"><span class="soft-emoji" aria-hidden="true">💬</span>Cotizar por WhatsApp</button>
                             <a href="{% url 'inicio' %}" class="btn-secondary"><span class="soft-emoji" aria-hidden="true">🌸</span>Seguir explorando</a>
+                        </div>
+
+                        <div class="summary-note">
+                            Esta lista no genera cobro autom&aacute;tico. Primero confirmamos disponibilidad, personalizaci&oacute;n y entrega antes de cerrar el pedido.
                         </div>
                     </aside>
                 </div>

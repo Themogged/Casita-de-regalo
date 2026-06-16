@@ -16,6 +16,9 @@
     {% block og_image %}{% endblock %}
     <title>{% block title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}</title>
     {% block structured_data %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&amp;family=Nunito+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
     <style>
         :root {
             --rose-25: #fff8fa;
@@ -50,9 +53,14 @@
             --radius-xl: 32px;
             --max-width: 1240px;
             --soft-line: rgba(198, 68, 125, 0.12);
-            --font-sans: "Inter", "Segoe UI Variable Text", Aptos, "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            --font-display: "Inter Tight", "Segoe UI Variable Display", "Aptos Display", "Segoe UI", Aptos, "Helvetica Neue", Arial, sans-serif;
-            --font-brand: "Segoe UI Variable Display", "Aptos Display", "Inter Tight", "Segoe UI", Aptos, "Helvetica Neue", Arial, sans-serif;
+            --font-sans: "Nunito Sans", Aptos, "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            --font-display: "Lora", Georgia, "Times New Roman", serif;
+            --font-brand: "Nunito Sans", Aptos, "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            --tracking-title: -0.006em;
+            --tracking-tight: -0.003em;
+            --tracking-soft: 0.008em;
+            --leading-title: 1.12;
+            --leading-copy: 1.66;
         }
 
         *,
@@ -74,9 +82,14 @@
             min-height: 100vh;
             font-family: var(--font-sans);
             font-size: 16px;
-            line-height: 1.56;
+            line-height: 1.62;
+            font-optical-sizing: auto;
+            font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
             text-rendering: optimizeLegibility;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
             color: var(--ink-900);
             background:
                 radial-gradient(circle at 9% 7%, rgba(255, 221, 234, 0.72), transparent 21%),
@@ -127,6 +140,31 @@
         button {
             border: 0;
             font: inherit;
+        }
+
+        input,
+        textarea,
+        select {
+            font: inherit;
+            letter-spacing: inherit;
+        }
+
+        :focus-visible {
+            outline: 3px solid rgba(229, 72, 132, 0.22);
+            outline-offset: 3px;
+        }
+
+        .cart-count,
+        .cart-count-card strong,
+        .detail-price,
+        .detail-mobile-showcase-price,
+        .hero-product-price,
+        .line-price,
+        .line-subtotal,
+        .product-price,
+        .qty-value,
+        .summary-total strong {
+            font-variant-numeric: lining-nums tabular-nums;
         }
 
         .soft-emoji {
@@ -215,17 +253,17 @@
         .brand small {
             color: var(--rose-700);
             font-size: 0.68rem;
-            letter-spacing: 0.22em;
-            font-weight: 800;
+            letter-spacing: 0.16em;
+            font-weight: 760;
             text-transform: uppercase;
         }
 
         .brand strong {
             font-family: var(--font-brand);
             font-size: 1.32rem;
-            font-weight: 860;
-            letter-spacing: -0.035em;
-            line-height: 1.02;
+            font-weight: 800;
+            letter-spacing: var(--tracking-title);
+            line-height: var(--leading-title);
         }
 
         .header-links {
@@ -652,7 +690,10 @@
         .page-card h2,
         .page-card h3 {
             font-family: var(--font-display);
-            letter-spacing: -0.018em;
+            font-weight: 600;
+            letter-spacing: var(--tracking-tight);
+            line-height: var(--leading-title);
+            text-wrap: balance;
         }
 
         .messages {
@@ -2277,7 +2318,7 @@
 
                 const detail = document.createElement('span');
                 detail.className = 'toast-detail';
-                detail.textContent = message || 'Puedes revisar tu selección cuando quieras.';
+                detail.textContent = message || 'Puedes revisar tu lista cuando quieras.';
 
                 const action = document.createElement('a');
                 action.className = 'toast-action';
@@ -2362,7 +2403,7 @@
                     node.textContent = `referencia${plural} para cotizar`;
                 });
                 document.querySelectorAll('[data-cart-reference-summary]').forEach((node) => {
-                    node.textContent = `${count} referencia${plural} lista${plural} para confirmar.`;
+                    node.textContent = `${count} referencia${plural} lista${plural} para cotizar.`;
                 });
             }
 

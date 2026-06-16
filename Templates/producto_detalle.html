@@ -221,16 +221,17 @@
 
     .detail-card h1 {
         font-family: var(--font-display);
-        font-size: clamp(2.2rem, 4vw, 3.2rem);
-        line-height: 1.02;
-        letter-spacing: -0.018em;
+        font-size: clamp(2.12rem, 3.85vw, 3.05rem);
+        line-height: var(--leading-title);
+        letter-spacing: var(--tracking-tight);
+        font-weight: 600;
         margin-bottom: 14px;
         overflow-wrap: anywhere;
     }
 
     .detail-description {
         color: var(--ink-700);
-        line-height: 1.8;
+        line-height: var(--leading-copy);
         margin-bottom: 22px;
     }
 
@@ -268,7 +269,9 @@
     .detail-price {
         font-size: 2.35rem;
         color: var(--rose-700);
+        font-family: var(--font-sans);
         font-weight: 800;
+        letter-spacing: 0;
         margin-bottom: 14px;
     }
 
@@ -320,7 +323,10 @@
         min-height: 48px;
         padding: 0 18px;
         border-radius: 14px;
-        font-weight: 700;
+        font-weight: 800;
+        line-height: 1.12;
+        letter-spacing: var(--tracking-soft);
+        text-align: center;
     }
 
     .btn {
@@ -501,7 +507,9 @@
         .detail-mobile-showcase h2 {
             font-family: var(--font-display);
             font-size: clamp(1.45rem, 7vw, 2rem);
-            line-height: 1.05;
+            line-height: var(--leading-title);
+            letter-spacing: var(--tracking-tight);
+            font-weight: 600;
             color: var(--ink-900);
             margin: 0;
         }
@@ -509,7 +517,9 @@
         .detail-mobile-showcase-price {
             color: var(--rose-700);
             font-size: clamp(1.08rem, 4.8vw, 1.34rem);
-            font-weight: 900;
+            font-family: var(--font-sans);
+            font-weight: 800;
+            letter-spacing: 0;
             line-height: 1;
         }
 
@@ -678,6 +688,8 @@
             padding: 0 10px;
             border-radius: 12px;
             font-size: 0.78rem;
+            font-weight: 800;
+            line-height: 1.12;
             white-space: nowrap;
         }
 
@@ -798,13 +810,15 @@
             padding: 0 11px;
             border-radius: 999px;
             font-size: 0.72rem;
-            font-weight: 850;
+            font-weight: 700;
         }
 
         .detail-mobile-showcase h2 {
             max-width: 15ch;
             font-size: clamp(1.55rem, 7.8vw, 2.18rem);
-            line-height: 0.98;
+            line-height: var(--leading-title);
+            letter-spacing: var(--tracking-tight);
+            font-weight: 600;
             color: #421327;
         }
 
@@ -818,6 +832,9 @@
             background: linear-gradient(135deg, var(--rose-600), var(--rose-700));
             color: #fff;
             font-size: clamp(1rem, 4.4vw, 1.22rem);
+            font-family: var(--font-sans);
+            font-weight: 800;
+            letter-spacing: 0;
             box-shadow: 0 12px 24px rgba(215, 38, 109, 0.2);
         }
 
@@ -1078,7 +1095,7 @@
             background: #fff0f6;
             color: #a93568;
             font-size: 0.72rem;
-            font-weight: 850;
+            font-weight: 700;
             letter-spacing: 0;
         }
 
@@ -1101,7 +1118,9 @@
             max-width: 16ch;
             font-family: var(--font-display);
             font-size: clamp(1.58rem, 7.5vw, 2.16rem);
-            line-height: 1;
+            line-height: var(--leading-title);
+            letter-spacing: var(--tracking-tight);
+            font-weight: 600;
             color: #4a1530;
             margin: 0;
         }
@@ -1116,7 +1135,9 @@
             background: linear-gradient(135deg, var(--rose-600), var(--rose-700));
             color: #fff;
             font-size: clamp(1.02rem, 4.5vw, 1.25rem);
-            font-weight: 900;
+            font-family: var(--font-sans);
+            font-weight: 800;
+            letter-spacing: 0;
             box-shadow: 0 12px 22px rgba(215, 38, 109, 0.22);
         }
 
@@ -1306,7 +1327,8 @@
             padding: 0 10px;
             border-radius: 14px;
             font-size: 0.8rem;
-            font-weight: 850;
+            font-weight: 800;
+            line-height: 1.12;
             transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
         }
 
