@@ -8,8 +8,8 @@
     .cart-hero {
         position: relative;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(240px, 0.36fr);
-        gap: 24px;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
         align-items: center;
         overflow: hidden;
     }
@@ -25,10 +25,10 @@
         pointer-events: none;
     }
 
-    .cart-hero__copy,
-    .cart-hero__summary {
+    .cart-hero__copy {
         position: relative;
         z-index: 1;
+        max-width: 720px;
     }
 
     .cart-hero__eyebrow,
@@ -62,178 +62,6 @@
         max-width: 680px;
         color: var(--hero-text-soft);
         line-height: var(--leading-copy);
-    }
-
-    .cart-hero__summary {
-        display: grid;
-        gap: 12px;
-    }
-
-    .cart-count-card {
-        position: relative;
-        overflow: hidden;
-        padding: 20px;
-        border-radius: 26px;
-        background:
-            radial-gradient(circle at 92% 8%, rgba(255, 226, 238, 0.64), transparent 34%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 250, 252, 0.88));
-        border: 1px solid rgba(255, 255, 255, 0.86);
-        box-shadow:
-            0 18px 34px rgba(75, 24, 46, 0.075),
-            inset 0 1px 0 rgba(255, 255, 255, 0.92);
-        backdrop-filter: blur(14px);
-    }
-
-    .cart-count-card__eyebrow {
-        display: inline-flex;
-        align-items: center;
-        width: fit-content;
-        margin-bottom: 14px;
-        padding: 7px 11px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.82);
-        border: 1px solid rgba(231, 54, 131, 0.12);
-        color: var(--rose-700);
-        font-size: 0.74rem;
-        font-weight: 800;
-        letter-spacing: 0.045em;
-        text-transform: uppercase;
-        box-shadow: 0 10px 20px rgba(75, 24, 46, 0.05);
-    }
-
-    .cart-count-card__grid {
-        display: grid;
-        grid-template-columns: 0.72fr 1fr;
-        gap: 12px;
-    }
-
-    .cart-count-card__item {
-        min-width: 0;
-        padding: 14px;
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.76);
-        border: 1px solid rgba(231, 54, 131, 0.09);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
-    }
-
-    .cart-count-card__item--strong {
-        background:
-            linear-gradient(135deg, rgba(255, 246, 250, 0.96), rgba(255, 255, 255, 0.82));
-    }
-
-    .cart-count-card::before {
-        content: "";
-        position: absolute;
-        inset: 0 0 auto;
-        height: 5px;
-        background: linear-gradient(90deg, #ffc5dc, var(--rose-600), #ffc5dc);
-    }
-
-    .cart-count-card__item strong {
-        display: block;
-        color: var(--rose-700);
-        font-size: clamp(1.45rem, 2.7vw, 2.08rem);
-        line-height: 1.05;
-    }
-
-    .cart-count-card__item span {
-        display: block;
-        margin-bottom: 6px;
-        color: var(--ink-700);
-        font-weight: 700;
-    }
-
-    .cart-count-card__item small,
-    .cart-count-card > small {
-        display: block;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid rgba(231, 54, 131, 0.1);
-        color: var(--ink-500);
-        font-size: 0.86rem;
-        line-height: 1.45;
-    }
-
-    .cart-count-card__item small {
-        margin-top: 8px;
-        padding-top: 8px;
-        font-size: 0.78rem;
-    }
-
-    .cart-flow {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
-        margin-top: 24px;
-        padding: 8px;
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.58);
-        border: 1px solid rgba(231, 54, 131, 0.08);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
-    }
-
-    .cart-flow__step {
-        position: relative;
-        overflow: hidden;
-        display: grid;
-        grid-template-columns: 34px minmax(0, 1fr);
-        gap: 10px;
-        align-items: center;
-        min-height: 74px;
-        padding: 12px;
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.82);
-        border: 1px solid rgba(255, 255, 255, 0.72);
-        box-shadow: 0 10px 18px rgba(75, 24, 46, 0.04);
-    }
-
-    .cart-flow__step:nth-child(2) {
-        background: rgba(255, 248, 251, 0.9);
-        border-color: rgba(231, 54, 131, 0.14);
-    }
-
-    .cart-flow__step > span {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 32px;
-        height: 32px;
-        margin: 0;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
-        color: #fff;
-        font-size: 0.8rem;
-        font-weight: 800;
-        grid-row: 1 / span 2;
-    }
-
-    .cart-flow__step strong,
-    .cart-flow__step p {
-        grid-column: 2;
-    }
-
-    .cart-flow__step strong {
-        display: block;
-        margin-bottom: 2px;
-        color: var(--ink-900);
-        font-weight: 800;
-        line-height: 1.24;
-    }
-
-    .cart-flow__step p {
-        color: var(--ink-700);
-        font-size: 0.86rem;
-        line-height: 1.38;
-    }
-
-    .cart-flow__step em {
-        display: none;
-        color: var(--ink-500);
-        font-style: normal;
-        font-size: 0.76rem;
-        font-weight: 800;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
     }
 
     .cart-wrapper {
@@ -841,9 +669,28 @@
 
     @media (max-width: 760px) {
         .hero-card {
+            position: relative;
+            overflow: hidden;
             margin-bottom: 18px;
-            padding: 22px 16px;
-            border-radius: 24px;
+            padding: 20px 16px 14px;
+            border-radius: 28px;
+            background:
+                radial-gradient(circle at 12% 0%, rgba(255, 216, 232, 0.82), transparent 34%),
+                radial-gradient(circle at 96% 12%, rgba(255, 245, 250, 0.96), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 247, 251, 0.88));
+            border-color: rgba(231, 54, 131, 0.11);
+            box-shadow:
+                0 26px 54px rgba(75, 24, 46, 0.105),
+                0 10px 22px rgba(229, 72, 132, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.92);
+        }
+
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 18px auto;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(229, 72, 132, 0.24), transparent);
         }
 
         .cart-wrapper {
@@ -857,7 +704,7 @@
         }
 
         .cart-hero {
-            gap: 14px;
+            gap: 0;
         }
 
         .cart-hero::after {
@@ -869,149 +716,55 @@
         .cart-hero__eyebrow,
         .cart-eyebrow {
             margin-bottom: 9px;
-            padding: 7px 10px;
+            padding: 7px 11px;
+            background: rgba(255, 255, 255, 0.74);
+            border-color: rgba(231, 54, 131, 0.11);
+            box-shadow: 0 9px 18px rgba(75, 24, 46, 0.045);
             font-size: 0.72rem;
             letter-spacing: 0.06em;
         }
 
         .cart-hero h1 {
-            margin-bottom: 10px;
-            font-size: clamp(1.75rem, 8vw, 2.2rem);
+            margin-bottom: 9px;
+            font-size: clamp(1.68rem, 7.6vw, 2.08rem);
             line-height: var(--leading-title);
+            text-wrap: balance;
         }
 
         .cart-hero p {
-            font-size: 0.95rem;
-            line-height: 1.55;
-        }
-
-        .cart-count-card {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            padding: 12px;
-            border-radius: 20px;
-            box-shadow: 0 12px 24px rgba(75, 24, 46, 0.06);
-        }
-
-        .cart-count-card__grid {
-            grid-template-columns: 1fr 1fr;
-            gap: 7px;
-        }
-
-        .cart-count-card__item {
-            padding: 10px;
-            border-radius: 16px;
-        }
-
-        .cart-count-card__item strong {
-            font-size: 1.18rem;
-        }
-
-        .cart-count-card__eyebrow {
-            margin-bottom: 0;
-            font-size: 0.7rem;
-        }
-
-        .cart-count-card__item span {
-            margin: 0 0 5px;
-            font-size: 0.78rem;
-        }
-
-        .cart-count-card__item small,
-        .cart-count-card > small {
-            margin-top: 0;
-            padding-top: 8px;
-            font-size: 0.82rem;
-        }
-
-        .cart-count-card__item small {
-            padding-top: 6px;
-            font-size: 0.7rem;
-            line-height: 1.28;
-        }
-
-        .cart-count-card > small {
-            display: none;
-        }
-
-        .cart-flow {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 7px;
-            margin-top: 16px;
-            padding: 7px;
-            border-radius: 22px;
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 247, 250, 0.76));
-            border: 1px solid rgba(231, 54, 131, 0.08);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76);
-        }
-
-        .cart-flow__step {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 6px;
-            justify-items: center;
-            min-height: auto;
-            padding: 9px 6px;
-            border: 0;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.68);
-            box-shadow: none;
-            text-align: center;
-        }
-
-        .cart-flow__step + .cart-flow__step {
-            border-top: 0;
-        }
-
-        .cart-flow__step:nth-child(2) {
-            background: rgba(255, 248, 251, 0.74);
-            border-color: rgba(231, 54, 131, 0.08);
-        }
-
-        .cart-flow__step > span {
-            width: 26px;
-            height: 26px;
-            margin: 0;
-            font-size: 0.68rem;
-            grid-row: auto;
-        }
-
-        .cart-flow__step strong {
-            grid-column: auto;
-            margin-bottom: 0;
-            font-size: 0.76rem;
-            line-height: 1.2;
-        }
-
-        .cart-flow__step p {
-            display: none;
-        }
-
-        .cart-flow__step em {
-            display: none;
+            font-size: 0.92rem;
+            line-height: 1.46;
         }
 
         .cart-notice {
             gap: 12px;
-            padding: 14px;
-            border-radius: 20px;
-            box-shadow: 0 12px 22px rgba(75, 24, 46, 0.045);
-            font-size: 0.93rem;
-            line-height: 1.55;
+            padding: 12px 13px;
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(255, 221, 234, 0.74), transparent 32%),
+                rgba(255, 255, 255, 0.95);
+            border-color: rgba(231, 54, 131, 0.1);
+            box-shadow:
+                0 18px 34px rgba(75, 24, 46, 0.08),
+                0 6px 14px rgba(229, 72, 132, 0.045),
+                inset 0 1px 0 rgba(255, 255, 255, 0.84);
+            font-size: 0.9rem;
+            line-height: 1.42;
         }
 
         .cart-notice__icon {
-            width: 32px;
-            height: 32px;
+            width: 30px;
+            height: 30px;
             border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(185, 45, 99, 0.16);
         }
 
         .cart-section-head {
             display: grid;
             padding: 18px 16px 12px;
             gap: 8px;
+            background:
+                linear-gradient(180deg, rgba(255, 249, 252, 0.88), rgba(255, 255, 255, 0));
         }
 
         .cart-section-head h2,
@@ -1020,18 +773,25 @@
         }
 
         .cart-section-head__summary {
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.78);
+            border-color: rgba(231, 54, 131, 0.1);
             font-size: 0.82rem;
+            box-shadow: 0 9px 18px rgba(75, 24, 46, 0.045);
         }
 
         .cart-items-card,
         .checkout-card,
         .cart-summary-card,
         .empty-cart {
-            box-shadow: 0 14px 28px rgba(75, 24, 46, 0.055);
+            box-shadow:
+                0 20px 40px rgba(75, 24, 46, 0.075),
+                0 8px 18px rgba(229, 72, 132, 0.045);
         }
 
         .cart-items-card {
             border-radius: 24px;
+            border-color: rgba(231, 54, 131, 0.11);
         }
 
         .cart-table,
@@ -1066,14 +826,26 @@
             gap: 10px;
             width: 100%;
             padding: 12px;
+            position: relative;
+            overflow: hidden;
             border-radius: 24px;
             background:
-                radial-gradient(circle at top right, rgba(255, 234, 242, 0.62), transparent 38%),
-                rgba(255, 255, 255, 0.99);
-            border: 1px solid rgba(231, 54, 131, 0.1);
+                radial-gradient(circle at top right, rgba(255, 224, 238, 0.74), transparent 38%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 249, 252, 0.96));
+            border: 1px solid rgba(231, 54, 131, 0.11);
             box-shadow:
-                0 13px 26px rgba(75, 24, 46, 0.055),
+                0 24px 44px rgba(75, 24, 46, 0.09),
+                0 8px 18px rgba(229, 72, 132, 0.055),
                 inset 0 1px 0 rgba(255, 255, 255, 0.84);
+        }
+
+        .cart-table tr::before {
+            content: "";
+            position: absolute;
+            inset: 0 18px auto;
+            height: 3px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, transparent, rgba(229, 72, 132, 0.38), transparent);
         }
 
         .cart-table td {
@@ -1159,6 +931,12 @@
             width: 78px;
             height: 78px;
             border-radius: 18px;
+            background:
+                radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.98), transparent 42%),
+                linear-gradient(180deg, rgba(255, 243, 248, 0.94), rgba(255, 255, 255, 0.98));
+            box-shadow:
+                0 16px 28px rgba(75, 24, 46, 0.11),
+                0 5px 12px rgba(229, 72, 132, 0.055);
         }
 
         .product-thumb img {
@@ -1206,7 +984,11 @@
             padding: 6px;
             min-height: 48px;
             border-radius: 16px;
-            background: rgba(255, 250, 252, 0.96);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 251, 0.95));
+            box-shadow:
+                0 10px 18px rgba(75, 24, 46, 0.045),
+                inset 0 1px 0 rgba(255, 255, 255, 0.86);
         }
 
         .qty-btn {
@@ -1218,7 +1000,8 @@
             width: 100%;
             min-height: 48px;
             border-radius: 16px;
-            background: rgba(255, 245, 248, 0.92);
+            background:
+                linear-gradient(180deg, rgba(255, 246, 250, 0.96), rgba(255, 239, 246, 0.9));
         }
 
         .checkout-card,
@@ -1262,20 +1045,30 @@
             width: min(520px, calc(100% - 20px));
             transform: translateX(-50%);
             z-index: 25;
+            overflow: hidden;
             grid-template-columns: minmax(0, 0.78fr) minmax(142px, 1fr);
             gap: 10px;
             align-items: center;
             margin: 0;
-            padding: 11px;
-            border-radius: 21px;
+            padding: 10px;
+            border-radius: 24px;
             background:
-                radial-gradient(circle at top right, rgba(255, 155, 194, 0.18), transparent 34%),
-                linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 251, 0.96));
-            border: 1px solid rgba(231, 54, 131, 0.13);
+                radial-gradient(circle at top right, rgba(255, 185, 214, 0.28), transparent 34%),
+                linear-gradient(135deg, rgba(255, 255, 255, 0.97), rgba(255, 247, 251, 0.96));
+            border: 1px solid rgba(231, 54, 131, 0.14);
             box-shadow:
-                0 18px 34px rgba(75, 24, 46, 0.13),
+                0 28px 54px rgba(75, 24, 46, 0.18),
+                0 10px 22px rgba(229, 72, 132, 0.09),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(16px);
+        }
+
+        .mobile-checkout-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(255, 197, 220, 0.1), rgba(229, 72, 132, 0.72), rgba(255, 197, 220, 0.1));
         }
 
         .mobile-checkout-panel span {
@@ -1300,7 +1093,9 @@
             padding: 0 12px;
             font-size: 0.84rem;
             line-height: 1.1;
-            box-shadow: 0 14px 24px rgba(185, 45, 99, 0.16);
+            box-shadow:
+                0 14px 24px rgba(185, 45, 99, 0.18),
+                inset 0 1px 0 rgba(255, 255, 255, 0.24);
         }
 
         .checkout-points li {
@@ -1390,48 +1185,9 @@
             <span class="cart-hero__eyebrow"><span class="soft-emoji" aria-hidden="true">&#128722;</span>Lista para cotizar</span>
             <h1>Revisa tu lista antes de cotizar</h1>
             <p>
-                Confirma las referencias, cantidades y datos opcionales antes de abrir WhatsApp.
-                As&iacute; tu lista llega ordenada y podemos ajustar disponibilidad, entrega y valor final.
+                Confirma referencias, cantidades y datos opcionales antes de abrir WhatsApp.
+                As&iacute; podemos ajustar disponibilidad, entrega y valor final sin perder detalles.
             </p>
-        </div>
-        <div class="cart-hero__summary" aria-label="Lista para cotizar">
-            <div class="cart-count-card">
-                <span class="cart-count-card__eyebrow">Listo para revisar</span>
-                <div class="cart-count-card__grid">
-                    <div class="cart-count-card__item">
-                        <span>Referencias</span>
-                        <strong data-cart-reference-count>{{ productos|length }}</strong>
-                        <small data-cart-reference-label>referencia{% if productos|length != 1 %}s{% endif %} para cotizar</small>
-                    </div>
-                    <div class="cart-count-card__item cart-count-card__item--strong">
-                        <span>Base estimada</span>
-                        <strong data-cart-total-label>{{ total|cop }}</strong>
-                        <small>Antes de ajustes finales</small>
-                    </div>
-                </div>
-                <small>WhatsApp se abre con tu lista organizada para confirmar personalizaci&oacute;n, domicilio y disponibilidad.</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="cart-flow" aria-label="Proceso de compra">
-        <div class="cart-flow__step">
-            <span>01</span>
-            <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">&#127873;</span>Referencias</strong>
-            <p>Cantidades y productos.</p>
-        </div>
-        <div class="cart-flow__step">
-            <span>02</span>
-            <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">&#128140;</span>Datos</strong>
-            <p>Ocasi&oacute;n, mensaje y ajustes.</p>
-        </div>
-        <div class="cart-flow__step">
-            <span>03</span>
-            <em>Paso</em>
-            <strong><span class="soft-emoji" aria-hidden="true">&#128172;</span>WhatsApp</strong>
-            <p>Confirmaci&oacute;n final.</p>
         </div>
     </div>
 </section>
@@ -1444,9 +1200,8 @@
             <div class="cart-notice">
                 <span class="cart-notice__icon" aria-hidden="true">💡</span>
                 <div>
-                    <strong>Importante:</strong> esta lista no genera cobro autom&aacute;tico. Los precios son valores base
-                    y el total final puede variar
-                    seg&uacute;n personalizaci&oacute;n, disponibilidad y domicilio.
+                    <strong>Importante:</strong> esta lista no genera cobro autom&aacute;tico. Confirmamos disponibilidad,
+                    personalizaci&oacute;n, domicilio y valor final por WhatsApp.
                 </div>
             </div>
 
