@@ -117,10 +117,15 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'confirmAddToCart')
         self.assertContains(response, 'is-confirmed')
-        self.assertContains(response, 'message--cart-added')
-        self.assertContains(response, "'message message--cart-added'")
-        self.assertContains(response, '.message.message--cart-added')
+        self.assertContains(response, 'message--toast')
+        self.assertContains(response, 'cart-added')
+        self.assertContains(response, 'has-action')
+        self.assertContains(response, '.message.message--toast')
         self.assertContains(response, 'toast-action')
+        self.assertContains(response, 'getToastMeta')
+        self.assertNotContains(response, '#2d9d78')
+        self.assertNotContains(response, '#d99114')
+        self.assertNotContains(response, '#d65a5a')
 
     def test_agregar_no_acepta_get(self):
         response = self.client.get(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
@@ -168,6 +173,15 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(data['item_removed'], True)
         self.assertEqual(data['is_empty'], True)
         self.assertEqual(self.client.session.get('carrito'), {})
+
+    def test_carrito_incluye_toasts_para_actualizar_y_retirar(self):
+        response = self.client.get(reverse('ver_carrito'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'cart-updated')
+        self.assertContains(response, 'cart-removed')
+        self.assertContains(response, 'Retirado de la lista')
+        self.assertContains(response, 'No se pudo actualizar')
 
     def test_finalizar_compra_redirige_a_whatsapp_y_descuenta_stock(self):
         session = self.client.session

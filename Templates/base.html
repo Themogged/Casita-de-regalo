@@ -711,33 +711,47 @@
             overflow: hidden;
             padding: 15px 16px;
             border-radius: 18px;
-            color: var(--white);
-            box-shadow: var(--shadow-md);
+            color: #3f1f2d;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.98), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 244, 250, 0.98));
+            border: 1px solid rgba(255, 168, 204, 0.54);
+            box-shadow:
+                0 18px 42px rgba(184, 56, 112, 0.13),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
             animation: toastSoftIn 360ms cubic-bezier(0.2, 0.82, 0.2, 1) both;
             transform-origin: top right;
             will-change: transform, opacity;
         }
 
         .message.success {
-            background: #2d9d78;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.98), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 244, 250, 0.98));
         }
 
         .message.warning {
-            background: #d99114;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.98), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 248, 242, 0.98));
+            border-color: rgba(255, 196, 128, 0.5);
         }
 
         .message.error {
-            background: #d65a5a;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(255, 255, 255, 0.98), transparent 32%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.99), rgba(255, 243, 247, 0.98));
+            border-color: rgba(255, 164, 184, 0.5);
         }
 
-        .message.message--cart-added {
+        .message.message--toast {
             position: fixed;
             left: 0;
             right: 0;
             top: auto;
             bottom: max(84px, calc(18px + env(safe-area-inset-bottom)));
             display: grid;
-            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-columns: auto minmax(0, 1fr);
             gap: 11px;
             align-items: center;
             width: min(420px, calc(100vw - 28px));
@@ -756,11 +770,15 @@
             animation: cartToastIn 440ms cubic-bezier(0.18, 0.88, 0.28, 1) both;
         }
 
-        .message.message--cart-added::before {
+        .message.message--toast.has-action {
+            grid-template-columns: auto minmax(0, 1fr) auto;
+        }
+
+        .message.message--toast::before {
             display: none;
         }
 
-        .message.message--cart-added::after {
+        .message.message--toast::after {
             display: none;
         }
 
@@ -781,6 +799,26 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.86),
                 0 9px 18px rgba(215, 45, 116, 0.14);
             animation: toastCheckSoft 560ms cubic-bezier(0.18, 0.88, 0.28, 1) 80ms both;
+        }
+
+        .message.message--toast.warning .toast-check {
+            background:
+                radial-gradient(circle at 28% 18%, #fff, transparent 34%),
+                linear-gradient(135deg, #fff0d8, #ffd39a);
+            color: #b76016;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.86),
+                0 9px 18px rgba(183, 96, 22, 0.12);
+        }
+
+        .message.message--toast.error .toast-check {
+            background:
+                radial-gradient(circle at 28% 18%, #fff, transparent 34%),
+                linear-gradient(135deg, #ffe3e8, #ffb8c7);
+            color: #c83055;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.86),
+                0 9px 18px rgba(200, 48, 85, 0.13);
         }
 
         .toast-copy {
@@ -837,7 +875,7 @@
             animation: toastSoftOut 260ms ease-in forwards;
         }
 
-        .message.message--cart-added.is-leaving {
+        .message.message--toast.is-leaving {
             animation: cartToastOut 260ms ease-in forwards;
         }
 
@@ -914,8 +952,8 @@
         }
 
         @media (max-width: 460px) {
-            .message.message--cart-added {
-                grid-template-columns: auto minmax(0, 1fr) auto;
+            .message.message--toast {
+                grid-template-columns: auto minmax(0, 1fr);
                 top: auto;
                 bottom: max(188px, calc(176px + env(safe-area-inset-bottom)));
                 gap: 8px;
@@ -927,13 +965,17 @@
                     inset 0 1px 0 rgba(255, 255, 255, 0.92);
             }
 
-            .message.message--cart-added .toast-check {
+            .message.message--toast.has-action {
+                grid-template-columns: auto minmax(0, 1fr) auto;
+            }
+
+            .message.message--toast .toast-check {
                 width: 28px;
                 height: 28px;
                 font-size: 0.84rem;
             }
 
-            .message.message--cart-added .toast-title {
+            .message.message--toast .toast-title {
                 overflow: hidden;
                 font-size: 0.82rem;
                 line-height: 1;
@@ -941,11 +983,11 @@
                 white-space: nowrap;
             }
 
-            .message.message--cart-added .toast-detail {
+            .message.message--toast .toast-detail {
                 display: none;
             }
 
-            .message.message--cart-added .toast-action {
+            .message.message--toast .toast-action {
                 grid-column: auto;
                 min-height: 30px;
                 padding: 0 10px;
@@ -954,18 +996,18 @@
         }
 
         @media (max-width: 360px) {
-            .message.message--cart-added {
+            .message.message--toast {
                 bottom: max(180px, calc(168px + env(safe-area-inset-bottom)));
                 width: min(306px, calc(100vw - 18px));
                 gap: 7px;
                 padding-right: 8px;
             }
 
-            .message.message--cart-added .toast-title {
+            .message.message--toast .toast-title {
                 font-size: 0.78rem;
             }
 
-            .message.message--cart-added .toast-action {
+            .message.message--toast .toast-action {
                 min-height: 28px;
                 padding: 0 8px;
                 font-size: 0.68rem;
@@ -2087,7 +2129,21 @@
     {% if messages %}
         <div class="messages">
             {% for message in messages %}
-                <div class="message {{ message.tags }}">{{ message }}</div>
+                <div class="message message--toast {{ message.tags }}" role="{% if 'error' in message.tags %}alert{% else %}status{% endif %}">
+                    <span class="toast-check" aria-hidden="true">{% if 'error' in message.tags or 'warning' in message.tags %}!{% else %}&#10003;{% endif %}</span>
+                    <span class="toast-copy">
+                        <strong class="toast-title">
+                            {% if 'error' in message.tags %}
+                                No se pudo completar
+                            {% elif 'warning' in message.tags %}
+                                Revisa esto
+                            {% else %}
+                                Lista actualizada
+                            {% endif %}
+                        </strong>
+                        <span class="toast-detail">{{ message }}</span>
+                    </span>
+                </div>
             {% endfor %}
         </div>
     {% endif %}
@@ -2292,43 +2348,93 @@
             return container;
         };
 
+        const getToastMeta = (level = 'success', options = {}) => {
+            const variant = options.variant || level || 'success';
+            const defaults = {
+                'cart-added': {
+                    title: 'Agregado a la lista',
+                    icon: '\u2713',
+                    detail: 'Puedes revisar tu lista cuando quieras.',
+                },
+                'cart-updated': {
+                    title: 'Lista actualizada',
+                    icon: '\u2713',
+                    detail: 'Tu lista quedo al dia.',
+                },
+                'cart-removed': {
+                    title: 'Retirado de la lista',
+                    icon: '\u2212',
+                    detail: 'Producto retirado correctamente.',
+                },
+                checkout: {
+                    title: 'WhatsApp listo',
+                    icon: '\u2713',
+                    detail: 'Abrimos tu cotizacion organizada.',
+                },
+                warning: {
+                    title: 'Revisa esto',
+                    icon: '!',
+                    detail: 'Hay un detalle por confirmar.',
+                },
+                error: {
+                    title: 'No se pudo completar',
+                    icon: '!',
+                    detail: 'Intentalo nuevamente.',
+                },
+                success: {
+                    title: 'Lista actualizada',
+                    icon: '\u2713',
+                    detail: 'Cambio guardado correctamente.',
+                },
+            };
+
+            return {
+                ...(defaults[variant] || defaults[level] || defaults.success),
+                ...options,
+                variant,
+            };
+        };
+
         const showToast = (message, level = 'success', options = {}) => {
             const container = getMessagesContainer();
             const item = document.createElement('div');
-            const isCartAddedToast = options.variant === 'cart-added';
+            const meta = getToastMeta(level, options);
+            const hasAction = Boolean(meta.actionHref);
 
-            item.className = isCartAddedToast ? 'message message--cart-added' : `message ${level}`;
-            if (options.variant && !isCartAddedToast) {
-                item.classList.add(`message--${options.variant}`);
+            item.className = `message message--toast ${level}`;
+            if (meta.variant) {
+                item.classList.add(`message--${meta.variant}`);
+            }
+            if (hasAction) {
+                item.classList.add('has-action');
             }
             item.setAttribute('role', level === 'error' ? 'alert' : 'status');
 
-            if (isCartAddedToast) {
-                const icon = document.createElement('span');
-                icon.className = 'toast-check';
-                icon.setAttribute('aria-hidden', 'true');
-                icon.textContent = '✓';
+            const icon = document.createElement('span');
+            icon.className = 'toast-check';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.textContent = meta.icon;
 
-                const copy = document.createElement('span');
-                copy.className = 'toast-copy';
+            const copy = document.createElement('span');
+            copy.className = 'toast-copy';
 
-                const title = document.createElement('strong');
-                title.className = 'toast-title';
-                title.textContent = options.title || 'Agregado a la lista';
+            const title = document.createElement('strong');
+            title.className = 'toast-title';
+            title.textContent = meta.title;
 
-                const detail = document.createElement('span');
-                detail.className = 'toast-detail';
-                detail.textContent = message || 'Puedes revisar tu lista cuando quieras.';
+            const detail = document.createElement('span');
+            detail.className = 'toast-detail';
+            detail.textContent = message || meta.detail;
 
+            copy.append(title, detail);
+            item.append(icon, copy);
+
+            if (hasAction) {
                 const action = document.createElement('a');
                 action.className = 'toast-action';
-                action.href = options.actionHref || '#';
-                action.textContent = options.actionLabel || 'Ver lista';
-
-                copy.append(title, detail);
-                item.append(icon, copy, action);
-            } else {
-                item.textContent = message;
+                action.href = meta.actionHref;
+                action.textContent = meta.actionLabel || 'Ver lista';
+                item.append(action);
             }
             container.appendChild(item);
 
@@ -2349,9 +2455,9 @@
                 data.message || 'Producto actualizado.',
                 level,
                 {
-                    variant: isSuccessfulAdd ? 'cart-added' : '',
-                    title: 'Agregado a la lista',
-                    actionHref: '{% url "ver_carrito" %}',
+                    variant: isSuccessfulAdd ? 'cart-added' : 'warning',
+                    title: isSuccessfulAdd ? 'Agregado a la lista' : 'Revisa disponibilidad',
+                    actionHref: isSuccessfulAdd ? '{% url "ver_carrito" %}' : '',
                     actionLabel: 'Ver lista',
                 },
             );
@@ -2441,7 +2547,7 @@
             if (data.is_empty && data.cart_url) {
                 window.setTimeout(() => {
                     window.location.assign(data.cart_url);
-                }, 420);
+                }, data.item_removed ? 1500 : 520);
             }
         };
 
@@ -3022,14 +3128,33 @@
 
                     const data = await response.json();
                     updateCartPageState(data);
+                    const updateOk = response.ok && data.ok !== false;
+                    const updateVariant = updateOk
+                        ? (data.item_removed ? 'cart-removed' : 'cart-updated')
+                        : 'warning';
+                    const updateTitle = updateOk
+                        ? (data.item_removed ? 'Retirado de la lista' : 'Lista actualizada')
+                        : 'Revisa tu lista';
+
                     showToast(
                         data.message || 'Lista actualizada.',
                         data.level || (response.ok ? 'success' : 'warning'),
+                        {
+                            variant: updateVariant,
+                            title: updateTitle,
+                        },
                     );
                 } catch (error) {
                     row?.classList.remove('is-updating');
                     button.disabled = false;
-                    showToast('No pudimos actualizar la lista en este momento.', 'error');
+                    showToast(
+                        'No pudimos actualizar la lista en este momento.',
+                        'error',
+                        {
+                            variant: 'error',
+                            title: 'No se pudo actualizar',
+                        },
+                    );
                 } finally {
                     button.dataset.loading = 'false';
                     button.textContent = originalText;
@@ -3063,9 +3188,14 @@
                     });
 
                     const data = await response.json();
+                    const checkoutOk = response.ok && data.ok !== false;
                     showToast(
                         data.message || 'Preparando tu pedido...',
                         data.level || (response.ok ? 'success' : 'warning'),
+                        {
+                            variant: checkoutOk ? 'checkout' : 'warning',
+                            title: checkoutOk ? 'WhatsApp listo' : 'Revisa tu lista',
+                        },
                     );
 
                     if (typeof data.cart_total !== 'undefined') {
@@ -3082,7 +3212,14 @@
                         return;
                     }
                 } catch (error) {
-                    showToast('No pudimos abrir WhatsApp en este momento.', 'error');
+                    showToast(
+                        'No pudimos abrir WhatsApp en este momento.',
+                        'error',
+                        {
+                            variant: 'error',
+                            title: 'WhatsApp no abrio',
+                        },
+                    );
                 } finally {
                     button.dataset.loading = 'false';
                     button.style.pointerEvents = '';
@@ -3132,7 +3269,14 @@
                     }
                 }
             } catch (error) {
-                showToast('No pudimos guardar el detalle en este momento.', 'error');
+                showToast(
+                    'No pudimos guardar el detalle en este momento.',
+                    'error',
+                    {
+                        variant: 'error',
+                        title: 'No se pudo guardar',
+                    },
+                );
             } finally {
                 button.dataset.loading = 'false';
                 button.style.pointerEvents = '';
