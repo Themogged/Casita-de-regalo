@@ -43,7 +43,7 @@
         border: 1px solid rgba(231, 54, 131, 0.12);
         color: var(--rose-700);
         font-size: 0.78rem;
-        font-weight: 760;
+        font-weight: 700;
         letter-spacing: 0.055em;
         text-transform: uppercase;
     }
@@ -110,7 +110,7 @@
         border-radius: 14px;
         background: linear-gradient(135deg, var(--coral-500), var(--rose-600));
         color: #fff;
-        font-weight: 900;
+        font-weight: 700;
     }
 
     .cart-notice strong {
@@ -187,7 +187,7 @@
         color: var(--ink-700);
         background: transparent;
         font-size: 0.82rem;
-        font-weight: 800;
+        font-weight: 700;
         letter-spacing: 0.06em;
         text-transform: uppercase;
     }
@@ -255,7 +255,7 @@
         padding: 10px;
         color: var(--rose-700);
         font-size: 0.82rem;
-        font-weight: 800;
+        font-weight: 700;
         text-align: center;
     }
 
@@ -292,7 +292,7 @@
         background: rgba(255, 234, 242, 0.82);
         color: var(--rose-700);
         font-size: 0.78rem;
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .product-tag--soft {
@@ -304,7 +304,7 @@
     .line-price,
     .line-subtotal {
         white-space: nowrap;
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .line-price {
@@ -337,7 +337,7 @@
         border: 0;
         border-radius: 999px;
         font: inherit;
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .qty-btn {
@@ -365,7 +365,7 @@
         min-width: 26px;
         justify-content: center;
         color: var(--ink-900);
-        font-weight: 900;
+        font-weight: 700;
     }
 
     .remove-btn {
@@ -423,7 +423,7 @@
 
     .checkout-field label {
         color: var(--ink-900);
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .checkout-field input,
@@ -519,14 +519,14 @@
 
     .summary-line strong {
         color: var(--ink-900);
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .summary-total {
         padding-top: 12px;
         border-top: 1px solid rgba(231, 54, 131, 0.1);
         color: var(--ink-900);
-        font-weight: 800;
+        font-weight: 700;
     }
 
     .summary-total strong {
@@ -563,7 +563,7 @@
         border-radius: 50%;
         background: rgba(255, 234, 242, 0.9);
         color: var(--rose-700);
-        font-weight: 900;
+        font-weight: 700;
     }
 
     .checkout-points strong {
@@ -599,7 +599,7 @@
         padding: 0 20px;
         border-radius: 999px;
         font: inherit;
-        font-weight: 800;
+        font-weight: 700;
         letter-spacing: var(--tracking-soft);
         text-align: center;
     }
@@ -642,7 +642,7 @@
         background: linear-gradient(135deg, var(--rose-50), #fffdf8);
         color: var(--rose-700);
         font-size: 2rem;
-        font-weight: 900;
+        font-weight: 700;
     }
 
     .empty-cart h2 {
@@ -864,7 +864,7 @@
             margin-bottom: 6px;
             color: var(--ink-500);
             font-size: 0.76rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.06em;
             text-transform: uppercase;
         }
@@ -1076,7 +1076,7 @@
             margin-bottom: 3px;
             color: var(--ink-500);
             font-size: 0.68rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.045em;
             text-transform: uppercase;
         }
@@ -1173,6 +1173,118 @@
             min-height: 42px;
             padding: 0 10px;
             font-size: 0.78rem;
+        }
+    }
+
+    /* Unified quote-list typography */
+    .cart-hero h1,
+    .cart-section-head h2,
+    .checkout-card h2,
+    .cart-summary-card h3,
+    .empty-cart h2 {
+        font-family: var(--font-display);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0;
+        line-height: var(--leading-title);
+    }
+
+    .cart-hero h1 {
+        max-width: 22ch;
+        font-size: var(--text-3xl);
+    }
+
+    .cart-hero p,
+    .cart-notice,
+    .checkout-card p,
+    .cart-summary-card p {
+        line-height: var(--leading-copy);
+    }
+
+    .cart-hero__eyebrow,
+    .cart-eyebrow,
+    .cart-section-head__summary,
+    .summary-label,
+    .field-label,
+    .mobile-checkout-panel span {
+        font-weight: var(--weight-bold);
+        letter-spacing: 0;
+    }
+
+    .cart-notice,
+    .cart-items-card,
+    .checkout-card,
+    .cart-summary-card,
+    .empty-cart,
+    .cart-table tr {
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+    }
+
+    .product-name {
+        font-family: var(--font-display);
+        font-size: var(--text-lg);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0;
+        line-height: 1.28;
+    }
+
+    .line-price,
+    .line-subtotal,
+    .summary-total strong,
+    .mobile-checkout-panel strong {
+        font-weight: var(--weight-bold);
+        letter-spacing: 0;
+    }
+
+    .qty-btn,
+    .remove-btn,
+    .summary-actions .btn,
+    .summary-actions .btn-secondary,
+    .mobile-checkout-panel .btn {
+        font-weight: var(--weight-bold);
+        letter-spacing: 0;
+    }
+
+    .checkout-card input,
+    .checkout-card textarea,
+    .checkout-card select,
+    .qty-controls,
+    .summary-actions .btn,
+    .summary-actions .btn-secondary,
+    .mobile-checkout-panel .btn {
+        border-radius: var(--radius-control);
+    }
+
+    @media (max-width: 760px) {
+        .hero-card {
+            padding: 18px 15px;
+            border-radius: 20px;
+        }
+
+        .cart-hero h1 {
+            font-size: clamp(1.9rem, 8vw, 2.4rem);
+            line-height: 1.12;
+        }
+
+        .cart-hero p {
+            font-size: var(--text-sm);
+            line-height: 1.58;
+        }
+
+        .cart-items-card,
+        .checkout-card,
+        .cart-summary-card,
+        .empty-cart,
+        .cart-table tr {
+            border-radius: 16px;
+        }
+
+        .product-name {
+            font-size: 1rem;
+        }
+
+        .mobile-checkout-panel {
+            border-radius: 16px;
         }
     }
 </style>

@@ -18,7 +18,7 @@
     {% block structured_data %}{% endblock %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&amp;family=Nunito+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <style>
         :root {
             --rose-25: #fff8fa;
@@ -46,21 +46,34 @@
             --surface-strong: #ffffff;
             --surface-soft: rgba(255, 248, 251, 0.9);
             --surface-border: rgba(198, 68, 125, 0.11);
-            --shadow-lg: 0 34px 80px rgba(94, 20, 58, 0.12);
-            --shadow-md: 0 20px 48px rgba(94, 20, 58, 0.08);
-            --shadow-card: 0 18px 42px rgba(77, 26, 50, 0.075);
-            --shadow-card-hover: 0 24px 54px rgba(77, 26, 50, 0.105);
-            --radius-xl: 32px;
+            --shadow-lg: 0 28px 64px rgba(94, 20, 58, 0.1);
+            --shadow-md: 0 16px 38px rgba(94, 20, 58, 0.075);
+            --shadow-card: 0 14px 32px rgba(77, 26, 50, 0.065);
+            --shadow-card-hover: 0 20px 42px rgba(77, 26, 50, 0.095);
+            --radius-xl: 24px;
+            --radius-card: 18px;
+            --radius-control: 12px;
             --max-width: 1240px;
             --soft-line: rgba(198, 68, 125, 0.12);
-            --font-sans: "Nunito Sans", Aptos, "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            --font-display: "Lora", Georgia, "Times New Roman", serif;
-            --font-brand: "Nunito Sans", Aptos, "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            --tracking-title: -0.006em;
-            --tracking-tight: -0.003em;
-            --tracking-soft: 0.008em;
-            --leading-title: 1.12;
-            --leading-copy: 1.66;
+            --font-sans: "Plus Jakarta Sans", Aptos, "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+            --font-brand: "Plus Jakarta Sans", Aptos, "Segoe UI Variable Display", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            --weight-regular: 400;
+            --weight-medium: 500;
+            --weight-semibold: 600;
+            --weight-bold: 700;
+            --text-xs: 0.75rem;
+            --text-sm: 0.875rem;
+            --text-base: 1rem;
+            --text-lg: 1.125rem;
+            --text-xl: 1.375rem;
+            --text-2xl: clamp(1.75rem, 3vw, 2.25rem);
+            --text-3xl: clamp(2.2rem, 4vw, 3.35rem);
+            --tracking-title: 0;
+            --tracking-tight: 0;
+            --tracking-soft: 0;
+            --leading-title: 1.14;
+            --leading-copy: 1.62;
         }
 
         *,
@@ -82,7 +95,7 @@
             min-height: 100vh;
             font-family: var(--font-sans);
             font-size: 16px;
-            line-height: 1.62;
+            line-height: var(--leading-copy);
             font-optical-sizing: auto;
             font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
             text-rendering: optimizeLegibility;
@@ -254,14 +267,14 @@
             color: var(--rose-700);
             font-size: 0.68rem;
             letter-spacing: 0.16em;
-            font-weight: 760;
+            font-weight: 700;
             text-transform: uppercase;
         }
 
         .brand strong {
             font-family: var(--font-brand);
             font-size: 1.32rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: var(--tracking-title);
             line-height: var(--leading-title);
         }
@@ -297,7 +310,7 @@
             border: 1px solid transparent;
             color: var(--ink-700);
             font-size: 0.92rem;
-            font-weight: 760;
+            font-weight: 700;
         }
 
         .header-link:hover {
@@ -323,7 +336,7 @@
             color: var(--white);
             border: 1px solid rgba(255, 255, 255, 0.3);
             font-size: 0.92rem;
-            font-weight: 850;
+            font-weight: 700;
             flex-shrink: 0;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.25),
@@ -561,7 +574,7 @@
             border: 1px solid rgba(255, 255, 255, 0.68);
             background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
             color: var(--white);
-            font-weight: 760;
+            font-weight: 700;
             font-size: 0.88rem;
             letter-spacing: 0.01em;
             text-shadow: 0 1px 0 rgba(129, 36, 74, 0.14);
@@ -794,7 +807,7 @@
                 linear-gradient(135deg, #ffe8f1, #ffc3db);
             color: #d72d74;
             font-size: 0.96rem;
-            font-weight: 900;
+            font-weight: 700;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.86),
                 0 9px 18px rgba(215, 45, 116, 0.14);
@@ -830,7 +843,7 @@
         .toast-title {
             color: #3f1f2d;
             font-size: 0.9rem;
-            font-weight: 900;
+            font-weight: 700;
             line-height: 1.15;
         }
 
@@ -838,7 +851,7 @@
             overflow: hidden;
             color: #8b5b70;
             font-size: 0.76rem;
-            font-weight: 650;
+            font-weight: 600;
             line-height: 1.2;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -855,7 +868,7 @@
             color: #fff;
             border: 1px solid rgba(255, 255, 255, 0.42);
             font-size: 0.78rem;
-            font-weight: 850;
+            font-weight: 700;
             white-space: nowrap;
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.24),
@@ -2044,7 +2057,7 @@
 
             .brand-copy strong {
                 font-size: 0.78rem;
-                letter-spacing: -0.01em;
+                letter-spacing: 0;
             }
 
             .cart-btn {
@@ -2060,6 +2073,61 @@
 
             .assistant-shell {
                 right: 12px;
+            }
+        }
+
+        /* Shared typography and surface system */
+        body,
+        button,
+        input,
+        textarea,
+        select {
+            letter-spacing: 0;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .brand strong,
+        .page-card h2,
+        .page-card h3 {
+            letter-spacing: 0;
+        }
+
+        .brand small,
+        .brand strong,
+        .header-link,
+        .cart-btn,
+        .category-pill,
+        .toast-title,
+        .toast-action,
+        .assistant-toggle,
+        .assistant-action,
+        .footer-card strong {
+            font-weight: var(--weight-bold);
+        }
+
+        .page-card,
+        .hero-card {
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-card);
+        }
+
+        @media (max-width: 640px) {
+            body {
+                font-size: 15px;
+            }
+
+            .page-card,
+            .hero-card {
+                border-radius: 20px;
+            }
+
+            .brand-copy strong,
+            .header-link,
+            .cart-btn {
+                letter-spacing: 0;
             }
         }
     </style>
