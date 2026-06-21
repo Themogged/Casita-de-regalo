@@ -1287,6 +1287,107 @@
             border-radius: 16px;
         }
     }
+
+    /* Rose signature quote list */
+    .hero-card {
+        border-top: 1px solid rgba(181, 88, 122, 0.11);
+        background:
+            radial-gradient(circle at 92% 12%, rgba(246, 207, 222, 0.25), transparent 28%),
+            linear-gradient(145deg, #ffffff, #fff9fb);
+    }
+
+    .cart-hero__eyebrow,
+    .cart-eyebrow,
+    .summary-label,
+    .field-label {
+        color: #b52b67;
+    }
+
+    .cart-notice {
+        color: #72485c;
+        border-color: rgba(179, 87, 120, 0.09);
+        background: linear-gradient(135deg, #fffdfd, #fff5f8);
+    }
+
+    .cart-notice__icon {
+        background: #ffffff;
+        box-shadow: 0 7px 18px rgba(114, 31, 67, 0.08);
+    }
+
+    .cart-items-card,
+    .checkout-card,
+    .cart-summary-card,
+    .empty-cart,
+    .cart-table tr {
+        border: 1px solid rgba(179, 87, 120, 0.09);
+        background: linear-gradient(150deg, #ffffff, #fffbfc);
+    }
+
+    .cart-items-card,
+    .cart-summary-card {
+        border-top: 1px solid rgba(181, 88, 122, 0.1);
+    }
+
+    .product-name,
+    .cart-section-head h2,
+    .cart-summary-card h3 {
+        color: #512d3b;
+    }
+
+    .line-price,
+    .line-subtotal,
+    .summary-total strong,
+    .mobile-checkout-panel strong {
+        color: #b55078;
+    }
+
+    .qty-controls,
+    .checkout-card input,
+    .checkout-card textarea,
+    .checkout-card select {
+        border-color: rgba(216, 58, 123, 0.16);
+        background: #ffffff;
+    }
+
+    .mobile-checkout-panel {
+        border: 1px solid rgba(216, 58, 123, 0.17);
+        background: rgba(255, 252, 254, 0.98);
+        box-shadow: 0 16px 36px rgba(103, 25, 60, 0.17);
+    }
+
+    .summary-actions .btn,
+    .mobile-checkout-panel .btn {
+        color: #ffffff;
+        background: linear-gradient(135deg, #ed8db2, #d96594);
+        box-shadow: 0 9px 20px rgba(172, 72, 111, 0.13);
+    }
+
+    .summary-actions .btn-secondary {
+        color: #98506d;
+        border-color: rgba(179, 86, 120, 0.11);
+        background: #ffffff;
+        box-shadow: 0 8px 18px rgba(101, 53, 70, 0.04);
+    }
+
+    @media (max-width: 760px) {
+        .hero-card {
+            padding: 16px 14px;
+            border-top-width: 1px;
+        }
+
+        .cart-hero h1 {
+            font-size: clamp(1.82rem, 8vw, 2.18rem);
+        }
+
+        .cart-notice,
+        .cart-items-card,
+        .checkout-card,
+        .cart-summary-card,
+        .empty-cart,
+        .cart-table tr {
+            border-radius: 17px;
+        }
+    }
 </style>
 {% endblock %}
 

@@ -740,6 +740,105 @@
             font-size: 0.8rem;
         }
     }
+
+    /* Rose signature gift designer */
+    .designer-hero {
+        border-top: 1px solid rgba(181, 88, 122, 0.11);
+        background:
+            radial-gradient(circle at 92% 8%, rgba(246, 205, 221, 0.28), transparent 26%),
+            linear-gradient(145deg, #ffffff, #fff9fb);
+    }
+
+    .designer-hero h1,
+    .designer-card h2,
+    .designer-preview-copy h2 {
+        color: #512d3b;
+    }
+
+    .designer-hero-panel,
+    .designer-card,
+    .designer-section,
+    .designer-preview-frame,
+    .designer-section-note {
+        border: 1px solid rgba(179, 87, 120, 0.09);
+        background: linear-gradient(150deg, #ffffff, #fffbfc);
+    }
+
+    .designer-hero-panel,
+    .designer-preview-frame {
+        border-top: 1px solid rgba(181, 88, 122, 0.1);
+    }
+
+    .designer-section-title,
+    .designer-match-score,
+    .designer-product-meta {
+        color: #9d5570;
+    }
+
+    .designer-section-title span {
+        color: #ffffff;
+        background: linear-gradient(135deg, #e98aaf, #d36594);
+        box-shadow: 0 6px 14px rgba(168, 72, 109, 0.12);
+    }
+
+    .designer-option {
+        color: #74465c;
+        border-color: rgba(179, 87, 120, 0.09);
+        background: #ffffff;
+    }
+
+    .designer-option:has(input:checked) {
+        color: #982955;
+        border-color: rgba(181, 87, 121, 0.2);
+        background: linear-gradient(145deg, #fff7fa, #ffedf3);
+        box-shadow: 0 8px 18px rgba(131, 70, 92, 0.06);
+    }
+
+    .designer-product {
+        border-color: rgba(179, 87, 120, 0.09);
+        background: #ffffff;
+    }
+
+    .designer-product.is-active {
+        border-color: #d982a6;
+        box-shadow: 0 12px 24px rgba(135, 70, 94, 0.08);
+    }
+
+    .designer-gift-cta,
+    .designer-submit {
+        color: #ffffff;
+        border-color: transparent;
+        background: linear-gradient(135deg, #eb8eb3, #d96494);
+        box-shadow: 0 10px 22px rgba(174, 72, 113, 0.13);
+    }
+
+    .designer-more-bases {
+        color: #a72c61;
+        border-color: rgba(216, 58, 123, 0.17);
+        background: #ffffff;
+    }
+
+    @media (max-width: 760px) {
+        .designer-hero {
+            padding: 18px 14px;
+            border-top-width: 1px;
+        }
+
+        .designer-hero h1 {
+            font-size: clamp(1.9rem, 8.5vw, 2.28rem);
+        }
+
+        .designer-hero-panel,
+        .designer-card,
+        .designer-section,
+        .designer-preview-frame {
+            border-radius: 17px;
+        }
+
+        .designer-section {
+            background: linear-gradient(150deg, #ffffff, #fff8fb);
+        }
+    }
 </style>
 {% endblock %}
 

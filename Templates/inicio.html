@@ -2727,6 +2727,352 @@
             font-size: var(--text-xs);
         }
     }
+
+    /* Rose signature home */
+    .home-hero {
+        position: relative;
+        overflow: hidden;
+        padding: clamp(26px, 3vw, 36px);
+        border-top: 1px solid rgba(185, 91, 126, 0.13);
+        background:
+            radial-gradient(circle at 96% 4%, rgba(248, 205, 222, 0.3), transparent 26%),
+            linear-gradient(145deg, #ffffff 0%, #fffbfc 54%, #fff6f9 100%);
+        box-shadow: 0 22px 48px rgba(105, 52, 72, 0.075);
+    }
+
+    .home-hero::after {
+        content: "";
+        position: absolute;
+        width: 170px;
+        height: 170px;
+        right: -72px;
+        top: -78px;
+        border: 24px solid rgba(207, 110, 147, 0.055);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .hero-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(360px, 0.88fr);
+        align-items: stretch;
+        gap: clamp(22px, 3vw, 36px);
+    }
+
+    .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .hero-copy h1 {
+        max-width: 14ch;
+        font-size: clamp(2.55rem, 4.2vw, 3.45rem);
+        color: #4c2736;
+    }
+
+    .hero-copy p {
+        max-width: 54ch;
+        color: #765968;
+    }
+
+    .hero-tags {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .hero-tag {
+        min-height: 42px;
+        padding: 9px 11px;
+        justify-content: center;
+        text-align: center;
+        color: #8d5870;
+        border: 1px solid rgba(181, 91, 125, 0.09);
+        background: rgba(255, 255, 255, 0.82);
+        box-shadow: 0 7px 16px rgba(105, 54, 73, 0.04);
+    }
+
+    .hero-actions {
+        display: grid;
+        grid-template-columns: minmax(150px, 0.78fr) minmax(230px, 1.22fr);
+        gap: 10px;
+    }
+
+    .hero-actions a {
+        justify-content: center;
+    }
+
+    .hero-actions .btn,
+    .product-actions .btn {
+        color: #ffffff;
+        background: linear-gradient(135deg, #ed8db2 0%, #df6f9b 56%, #cf5888 100%);
+        box-shadow: 0 9px 20px rgba(174, 72, 112, 0.13);
+    }
+
+    .hero-actions .btn-secondary,
+    .product-actions .btn-outline {
+        color: #98506d;
+        border-color: rgba(179, 86, 120, 0.11);
+        background: linear-gradient(180deg, #ffffff, #fff9fb);
+        box-shadow: 0 8px 18px rgba(101, 53, 70, 0.04);
+    }
+
+    .hero-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .hero-stat {
+        min-height: 64px;
+        padding: 10px 12px;
+        border: 1px solid rgba(179, 88, 122, 0.08);
+        background: linear-gradient(155deg, rgba(255, 255, 255, 0.92), rgba(255, 247, 250, 0.9));
+        box-shadow: none;
+    }
+
+    .hero-stat strong {
+        color: #a64e72;
+    }
+
+    .hero-gallery-panel {
+        align-content: start;
+        min-width: 0;
+        padding: 22px;
+        border: 1px solid rgba(179, 85, 120, 0.1);
+        background:
+            linear-gradient(155deg, rgba(255, 253, 254, 0.98), rgba(255, 239, 245, 0.94));
+        box-shadow: 0 15px 32px rgba(102, 52, 71, 0.065);
+    }
+
+    .hero-gallery-panel::before {
+        display: none;
+    }
+
+    .hero-gallery-copy h2 {
+        max-width: 18ch;
+        font-family: var(--font-sans);
+        font-size: clamp(1.4rem, 2vw, 1.7rem);
+        font-weight: var(--weight-bold);
+        line-height: 1.18;
+        color: #512b3a;
+    }
+
+    .hero-gallery-copy p {
+        margin-top: 7px;
+        font-size: 0.9rem;
+        line-height: 1.52;
+    }
+
+    .hero-product-card {
+        width: min(210px, 64vw);
+        border: 1px solid rgba(180, 88, 122, 0.1);
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 11px 24px rgba(102, 53, 71, 0.055);
+    }
+
+    .hero-product-media {
+        aspect-ratio: 4 / 4.25;
+        background: linear-gradient(155deg, #fffcfd, #fff3f7);
+    }
+
+    .hero-product-info {
+        gap: 8px;
+        padding: 11px 12px 13px;
+    }
+
+    .hero-product-category {
+        color: #a44d71;
+        background: #fff5f8;
+    }
+
+    .hero-product-title {
+        min-height: 2.44em;
+        font-family: var(--font-sans);
+        color: #52303e;
+        font-size: 0.9rem;
+        font-weight: var(--weight-bold);
+        line-height: 1.22;
+    }
+
+    .hero-product-meta {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .hero-product-price {
+        color: #b44f78;
+        font-size: 0.82rem;
+    }
+
+    .hero-product-cta {
+        display: flex;
+        width: 100%;
+        min-height: 34px;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 10px;
+        color: #99516e;
+        border: 1px solid rgba(181, 87, 121, 0.11);
+        border-radius: 11px;
+        background: linear-gradient(180deg, #fffafb, #fff0f5);
+        box-shadow: none;
+        font-size: 0.72rem;
+        font-weight: var(--weight-bold);
+    }
+
+    .hero-panel-note {
+        padding: 10px 12px;
+        border-color: rgba(179, 87, 120, 0.09);
+        border-radius: 14px;
+        background: rgba(255, 252, 254, 0.9);
+        box-shadow: none;
+    }
+
+    .hero-panel-note strong {
+        color: #9b526f;
+    }
+
+    .section-stack > .section-card:nth-child(even),
+    .catalog-main {
+        background: linear-gradient(150deg, #ffffff, #fff7fa);
+    }
+
+    .section-card,
+    .catalog-main,
+    .sidebar {
+        border: 1px solid rgba(216, 56, 123, 0.13);
+    }
+
+    .results-header h2,
+    .section-card h2 {
+        color: #4b172c;
+    }
+
+    .product-card {
+        overflow: hidden;
+        border: 1px solid rgba(179, 88, 121, 0.1);
+        background: #ffffff;
+        box-shadow: 0 11px 25px rgba(103, 54, 72, 0.055);
+    }
+
+    .product-media {
+        background: linear-gradient(155deg, #fffcfd, #fff4f8);
+    }
+
+    .product-body h3,
+    .product-price {
+        color: #52303e;
+    }
+
+    .product-ribbon,
+    .product-mini-badge,
+    .pill {
+        border-color: rgba(218, 56, 124, 0.14);
+        background: #fff5f8;
+        color: #9e5571;
+    }
+
+    @media (max-width: 680px) {
+        .home-hero {
+            padding: 18px 14px 20px;
+            border-top-width: 1px;
+            border-radius: 22px;
+        }
+
+        .home-hero::after {
+            width: 108px;
+            height: 108px;
+            right: -52px;
+            top: -54px;
+            border-width: 16px;
+        }
+
+        .hero-grid {
+            display: block;
+        }
+
+        .hero-copy h1 {
+            max-width: none;
+            margin: 12px 0 10px;
+            font-size: clamp(2rem, 9vw, 2.3rem);
+            line-height: 1.08;
+        }
+
+        .hero-copy p {
+            font-size: 0.9rem;
+            line-height: 1.55;
+        }
+
+        .hero-tags {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            margin-top: 12px;
+        }
+
+        .hero-tag {
+            min-height: 38px;
+            padding: 7px 8px;
+            font-size: 0.72rem;
+            line-height: 1.3;
+        }
+
+        .hero-tag:last-child {
+            grid-column: 1 / -1;
+        }
+
+        .hero-actions {
+            grid-template-columns: 1fr;
+            margin-top: 12px;
+        }
+
+        .hero-actions a {
+            min-height: 44px;
+            padding-inline: 12px;
+            font-size: 0.82rem;
+        }
+
+        .hero-stats,
+        .hero-gallery-panel {
+            display: none;
+        }
+
+        .section-card,
+        .catalog-main,
+        .sidebar {
+            border-radius: 18px;
+        }
+
+        .product-card {
+            border-radius: 15px;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .catalog-grid {
+            gap: 11px;
+        }
+
+        .product-media {
+            min-height: 142px;
+        }
+
+        .product-body {
+            padding: 10px;
+        }
+
+        .product-actions {
+            gap: 7px;
+        }
+
+        .product-actions .btn,
+        .product-actions .btn-outline,
+        .btn-disabled {
+            min-height: 38px;
+            border-radius: 10px;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -2737,9 +3083,8 @@
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Acompa&ntilde;ando tus sentimientos</span>
             <h1>Regalos con amor para momentos que se quedan en el coraz&oacute;n.</h1>
             <p>
-                Preparamos detalles personalizados con cuidado, color y amor: desayunos sorpresa,
-                cajas tem&aacute;ticas y regalos rom&aacute;nticos pensados para hacer sentir especial
-                a quien los recibe en Bello, Medell&iacute;n y el &aacute;rea metropolitana.
+                Creamos desayunos sorpresa, cajas tem&aacute;ticas y detalles personalizados para emocionar
+                en Bello, Medell&iacute;n y el &aacute;rea metropolitana.
             </p>
 
             <div class="hero-tags">

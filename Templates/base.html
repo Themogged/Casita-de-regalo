@@ -2130,6 +2130,193 @@
                 letter-spacing: 0;
             }
         }
+
+        /* Rose signature finish */
+        :root {
+            --rose-signature: #df6f9b;
+            --rose-signature-dark: #9f4a6d;
+            --rose-signature-soft: #fff4f8;
+            --rose-signature-pale: #fffbfc;
+            --rose-signature-line: rgba(166, 82, 115, 0.1);
+            --shadow-lg: 0 24px 56px rgba(105, 50, 72, 0.09);
+            --shadow-md: 0 16px 38px rgba(105, 50, 72, 0.07);
+            --shadow-card: 0 12px 28px rgba(101, 48, 68, 0.055);
+            --shadow-card-hover: 0 18px 38px rgba(101, 48, 68, 0.09);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 8% 5%, rgba(248, 213, 226, 0.42), transparent 22%),
+                radial-gradient(circle at 94% 18%, rgba(255, 235, 242, 0.62), transparent 24%),
+                linear-gradient(180deg, #fffefd 0%, #fff9fb 38%, #fffcfd 72%, #ffffff 100%);
+        }
+
+        .site-header {
+            background: rgba(255, 253, 254, 0.94);
+            border-bottom-color: var(--rose-signature-line);
+            box-shadow: 0 9px 28px rgba(103, 50, 70, 0.06);
+        }
+
+        .header-inner {
+            min-height: 78px;
+        }
+
+        .brand {
+            border: 1px solid rgba(181, 91, 125, 0.08);
+            background: linear-gradient(145deg, #ffffff, #fffbfc);
+            box-shadow: 0 8px 22px rgba(106, 53, 73, 0.045);
+        }
+
+        .brand-mark {
+            border: 3px solid #ffffff;
+            box-shadow: 0 0 0 1px rgba(190, 91, 128, 0.11), 0 6px 14px rgba(101, 51, 70, 0.07);
+        }
+
+        .brand-copy small {
+            color: var(--rose-signature-dark);
+        }
+
+        .header-links {
+            border-color: rgba(176, 86, 120, 0.09);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 20px rgba(96, 51, 68, 0.04);
+        }
+
+        .header-link:hover,
+        .header-link:focus-visible {
+            color: var(--rose-signature-dark);
+            background: var(--rose-signature-soft);
+        }
+
+        .cart-btn,
+        .btn,
+        .assistant-send {
+            color: #ffffff;
+            border-color: transparent;
+            background: linear-gradient(135deg, #ed8db2 0%, var(--rose-signature) 56%, #cf5888 100%);
+            box-shadow: 0 10px 22px rgba(181, 72, 116, 0.14);
+        }
+
+        .btn-secondary,
+        .btn-outline {
+            color: var(--rose-signature-dark);
+            border-color: rgba(176, 82, 117, 0.13);
+            background: linear-gradient(180deg, #ffffff, #fffafb);
+            box-shadow: 0 8px 18px rgba(102, 52, 70, 0.045);
+        }
+
+        .category-strip {
+            background: transparent;
+            border-bottom: 0;
+        }
+
+        .category-strip-inner {
+            border: 1px solid rgba(229, 72, 132, 0.12);
+            border-radius: 999px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 241, 248, 0.92));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.94),
+                0 12px 24px rgba(185, 45, 99, 0.055);
+        }
+
+        .category-pill {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.68);
+            background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+            text-shadow: 0 1px 0 rgba(129, 36, 74, 0.14);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 8px 16px rgba(213, 68, 128, 0.14);
+        }
+
+        .category-pill:hover,
+        .category-pill:focus-visible,
+        .category-pill.is-active,
+        .category-pill[aria-current="page"] {
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.78);
+            background: linear-gradient(180deg, #ffc5dc 0%, #ff9bc2 56%, #f27caf 100%);
+            box-shadow:
+                0 0 0 3px rgba(255, 226, 238, 0.82),
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 11px 22px rgba(229, 72, 132, 0.2);
+        }
+
+        .hero-card,
+        .page-card {
+            border: 1px solid var(--rose-signature-line);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 251, 252, 0.97));
+        }
+
+        .section-kicker {
+            color: var(--rose-signature-dark);
+            border-color: rgba(177, 85, 118, 0.1);
+            background: rgba(255, 249, 251, 0.94);
+        }
+
+        .floating-designer,
+        .floating-whatsapp,
+        .assistant-toggle {
+            border-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 12px 26px rgba(100, 48, 68, 0.13);
+        }
+
+        .assistant-toggle {
+            color: #ffffff;
+            background: linear-gradient(135deg, #e989af, #d75e90);
+        }
+
+        .assistant-panel,
+        .message--toast {
+            border-color: rgba(177, 84, 117, 0.11);
+            background: rgba(255, 253, 254, 0.98);
+            box-shadow: 0 20px 46px rgba(96, 48, 66, 0.12);
+        }
+
+        @media (max-width: 640px) {
+            .header-inner {
+                min-height: 62px;
+            }
+
+            .brand {
+                padding: 4px 7px;
+                border-color: transparent;
+                background: transparent;
+                box-shadow: none;
+            }
+
+            .category-strip-inner {
+                border: 1px solid rgba(229, 72, 132, 0.12);
+                border-radius: 999px;
+                background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 241, 248, 0.92));
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+                    0 10px 20px rgba(185, 45, 99, 0.05);
+            }
+
+            .category-pill {
+                min-height: 36px;
+                padding-inline: 14px;
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                    0 6px 12px rgba(186, 50, 104, 0.12);
+            }
+
+            .page-shell {
+                width: min(100% - 20px, var(--max-width));
+            }
+
+            .floating-designer,
+            .floating-whatsapp {
+                box-shadow: 0 10px 24px rgba(96, 24, 56, 0.17);
+            }
+
+            .assistant-toggle {
+                box-shadow: 0 10px 24px rgba(204, 38, 108, 0.2);
+            }
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>

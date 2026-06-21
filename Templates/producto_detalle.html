@@ -1502,6 +1502,106 @@
             box-shadow: 0 16px 34px rgba(103, 28, 59, 0.14);
         }
     }
+
+    /* Rose signature product detail */
+    .product-detail-page .hero-card {
+        border-top: 1px solid rgba(181, 88, 122, 0.11);
+        background: linear-gradient(145deg, #ffffff, #fffafb);
+    }
+
+    .detail-breadcrumbs a,
+    .detail-category,
+    .detail-switcher-status {
+        color: #b52c67;
+    }
+
+    .detail-media,
+    .detail-card,
+    .detail-mobile-showcase,
+    .related-item {
+        border: 1px solid rgba(179, 87, 120, 0.1);
+        background: linear-gradient(150deg, #ffffff, #fffbfc);
+    }
+
+    .detail-media {
+        overflow: hidden;
+        border-top: 1px solid rgba(182, 88, 123, 0.11);
+    }
+
+    .detail-card {
+        border-top: 1px solid rgba(182, 88, 123, 0.11);
+    }
+
+    .detail-card h1,
+    .detail-mobile-showcase h2 {
+        color: #512d3b;
+    }
+
+    .detail-price,
+    .detail-mobile-showcase-price {
+        color: #b55078;
+    }
+
+    .detail-mobile-showcase-price {
+        color: #ffffff;
+    }
+
+    .detail-selling-point {
+        border: 1px solid rgba(179, 88, 121, 0.08);
+        background: linear-gradient(155deg, #ffffff, #fff7fa);
+        box-shadow: none;
+    }
+
+    .detail-selling-point span {
+        color: #9c5570;
+    }
+
+    .detail-note {
+        color: #71465b;
+        border-color: rgba(218, 58, 124, 0.14);
+        background: #fff3f8;
+    }
+
+    .detail-mobile-bar {
+        border: 1px solid rgba(218, 58, 124, 0.16);
+        background: rgba(255, 253, 254, 0.97);
+    }
+
+    .detail-actions .btn,
+    .detail-mobile-bar .btn {
+        color: #ffffff;
+        background: linear-gradient(135deg, #ed8db2, #d96594);
+        box-shadow: 0 9px 20px rgba(172, 72, 111, 0.13);
+    }
+
+    .detail-actions .btn-secondary,
+    .detail-mobile-bar .btn-secondary {
+        color: #98506d;
+        border-color: rgba(179, 86, 120, 0.11);
+        background: #ffffff;
+        box-shadow: 0 8px 18px rgba(101, 53, 70, 0.04);
+    }
+
+    @media (max-width: 620px) {
+        .product-detail-page .hero-card {
+            border-top-width: 1px;
+        }
+
+        .detail-media,
+        .detail-card,
+        .detail-mobile-showcase {
+            border-radius: 18px;
+        }
+
+        .detail-mobile-showcase {
+            border-top: 1px solid rgba(181, 88, 122, 0.11);
+            background: linear-gradient(145deg, #ffffff, #fff6f9);
+        }
+
+        .detail-mobile-bar {
+            box-shadow: 0 14px 34px rgba(110, 26, 62, 0.17);
+        }
+    }
 </style>
 {% endblock %}
 
