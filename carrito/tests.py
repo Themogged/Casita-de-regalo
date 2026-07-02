@@ -25,7 +25,7 @@ class CarritoViewsTests(TestCase):
 
         self.assertRedirects(
             response,
-            'https://testserver/?q=desayuno#catalogo',
+            '/catalogo/#catalogo',
             fetch_redirect_response=False,
         )
 

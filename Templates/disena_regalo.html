@@ -1016,7 +1016,7 @@
                     <span class="designer-gift-cta-mark" aria-hidden="true"></span>
                     <span>Enviar idea por WhatsApp</span>
                 </a>
-                <a href="{% url 'inicio' %}#catalogo" class="btn-secondary" data-designer-catalog>Ver modelos parecidos</a>
+                <a href="{% url 'catalogo' %}#catalogo" class="btn-secondary" data-designer-catalog>Ver modelos parecidos</a>
             </div>
             <p class="designer-note">
                 La vista previa es una referencia de composición. En WhatsApp confirmamos disponibilidad,
@@ -1188,7 +1188,7 @@
                 params.set('ocasion', state.occasion);
                 params.set('presupuesto', priceRange(state.budget?.value));
                 state.elements.forEach((element) => params.append('atributos', element.value));
-                catalogLink.href = `{% url 'inicio' %}?${params.toString()}#catalogo`;
+                catalogLink.href = `{% url 'catalogo' %}?${params.toString()}#catalogo`;
             }
         };
 

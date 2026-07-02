@@ -2333,7 +2333,7 @@
 
             <nav class="header-links" id="main-menu" aria-label="Navegaci&oacute;n principal">
                 <a href="{% url 'inicio' %}" class="header-link">Inicio</a>
-                <a href="{% url 'inicio' %}#catalogo" class="header-link">Cat&aacute;logo</a>
+                <a href="{% url 'catalogo' %}#catalogo" class="header-link">Cat&aacute;logo</a>
                 <a href="{% url 'como_comprar' %}" class="header-link">C&oacute;mo comprar</a>
                 <a href="#footer" class="header-link">Contacto</a>
             </nav>
@@ -2354,10 +2354,10 @@
         <div class="category-strip">
             <div class="category-strip-inner">
                 {% with categoria_activa=request.GET.categoria|default:"" %}
-                <a href="{% url 'inicio' %}#catalogo" class="category-pill {% if not categoria_activa %}is-active{% endif %}" {% if not categoria_activa %}aria-current="page"{% endif %}>Todos</a>
+                <a href="{% url 'catalogo' %}#catalogo" class="category-pill {% if not categoria_activa %}is-active{% endif %}" {% if not categoria_activa %}aria-current="page"{% endif %}>Todos</a>
                 {% for categoria in categorias_menu %}
                     {% if forloop.counter <= 6 %}
-                        <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
+                        <a href="{% url 'catalogo' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
                             {{ categoria.nombre }}
                         </a>
                     {% endif %}
@@ -2368,7 +2368,7 @@
                         <div class="category-more-panel">
                             {% for categoria in categorias_menu %}
                                 {% if forloop.counter > 6 %}
-                                    <a href="{% url 'inicio' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
+                                    <a href="{% url 'catalogo' %}?categoria={{ categoria.id }}#catalogo" class="category-pill {% if categoria_activa == categoria.id|stringformat:'s' %}is-active{% endif %}" {% if categoria_activa == categoria.id|stringformat:'s' %}aria-current="page"{% endif %}>
                                         {{ categoria.nombre }}
                                     </a>
                                 {% endif %}
@@ -2423,7 +2423,7 @@
 
             <div class="footer-card">
                 <h4>Explorar</h4>
-                <a href="{% url 'inicio' %}#catalogo">Ver cat&aacute;logo</a>
+                <a href="{% url 'catalogo' %}#catalogo">Ver cat&aacute;logo</a>
                 <a href="{% url 'ver_carrito' %}">Lista para cotizar</a>
             </div>
 
@@ -3034,7 +3034,7 @@
         const getAssistantWelcome = () => ({
             text: 'Hola, soy el asistente de Casita. Te ayudo a elegir mejor, resolver dudas del catálogo y llevarte a WhatsApp cuando ya quieras confirmar.',
             actions: [
-                { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "catalogo" %}'}#catalogo` },
                 { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
                 { label: 'WhatsApp', href: '{{ whatsapp_assistance_url|escapejs }}', external: true },
             ],
@@ -3064,7 +3064,7 @@
                 return {
                     text: 'Puedes recorrer el catálogo completo o entrar por categoría si ya tienes una idea más clara del tipo de detalle que buscas.',
                     actions: [
-                        { label: 'Ir al catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                        { label: 'Ir al catálogo', href: `${window.location.origin}${'{% url "catalogo" %}'}#catalogo` },
                         { label: 'Explorar categorías', prompt: 'Qué categorías hay' },
                     ],
                 };
@@ -3126,7 +3126,7 @@
                     text: 'Puedes guardar detalles desde el catálogo o desde la ficha del producto. Luego revisas tu lista para cotizar y confirmas por WhatsApp.',
                     actions: [
                         { label: 'Ver mi lista', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
-                        { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "inicio" %}'}#catalogo` },
+                        { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "catalogo" %}'}#catalogo` },
                     ],
                 };
             }
@@ -3551,6 +3551,7 @@
             const catalogLink = event.target.closest('.js-catalog-nav');
             if (!catalogLink) return;
             if (catalogLink.target && catalogLink.target !== '_self') return;
+            if (!document.querySelector('#catalogo')) return;
 
             const targetUrl = new URL(catalogLink.href, window.location.origin);
             const currentUrl = new URL(window.location.href);

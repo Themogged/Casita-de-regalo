@@ -1,0 +1,696 @@
+{% extends 'base.html' %}
+{% load moneda static media_optimization %}
+
+{% block title %}Cat&aacute;logo | Casita de Regalos{% endblock %}
+{% block meta_description %}Mira el cat&aacute;logo de Casita de Regalos, filtra por ocasi&oacute;n o presupuesto y guarda tus detalles favoritos para cotizar por WhatsApp.{% endblock %}
+{% block meta_keywords %}cat&aacute;logo regalos personalizados, desayunos sorpresa, detalles rom&aacute;nticos, regalos cumplea&ntilde;os, Bello Medell&iacute;n{% endblock %}
+{% block og_title %}Cat&aacute;logo | Casita de Regalos{% endblock %}
+{% block og_description %}Elige un detalle bonito y cot&iacute;zalo por WhatsApp con Casita de Regalos.{% endblock %}
+
+{% block extra_head %}
+{% include 'partials/storefront_styles.html' %}
+<style>
+    .catalog-page {
+        display: grid;
+        gap: clamp(20px, 3vw, 30px);
+    }
+
+    .catalog-landing-hero {
+        position: relative;
+        box-sizing: border-box;
+        min-height: clamp(280px, 30vw, 380px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.58fr);
+        align-items: center;
+        gap: clamp(22px, 4vw, 54px);
+        isolation: isolate;
+        padding: clamp(22px, 3.4vw, 40px);
+        overflow: hidden;
+        text-align: left;
+        border-radius: clamp(26px, 4vw, 42px);
+        background:
+            linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(255, 250, 252, 0.99) 54%, rgba(255, 242, 248, 0.98) 100%);
+        border: 1px solid rgba(216, 56, 123, 0.1);
+        box-shadow:
+            0 24px 58px rgba(94, 35, 63, 0.08),
+            inset 0 1px 0 rgba(255, 255, 255, 0.86);
+    }
+
+    .catalog-landing-hero::before,
+    .catalog-landing-hero::after {
+        content: "";
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .catalog-landing-hero::before {
+        inset: 0;
+        z-index: -1;
+        background:
+            radial-gradient(circle at 88% 12%, rgba(255, 198, 222, 0.42), transparent 24%),
+            radial-gradient(circle at 4% 92%, rgba(255, 222, 236, 0.56), transparent 23%);
+    }
+
+    .catalog-landing-hero::after {
+        left: clamp(22px, 4vw, 48px);
+        right: clamp(22px, 4vw, 48px);
+        top: 0;
+        height: 4px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, rgba(230, 74, 134, 0.36), transparent);
+    }
+
+    .catalog-hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        overflow: hidden;
+    }
+
+    .catalog-hero-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        opacity: 0.08;
+        filter: saturate(0.72) contrast(0.92);
+    }
+
+    .catalog-hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0%, rgba(255, 250, 252, 0.94) 52%, rgba(255, 241, 247, 0.88) 100%),
+            radial-gradient(circle at 80% 26%, rgba(255, 255, 255, 0.72), transparent 42%);
+    }
+
+    .catalog-hero-content {
+        width: min(680px, 100%);
+        display: grid;
+        justify-items: start;
+        gap: 14px;
+    }
+
+    .catalog-location-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 40px;
+        padding: 0 18px;
+        border-radius: 999px;
+        color: #9b3a62;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(216, 56, 123, 0.13);
+        font-size: 0.9rem;
+        font-weight: 800;
+        box-shadow: 0 12px 24px rgba(94, 35, 63, 0.05);
+    }
+
+    .catalog-landing-hero h1 {
+        max-width: 13ch;
+        margin: 0;
+        color: var(--ink-900);
+        font-family: var(--font-display);
+        font-size: clamp(2.45rem, 5vw, 4.2rem);
+        line-height: 1.04;
+        letter-spacing: 0;
+        text-wrap: balance;
+    }
+
+    .catalog-landing-hero .meta-copy {
+        max-width: 50ch;
+        margin: 0;
+        color: var(--ink-700);
+        font-size: clamp(0.98rem, 1.3vw, 1.06rem);
+        line-height: 1.62;
+    }
+
+    .catalog-hero-actions {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: min(570px, 100%);
+        margin-top: 4px;
+    }
+
+    .catalog-hero-actions .btn,
+    .catalog-hero-actions .btn-secondary {
+        min-width: min(260px, 100%);
+        min-height: 54px;
+        padding-inline: 26px;
+        border-radius: 20px;
+        font-size: 1rem;
+    }
+
+    .catalog-hero-actions .btn {
+        color: #fff;
+        background: linear-gradient(135deg, #ff8db7 0%, #e95b91 58%, #cf3678 100%);
+        border: 1px solid rgba(216, 56, 123, 0.1);
+        box-shadow: 0 18px 34px rgba(215, 38, 109, 0.18);
+    }
+
+    .catalog-hero-actions .btn:hover {
+        color: #fff;
+        background: linear-gradient(135deg, #ff8eb9 0%, #e84e88 60%, #bf2c6d 100%);
+    }
+
+    .catalog-hero-actions .btn-secondary {
+        color: #8f3b61;
+        background: rgba(255, 255, 255, 0.82);
+        border-color: rgba(216, 56, 123, 0.12);
+        box-shadow: 0 12px 24px rgba(94, 35, 63, 0.05);
+    }
+
+    .catalog-hero-notes {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+
+    .catalog-hero-notes span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 32px;
+        padding: 0 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(216, 56, 123, 0.1);
+        color: var(--ink-700);
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .catalog-hero-showcase {
+        position: relative;
+        justify-self: stretch;
+        height: clamp(230px, 26vw, 330px);
+        overflow: hidden;
+        border-radius: 32px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(255, 244, 249, 0.96));
+        border: 1px solid rgba(216, 56, 123, 0.13);
+        box-shadow:
+            0 22px 44px rgba(94, 35, 63, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .catalog-hero-showcase::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        border-radius: 24px;
+        border: 1px solid rgba(216, 56, 123, 0.08);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent);
+        pointer-events: none;
+    }
+
+    .catalog-hero-showcase img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .catalog-hero-showcase-label {
+        position: absolute;
+        left: 22px;
+        right: 22px;
+        bottom: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(216, 56, 123, 0.1);
+        color: #7d2d52;
+        font-size: 0.86rem;
+        font-weight: 800;
+        box-shadow: 0 14px 26px rgba(94, 35, 63, 0.1);
+        backdrop-filter: blur(10px);
+    }
+
+    .catalog-page .home-flow {
+        gap: 22px;
+    }
+
+    .catalog-page .catalog-main {
+        padding: 0;
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+    }
+
+    .catalog-page .catalog-toolbar {
+        padding: clamp(18px, 3vw, 28px);
+        border-radius: 28px;
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 249, 252, 0.99));
+        border: 1px solid rgba(216, 56, 123, 0.12);
+        box-shadow: 0 18px 42px rgba(94, 35, 63, 0.06);
+    }
+
+    .catalog-page .catalog-toolbar::before {
+        display: none;
+    }
+
+    .catalog-page .catalog-toolbar-copy strong {
+        font-size: clamp(1.45rem, 2.6vw, 2rem);
+    }
+
+    .catalog-page .catalog-toolbar-copy p {
+        max-width: 62ch;
+    }
+
+    .catalog-page .filter-form {
+        grid-template-columns: minmax(220px, 1.25fr) repeat(2, minmax(160px, 0.8fr)) auto;
+        align-items: end;
+        gap: 12px;
+    }
+
+    .catalog-page .field-group input,
+    .catalog-page .field-group select {
+        min-height: 48px;
+        border-radius: 16px;
+        background: #fff;
+    }
+
+    .catalog-page .catalog-chip-row {
+        gap: 10px;
+    }
+
+    .catalog-page .catalog-chip {
+        min-height: 40px;
+        padding-inline: 15px;
+        background: #fff7fb;
+        border-color: rgba(216, 56, 123, 0.12);
+        color: #8b315a;
+        box-shadow: 0 8px 18px rgba(94, 35, 63, 0.035);
+    }
+
+    .catalog-page .catalog-chip.is-active,
+    .catalog-page .catalog-chip:hover {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(135deg, #ff9fc4 0%, #ed6d9d 62%, #d64282 100%);
+        box-shadow: 0 12px 24px rgba(215, 38, 109, 0.2);
+    }
+
+    .catalog-page .results-header {
+        padding: 4px 2px 0;
+    }
+
+    .catalog-page .results-header h2 {
+        max-width: 15ch;
+    }
+
+    .catalog-page .catalog-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        align-items: start;
+        gap: 18px;
+    }
+
+    .catalog-page .product-card {
+        align-self: start;
+        border-radius: 24px;
+        border-color: rgba(216, 56, 123, 0.12);
+        background: #fff;
+        box-shadow:
+            0 16px 34px rgba(94, 35, 63, 0.06),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .catalog-page .product-media {
+        margin: 10px 10px 0;
+        border-radius: 22px;
+        aspect-ratio: 1 / 1.05;
+        background: linear-gradient(145deg, #fff8fb, #ffeaf3);
+    }
+
+    .catalog-page .product-body {
+        align-content: start;
+        gap: 11px;
+        padding: 16px;
+    }
+
+    .catalog-page .product-price-row {
+        min-height: 0;
+    }
+
+    .catalog-page .product-description {
+        display: -webkit-box;
+        min-height: 0;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
+
+    .catalog-page .product-badge-row {
+        max-height: 62px;
+        overflow: hidden;
+    }
+
+    .catalog-page .product-mini-badge:nth-child(n+4) {
+        display: none;
+    }
+
+    .catalog-page .product-mini-meta {
+        display: none;
+    }
+
+    .catalog-page .product-actions .btn,
+    .catalog-page .product-actions .btn-outline {
+        border-radius: 14px;
+    }
+
+    @media (max-width: 760px) {
+        .catalog-landing-hero {
+            grid-template-columns: 1fr;
+            min-height: 0;
+            padding: 26px 15px;
+            border-radius: 28px;
+            text-align: center;
+        }
+
+        .catalog-hero-content {
+            justify-items: center;
+            gap: 10px;
+        }
+
+        .catalog-location-pill {
+            min-height: 34px;
+            padding: 0 14px;
+            font-size: 0.8rem;
+        }
+
+        .catalog-landing-hero h1 {
+            max-width: 12.6ch;
+            font-size: clamp(1.95rem, 9.4vw, 2.72rem);
+            line-height: 1.03;
+        }
+
+        .catalog-landing-hero .meta-copy {
+            font-size: 0.94rem;
+            line-height: 1.5;
+        }
+
+        .catalog-hero-actions {
+            justify-content: center;
+            width: 100%;
+            gap: 8px;
+        }
+
+        .catalog-hero-actions .btn,
+        .catalog-hero-actions .btn-secondary {
+            width: 100%;
+            min-height: 46px;
+            border-radius: 16px;
+        }
+
+        .catalog-hero-actions .btn-secondary {
+            min-height: 42px;
+            font-size: 0.92rem;
+        }
+
+        .catalog-hero-notes {
+            display: none;
+        }
+
+        .catalog-hero-showcase {
+            display: none;
+        }
+
+        .catalog-page .filter-form {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .catalog-page .filter-form > .field-group:first-child,
+        .catalog-page .catalog-filter-actions,
+        .catalog-page .catalog-advanced-filters {
+            grid-column: 1 / -1;
+        }
+
+        .catalog-page .catalog-filter-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 9px;
+        }
+
+        .catalog-page .catalog-filter-actions .btn,
+        .catalog-page .catalog-filter-actions .btn-secondary {
+            min-height: 42px;
+            padding-inline: 12px;
+        }
+
+        .catalog-page .catalog-toolbar {
+            border-radius: 24px;
+            padding: 14px;
+        }
+
+        .catalog-page .catalog-toolbar-top {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .catalog-page .catalog-toolbar-copy {
+            gap: 8px;
+        }
+
+        .catalog-page .catalog-toolbar-copy .section-kicker {
+            min-height: 32px;
+            padding: 0 12px;
+            font-size: 0.72rem;
+        }
+
+        .catalog-page .catalog-toolbar-copy strong {
+            font-size: clamp(1.45rem, 7vw, 1.85rem);
+            line-height: 1.04;
+        }
+
+        .catalog-page .catalog-toolbar-copy p {
+            display: none;
+        }
+
+        .catalog-page .results-counter {
+            min-width: 74px;
+            min-height: 60px;
+            padding: 9px 10px;
+            border-radius: 17px;
+        }
+
+        .catalog-page .results-counter strong {
+            font-size: 1.35rem;
+        }
+
+        .catalog-page .field-group {
+            gap: 6px;
+        }
+
+        .catalog-page .field-group label {
+            font-size: 0.78rem;
+        }
+
+        .catalog-page .field-group input,
+        .catalog-page .field-group select {
+            min-height: 42px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+        }
+
+        .catalog-page .catalog-advanced-filters summary {
+            min-height: 42px;
+            padding: 0 13px;
+            border-radius: 14px;
+            font-size: 0.88rem;
+        }
+
+        .catalog-page .catalog-chip-row {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            scrollbar-width: none;
+        }
+
+        .catalog-page .catalog-chip-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .catalog-page .catalog-chip,
+        .catalog-page .catalog-chip-more {
+            flex: 0 0 auto;
+        }
+
+        .catalog-page .catalog-chip {
+            min-height: 34px;
+            padding-inline: 12px;
+            font-size: 0.8rem;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .catalog-page .catalog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 11px;
+            padding-bottom: 92px;
+        }
+
+        .catalog-page .product-card {
+            border-radius: 18px;
+        }
+
+        .catalog-page .product-media {
+            margin: 7px 7px 0;
+            border-radius: 15px;
+            aspect-ratio: 1 / 1.02;
+        }
+
+        .catalog-page .product-body {
+            gap: 8px;
+            padding: 10px;
+        }
+
+        .catalog-page .product-description,
+        .catalog-page .product-mini-meta,
+        .catalog-page .product-copy {
+            display: none;
+        }
+
+        .catalog-page .product-title-link {
+            font-size: 0.86rem;
+            line-height: 1.22;
+        }
+
+        .catalog-page .product-price {
+            font-size: 0.95rem;
+        }
+
+        .catalog-page .product-actions {
+            grid-template-columns: 1fr;
+        }
+
+        .catalog-page .product-actions .btn-outline {
+            display: none;
+        }
+
+        .catalog-page .product-actions .btn {
+            min-height: 40px;
+            border-radius: 13px;
+            font-size: 0.82rem;
+        }
+
+        .catalog-page .product-badge-row {
+            max-height: 26px;
+        }
+
+        .catalog-page .product-mini-badge:nth-child(n+2) {
+            display: none;
+        }
+
+        .floating-designer,
+        .floating-whatsapp {
+            right: 4px;
+            width: 34px;
+            height: 34px;
+            border-radius: 13px;
+            box-shadow: 0 9px 20px rgba(96, 24, 56, 0.14);
+        }
+
+        .floating-designer {
+            bottom: 118px;
+        }
+
+        .floating-whatsapp {
+            bottom: 68px;
+        }
+
+        .floating-whatsapp svg,
+        .floating-designer-icon {
+            width: 19px;
+            height: 19px;
+        }
+
+        .assistant-shell {
+            right: 4px;
+            bottom: 9px;
+        }
+
+        .assistant-toggle {
+            width: 36px;
+            min-height: 34px;
+            padding: 0;
+            border-radius: 13px;
+        }
+
+        .assistant-toggle strong {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+        }
+    }
+
+    @media (max-width: 370px) {
+        .catalog-page .catalog-grid {
+            gap: 8px;
+        }
+
+        .catalog-page .product-body {
+            padding: 9px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<section class="hero-card catalog-landing-hero">
+    <div class="catalog-hero-bg" aria-hidden="true">
+        {% if productos.0.imagen %}
+            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="eager" decoding="async">
+        {% endif %}
+    </div>
+    <div class="catalog-hero-content">
+        <span class="catalog-location-pill"><span class="soft-emoji" aria-hidden="true">&#127800;</span>Regalos en Bello y Medell&iacute;n</span>
+        <h1>Elige un detalle bonito</h1>
+        <p class="meta-copy">
+            Mira opciones reales, guarda tus favoritas y escr&iacute;benos por WhatsApp para ajustar colores, precio y detalles.
+        </p>
+        <div class="catalog-hero-actions">
+            <a href="#catalogo" class="btn"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Ver cat&aacute;logo</a>
+            <a href="{% url 'disena_regalo' %}" class="btn-secondary"><span class="soft-emoji" aria-hidden="true">&#128140;</span>Armar regalo a medida</a>
+        </div>
+        <div class="catalog-hero-notes" aria-label="Resumen del cat&aacute;logo">
+            <span>{{ catalogo_total }} referencias</span>
+            <span>Desayunos y detalles</span>
+            <span>Cotizaci&oacute;n por WhatsApp</span>
+        </div>
+    </div>
+    <div class="catalog-hero-showcase" aria-hidden="true">
+        {% if productos.0.imagen %}
+            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="eager" decoding="async">
+        {% endif %}
+        <span class="catalog-hero-showcase-label">
+            <span>Ideas reales para regalar</span>
+            {% if productos.0 %}
+                <span>Desde {{ productos.0.catalog_price_label|default:productos.0.precio }} COP</span>
+            {% endif %}
+        </span>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="home-flow catalog-page">
+    {% include 'partials/catalogo_productos.html' %}
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from .models import Producto
@@ -18,6 +18,7 @@ from .selectors import (
     get_featured_products,
     paginate_products,
 )
+from .templatetags.moneda import cop as format_cop
 from .whatsapp import build_whatsapp_url
 
 
@@ -657,7 +658,7 @@ def _build_active_filter_labels(filters):
         (CATALOG_TIME_OPTIONS, filters['tiempo']),
     ]
     for options, selected_value in option_groups:
-        label = _option_label(options, selected_value)
+        label = _option_label(options, selected_value) if selected_value else ''
         if label:
             labels.append(label)
 
@@ -669,7 +670,7 @@ def _build_active_filter_labels(filters):
     return labels
 
 
-def inicio(request):
+def _build_catalog_context(request):
     busqueda = request.GET.get('q', '').strip()
     categoria_id = request.GET.get('categoria', '').strip()
     orden = request.GET.get('orden', 'destacados')
@@ -691,27 +692,17 @@ def inicio(request):
         time_filter=tiempo,
         attributes=atributos,
     )
-    destacados = get_featured_products(
-        productos,
-        search=busqueda,
-        current_category=categoria_actual,
-    )
-    videos_elaboracion = get_active_process_videos()
-    resumen = {
-        'total_productos': Producto.objects.count(),
-        'categorias': categorias.count(),
-    }
 
     page_obj = paginate_products(productos, request.GET.get('page'))
     productos_pagina = list(page_obj.object_list)
     for producto in productos_pagina:
         producto.catalog_badges = _build_product_badges(producto)
         producto.catalog_microcopy = _build_product_microcopy(producto)
+        producto.catalog_price_label = format_cop(producto.precio)
 
     query_params = request.GET.copy()
     query_params.pop('page', None)
     catalog_query_base = query_params.urlencode()
-    catalog_page_prefix = f'{catalog_query_base}&' if catalog_query_base else ''
     active_filter_labels = _build_active_filter_labels(
         {
             'q': busqueda,
@@ -724,10 +715,9 @@ def inicio(request):
         }
     )
 
-    contexto = {
+    return {
         'categorias': categorias,
         'categoria_actual': categoria_actual,
-        'destacados': destacados,
         'filtros': {
             'q': busqueda,
             'categoria_id': categoria_actual.id if categoria_actual else '',
@@ -747,9 +737,45 @@ def inicio(request):
         'opciones_tiempo': CATALOG_TIME_OPTIONS,
         'opciones_atributos': CATALOG_ATTRIBUTE_OPTIONS,
         'filtros_activos': active_filter_labels,
-        'catalog_page_prefix': catalog_page_prefix,
+        'catalog_page_prefix': f'{catalog_query_base}&' if catalog_query_base else '',
         'page_obj': page_obj,
         'productos': productos_pagina,
+        'catalog_base_url': reverse('catalogo'),
+        'catalog_query_string': catalog_query_base,
+        'catalogo_total': page_obj.paginator.count,
+        'categoria_actual_nombre': categoria_actual.nombre if categoria_actual else 'Todos los detalles',
+    }
+
+
+def _prepare_home_products(products):
+    for producto in products:
+        producto.catalog_badges = _build_product_badges(producto)
+        producto.catalog_microcopy = _build_product_microcopy(producto)
+        producto.catalog_price_label = format_cop(producto.precio)
+    return products
+
+
+def inicio(request):
+    if request.GET:
+        query_string = request.GET.urlencode()
+        target = reverse('catalogo')
+        return redirect(f'{target}?{query_string}#catalogo' if query_string else f'{target}#catalogo')
+
+    destacados = _prepare_home_products(
+        get_featured_products(
+            Producto.objects.select_related('categoria').filter(stock__gt=0),
+            limit=3,
+        )
+    )
+    videos_elaboracion = get_active_process_videos()
+    resumen = {
+        'total_productos': Producto.objects.count(),
+        'categorias': Producto.objects.values('categoria').distinct().count(),
+    }
+
+    contexto = {
+        'destacados': destacados,
+        'productos_destacados_home': destacados,
         'quienes_somos': QUIENES_SOMOS,
         'pilares_servicio': PILARES_SERVICIO,
         'lineas_detalle': LINEAS_DETALLE,
@@ -764,6 +790,11 @@ def inicio(request):
         'resumen': resumen,
     }
     return render(request, 'inicio.html', contexto)
+
+
+def catalogo(request):
+    contexto = _build_catalog_context(request)
+    return render(request, 'catalogo.html', contexto)
 
 
 def disena_regalo(request):

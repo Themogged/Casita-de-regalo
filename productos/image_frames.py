@@ -15,7 +15,14 @@ class ProductFrameError(Exception):
 
 
 def slugify_filename(value):
-    normalized = unicodedata.normalize("NFKD", value or "")
+    text = value or ""
+    if any(marker in text for marker in ("Ã", "Â", "�")):
+        try:
+            text = text.encode("latin1").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            pass
+
+    normalized = unicodedata.normalize("NFKD", text)
     ascii_value = normalized.encode("ascii", "ignore").decode("ascii")
     slug = re.sub(r"[^a-zA-Z0-9]+", "-", ascii_value).strip("-").lower()
     return slug or "producto"

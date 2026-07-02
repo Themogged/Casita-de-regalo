@@ -114,7 +114,7 @@ class CategoriaAdmin(admin.ModelAdmin):
 
     @admin.display(description='Tienda')
     def ver_catalogo(self, obj):
-        url = f"{reverse('inicio')}?{urlencode({'categoria': obj.pk})}#catalogo"
+        url = f"{reverse('catalogo')}?{urlencode({'categoria': obj.pk})}#catalogo"
         return format_html(
             '<a class="casita-admin-link" href="{}" target="_blank" rel="noopener noreferrer">Ver catalogo</a>',
             url,

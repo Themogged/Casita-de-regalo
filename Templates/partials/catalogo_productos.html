@@ -1,0 +1,186 @@
+<section class="catalog-layout" id="catalogo">
+    <div class="catalog-main page-card">
+        <div class="catalog-toolbar">
+            <div class="catalog-toolbar-top">
+                <div class="catalog-toolbar-copy">
+                    <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Cat&aacute;logo</span>
+                    <strong>Encuentra tu regalo</strong>
+                    <p>Busca por ocasi&oacute;n, estilo o precio. Elige tus favoritos y los ajustamos contigo por WhatsApp.</p>
+                </div>
+                <div class="results-counter">
+                    <strong>{{ page_obj.paginator.count }}</strong>
+                    <span> resultados</span>
+                </div>
+            </div>
+
+            <form method="get" action="{{ catalog_base_url }}" class="catalog-filter-form filter-form js-catalog-form" aria-label="Buscar y ordenar cat&aacute;logo">
+                <div class="field-group">
+                    <label for="catalog-search">Buscar regalo</label>
+                    <input type="search" id="catalog-search" name="q" value="{{ filtros.q }}" placeholder="Stitch, rosas, desayuno, cumplea&ntilde;os">
+                </div>
+                <div class="field-group">
+                    <label for="catalog-category">Categor&iacute;a</label>
+                    <select id="catalog-category" name="categoria">
+                        <option value="">Todas</option>
+                        {% for categoria in categorias %}
+                            <option value="{{ categoria.id }}" {% if filtros.categoria_id == categoria.id %}selected{% endif %}>{{ categoria.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label for="catalog-order">Ordenar por</label>
+                    <select id="catalog-order" name="orden">
+                        {% for value, label in opciones_orden %}
+                            <option value="{{ value }}" {% if filtros.orden == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="catalog-filter-actions">
+                    <button type="submit" class="btn"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Buscar</button>
+                    <a href="{{ catalog_base_url }}#catalogo" class="btn-secondary js-catalog-nav">Limpiar</a>
+                </div>
+
+                <details class="catalog-advanced-filters" {% if filtros.presupuesto or filtros.ocasion or filtros.persona or filtros.tipo or filtros.tiempo or filtros.atributos %}open{% endif %}>
+                    <summary>M&aacute;s filtros</summary>
+                    <div class="catalog-advanced-grid">
+                        <div class="field-group">
+                            <label for="catalog-budget">Presupuesto</label>
+                            <select id="catalog-budget" name="presupuesto">
+                                {% for value, label in opciones_presupuesto %}
+                                    <option value="{{ value }}" {% if filtros.presupuesto == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="catalog-occasion">Ocasi&oacute;n</label>
+                            <select id="catalog-occasion" name="ocasion">
+                                {% for value, label in opciones_ocasion %}
+                                    <option value="{{ value }}" {% if filtros.ocasion == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="catalog-person">Persona</label>
+                            <select id="catalog-person" name="persona">
+                                {% for value, label in opciones_persona %}
+                                    <option value="{{ value }}" {% if filtros.persona == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="catalog-type">Tipo</label>
+                            <select id="catalog-type" name="tipo">
+                                {% for value, label in opciones_tipo %}
+                                    <option value="{{ value }}" {% if filtros.tipo == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="catalog-time">Tiempo</label>
+                            <select id="catalog-time" name="tiempo">
+                                {% for value, label in opciones_tiempo %}
+                                    <option value="{{ value }}" {% if filtros.tiempo == value %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="catalog-attribute-panel" aria-label="Filtros por elementos incluidos">
+                            {% for value, label in opciones_atributos %}
+                                <label class="catalog-check">
+                                    <input type="checkbox" name="atributos" value="{{ value }}" {% if value in filtros.atributos %}checked{% endif %}>
+                                    <span>{{ label }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </details>
+            </form>
+
+            <nav class="catalog-chip-row" aria-label="Categor&iacute;as del cat&aacute;logo">
+                <a href="{{ catalog_base_url }}#catalogo" class="catalog-chip js-catalog-nav {% if not categoria_actual %}is-active{% endif %}" {% if not categoria_actual %}aria-current="page"{% endif %}>Todos</a>
+                {% for categoria in categorias %}
+                    {% if forloop.counter <= 6 %}
+                        <a href="{{ catalog_base_url }}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}" {% if categoria_actual and categoria_actual.id == categoria.id %}aria-current="page"{% endif %}>
+                            {{ categoria.nombre }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+                {% if categorias|length > 6 %}
+                    <details class="catalog-chip-more">
+                        <summary class="catalog-chip">Ver m&aacute;s</summary>
+                        <div class="catalog-chip-more-panel">
+                            {% for categoria in categorias %}
+                                {% if forloop.counter > 6 %}
+                                    <a href="{{ catalog_base_url }}?categoria={{ categoria.id }}#catalogo" class="catalog-chip js-catalog-nav {% if categoria_actual and categoria_actual.id == categoria.id %}is-active{% endif %}" {% if categoria_actual and categoria_actual.id == categoria.id %}aria-current="page"{% endif %}>
+                                        {{ categoria.nombre }}
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </details>
+                {% endif %}
+            </nav>
+
+            {% if filtros_activos %}
+                <div class="active-filter-row" aria-label="Filtros activos">
+                    {% for filtro in filtros_activos %}
+                        <span class="active-filter-chip">{{ filtro }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="results-header">
+            <div>
+                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#129505;</span>Regalos disponibles</span>
+                <h2>
+                    {% if categoria_actual %}
+                        {{ categoria_actual.nombre }}
+                    {% else %}
+                        Todos los regalos
+                    {% endif %}
+                </h2>
+                <p>
+                    {% if filtros.q %}
+                        Resultados para "{{ filtros.q }}". Se encontraron {{ page_obj.paginator.count }} productos.
+                    {% else %}
+                        Revisa las opciones, elige la que m&aacute;s te guste y la ajustamos a tu idea.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        {% if productos %}
+            <div class="catalog-grid">
+                {% for producto in productos %}
+                    {% include 'partials/product_card.html' %}
+                {% endfor %}
+            </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                <nav class="pagination" aria-label="Paginaci&oacute;n">
+                    {% if page_obj.has_previous %}
+                        <a href="?{{ catalog_page_prefix }}page={{ page_obj.previous_page_number }}#catalogo" class="js-catalog-nav">Anterior</a>
+                    {% endif %}
+
+                    {% for number in page_obj.paginator.page_range %}
+                        {% if number == page_obj.number %}
+                            <span class="is-current">{{ number }}</span>
+                        {% elif number >= page_obj.number|add:-2 and number <= page_obj.number|add:2 %}
+                            <a href="?{{ catalog_page_prefix }}page={{ number }}#catalogo" class="js-catalog-nav">{{ number }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?{{ catalog_page_prefix }}page={{ page_obj.next_page_number }}#catalogo" class="js-catalog-nav">Siguiente</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="empty-state">
+                <h3>No encontramos productos con esos filtros.</h3>
+                <p>Prueba con otra b&uacute;squeda o vuelve al cat&aacute;logo completo.</p>
+                <a href="{{ catalog_base_url }}#catalogo" class="btn js-catalog-nav">Volver al cat&aacute;logo completo</a>
+            </div>
+        {% endif %}
+    </div>
+</section>

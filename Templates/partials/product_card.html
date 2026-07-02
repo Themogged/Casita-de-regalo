@@ -1,0 +1,65 @@
+{% load media_optimization %}
+<article class="product-card">
+    <div class="product-media">
+        {% if producto.destacado %}
+            <span class="product-ribbon">Top regalo</span>
+        {% endif %}
+        {% if producto.imagen %}
+            <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="lazy" decoding="async">
+        {% else %}
+            <div class="product-placeholder">Imagen pendiente de cargar</div>
+        {% endif %}
+    </div>
+
+    <div class="product-body">
+        <div class="product-topline">
+            <span class="pill">{{ producto.categoria.nombre|default:"Sin categor&iacute;a" }}</span>
+            <span class="{{ producto.public_status_badge_class }}">{{ producto.public_status_label }}</span>
+        </div>
+
+        <div>
+            <h3><a href="{% url 'detalle_producto' producto.id %}" class="product-title-link">{{ producto.nombre }}</a></h3>
+            <p class="product-description">
+                {% if producto.descripcion %}
+                    {{ producto.descripcion|truncatechars:120 }}
+                {% else %}
+                    Detalle personalizable para fechas especiales.
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="product-badge-row" aria-label="Etiquetas del producto">
+            {% for badge in producto.catalog_badges %}
+                <span class="product-mini-badge">{{ badge }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="product-price-row">
+            <div>
+                <div class="product-price">Desde {{ producto.catalog_price_label|default:producto.precio }}<span class="product-currency"> COP</span></div>
+                <div class="product-copy">Puede variar seg&uacute;n personalizaci&oacute;n</div>
+            </div>
+        </div>
+
+        <div class="product-mini-meta">
+            {% for item in producto.catalog_microcopy %}
+                <span>{{ item }}</span>
+            {% endfor %}
+        </div>
+
+        <div class="product-actions">
+            <a href="{% url 'detalle_producto' producto.id %}" class="btn-outline">Ver detalle</a>
+            {% if producto.disponible %}
+                <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}">
+                        <span class="product-action-label-full">Agregar a mi cotizaci&oacute;n</span>
+                        <span class="product-action-label-short">Agregar</span>
+                    </button>
+                </form>
+            {% else %}
+                <span class="btn-disabled">Agotado</span>
+            {% endif %}
+        </div>
+    </div>
+</article>

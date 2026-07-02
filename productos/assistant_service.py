@@ -420,7 +420,7 @@ def _build_fallback_actions(context_data):
         actions.append(
             {
                 "label": f"Ver {category.nombre}",
-                "href": f"{reverse('inicio')}?categoria={category.id}#catalogo",
+                "href": f"{reverse('catalogo')}?categoria={category.id}#catalogo",
             }
         )
 
@@ -429,7 +429,7 @@ def _build_fallback_actions(context_data):
     elif "pago" in intents or "entrega" in intents:
         actions.append({"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"})
     elif not actions:
-        actions.append({"label": "Ver catálogo", "href": f"{reverse('inicio')}#catalogo"})
+        actions.append({"label": "Ver catálogo", "href": f"{reverse('catalogo')}#catalogo"})
 
     whatsapp_message = DEFAULT_ASSISTANCE_MESSAGE
     if products:
@@ -574,7 +574,7 @@ def get_assistant_reply(message, history=None):
             "mode": "fallback",
             "configured": False,
             "actions": [
-                {"label": "Ver catálogo", "href": f"{reverse('inicio')}#catalogo"},
+                {"label": "Ver catálogo", "href": f"{reverse('catalogo')}#catalogo"},
                 {"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"},
                 {
                     "label": "WhatsApp",

@@ -172,7 +172,7 @@ def _build_whatsapp_url_for_pedido(pedido, checkout_data=None):
 
 
 def _redirect_despues_de_agregar(request):
-    fallback = f"{reverse('inicio')}#catalogo"
+    fallback = f"{reverse('catalogo')}#catalogo"
     referer = request.META.get("HTTP_REFERER")
 
     if not referer:
@@ -182,7 +182,7 @@ def _redirect_despues_de_agregar(request):
 
     if parsed.path == reverse("inicio"):
         limpio = referer.split("#", 1)[0]
-        return redirect(f"{limpio}#catalogo")
+        return redirect(f"{reverse('catalogo')}#catalogo")
 
     return redirect(referer)
 
