@@ -1665,9 +1665,9 @@
 
         .detail-selling-points {
             display: grid !important;
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            gap: 9px !important;
-            margin: 0 0 15px !important;
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+            margin: 0 0 14px !important;
             padding: 0 !important;
             overflow: visible !important;
             scroll-snap-type: none !important;
@@ -1676,17 +1676,17 @@
         .detail-selling-point {
             display: grid !important;
             align-content: start;
-            min-height: 102px;
-            padding: 10px 9px;
-            border-radius: 17px;
-            border: 1px solid rgba(218, 58, 124, 0.09);
+            min-height: auto;
+            padding: 11px 12px;
+            border-radius: 16px;
+            border: 1px solid rgba(218, 58, 124, 0.085);
             border-left: 0;
             background:
-                radial-gradient(circle at right bottom, rgba(255, 218, 234, 0.62), transparent 58%),
-                linear-gradient(150deg, #ffffff 0%, #fff9fc 100%);
+                radial-gradient(circle at right bottom, rgba(255, 230, 241, 0.7), transparent 54%),
+                linear-gradient(150deg, #ffffff 0%, #fffafd 100%);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.88),
-                0 7px 15px rgba(110, 26, 62, 0.04);
+                0 8px 16px rgba(110, 26, 62, 0.035);
             scroll-snap-align: initial;
         }
 
@@ -1696,12 +1696,15 @@
 
         .detail-selling-point span {
             align-items: center;
-            margin-bottom: 4px;
+            width: 100%;
+            min-width: 0;
+            margin-bottom: 5px;
             color: #a74870;
-            font-size: 0.59rem;
+            font-size: 0.66rem;
             font-weight: 800;
-            line-height: 1.18;
+            line-height: 1.22;
             letter-spacing: 0.01em;
+            white-space: normal;
         }
 
         .detail-selling-point .soft-emoji {
@@ -1721,8 +1724,8 @@
 
         .detail-selling-point strong {
             color: #4a2b39;
-            font-size: 0.71rem;
-            line-height: 1.32;
+            font-size: 0.82rem;
+            line-height: 1.36;
             letter-spacing: 0;
         }
 
@@ -1767,11 +1770,11 @@
         }
 
         .detail-selling-point span {
-            font-size: 0.62rem;
+            font-size: 0.64rem;
         }
 
         .detail-selling-point strong {
-            font-size: 0.74rem;
+            font-size: 0.78rem;
         }
     }
 </style>
