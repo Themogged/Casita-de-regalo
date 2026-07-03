@@ -464,6 +464,9 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Tiempo recomendado')
         self.assertContains(response, 'Ideal para')
         self.assertContains(response, 'Puede variar')
+        self.assertContains(response, 'Detalles del pedido')
+        self.assertContains(response, '.detail-selling-points')
+        self.assertContains(response, 'display: grid !important;')
         self.assertContains(response, 'Agregar a mi cotizaci&oacute;n')
         self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, 'class="product-detail-page"')
@@ -524,15 +527,10 @@ class CatalogoViewsTests(TestCase):
             f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="btn-outline product-detail-action">Ver detalle</a>',
             html=True,
         )
-        self.assertContains(
-            response,
-            f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="product-detail-inline">Ver detalle</a>',
-            html=True,
-        )
         self.assertContains(response, '.catalog-layout .product-actions .product-detail-action')
-        self.assertContains(response, '.catalog-layout .product-detail-inline')
         self.assertContains(response, '.catalog-layout .product-actions')
         self.assertContains(response, 'display: inline-flex !important;')
+        self.assertNotContains(response, 'class="product-detail-inline"')
         self.assertNotIn(
             '.catalog-page .product-actions .btn-outline {\n            display: none;',
             response.content.decode(),

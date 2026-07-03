@@ -1602,6 +1602,178 @@
             box-shadow: 0 14px 34px rgba(110, 26, 62, 0.17);
         }
     }
+
+    .detail-section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        margin: 4px 0 12px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        color: #a0446b;
+        background: linear-gradient(180deg, #fff9fc, #fff0f6);
+        border: 1px solid rgba(218, 58, 124, 0.12);
+        box-shadow: 0 8px 18px rgba(110, 26, 62, 0.045);
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .detail-section-label::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 999px;
+        background: #ef8ab4;
+        box-shadow: 0 0 0 4px rgba(239, 138, 180, 0.13);
+    }
+
+    .detail-selling-point {
+        isolation: isolate;
+        position: relative;
+    }
+
+    .detail-selling-point::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 231, 242, 0.28));
+        opacity: 0;
+        transition: opacity 160ms ease;
+        z-index: -1;
+    }
+
+    .detail-selling-point:hover::before {
+        opacity: 1;
+    }
+
+    @media (max-width: 620px) {
+        .detail-card {
+            padding: 15px;
+        }
+
+        .detail-description {
+            margin-bottom: 14px;
+        }
+
+        .detail-section-label {
+            margin: 2px 0 10px;
+            padding: 6px 10px;
+            font-size: 0.72rem;
+        }
+
+        .detail-selling-points {
+            display: grid !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 9px !important;
+            margin: 0 0 15px !important;
+            padding: 0 !important;
+            overflow: visible !important;
+            scroll-snap-type: none !important;
+        }
+
+        .detail-selling-point {
+            display: grid !important;
+            align-content: start;
+            min-height: 102px;
+            padding: 10px 9px;
+            border-radius: 17px;
+            border: 1px solid rgba(218, 58, 124, 0.09);
+            border-left: 0;
+            background:
+                radial-gradient(circle at right bottom, rgba(255, 218, 234, 0.62), transparent 58%),
+                linear-gradient(150deg, #ffffff 0%, #fff9fc 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.88),
+                0 7px 15px rgba(110, 26, 62, 0.04);
+            scroll-snap-align: initial;
+        }
+
+        .detail-selling-point::after {
+            display: none;
+        }
+
+        .detail-selling-point span {
+            align-items: center;
+            margin-bottom: 4px;
+            color: #a74870;
+            font-size: 0.59rem;
+            font-weight: 800;
+            line-height: 1.18;
+            letter-spacing: 0.01em;
+        }
+
+        .detail-selling-point .soft-emoji {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            margin-right: 4px;
+            border-radius: 999px;
+            background: #fff2f7;
+            font-size: 0.66rem;
+            box-shadow:
+                inset 0 0 0 1px rgba(218, 58, 124, 0.07),
+                0 4px 8px rgba(185, 45, 99, 0.045);
+        }
+
+        .detail-selling-point strong {
+            color: #4a2b39;
+            font-size: 0.71rem;
+            line-height: 1.32;
+            letter-spacing: 0;
+        }
+
+        .detail-meta {
+            margin-top: 12px;
+        }
+
+        .detail-note {
+            margin-top: 12px;
+        }
+
+        .detail-mobile-bar {
+            left: 10px;
+            right: 10px;
+            padding: 7px;
+            border-radius: 18px;
+        }
+
+        .detail-mobile-bar-actions {
+            grid-template-columns: 1fr 1fr;
+            gap: 7px;
+        }
+
+        .detail-mobile-bar .btn,
+        .detail-mobile-bar .btn-secondary,
+        .detail-mobile-bar .btn-disabled {
+            min-height: 40px;
+            border-radius: 13px;
+            font-size: 0.76rem;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .detail-selling-points {
+            grid-template-columns: 1fr !important;
+            gap: 8px !important;
+        }
+
+        .detail-selling-point {
+            min-height: auto;
+            padding: 10px;
+        }
+
+        .detail-selling-point span {
+            font-size: 0.62rem;
+        }
+
+        .detail-selling-point strong {
+            font-size: 0.74rem;
+        }
+    }
 </style>
 {% endblock %}
 
@@ -1712,30 +1884,32 @@
             {% endif %}
         </div>
 
+        <div class="detail-section-label">Detalles del pedido</div>
+
         <div class="detail-selling-points" aria-label="Información clave del producto">
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">🎀</span>Incluye</span>
-                <strong>La referencia base y los elementos descritos en la ficha del producto.</strong>
+                <strong>Referencia base y elementos descritos en la ficha.</strong>
             </div>
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">✨</span>Personalizable</span>
-                <strong>Colores, mensaje, tem&aacute;tica y acabados se validan antes de elaborar.</strong>
+                <strong>Colores, mensaje y acabados se confirman antes de elaborar.</strong>
             </div>
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">⏰</span>Tiempo recomendado</span>
-                <strong>Reserva con 1 a 2 d&iacute;as de anticipaci&oacute;n para asegurar disponibilidad.</strong>
+                <strong>Reserva con 1 a 2 d&iacute;as para asegurar disponibilidad.</strong>
             </div>
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">🚚</span>Entrega</span>
-                <strong>Coordinamos zona, horario y domicilio directamente por WhatsApp.</strong>
+                <strong>Coordinamos zona, horario y domicilio por WhatsApp.</strong>
             </div>
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">💝</span>Ideal para</span>
-                <strong>Cumpleaños, aniversarios, agradecimientos y sorpresas personalizadas.</strong>
+                <strong>Cumplea&ntilde;os, aniversarios y sorpresas personalizadas.</strong>
             </div>
             <div class="detail-selling-point">
                 <span><span class="soft-emoji" aria-hidden="true">🌸</span>Puede variar</span>
-                <strong>Algunos colores, dulces o flores se ajustan según temporada y disponibilidad.</strong>
+                <strong>Colores, dulces o flores pueden variar seg&uacute;n temporada.</strong>
             </div>
         </div>
 

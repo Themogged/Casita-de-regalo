@@ -19,7 +19,6 @@
 
         <div>
             <h3><a href="{% url 'detalle_producto' producto.id %}" class="product-title-link">{{ producto.nombre }}</a></h3>
-            <a href="{% url 'detalle_producto' producto.id %}" class="product-detail-inline">Ver detalle</a>
             <p class="product-description">
                 {% if producto.descripcion %}
                     {{ producto.descripcion|truncatechars:120 }}

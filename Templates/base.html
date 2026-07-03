@@ -2211,56 +2211,35 @@
             opacity: 1 !important;
         }
 
-        .product-detail-inline {
-            display: none;
-        }
-
         @media (max-width: 680px) {
             .catalog-layout .product-actions {
-                grid-template-columns: 1fr !important;
-                gap: 6px;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 7px;
+                align-items: stretch;
             }
 
-            .catalog-layout .product-actions .product-detail-action {
-                display: none !important;
+            .catalog-layout .product-actions form {
+                min-width: 0;
             }
 
+            .catalog-layout .product-actions .product-detail-action,
             .catalog-layout .product-actions .js-add-to-cart {
                 min-width: 0;
                 min-height: 38px;
-                padding-inline: 6px;
+                padding-inline: 7px;
                 font-size: 0.76rem;
                 line-height: 1.05;
                 white-space: nowrap;
             }
 
-            .catalog-layout .product-detail-inline {
+            .catalog-layout .product-actions .product-detail-action {
                 display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: max-content;
-                min-height: 27px;
-                margin-top: 7px;
-                padding: 0 10px;
-                border-radius: 999px;
-                color: #b23b72;
-                background: linear-gradient(180deg, #fff9fc 0%, #ffeaf3 100%);
-                border: 1px solid rgba(223, 82, 140, 0.16);
+                color: #9c506d;
+                background: linear-gradient(180deg, #ffffff 0%, #fff9fc 100%);
+                border-color: rgba(198, 68, 125, 0.14);
                 box-shadow:
-                    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-                    0 7px 14px rgba(185, 45, 99, 0.07);
-                font-size: 0.72rem;
-                font-weight: 800;
-                line-height: 1;
-                text-decoration: none;
-                white-space: nowrap;
-            }
-
-            .catalog-layout .product-detail-inline::after {
-                content: ">";
-                margin-left: 5px;
-                font-size: 0.78rem;
-                line-height: 1;
+                    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+                    0 7px 14px rgba(75, 24, 46, 0.045);
             }
         }
 
