@@ -519,6 +519,24 @@ class CatalogoViewsTests(TestCase):
             f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="product-title-link">{self.producto_principal.nombre}</a>',
             html=True,
         )
+        self.assertContains(
+            response,
+            f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="btn-outline product-detail-action">Ver detalle</a>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="product-detail-inline">Ver detalle</a>',
+            html=True,
+        )
+        self.assertContains(response, '.catalog-layout .product-actions .product-detail-action')
+        self.assertContains(response, '.catalog-layout .product-detail-inline')
+        self.assertContains(response, '.catalog-layout .product-actions')
+        self.assertContains(response, 'display: inline-flex !important;')
+        self.assertNotIn(
+            '.catalog-page .product-actions .btn-outline {\n            display: none;',
+            response.content.decode(),
+        )
 
     def test_catalogo_mantiene_anchor_en_paginacion_y_filtros(self):
         response = self.client.get(reverse('catalogo'), secure=True)

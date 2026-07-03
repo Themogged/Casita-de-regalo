@@ -255,6 +255,12 @@
         box-shadow: 0 10px 22px rgba(94, 35, 63, 0.055);
     }
 
+    .hero-quicklinks a .soft-emoji {
+        flex: 0 0 auto;
+        margin-right: 0;
+        font-size: 0.95rem;
+    }
+
     .hero-stats {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2475,6 +2481,7 @@
         }
 
         .product-actions .btn-outline {
+            display: inline-flex !important;
             box-shadow: 0 6px 12px rgba(75, 24, 46, 0.045);
         }
 
@@ -3237,7 +3244,7 @@
 
             <div class="hero-quicklinks" aria-label="Atajos r&aacute;pidos">
                 <a href="{% url 'catalogo' %}#catalogo"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Ver cat&aacute;logo</a>
-                <a href="#mas-pedidos"><span class="soft-emoji" aria-hidden="true">&#127892;</span>Ver sugeridos</a>
+                <a href="#mas-pedidos"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Ver sugeridos</a>
             </div>
 
             <div class="hero-stats">

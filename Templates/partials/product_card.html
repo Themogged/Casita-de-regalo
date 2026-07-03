@@ -19,6 +19,7 @@
 
         <div>
             <h3><a href="{% url 'detalle_producto' producto.id %}" class="product-title-link">{{ producto.nombre }}</a></h3>
+            <a href="{% url 'detalle_producto' producto.id %}" class="product-detail-inline">Ver detalle</a>
             <p class="product-description">
                 {% if producto.descripcion %}
                     {{ producto.descripcion|truncatechars:120 }}
@@ -48,7 +49,7 @@
         </div>
 
         <div class="product-actions">
-            <a href="{% url 'detalle_producto' producto.id %}" class="btn-outline">Ver detalle</a>
+            <a href="{% url 'detalle_producto' producto.id %}" class="btn-outline product-detail-action">Ver detalle</a>
             {% if producto.disponible %}
                 <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
                     {% csrf_token %}
