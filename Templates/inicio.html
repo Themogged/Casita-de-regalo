@@ -893,12 +893,13 @@
     .process-video-card {
         position: relative;
         display: grid;
-        gap: 20px;
+        grid-template-columns: minmax(230px, 0.7fr) minmax(0, 1.6fr);
+        align-items: stretch;
+        gap: clamp(22px, 3vw, 38px);
         overflow: hidden;
         background:
-            radial-gradient(circle at 92% 0%, rgba(255, 218, 232, 0.72), transparent 26%),
-            radial-gradient(circle at 8% 100%, rgba(255, 242, 247, 0.96), transparent 34%),
-            linear-gradient(135deg, rgba(255, 252, 249, 0.99) 0%, rgba(255, 246, 251, 0.99) 100%);
+            radial-gradient(circle at 100% 0%, rgba(255, 222, 235, 0.68), transparent 34%),
+            linear-gradient(135deg, rgba(255, 253, 252, 0.99) 0%, rgba(255, 247, 251, 0.99) 100%);
     }
 
     .designer-gift-cta {
@@ -979,14 +980,16 @@
     }
 
     .process-video-header {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        align-items: end;
-        gap: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 20px;
+        padding: 6px 0;
     }
 
     .process-video-header > div {
-        max-width: 720px;
+        max-width: 420px;
     }
 
     .process-video-heading {
@@ -995,70 +998,82 @@
     }
 
     .process-video-heading h2 {
-        max-width: 13ch;
-        font-size: clamp(2rem, 4vw, 3rem);
-        line-height: 0.98;
+        max-width: 11ch;
+        font-size: clamp(2rem, 3.5vw, 2.85rem);
+        line-height: 1.02;
     }
 
-    .process-video-header .btn-secondary {
-        margin-left: auto;
+    .process-video-instagram {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 0 15px;
+        border-radius: 999px;
+        margin-top: auto;
+        border: 1px solid rgba(198, 68, 125, 0.12);
+        background: rgba(255, 255, 255, 0.82);
+        color: var(--rose-700);
+        font-size: 0.86rem;
+        font-weight: var(--weight-bold);
         white-space: nowrap;
+        box-shadow: 0 10px 22px rgba(94, 35, 63, 0.055);
     }
 
     .process-video-support {
-        max-width: 58ch;
+        max-width: 38ch;
         color: var(--ink-700);
         line-height: 1.62;
     }
 
-    .process-video-highlights {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 4px;
+    .process-video-sequence {
+        margin: 4px 0 0;
+        color: #98516d;
+        font-size: 0.82rem;
+        font-weight: var(--weight-bold);
+        line-height: 1.6;
     }
 
-    .process-video-highlights span {
-        display: inline-flex;
-        align-items: center;
-        min-height: 32px;
-        padding: 0 12px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.78);
-        border: 1px solid rgba(216, 56, 123, 0.1);
-        color: #8f3b61;
-        font-size: 0.8rem;
-        font-weight: 800;
-        box-shadow: 0 10px 20px rgba(94, 35, 63, 0.045);
+    .process-video-sequence span {
+        margin-inline: 4px;
+        color: rgba(198, 68, 125, 0.42);
     }
 
     .process-video-carousel {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
         align-items: stretch;
-        margin-top: 2px;
         min-width: 0;
         width: 100%;
+        gap: 10px;
     }
 
     .process-video-carousel .carousel-btn {
         align-self: center;
-        width: 42px;
-        height: 42px;
+        width: 40px;
+        height: 40px;
         background: rgba(255, 255, 255, 0.98);
         box-shadow: 0 14px 26px rgba(125, 35, 76, 0.12);
     }
 
     .process-video-grid {
-        gap: 16px;
-        padding: 4px 2px 10px;
+        width: 100%;
+        gap: 14px;
+        padding: 3px 2px 8px;
+        scroll-snap-type: x mandatory;
     }
 
     .process-video-item {
-        width: min(278px, 78vw);
+        display: grid;
+        grid-template-columns: minmax(190px, 0.82fr) minmax(190px, 1fr);
+        width: calc(100% - 24px);
         overflow: hidden;
         border-radius: 24px;
-        background: rgba(255, 255, 255, 0.88);
-        border: 1px solid rgba(198, 68, 125, 0.12);
-        box-shadow: 0 18px 38px rgba(75, 24, 46, 0.08);
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(198, 68, 125, 0.13);
+        box-shadow: 0 20px 42px rgba(75, 24, 46, 0.09);
+        scroll-snap-align: start;
     }
 
     .process-video-item:hover {
@@ -1068,23 +1083,119 @@
     }
 
     .process-video-media {
-        aspect-ratio: 9 / 13;
+        position: relative;
+        min-height: 370px;
         overflow: hidden;
         background:
             radial-gradient(circle at center, rgba(255, 230, 239, 0.92), rgba(255, 247, 251, 0.96));
     }
 
     .process-video-media video {
+        position: relative;
+        z-index: 2;
         width: 100%;
         height: 100%;
         display: block;
         object-fit: cover;
+        opacity: 0;
+    }
+
+    .process-video-media.is-video-ready video {
+        opacity: 1;
+    }
+
+    .process-video-fallback {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: grid;
+        place-content: center;
+        gap: 4px;
+        padding: 24px;
+        background:
+            radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.96), transparent 34%),
+            linear-gradient(160deg, #fff8fb, #fde6ef);
+        color: #9b5570;
+        text-align: center;
+    }
+
+    .process-video-fallback span {
+        font-size: 0.72rem;
+        font-weight: var(--weight-bold);
+        text-transform: uppercase;
+    }
+
+    .process-video-fallback strong {
+        font-family: var(--font-display);
+        color: var(--ink-900);
+        font-size: 1.35rem;
+    }
+
+    .process-video-play {
+        position: absolute;
+        z-index: 4;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 0 14px 0 9px;
+        border: 1px solid rgba(198, 68, 125, 0.13);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.94);
+        color: var(--rose-700);
+        font-size: 0.8rem;
+        font-weight: var(--weight-bold);
+        white-space: nowrap;
+        box-shadow: 0 12px 26px rgba(82, 29, 53, 0.16);
+        cursor: pointer;
+    }
+
+    .process-video-play-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 28px;
+        height: 28px;
+        padding-left: 2px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f28db5, #d65388);
+        color: #fff;
+        font-size: 0.7rem;
+    }
+
+    .process-video-media.is-video-ready .process-video-play,
+    .process-video-media.is-playing .process-video-play {
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .process-video-number {
+        position: absolute;
+        z-index: 4;
+        top: 12px;
+        right: 12px;
+        display: inline-grid;
+        place-items: center;
+        min-width: 32px;
+        height: 28px;
+        padding-inline: 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid rgba(198, 68, 125, 0.1);
+        color: #9b5570;
+        font-size: 0.7rem;
+        font-weight: var(--weight-bold);
+        box-shadow: 0 8px 18px rgba(82, 29, 53, 0.08);
     }
 
     .process-video-copy {
         display: grid;
-        gap: 8px;
-        padding: 14px 15px 16px;
+        align-content: center;
+        gap: 11px;
+        padding: clamp(22px, 3vw, 34px);
     }
 
     .process-video-copy .mini-pill {
@@ -1104,15 +1215,16 @@
     .process-video-copy h3 {
         margin: 0;
         color: var(--ink-900);
-        font-size: 1rem;
-        line-height: 1.25;
+        font-family: var(--font-display);
+        font-size: clamp(1.35rem, 2vw, 1.75rem);
+        line-height: 1.12;
     }
 
     .process-video-copy p {
         margin: 0;
         color: var(--ink-600);
-        font-size: 0.9rem;
-        line-height: 1.55;
+        font-size: 0.94rem;
+        line-height: 1.62;
     }
 
     .cta-band {
@@ -1984,7 +2096,7 @@
         .hero-actions a,
         .filter-actions a,
         .filter-actions button,
-        .process-video-card .btn-secondary,
+        .process-video-instagram,
         .instagram-card .btn-secondary,
         .cta-band .btn {
             width: 100%;
@@ -2141,32 +2253,40 @@
             padding: 16px;
         }
 
+        .process-video-card {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 18px;
+            padding: 18px 14px 16px;
+            border-radius: 24px;
+        }
+
         .process-video-header {
             align-items: flex-start;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            gap: 14px;
+            padding: 0;
         }
 
         .process-video-header > div {
             max-width: none;
         }
 
-        .process-video-header .btn-secondary {
-            margin-left: 0;
+        .process-video-instagram {
+            margin-top: 0;
             white-space: normal;
         }
 
         .process-video-heading h2 {
             max-width: none;
+            font-size: clamp(1.75rem, 8vw, 2.15rem);
+            line-height: 1.06;
         }
 
-        .process-video-highlights {
-            gap: 7px;
+        .process-video-support {
+            font-size: 0.9rem;
+            line-height: 1.58;
         }
 
-        .process-video-highlights span {
-            min-height: 30px;
-            padding-inline: 10px;
+        .process-video-sequence {
             font-size: 0.76rem;
         }
 
@@ -2181,28 +2301,46 @@
         }
 
         .process-video-carousel {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            align-items: center;
             gap: 8px;
-            margin-inline: -6px;
+            margin-inline: 0;
         }
 
         .process-video-carousel .carousel-btn {
+            grid-row: 2;
             width: 34px;
             height: 34px;
             font-size: 1rem;
             box-shadow: 0 10px 18px rgba(125, 35, 76, 0.12);
         }
 
+        .process-video-nav--prev {
+            grid-column: 2;
+        }
+
+        .process-video-nav--next {
+            grid-column: 3;
+        }
+
         .process-video-grid {
+            grid-column: 1 / -1;
+            grid-row: 1;
+            width: 100%;
             gap: 12px;
-            padding-bottom: 6px;
+            padding: 2px 1px 8px;
         }
 
         .process-video-item {
-            width: min(72vw, 300px);
+            display: block;
+            width: min(80vw, 310px);
             border-radius: 20px;
+            scroll-snap-align: center;
         }
 
         .process-video-media {
+            min-height: 0;
             aspect-ratio: 9 / 12.5;
         }
 
@@ -2211,11 +2349,28 @@
             padding: 12px 13px 14px;
         }
 
+        .process-video-copy h3 {
+            font-size: 1.15rem;
+        }
+
         .process-video-copy p {
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .process-video-instagram {
+            width: fit-content;
+            min-height: 38px;
+            padding-inline: 13px;
+            font-size: 0.8rem;
+        }
+
+        .process-video-play {
+            bottom: 14px;
+            min-height: 40px;
+            font-size: 0.76rem;
         }
 
         .instagram-card {
@@ -3302,6 +3457,203 @@
             grid-template-columns: 1fr;
         }
     }
+
+    .home-hero {
+        background:
+            linear-gradient(118deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 247, 251, 0.98) 54%, rgba(255, 240, 247, 0.94) 100%);
+        border-color: rgba(198, 68, 125, 0.1);
+        box-shadow:
+            0 22px 46px rgba(103, 47, 70, 0.085),
+            inset 0 1px 0 rgba(255, 255, 255, 0.84);
+    }
+
+    .home-hero::after {
+        display: none;
+    }
+
+    .home-hero .hero-copy {
+        align-self: center;
+        padding-block: clamp(6px, 1.2vw, 14px);
+    }
+
+    .home-hero .hero-copy .section-kicker {
+        width: fit-content;
+        min-height: 34px;
+        padding-inline: 13px;
+        background: rgba(255, 255, 255, 0.76);
+        border-color: rgba(198, 68, 125, 0.14);
+        color: #a34369;
+        box-shadow: 0 8px 18px rgba(104, 42, 68, 0.045);
+    }
+
+    .hero-title {
+        display: grid;
+        gap: 2px;
+        max-width: 15ch;
+        margin: 20px 0 15px;
+        font-size: clamp(2.55rem, 4.4vw, 3.85rem);
+        line-height: 1.01;
+    }
+
+    .hero-title span,
+    .hero-title em {
+        display: block;
+    }
+
+    .hero-title em {
+        width: fit-content;
+        color: #c64279;
+        font-style: normal;
+        text-wrap: balance;
+    }
+
+    .hero-intro {
+        max-width: 52ch !important;
+        margin: 0;
+        color: #705262 !important;
+        line-height: 1.7 !important;
+    }
+
+    .hero-assurance {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(198, 68, 125, 0.12);
+    }
+
+    .hero-assurance-mark {
+        display: inline-grid;
+        place-items: center;
+        flex: 0 0 auto;
+        width: 40px;
+        height: 40px;
+        border-radius: 14px;
+        background: linear-gradient(145deg, #f7a2c1, #d75e90);
+        color: #fff;
+        font-size: 1rem;
+        box-shadow: 0 10px 20px rgba(193, 64, 117, 0.16);
+    }
+
+    .hero-assurance-copy {
+        display: grid;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    .hero-assurance-copy strong {
+        color: #7b3453;
+        font-size: 0.9rem;
+        font-weight: var(--weight-bold);
+    }
+
+    .hero-assurance-copy small {
+        color: #866676;
+        font-size: 0.78rem;
+        line-height: 1.45;
+    }
+
+    .home-hero .hero-actions {
+        margin-top: 20px;
+    }
+
+    .home-hero .hero-tags,
+    .home-hero .hero-stats {
+        display: none;
+    }
+
+    .hero-gallery-panel,
+    .featured-catalog,
+    .process-video-card,
+    .designer-entry-card,
+    .meta-grid .section-card {
+        border-color: rgba(164, 92, 62, 0.105);
+        background:
+            linear-gradient(90deg, rgba(177, 114, 82, 0.024) 1px, transparent 1px),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.985), rgba(255, 249, 246, 0.96));
+        background-size: 30px 30px, auto;
+        box-shadow: 0 16px 34px rgba(93, 55, 42, 0.065);
+    }
+
+    .hero-gallery-panel {
+        background:
+            radial-gradient(circle at 94% 8%, rgba(246, 196, 215, 0.18), transparent 30%),
+            linear-gradient(90deg, rgba(177, 114, 82, 0.022) 1px, transparent 1px),
+            linear-gradient(160deg, rgba(255, 255, 255, 0.985), rgba(255, 247, 244, 0.965));
+        background-size: auto, 30px 30px, auto;
+    }
+
+    .hero-product-card,
+    .featured-catalog .product-card {
+        border-color: rgba(164, 92, 62, 0.1);
+        box-shadow: 0 12px 24px rgba(97, 57, 43, 0.055);
+    }
+
+    .hero-panel-note {
+        border-color: rgba(164, 92, 62, 0.13);
+        background: rgba(255, 252, 248, 0.88);
+    }
+
+    @media (max-width: 680px) {
+        .home-hero {
+            padding: 20px 14px 18px;
+        }
+
+        .home-hero .hero-copy {
+            padding-block: 0;
+        }
+
+        .home-hero .hero-copy .section-kicker {
+            min-height: 32px;
+            padding-inline: 11px;
+        }
+
+        .hero-title {
+            gap: 1px;
+            max-width: none;
+            margin: 15px 0 11px;
+            font-size: clamp(2.05rem, 9.4vw, 2.42rem);
+            line-height: 1.04;
+        }
+
+        .hero-intro {
+            font-size: 0.88rem !important;
+            line-height: 1.58 !important;
+        }
+
+        .hero-assurance {
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 13px;
+            text-align: left;
+        }
+
+        .hero-assurance-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+        }
+
+        .hero-assurance-copy strong {
+            font-size: 0.82rem;
+        }
+
+        .hero-assurance-copy small {
+            font-size: 0.7rem;
+        }
+
+        .home-hero .hero-quicklinks {
+            grid-template-columns: 1fr;
+        }
+
+        .home-hero .hero-quicklinks a:last-child {
+            display: none;
+        }
+
+    }
 </style>
 {% endblock %}
 
@@ -3310,16 +3662,21 @@
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Acompa&ntilde;ando tus sentimientos</span>
-            <h1>Regalos con amor para momentos que se quedan en el coraz&oacute;n.</h1>
-            <p>
-                Creamos desayunos sorpresa, cajas tem&aacute;ticas y detalles personalizados para emocionar
-                en Bello, Medell&iacute;n y el &aacute;rea metropolitana.
+            <h1 class="hero-title">
+                <span>Regalos con amor para momentos</span>
+                <em>que se quedan en el coraz&oacute;n.</em>
+            </h1>
+            <p class="hero-intro">
+                Desayunos sorpresa, cajas tem&aacute;ticas y detalles personalizados, preparados en Bello
+                para celebrar en Medell&iacute;n y el &aacute;rea metropolitana.
             </p>
 
-            <div class="hero-tags">
-                <span class="hero-tag"><span class="soft-emoji" aria-hidden="true">&#128151;</span>Hechos con amor</span>
-                <span class="hero-tag"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Personalizados para cada ocasi&oacute;n</span>
-                <span class="hero-tag"><span class="soft-emoji" aria-hidden="true">&#127800;</span>Presentaci&oacute;n cuidada</span>
+            <div class="hero-assurance">
+                <span class="hero-assurance-mark" aria-hidden="true">&#9829;</span>
+                <span class="hero-assurance-copy">
+                    <strong>Preparado especialmente para tu ocasi&oacute;n</strong>
+                    <small>{{ resumen.total_productos }} opciones para personalizar &middot; Reserva con 1-2 d&iacute;as</small>
+                </span>
             </div>
 
             <div class="hero-actions">
@@ -3332,20 +3689,6 @@
                 <a href="{{ whatsapp_assistance_url }}" target="_blank" rel="noopener noreferrer"><span class="soft-emoji" aria-hidden="true">&#128172;</span>WhatsApp</a>
             </div>
 
-            <div class="hero-stats">
-                <div class="hero-stat">
-                    <strong>{{ resumen.total_productos }}</strong>
-                    <span><span class="soft-emoji" aria-hidden="true">&#127872;</span>referencias en cat&aacute;logo</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>1-2 d&iacute;as</strong>
-                    <span><span class="soft-emoji" aria-hidden="true">&#9200;</span>tiempo recomendado de reserva</span>
-                </div>
-                <div class="hero-stat">
-                    <strong>Asesor&iacute;a</strong>
-                    <span><span class="soft-emoji" aria-hidden="true">&#128140;</span>confirmaci&oacute;n directa por WhatsApp</span>
-                </div>
-            </div>
         </div>
 
         <aside class="hero-panel hero-gallery-panel">
@@ -3363,7 +3706,13 @@
                             <a href="{% url 'detalle_producto' producto.id %}" class="hero-product-card">
                                 <div class="hero-product-media">
                                     {% if producto.imagen %}
-                                        <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="eager" decoding="async">
+                                        <img
+                                            src="{{ producto.imagen.url|optimized_image_url }}"
+                                            alt="{{ producto.nombre }}"
+                                            {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy" fetchpriority="low"{% endif %}
+                                            decoding="async"
+                                            sizes="(max-width: 680px) 58vw, 210px"
+                                        >
                                     {% else %}
                                         <span class="hero-product-placeholder">Imagen pendiente</span>
                                     {% endif %}
@@ -3422,31 +3771,36 @@
     </section>
 
     {% if videos_elaboracion %}
-    <section class="process-video-card section-card page-card">
+    <section class="process-video-card section-card page-card" id="proceso-real">
         <div class="process-video-header">
             <div class="process-video-heading">
-                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#127909;</span>Detr&aacute;s de cada regalo</span>
-                <h2>As&iacute; elaboramos tus detalles</h2>
-                <p class="process-video-support">Una mirada real a la selecci&oacute;n, armado, decoraci&oacute;n y presentaci&oacute;n antes de entregar cada sorpresa.</p>
-                <div class="process-video-highlights" aria-label="Valores del proceso">
-                    <span>Armado cuidadoso</span>
-                    <span>Acabados personalizados</span>
-                    <span>Presentaci&oacute;n lista para regalar</span>
-                </div>
+                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#127909;</span>Proceso real</span>
+                <h2>Mira c&oacute;mo preparamos tu regalo</h2>
+                <p class="process-video-support">Te mostramos el cuidado real que hay desde la selecci&oacute;n de cada elemento hasta la presentaci&oacute;n final.</p>
+                <p class="process-video-sequence">Elegimos <span>&middot;</span> Armamos <span>&middot;</span> Decoramos <span>&middot;</span> Cuidamos el acabado</p>
             </div>
-            <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" class="btn-secondary" target="_blank" rel="noopener noreferrer external"><span class="soft-emoji" aria-hidden="true">&#128248;</span>Ver m&aacute;s en Instagram</a>
+            <a href="https://www.instagram.com/casitaregalos/?hl=zh-cn" class="process-video-instagram" target="_blank" rel="noopener noreferrer external"><span class="soft-emoji" aria-hidden="true">&#128248;</span>M&aacute;s videos en Instagram</a>
         </div>
 
         <div class="process-video-carousel carousel-shell js-carousel">
-            <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver elaboraci&oacute;n anterior">&lsaquo;</button>
+            <button type="button" class="carousel-btn process-video-nav process-video-nav--prev" data-carousel-prev aria-label="Ver elaboraci&oacute;n anterior">&lsaquo;</button>
             <div class="process-video-grid carousel-track js-carousel-track" aria-label="Videos de elaboraci&oacute;n de regalos">
                 {% for video_item in videos_elaboracion %}
                     <article class="process-video-item">
                         <div class="process-video-media">
-                            <video controls muted preload="metadata" playsinline data-autoplay-video {% if video_item.portada %}poster="{{ video_item.portada.url }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
-                                <source src="{{ video_item.video.url }}" type="{{ video_item.mime_type }}">
+                            <div class="process-video-fallback" aria-hidden="true">
+                                <span>Casita de Regalos</span>
+                                <strong>Proceso real</strong>
+                            </div>
+                            <video controls muted loop preload="none" playsinline data-autoplay-video {% if video_item.portada %}poster="{{ video_item.portada.url }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
+                                <source data-src="{{ video_item.video.url }}" type="{{ video_item.mime_type }}">
                                 Tu navegador no soporta video HTML5.
                             </video>
+                            <button type="button" class="process-video-play" data-video-play aria-label="Reproducir {{ video_item.titulo }}">
+                                <span class="process-video-play-icon" aria-hidden="true">&#9654;</span>
+                                <span>Reproducir</span>
+                            </button>
+                            <span class="process-video-number" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
                         </div>
                         <div class="process-video-copy">
                             <span class="mini-pill">{% if video_item.destacado %}Proceso destacado{% else %}Proceso real{% endif %}</span>
@@ -3458,7 +3812,7 @@
                     </article>
                 {% endfor %}
             </div>
-            <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver siguiente elaboraci&oacute;n">&rsaquo;</button>
+            <button type="button" class="carousel-btn process-video-nav process-video-nav--next" data-carousel-next aria-label="Ver siguiente elaboraci&oacute;n">&rsaquo;</button>
         </div>
     </section>
     {% endif %}
@@ -3486,7 +3840,7 @@
                 {% for metodo in metodos_pago %}
                     <li>
                         <span class="payment-logo-frame">
-                            <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo">
+                            <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo" loading="lazy" decoding="async">
                         </span>
                         <span><strong>{{ metodo.titulo }}</strong><br>{{ metodo.descripcion }}</span>
                     </li>

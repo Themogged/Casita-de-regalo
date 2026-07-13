@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from django.contrib.admin.sites import AdminSite
+from django.core.cache import cache
 from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import SimpleTestCase, TestCase, override_settings
@@ -14,6 +15,7 @@ from PIL import Image
 from unittest import mock
 
 from .admin import CategoriaAdmin, GaleriaProductoFilter, ImagenProductoFilter, ProductoAdmin, VideoElaboracionAdmin
+from .assistant_service import _serialize_catalog_context
 from .image_frames import generate_yellow_child_frame, slugify_filename
 from .models import Categoria, Producto, ProductoImagen, VideoElaboracion
 from .whatsapp import build_whatsapp_url
@@ -362,7 +364,13 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'process-video-card')
         self.assertContains(response, 'Armado de detalle personalizado')
-        self.assertContains(response, '<video controls muted preload="metadata" playsinline')
+        self.assertContains(response, '<video controls muted loop preload="none" playsinline')
+        self.assertContains(response, 'Mira c&oacute;mo preparamos tu regalo')
+        self.assertContains(response, 'Preparado especialmente para tu ocasi&oacute;n')
+        self.assertNotContains(response, 'Hecho a mano')
+        self.assertNotContains(response, 'Detr&aacute;s de cada regalo')
+        self.assertContains(response, 'data-src="/media/procesos/videos/proceso.mp4"')
+        self.assertContains(response, 'data-video-play')
         self.assertContains(response, 'type="video/mp4"')
         self.assertNotContains(response, 'Video oculto')
 
@@ -580,6 +588,131 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(payload["mode"], "fallback")
         self.assertIn("te recomiendo empezar", payload["reply"].lower())
         self.assertTrue(payload["actions"])
+
+    def test_asistente_explica_lista_para_cotizar(self):
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Cómo funciona la lista para cotizar",
+                        "history": [],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertIn("lista para cotizar", payload["reply"].lower())
+        self.assertIn("sin pagar", payload["reply"].lower())
+        self.assertIn("Ver mi lista", [action["label"] for action in payload["actions"]])
+
+    def test_asistente_explica_regalo_a_medida(self):
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Quiero armar un regalo a medida",
+                        "history": [],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["ok"])
+        self.assertIn("referencia inicial", payload["reply"].lower())
+        self.assertIn("Armar regalo", [action["label"] for action in payload["actions"]])
+
+    def test_asistente_conserva_ocasion_del_historial_para_recomendar(self):
+        categoria = Categoria.objects.create(nombre='Amor y aniversario asistente')
+        producto = Producto.objects.create(
+            nombre='Detalle romántico contexto',
+            descripcion='Regalo pensado para pareja y aniversario.',
+            precio='78000.00',
+            stock=3,
+            categoria=categoria,
+            destacado=True,
+        )
+
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Tengo 80 mil",
+                        "history": [{"role": "user", "text": "Me gustó Amor y aniversario asistente"}],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn(producto.nombre.lower(), payload["reply"].lower())
+        self.assertTrue(any(action["label"].startswith('Ver ') for action in payload["actions"]))
+
+    def test_asistente_describe_contenido_real_de_la_lista(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto_principal.id): 2}
+        session.save()
+
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps(
+                    {
+                        "message": "Qué tengo en mi lista para cotizar",
+                        "history": [],
+                    }
+                ),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn(self.producto_principal.nombre.lower(), payload["reply"].lower())
+        self.assertIn('2 unidades', payload["reply"].lower())
+        self.assertIn('Ver mi lista', [action["label"] for action in payload["actions"]])
+
+    def test_asistente_rechaza_mensajes_excesivamente_largos(self):
+        response = self.client.post(
+            reverse('assistant_chat'),
+            data=json.dumps({"message": "a" * 501, "history": []}),
+            content_type='application/json',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["ok"])
+
+    def test_contexto_del_asistente_se_construye_con_una_consulta(self):
+        cache.delete("assistant.catalog.context")
+
+        with self.assertNumQueries(1):
+            context = _serialize_catalog_context()
+
+        self.assertIn(self.producto_principal.nombre, context)
+        cache.delete("assistant.catalog.context")
+
+    def test_asistente_rechaza_payload_que_no_es_un_objeto(self):
+        response = self.client.post(
+            reverse('assistant_chat'),
+            data=json.dumps([]),
+            content_type='application/json',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertFalse(response.json()["ok"])
 
     def test_asistente_puede_responder_en_modo_ai(self):
         with mock.patch(

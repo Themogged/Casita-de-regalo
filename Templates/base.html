@@ -1368,8 +1368,9 @@
         @media (prefers-reduced-motion: reduce) {
             .floating-whatsapp,
             .floating-whatsapp::after,
+            .assistant-toggle::after,
             .floating-whatsapp svg {
-                animation: none;
+                animation: none !important;
                 transition: none;
             }
         }
@@ -1396,6 +1397,7 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            position: relative;
             min-height: 58px;
             padding: 0 20px;
             border-radius: 999px;
@@ -1403,6 +1405,31 @@
             color: #fff;
             box-shadow: 0 18px 38px rgba(215, 38, 109, 0.28);
             cursor: pointer;
+        }
+
+        .assistant-toggle::after {
+            content: "";
+            position: absolute;
+            top: 9px;
+            right: 12px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff9d8;
+            box-shadow: 0 0 0 0 rgba(255, 249, 216, 0.52);
+            animation: assistantPulse 2.8s ease-out infinite !important;
+        }
+
+        @keyframes assistantPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 249, 216, 0.52);
+            }
+            70% {
+                box-shadow: 0 0 0 9px rgba(255, 249, 216, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 249, 216, 0);
+            }
         }
 
         .assistant-toggle:focus-visible {
@@ -1422,12 +1449,15 @@
         }
 
         .assistant-panel {
+            display: flex;
+            flex-direction: column;
             width: min(390px, calc(100vw - 28px));
+            max-height: min(680px, calc(100dvh - 104px));
             border-radius: 30px;
             overflow: hidden;
             background: rgba(255, 252, 253, 0.98);
-            border: 1px solid rgba(198, 68, 125, 0.12);
-            box-shadow: 0 28px 60px rgba(86, 25, 53, 0.16);
+            border: 1px solid rgba(164, 92, 62, 0.14);
+            box-shadow: 0 28px 60px rgba(86, 45, 29, 0.14);
             backdrop-filter: blur(18px);
         }
 
@@ -1442,8 +1472,10 @@
             gap: 12px;
             padding: 18px 18px 14px;
             background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
                 radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 28%),
-                linear-gradient(135deg, #8d1b4e 0%, var(--rose-700) 58%, #4b102b 100%);
+                linear-gradient(135deg, #e58db0 0%, #cf5c8e 56%, #b73972 100%);
+            background-size: 22px 22px, auto, auto;
             color: #fff8fb;
         }
 
@@ -1484,13 +1516,13 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: #94ffcd;
-            box-shadow: 0 0 0 4px rgba(148, 255, 205, 0.16);
+            background: #fff0f6;
+            box-shadow: 0 0 0 4px rgba(255, 240, 246, 0.17);
         }
 
         .assistant-status.is-fallback::before {
-            background: #ffd991;
-            box-shadow: 0 0 0 4px rgba(255, 217, 145, 0.16);
+            background: #ffd6e7;
+            box-shadow: 0 0 0 4px rgba(255, 214, 231, 0.17);
         }
 
         .assistant-close {
@@ -1507,24 +1539,18 @@
 
         .assistant-body {
             display: grid;
-            gap: 14px;
+            grid-template-rows: minmax(104px, 1fr) auto auto;
+            gap: 12px;
+            min-height: 0;
             padding: 16px;
         }
 
-        .assistant-context {
-            padding: 12px 14px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #fff6f9, #fffbf6);
-            border: 1px solid rgba(198, 68, 125, 0.08);
-            color: var(--ink-700);
-            font-size: 0.92rem;
-            line-height: 1.55;
-        }
-
         .assistant-messages {
+            min-height: 0;
             max-height: 320px;
             overflow-y: auto;
             display: grid;
+            align-content: start;
             gap: 10px;
             padding-right: 4px;
         }
@@ -1579,6 +1605,19 @@
             gap: 8px;
         }
 
+        .assistant-suggestions-wrap {
+            display: grid;
+            gap: 7px;
+            min-width: 0;
+        }
+
+        .assistant-suggestions-label {
+            color: var(--ink-500);
+            font-size: 0.72rem;
+            font-weight: var(--weight-bold);
+            text-transform: uppercase;
+        }
+
         .assistant-action,
         .assistant-suggestion {
             display: inline-flex;
@@ -1597,6 +1636,14 @@
 
         .assistant-suggestion {
             background: linear-gradient(135deg, #fff6f9, #fffdfc);
+        }
+
+        .assistant-form.is-pending {
+            opacity: 0.72;
+        }
+
+        .assistant-form.is-pending .assistant-send {
+            cursor: wait;
         }
 
         .assistant-form {
@@ -1948,9 +1995,9 @@
             }
 
             .assistant-shell {
-                right: 14px;
+                right: 10px;
                 left: auto;
-                bottom: 14px;
+                bottom: max(10px, env(safe-area-inset-bottom));
                 justify-items: end;
             }
 
@@ -1989,7 +2036,64 @@
             }
 
             .assistant-panel {
-                width: min(360px, calc(100vw - 24px));
+                width: min(360px, calc(100vw - 30px));
+                max-height: min(610px, calc(100dvh - 126px));
+                border-radius: 24px;
+            }
+
+            .assistant-header {
+                padding: 14px 15px 12px;
+            }
+
+            .assistant-header-copy strong {
+                font-size: 1.05rem;
+            }
+
+            .assistant-body {
+                grid-template-rows: minmax(96px, 1fr) auto auto;
+                gap: 10px;
+                padding: 12px;
+            }
+
+            .assistant-messages {
+                max-height: min(285px, 36dvh);
+            }
+
+            .assistant-suggestions {
+                flex-wrap: nowrap;
+                gap: 7px;
+                overflow-x: auto;
+                padding: 1px 1px 5px;
+                scrollbar-width: none;
+            }
+
+            .assistant-suggestions::-webkit-scrollbar {
+                display: none;
+            }
+
+            .assistant-suggestion {
+                flex: 0 0 auto;
+                min-height: 36px;
+                padding-inline: 12px;
+                font-size: 0.8rem;
+            }
+
+            .assistant-bubble {
+                max-width: 94%;
+                padding: 11px 12px;
+                font-size: 0.88rem;
+                line-height: 1.52;
+            }
+
+            .assistant-input {
+                min-height: 44px;
+                padding-inline: 13px;
+                font-size: 0.88rem;
+            }
+
+            .assistant-send {
+                width: 44px;
+                height: 44px;
             }
         }
 
@@ -2036,7 +2140,8 @@
             }
 
             .assistant-form {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr) auto;
+                align-items: center;
             }
         }
 
@@ -2540,27 +2645,34 @@
     </a>
 
     <div class="assistant-shell" data-assistant data-assistant-endpoint="{% url 'assistant_chat' %}">
-        <section class="assistant-panel" data-assistant-panel hidden>
+        <section
+            class="assistant-panel"
+            id="assistant-panel"
+            data-assistant-panel
+            role="dialog"
+            aria-modal="false"
+            aria-labelledby="assistant-title"
+            hidden
+        >
             <header class="assistant-header">
                 <div class="assistant-header-copy">
-                    <strong><span class="soft-emoji" aria-hidden="true">💬</span>Asistente Casita</strong>
-                    <span data-assistant-status class="assistant-status">Asistente inteligente</span>
+                    <strong id="assistant-title"><span class="soft-emoji" aria-hidden="true">💬</span>Asistente Casita</strong>
+                    <span data-assistant-status class="assistant-status">Gu&iacute;a del cat&aacute;logo</span>
                 </div>
                 <button type="button" class="assistant-close" data-assistant-close aria-label="Cerrar asistente">×</button>
             </header>
 
             <div class="assistant-body">
-                <div class="assistant-context">
-                    Puedo orientarte por categoría, presupuesto, personalización, pagos y cierre por WhatsApp.
-                </div>
+                <div class="assistant-messages" data-assistant-messages role="log" aria-live="polite" aria-label="Conversaci&oacute;n con el asistente"></div>
 
-                <div class="assistant-messages" data-assistant-messages></div>
-
-                <div class="assistant-suggestions" data-assistant-suggestions>
-                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Quiero ver el catálogo">Ver catálogo</button>
-                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Cómo comprar">Cómo comprar</button>
-                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Medios de pago">Pagos</button>
-                    <button type="button" class="assistant-suggestion" data-assistant-prompt="Hablar por whatsapp">WhatsApp</button>
+                <div class="assistant-suggestions-wrap">
+                    <span class="assistant-suggestions-label">Preguntas r&aacute;pidas</span>
+                    <div class="assistant-suggestions" data-assistant-suggestions>
+                        <button type="button" class="assistant-suggestion" data-assistant-prompt="Ayúdame a elegir un regalo">Recomi&eacute;ndame</button>
+                        <button type="button" class="assistant-suggestion" data-assistant-prompt="Quiero armar un regalo a medida">A medida</button>
+                        <button type="button" class="assistant-suggestion" data-assistant-prompt="Qué tengo en mi lista para cotizar">Mi lista</button>
+                        <button type="button" class="assistant-suggestion" data-assistant-prompt="Cómo funcionan la entrega y la reserva">Entrega</button>
+                    </div>
                 </div>
 
                 <form class="assistant-form" data-assistant-form>
@@ -2568,10 +2680,10 @@
                         type="text"
                         class="assistant-input"
                         data-assistant-input
-                        placeholder="Escribe: pagos, catálogo, temáticos, whatsapp..."
+                        placeholder="Ej.: regalo para mam&aacute;, $80.000"
                         maxlength="220"
                     >
-                    <button type="submit" class="assistant-send" aria-label="Enviar mensaje">→</button>
+                    <button type="submit" class="assistant-send" data-assistant-send aria-label="Enviar mensaje">→</button>
                 </form>
             </div>
         </section>
@@ -2911,9 +3023,20 @@
             if (!videos.length) return;
 
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            if (prefersReducedMotion || !('IntersectionObserver' in window)) return;
-
+            const prefersReducedData = navigator.connection?.saveData === true;
             let activeVideo = null;
+
+            const hydrateVideo = (video) => {
+                if (!video || video.dataset.videoLoaded === 'true') return;
+                const sources = Array.from(video.querySelectorAll('source[data-src]'));
+                sources.forEach((source) => {
+                    source.src = source.dataset.src;
+                    source.removeAttribute('data-src');
+                });
+                video.dataset.videoLoaded = 'true';
+                video.preload = 'metadata';
+                video.load();
+            };
 
             const pauseVideo = (video) => {
                 if (!video || video.paused) return;
@@ -2921,7 +3044,8 @@
             };
 
             const playVideo = async (video) => {
-                if (!video || activeVideo === video) return;
+                if (!video || (activeVideo === video && !video.paused)) return;
+                hydrateVideo(video);
                 videos.forEach((item) => {
                     if (item !== video) pauseVideo(item);
                 });
@@ -2936,10 +3060,44 @@
                 }
             };
 
+            videos.forEach((video) => {
+                const media = video.closest('.process-video-media');
+                video.addEventListener('loadeddata', () => media?.classList.add('is-video-ready'));
+                video.addEventListener('play', () => media?.classList.add('is-playing'));
+                video.addEventListener('pause', () => media?.classList.remove('is-playing'));
+                video.addEventListener('ended', () => {
+                    media?.classList.remove('is-playing');
+                    if (activeVideo === video) activeVideo = null;
+                });
+            });
+
+            scope.querySelectorAll('[data-video-play]').forEach((button) => {
+                button.addEventListener('click', async () => {
+                    const video = button.closest('.process-video-media')?.querySelector('video[data-autoplay-video]');
+                    await playVideo(video);
+                });
+            });
+
+            if (!('IntersectionObserver' in window) || prefersReducedData) return;
+
+            const preloadObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    hydrateVideo(entry.target);
+                    observer.unobserve(entry.target);
+                });
+            }, {
+                rootMargin: '320px 120px',
+                threshold: 0.01,
+            });
+
+            videos.forEach((video) => preloadObserver.observe(video));
+            if (prefersReducedMotion) return;
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
                     const video = entry.target;
-                    if (!entry.isIntersecting || entry.intersectionRatio < 0.55) {
+                    if (!entry.isIntersecting || entry.intersectionRatio < 0.68) {
                         if (activeVideo === video) activeVideo = null;
                         pauseVideo(video);
                         return;
@@ -2948,8 +3106,8 @@
                     playVideo(video);
                 });
             }, {
-                threshold: [0, 0.35, 0.55, 0.75],
-                rootMargin: '-12% 0px -18% 0px',
+                threshold: [0, 0.4, 0.68, 0.82],
+                rootMargin: '-10% 0px -16% 0px',
             });
 
             videos.forEach((video) => observer.observe(video));
@@ -2992,6 +3150,7 @@
             messages: document.querySelector('[data-assistant-messages]'),
             form: document.querySelector('[data-assistant-form]'),
             input: document.querySelector('[data-assistant-input]'),
+            send: document.querySelector('[data-assistant-send]'),
             suggestions: document.querySelector('[data-assistant-suggestions]'),
             status: document.querySelector('[data-assistant-status]'),
         };
@@ -3050,7 +3209,7 @@
 
             assistantState.mode = mode;
             status.classList.toggle('is-fallback', mode !== 'ai');
-            status.textContent = mode === 'ai' ? 'IA conectada' : 'Asistente inteligente';
+            status.textContent = mode === 'ai' ? 'Asesoría conectada' : 'Guía del catálogo';
         };
 
         const pushAssistantHistory = (role, text) => {
@@ -3062,7 +3221,7 @@
         const showAssistantTyping = () => {
             const node = appendAssistantMessage({
                 role: 'bot',
-                text: 'Pensando una respuesta para ti...',
+                text: 'Buscando la mejor orientación...',
                 actions: [],
             });
             node?.classList.add('is-typing');
@@ -3070,12 +3229,8 @@
         };
 
         const getAssistantWelcome = () => ({
-            text: 'Hola, soy el asistente de Casita. Te ayudo a elegir mejor, resolver dudas del catálogo y llevarte a WhatsApp cuando ya quieras confirmar.',
-            actions: [
-                { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "catalogo" %}'}#catalogo` },
-                { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
-                { label: 'WhatsApp', href: '{{ whatsapp_assistance_url|escapejs }}', external: true },
-            ],
+            text: 'Cuéntame para quién es, la fecha y tu presupuesto. Te recomiendo opciones reales y te ayudo a preparar la cotización.',
+            actions: [],
         });
 
         const assistantEndpoint = assistantElements.shell?.dataset.assistantEndpoint || '';
@@ -3119,9 +3274,29 @@
                 };
             }
 
+            if (input.includes('lista') || input.includes('cotizar') || input.includes('cotizacion') || input.includes('carrito') || input.includes('agregar')) {
+                return {
+                    text: 'La lista para cotizar guarda referencias sin pagar todavía. Agregas productos, revisas cantidades y luego enviamos todo por WhatsApp para confirmar disponibilidad, personalización y valor final.',
+                    actions: [
+                        { label: 'Ver mi lista', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
+                        { label: 'Ver catálogo', href: `${window.location.origin}${'{% url "catalogo" %}'}#catalogo` },
+                    ],
+                };
+            }
+
+            if (input.includes('medida') || input.includes('armar') || input.includes('crear') || input.includes('disena') || input.includes('diseñar')) {
+                return {
+                    text: 'Para un regalo a medida eliges una referencia real, ocasión, colores, presupuesto y detalles clave. Con eso Casita ajusta el acabado contigo por WhatsApp.',
+                    actions: [
+                        { label: 'Armar regalo', href: `${window.location.origin}${'{% url "disena_regalo" %}'}` },
+                        { label: 'Cotizar por WhatsApp', href: '{{ whatsapp_personalization_url|escapejs }}', external: true },
+                    ],
+                };
+            }
+
             if (input.includes('como comprar') || input.includes('comprar') || input.includes('proceso') || input.includes('pedido')) {
                 return {
-                    text: 'El proceso es simple: exploras el catálogo, eliges una referencia, la personalizas si quieres y luego confirmas todo por WhatsApp.',
+                    text: 'El proceso recomendado es: revisas el catálogo, abres el detalle si quieres ver más, agregas a la lista para cotizar y confirmas por WhatsApp disponibilidad, entrega y pago.',
                     actions: [
                         { label: 'Ver cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
                         { label: 'Ver mi lista', href: `${window.location.origin}${'{% url "ver_carrito" %}'}` },
@@ -3131,7 +3306,7 @@
 
             if (input.includes('pago') || input.includes('nequi') || input.includes('bancolombia')) {
                 return {
-                    text: 'Puedes confirmar tu pedido por Nequi o Bancolombia. Primero se valida disponibilidad y personalización, y luego se coordina el pago.',
+                    text: 'Primero se valida disponibilidad, personalización y valor final. Después se coordinan los datos de pago, normalmente por Nequi o Bancolombia.',
                     actions: [
                         { label: 'Ir a medios de pago', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
                         { label: 'Pedir datos por WhatsApp', href: '{{ whatsapp_payment_url|escapejs }}', external: true },
@@ -3141,9 +3316,9 @@
 
             if (input.includes('personaliz') || input.includes('mensaje') || input.includes('tematica') || input.includes('colores')) {
                 return {
-                    text: 'Sí, la mayoría de los detalles se pueden personalizar según la ocasión, colores, mensaje, temática o presupuesto.',
+                    text: 'Sí. Puedes ajustar colores, mensaje, temática, nombre, estilo y presupuesto. Lo ideal es partir de una referencia del catálogo para que el acabado quede claro.',
                     actions: [
-                        { label: 'Ver temáticos', prompt: 'Quiero ver tematicos e infantiles' },
+                        { label: 'Armar regalo', href: `${window.location.origin}${'{% url "disena_regalo" %}'}` },
                         { label: 'Cotizar personalización', href: '{{ whatsapp_personalization_url|escapejs }}', external: true },
                     ],
                 };
@@ -3179,17 +3354,27 @@
                 };
             }
 
+            if (input.includes('entrega') || input.includes('envio') || input.includes('domicilio') || input.includes('reserva') || input.includes('hoy')) {
+                return {
+                    text: 'La entrega se coordina por WhatsApp según dirección, horario y disponibilidad. Si puedes, reserva con 1 a 2 días para cuidar mejor el armado.',
+                    actions: [
+                        { label: 'Cómo comprar', href: `${window.location.origin}${'{% url "como_comprar" %}'}` },
+                        { label: 'Consultar entrega', href: '{{ whatsapp_coverage_url|escapejs }}', external: true },
+                    ],
+                };
+            }
+
             return {
-                text: 'Puedo ayudarte con catálogo, categorías, pagos, personalización, carrito o WhatsApp. Si quieres, prueba escribiendo algo como "pagos", "catálogo" o "temáticos".',
+                text: 'Puedo ayudarte con catálogo, lista para cotizar, regalo a medida, pagos, entrega o WhatsApp. Dime para quién es, fecha y presupuesto aproximado para orientarte mejor.',
                 actions: [
                     { label: 'Ver catálogo', prompt: 'Quiero ver el catálogo' },
-                    { label: 'Pagos', prompt: 'Medios de pago' },
+                    { label: 'A medida', prompt: 'Quiero armar un regalo a medida' },
                     { label: 'WhatsApp', prompt: 'Hablar por whatsapp' },
                 ],
             };
         };
 
-        const requestAssistantReply = async (message) => {
+        const requestAssistantReply = async (message, history) => {
             if (!assistantEndpoint) {
                 const fallback = assistantFallbackKnowledge(message);
                 return {
@@ -3209,7 +3394,7 @@
                 credentials: 'same-origin',
                 body: JSON.stringify({
                     message,
-                    history: assistantState.history,
+                    history,
                 }),
             });
 
@@ -3238,7 +3423,9 @@
                 assistantState.greeted = true;
             }
 
-            setTimeout(() => input?.focus(), 60);
+            if (window.matchMedia('(min-width: 769px) and (pointer: fine)').matches) {
+                setTimeout(() => input?.focus(), 60);
+            }
         };
 
         const closeAssistant = () => {
@@ -3246,6 +3433,15 @@
             if (!panel || !toggle) return;
             panel.hidden = true;
             toggle.setAttribute('aria-expanded', 'false');
+            toggle.focus({ preventScroll: true });
+        };
+
+        const setAssistantPending = (isPending) => {
+            const { form, input, send } = assistantElements;
+            form?.classList.toggle('is-pending', isPending);
+            form?.setAttribute('aria-busy', String(isPending));
+            if (input) input.disabled = isPending;
+            if (send) send.disabled = isPending;
         };
 
         const handleAssistantPrompt = async (text) => {
@@ -3253,25 +3449,29 @@
             if (!cleanText || assistantState.pending) return;
 
             assistantState.pending = true;
+            setAssistantPending(true);
             appendAssistantMessage({ role: 'user', text: cleanText });
-            pushAssistantHistory('user', cleanText);
+            const historyBeforeRequest = assistantState.history.slice(-8);
 
             const typingNode = showAssistantTyping();
 
             try {
-                const response = await requestAssistantReply(cleanText);
+                const response = await requestAssistantReply(cleanText, historyBeforeRequest);
                 typingNode?.remove();
                 updateAssistantStatus(response.mode || 'fallback');
                 appendAssistantMessage({ role: 'bot', text: response.reply, actions: response.actions || [] });
+                pushAssistantHistory('user', cleanText);
                 pushAssistantHistory('assistant', response.reply);
             } catch (error) {
                 typingNode?.remove();
                 const fallback = assistantFallbackKnowledge(cleanText);
                 updateAssistantStatus('fallback');
                 appendAssistantMessage({ role: 'bot', text: fallback.text, actions: fallback.actions || [] });
+                pushAssistantHistory('user', cleanText);
                 pushAssistantHistory('assistant', fallback.text);
             } finally {
                 assistantState.pending = false;
+                setAssistantPending(false);
             }
         };
 
@@ -3289,13 +3489,6 @@
 
             close.addEventListener('click', closeAssistant);
 
-            suggestions.addEventListener('click', async (event) => {
-                const promptButton = event.target.closest('[data-assistant-prompt]');
-                if (!promptButton) return;
-                openAssistant();
-                await handleAssistantPrompt(promptButton.dataset.assistantPrompt);
-            });
-
             panel.addEventListener('click', async (event) => {
                 const promptButton = event.target.closest('[data-assistant-prompt]');
                 if (!promptButton) return;
@@ -3308,6 +3501,10 @@
                 if (!value) return;
                 await handleAssistantPrompt(value);
                 input.value = '';
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && !panel.hidden) closeAssistant();
             });
         };
 
