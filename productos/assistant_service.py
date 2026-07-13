@@ -465,6 +465,9 @@ def _detect_intent_and_context(message, history=None, cart=None):
         "presupuesto",
         "ayuda",
         "ayudame",
+        "elegir",
+        "escojo",
+        "escoger",
         "recomienda",
         "recomiendame",
     }
@@ -561,7 +564,7 @@ def _get_context_products(context_data):
 
     intents = set(context_data["intents"])
     should_recommend = bool(
-        intents & RECOMMENDATION_INTENTS
+        intents & (RECOMMENDATION_INTENTS - {"recomendacion"})
         or context_data["category"]
         or context_data["price_range"]
     )

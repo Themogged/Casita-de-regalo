@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from django.contrib.admin.sites import AdminSite
+from django.contrib.staticfiles import finders
 from django.core.cache import cache
 from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -568,6 +569,18 @@ class CatalogoViewsTests(TestCase):
         )
         self.assertNotContains(response, 'href="/#catalogo" class="category-pill is-active"')
 
+    def test_inicio_integra_mascota_cora_en_el_asistente(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="assistant-title">Cora</strong>')
+        self.assertContains(response, 'Abrir asistente Cora')
+        self.assertContains(response, '/static/productos/img/assistant-cora.webp', count=3)
+        self.assertContains(response, '@keyframes coraIdle')
+        self.assertContains(response, "playAssistantGesture('greeting', 820)")
+        self.assertContains(response, "playAssistantGesture('celebrating', 760)")
+        self.assertIsNotNone(finders.find('productos/img/assistant-cora.webp'))
+
     def test_asistente_devuelve_fallback_si_no_hay_api_key(self):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
             response = self.client.post(
@@ -588,6 +601,23 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(payload["mode"], "fallback")
         self.assertIn("te recomiendo empezar", payload["reply"].lower())
         self.assertTrue(payload["actions"])
+
+    def test_asistente_no_sugiere_producto_sin_contexto_suficiente(self):
+        with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
+            response = self.client.post(
+                reverse('assistant_chat'),
+                data=json.dumps({"message": "Ayúdame a elegir un regalo", "history": []}),
+                content_type='application/json',
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertIn("tres datos", payload["reply"].lower())
+        self.assertEqual(
+            [action["label"] for action in payload["actions"]],
+            ["Ver catálogo", "WhatsApp"],
+        )
 
     def test_asistente_explica_lista_para_cotizar(self):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
