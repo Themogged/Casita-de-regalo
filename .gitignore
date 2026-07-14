@@ -15,3 +15,6 @@ media/procesos/*
 !media/procesos/videos/
 media/procesos/videos/*
 !media/procesos/videos/elaboracion-casita-*.mp4
+!media/procesos/portadas/
+media/procesos/portadas/*
+!media/procesos/portadas/elaboracion-casita-*.webp

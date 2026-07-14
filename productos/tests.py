@@ -216,6 +216,26 @@ class CatalogoAdminTests(TestCase):
         self.assertIn('Activo', str(video_admin.estado_publicacion(video)))
         self.assertIn('MP4', str(video_admin.archivo_video(video)))
 
+    def test_video_usa_portada_generada_cuando_no_hay_portada_manual(self):
+        media_root = Path('.tmp-test-media') / 'video-poster'
+        poster_path = media_root / 'procesos' / 'portadas' / 'proceso.webp'
+        poster_path.parent.mkdir(parents=True, exist_ok=True)
+        poster_path.write_bytes(b'poster-webp')
+
+        try:
+            with override_settings(MEDIA_ROOT=media_root, MEDIA_URL='/media/'):
+                video = VideoElaboracion(
+                    titulo='Proceso con portada optimizada',
+                    video='procesos/videos/proceso.mp4',
+                )
+
+                self.assertEqual(
+                    video.display_poster_url,
+                    '/media/procesos/portadas/proceso.webp',
+                )
+        finally:
+            shutil.rmtree(media_root, ignore_errors=True)
+
 
 class CatalogoViewsTests(TestCase):
     @staticmethod
@@ -351,6 +371,7 @@ class CatalogoViewsTests(TestCase):
             titulo='Armado de detalle personalizado',
             descripcion='Proceso real de decoraciÃ³n y empaque.',
             video='procesos/videos/proceso.mp4',
+            portada='procesos/portadas/proceso.webp',
             destacado=True,
         )
         VideoElaboracion.objects.create(
@@ -371,7 +392,11 @@ class CatalogoViewsTests(TestCase):
         self.assertNotContains(response, 'Hecho a mano')
         self.assertNotContains(response, 'Detr&aacute;s de cada regalo')
         self.assertContains(response, 'data-src="/media/procesos/videos/proceso.mp4"')
+        self.assertContains(response, 'poster="/media/procesos/portadas/proceso.webp"')
+        self.assertContains(response, 'data-video-load-state="idle"')
         self.assertContains(response, 'data-video-play')
+        self.assertContains(response, 'data-video-play-label')
+        self.assertContains(response, 'backgroundVideoHydrated')
         self.assertContains(response, 'type="video/mp4"')
         self.assertNotContains(response, 'Video oculto')
 

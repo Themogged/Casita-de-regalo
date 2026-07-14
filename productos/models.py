@@ -1,6 +1,10 @@
+from pathlib import PurePosixPath
+
 from django.core.exceptions import ValidationError
+from django.core.files.storage import default_storage
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils.functional import cached_property
 
 MAX_VIDEO_SIZE_MB = 30
 
@@ -103,6 +107,19 @@ class VideoElaboracion(models.Model):
             'webm': 'video/webm',
             'mov': 'video/quicktime',
         }.get(extension, 'video/mp4')
+
+    @cached_property
+    def display_poster_url(self):
+        if self.portada:
+            return self.portada.url
+        if not self.video or not self.video.name:
+            return ''
+
+        video_stem = PurePosixPath(self.video.name).stem
+        generated_poster = f'procesos/portadas/{video_stem}.webp'
+        if default_storage.exists(generated_poster):
+            return default_storage.url(generated_poster)
+        return ''
 
     class Meta:
         ordering = ['orden', '-destacado', '-fecha_creacion']

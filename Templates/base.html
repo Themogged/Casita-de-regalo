@@ -1368,7 +1368,6 @@
         @media (prefers-reduced-motion: reduce) {
             .floating-whatsapp,
             .floating-whatsapp::after,
-            .assistant-toggle::after,
             .assistant-message-avatar,
             .assistant-mascot-image,
             .floating-whatsapp svg {
@@ -1385,53 +1384,31 @@
         }
 
         .assistant-shell {
+            --assistant-avatar-size: 32px;
             position: fixed;
             right: 18px;
             bottom: 18px;
             z-index: 85;
             display: grid;
             justify-items: end;
-            gap: 12px;
+            gap: 10px;
         }
 
         .assistant-toggle {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 9px;
+            gap: 8px;
             position: relative;
-            min-height: 54px;
-            padding: 0 17px 0 9px;
+            min-height: 52px;
+            padding: 6px 16px 6px 7px;
             border-radius: 999px;
             background: linear-gradient(135deg, var(--coral-500) 0%, var(--rose-600) 58%, var(--rose-700) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.42);
             color: #fff;
             box-shadow: 0 18px 38px rgba(215, 38, 109, 0.28);
             cursor: pointer;
-        }
-
-        .assistant-toggle::after {
-            content: "";
-            position: absolute;
-            top: 9px;
-            right: 12px;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #fff9d8;
-            box-shadow: 0 0 0 0 rgba(255, 249, 216, 0.52);
-            animation: assistantPulse 2.8s ease-out infinite !important;
-        }
-
-        @keyframes assistantPulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 249, 216, 0.52);
-            }
-            70% {
-                box-shadow: 0 0 0 9px rgba(255, 249, 216, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 249, 216, 0);
-            }
+            line-height: 1;
         }
 
         .assistant-toggle:focus-visible {
@@ -1440,7 +1417,9 @@
         }
 
         .assistant-toggle strong {
+            display: block;
             font-size: 0.92rem;
+            line-height: 1;
             letter-spacing: 0.01em;
         }
 
@@ -1449,6 +1428,7 @@
             display: inline-grid;
             place-items: center;
             flex-shrink: 0;
+            aspect-ratio: 1;
             overflow: hidden;
             background: rgba(255, 255, 255, 0.96);
             border: 1px solid rgba(255, 255, 255, 0.78);
@@ -1559,9 +1539,9 @@
         .assistant-panel {
             display: flex;
             flex-direction: column;
-            width: min(390px, calc(100vw - 28px));
+            width: min(388px, calc(100vw - 36px));
             max-height: min(680px, calc(100dvh - 104px));
-            border-radius: 30px;
+            border-radius: 26px;
             overflow: hidden;
             background: rgba(255, 252, 253, 0.98);
             border: 1px solid rgba(164, 92, 62, 0.14);
@@ -1578,26 +1558,28 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            padding: 18px 18px 14px;
+            min-height: 80px;
+            padding: 14px 15px;
             background:
                 linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
                 radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 28%),
                 linear-gradient(135deg, #e58db0 0%, #cf5c8e 56%, #b73972 100%);
             background-size: 22px 22px, auto, auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.14);
             color: #fff8fb;
         }
 
         .assistant-identity {
             display: flex;
             align-items: center;
-            gap: 11px;
+            gap: 12px;
             min-width: 0;
         }
 
         .assistant-mascot-frame--header {
-            width: 52px;
-            height: 52px;
-            border-radius: 18px;
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
         }
 
         .assistant-header-copy {
@@ -1609,11 +1591,12 @@
         .assistant-header-copy strong {
             font-family: var(--font-display);
             font-size: 1.15rem;
-            line-height: 1.02;
+            line-height: 1.08;
         }
 
         .assistant-header-copy span {
             font-size: 0.84rem;
+            line-height: 1.2;
             color: rgba(255, 248, 251, 0.82);
         }
 
@@ -1651,10 +1634,11 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             color: #fff;
             cursor: pointer;
         }
@@ -1664,7 +1648,7 @@
             grid-template-rows: minmax(104px, 1fr) auto auto;
             gap: 12px;
             min-height: 0;
-            padding: 16px;
+            padding: 14px;
         }
 
         .assistant-messages {
@@ -1673,8 +1657,8 @@
             overflow-y: auto;
             display: grid;
             align-content: start;
-            gap: 10px;
-            padding-right: 4px;
+            gap: 12px;
+            padding-right: 2px;
         }
 
         .assistant-messages::-webkit-scrollbar {
@@ -1688,11 +1672,11 @@
 
         .assistant-message {
             display: grid;
-            gap: 10px;
+            gap: 8px 10px;
         }
 
         .assistant-message.is-bot {
-            grid-template-columns: 30px minmax(0, 1fr);
+            grid-template-columns: var(--assistant-avatar-size) minmax(0, 1fr);
             align-items: start;
         }
 
@@ -1701,12 +1685,12 @@
         }
 
         .assistant-message-avatar {
-            width: 30px;
-            height: 30px;
+            width: var(--assistant-avatar-size);
+            height: var(--assistant-avatar-size);
             display: grid;
             place-items: center;
             overflow: hidden;
-            border-radius: 11px;
+            border-radius: 10px;
             background: #fff8fb;
             border: 1px solid rgba(198, 68, 125, 0.1);
             box-shadow: 0 8px 16px rgba(86, 25, 53, 0.07);
@@ -1739,9 +1723,9 @@
         }
 
         .assistant-bubble {
-            max-width: 92%;
+            max-width: 90%;
             padding: 13px 14px;
-            border-radius: 20px;
+            border-radius: 18px;
             line-height: 1.58;
             font-size: 0.95rem;
             box-shadow: 0 10px 24px rgba(86, 25, 53, 0.05);
@@ -2160,8 +2144,9 @@
             }
 
             .assistant-shell {
-                right: 10px;
-                left: auto;
+                --assistant-avatar-size: 28px;
+                right: 12px;
+                left: 12px;
                 bottom: max(10px, env(safe-area-inset-bottom));
                 justify-items: end;
             }
@@ -2170,7 +2155,7 @@
                 width: auto;
                 height: auto;
                 min-height: 46px;
-                padding: 0 14px 0 7px;
+                padding: 5px 13px 5px 6px;
                 aspect-ratio: auto;
                 border-radius: 999px;
                 justify-content: center;
@@ -2202,19 +2187,20 @@
             }
 
             .assistant-panel {
-                width: min(360px, calc(100vw - 30px));
+                width: min(100%, 388px);
                 max-height: min(610px, calc(100dvh - 126px));
                 border-radius: 24px;
             }
 
             .assistant-header {
-                padding: 14px 15px 12px;
+                min-height: 72px;
+                padding: 12px 13px;
             }
 
             .assistant-mascot-frame--header {
-                width: 46px;
-                height: 46px;
-                border-radius: 16px;
+                width: 44px;
+                height: 44px;
+                border-radius: 15px;
             }
 
             .assistant-header-copy strong {
@@ -2251,7 +2237,7 @@
             }
 
             .assistant-bubble {
-                max-width: 94%;
+                max-width: 92%;
                 padding: 11px 12px;
                 font-size: 0.88rem;
                 line-height: 1.52;
@@ -3226,11 +3212,36 @@
             if (!videos.length) return;
 
             const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const prefersReducedData = navigator.connection?.saveData === true;
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const effectiveType = connection?.effectiveType || '';
+            const prefersReducedData = connection?.saveData === true;
+            const hasSlowConnection = ['slow-2g', '2g', '3g'].includes(effectiveType);
+            const avoidsBackgroundLoading = prefersReducedData || hasSlowConnection;
             let activeVideo = null;
+            let backgroundVideoHydrated = false;
+
+            const getVideoUi = (video) => {
+                const media = video?.closest('.process-video-media');
+                return {
+                    media,
+                    button: media?.querySelector('[data-video-play]'),
+                    label: media?.querySelector('[data-video-play-label]'),
+                };
+            };
+
+            const setVideoState = (video, state, labelText = '') => {
+                const { media, button, label } = getVideoUi(video);
+                if (!media) return;
+
+                media.dataset.videoLoadState = state;
+                media.classList.toggle('is-loading', state === 'loading');
+                media.classList.toggle('has-video-error', state === 'error');
+                if (button) button.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
+                if (label && labelText) label.textContent = labelText;
+            };
 
             const hydrateVideo = (video) => {
-                if (!video || video.dataset.videoLoaded === 'true') return;
+                if (!video || video.dataset.videoLoaded === 'true') return false;
                 const sources = Array.from(video.querySelectorAll('source[data-src]'));
                 sources.forEach((source) => {
                     source.src = source.dataset.src;
@@ -3238,7 +3249,9 @@
                 });
                 video.dataset.videoLoaded = 'true';
                 video.preload = 'metadata';
+                setVideoState(video, 'loading', 'Cargando');
                 video.load();
+                return true;
             };
 
             const pauseVideo = (video) => {
@@ -3248,7 +3261,12 @@
 
             const playVideo = async (video) => {
                 if (!video || (activeVideo === video && !video.paused)) return;
-                hydrateVideo(video);
+                const hydratedNow = hydrateVideo(video);
+                const { media } = getVideoUi(video);
+                if (!hydratedNow && media?.dataset.videoLoadState === 'error') {
+                    setVideoState(video, 'loading', 'Cargando');
+                    video.load();
+                }
                 videos.forEach((item) => {
                     if (item !== video) pauseVideo(item);
                 });
@@ -3260,16 +3278,40 @@
                     await video.play();
                 } catch (error) {
                     activeVideo = null;
+                    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+                        setVideoState(video, 'ready', 'Reproducir');
+                    }
                 }
             };
 
             videos.forEach((video) => {
-                const media = video.closest('.process-video-media');
-                video.addEventListener('loadeddata', () => media?.classList.add('is-video-ready'));
-                video.addEventListener('play', () => media?.classList.add('is-playing'));
-                video.addEventListener('pause', () => media?.classList.remove('is-playing'));
+                const { media } = getVideoUi(video);
+                video.addEventListener('canplay', () => {
+                    media?.classList.add('is-video-ready');
+                    setVideoState(
+                        video,
+                        video.paused ? 'ready' : 'playing',
+                        video.paused ? 'Reproducir' : 'Reproduciendo',
+                    );
+                });
+                video.addEventListener('play', () => {
+                    media?.classList.add('is-playing', 'is-video-ready');
+                    setVideoState(video, 'playing', 'Reproduciendo');
+                });
+                video.addEventListener('pause', () => {
+                    media?.classList.remove('is-playing');
+                    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+                        setVideoState(video, 'ready', 'Continuar');
+                    }
+                });
                 video.addEventListener('ended', () => {
                     media?.classList.remove('is-playing');
+                    setVideoState(video, 'ready', 'Volver a ver');
+                    if (activeVideo === video) activeVideo = null;
+                });
+                video.addEventListener('error', () => {
+                    media?.classList.remove('is-playing', 'is-video-ready');
+                    setVideoState(video, 'error', 'Reintentar');
                     if (activeVideo === video) activeVideo = null;
                 });
             });
@@ -3281,35 +3323,42 @@
                 });
             });
 
-            if (!('IntersectionObserver' in window) || prefersReducedData) return;
+            if (!('IntersectionObserver' in window) || avoidsBackgroundLoading) return;
 
             const preloadObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach((entry) => {
-                    if (!entry.isIntersecting) return;
-                    hydrateVideo(entry.target);
-                    observer.unobserve(entry.target);
-                });
+                if (backgroundVideoHydrated) return;
+                const candidate = entries
+                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35)
+                    .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+                if (!candidate) return;
+
+                backgroundVideoHydrated = true;
+                hydrateVideo(candidate.target);
+                observer.disconnect();
             }, {
-                rootMargin: '320px 120px',
-                threshold: 0.01,
+                rootMargin: '40px 0px',
+                threshold: [0.35, 0.6],
             });
 
             videos.forEach((video) => preloadObserver.observe(video));
             if (prefersReducedMotion) return;
 
             const observer = new IntersectionObserver((entries) => {
+                const candidate = entries
+                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.72)
+                    .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+
                 entries.forEach((entry) => {
                     const video = entry.target;
-                    if (!entry.isIntersecting || entry.intersectionRatio < 0.68) {
+                    if (!entry.isIntersecting || entry.intersectionRatio < 0.72) {
                         if (activeVideo === video) activeVideo = null;
                         pauseVideo(video);
-                        return;
                     }
-
-                    playVideo(video);
                 });
+
+                if (candidate) playVideo(candidate.target);
             }, {
-                threshold: [0, 0.4, 0.68, 0.82],
+                threshold: [0, 0.4, 0.72, 0.86],
                 rootMargin: '-10% 0px -16% 0px',
             });
 
