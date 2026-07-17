@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Ingresar | Casita de Regalos{% endblock %}
+{% block body_class %}account-page{% endblock %}
+
+{% block content %}
+<section class="auth-shell">
+    <div class="auth-card">
+        <span class="account-kicker">Tu espacio en Casita</span>
+        <h1>Vuelve a tus regalos</h1>
+        <p>Recupera tu lista, consulta tus pedidos y decide qu&eacute; puede recordar Cora.</p>
+
+        <form method="post" class="account-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            <div class="field-group">
+                <label for="{{ form.username.id_for_label }}">Usuario</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="field-group">
+                <label for="{{ form.password.id_for_label }}">Contrase&ntilde;a</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+            {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+            <button type="submit" class="btn">Ingresar</button>
+        </form>
+
+        <p class="account-switch">&iquest;A&uacute;n no tienes cuenta? <a href="{% url 'account_signup' %}">Crear cuenta</a></p>
+    </div>
+    <aside class="auth-intro" aria-label="Beneficios de tu cuenta">
+        <span class="account-benefits-mark" aria-hidden="true">C</span>
+        <h2>Una experiencia m&aacute;s personal</h2>
+        <ul>
+            <li>Tu lista se mantiene sincronizada.</li>
+            <li>Ves el estado de tus pedidos.</li>
+            <li>Controlas por completo la memoria de Cora.</li>
+        </ul>
+    </aside>
+</section>
+{% endblock %}

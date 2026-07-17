@@ -60,6 +60,8 @@ class SecurityHeadersMiddlewareTests(SimpleTestCase):
         response = self._get_response("/")
 
         self.assertIn("Content-Security-Policy", response)
+        self.assertIn("https://fonts.googleapis.com", response["Content-Security-Policy"])
+        self.assertIn("https://fonts.gstatic.com", response["Content-Security-Policy"])
         self.assertEqual(response["X-Content-Type-Options"], "nosniff")
         self.assertEqual(response["X-Frame-Options"], "DENY")
         self.assertEqual(response["Origin-Agent-Cluster"], "?1")
@@ -70,3 +72,12 @@ class SecurityHeadersMiddlewareTests(SimpleTestCase):
         self.assertEqual(response["Cache-Control"], "no-store, no-cache, must-revalidate, max-age=0")
         self.assertEqual(response["Pragma"], "no-cache")
         self.assertEqual(response["Expires"], "0")
+
+    def test_cuenta_y_carrito_no_deben_quedar_cacheados(self):
+        for path in ("/cuenta/", "/cuenta/memoria/", "/carrito/"):
+            with self.subTest(path=path):
+                response = self._get_response(path)
+                self.assertEqual(
+                    response["Cache-Control"],
+                    "no-store, no-cache, must-revalidate, max-age=0",
+                )

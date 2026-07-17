@@ -18,6 +18,8 @@ urlpatterns = [
     path("", include("productos.urls")),
     path("categoria/", include("categorias.urls")),
     path("carrito/", include("carrito.urls")),
+    path("cuenta/memoria/", include("asistente.urls")),
+    path("cuenta/", include("cuentas.urls")),
 ]
 
 if settings.DEBUG:

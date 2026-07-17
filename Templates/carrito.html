@@ -1462,6 +1462,22 @@
                                                 <span class="product-tag">Seleccionado</span>
                                                 <span class="product-tag product-tag--soft">{{ item.producto.categoria.nombre|default:"Detalle" }}</span>
                                             </div>
+                                            {% if item.personalizacion %}
+                                                <div class="cart-personalization" aria-label="Personalizaci&oacute;n elegida">
+                                                    {% if item.cart_item.texto_personalizado %}<span>Texto: {{ item.cart_item.texto_personalizado }}</span>{% endif %}
+                                                    {% if item.cart_item.color %}<span>Color: {{ item.cart_item.color }}</span>{% endif %}
+                                                    {% if item.cart_item.variante %}<span>Variante: {{ item.cart_item.variante }}</span>{% endif %}
+                                                    {% if item.cart_item.fecha_entrega %}<span>Fecha: {{ item.cart_item.fecha_entrega|date:"d/m/Y" }}</span>{% endif %}
+                                                    {% if item.cart_item.mensaje_regalo %}<span>Mensaje: {{ item.cart_item.mensaje_regalo|truncatechars:60 }}</span>{% endif %}
+                                                     {% if item.cart_item.imagen_cliente %}<span>Imagen adjunta</span>{% endif %}
+                                                 </div>
+                                                 {% if item.cart_item.imagen_cliente %}
+                                                     <a class="cart-customer-preview" href="{{ item.cart_item.imagen_cliente.url }}" target="_blank" rel="noopener" aria-label="Abrir imagen adjunta para {{ item.producto.nombre }}">
+                                                         <img src="{{ item.cart_item.imagen_cliente.url }}" alt="Vista previa adjunta para {{ item.producto.nombre }}" loading="lazy" decoding="async">
+                                                         <span>Vista previa enviada</span>
+                                                     </a>
+                                                 {% endif %}
+                                             {% endif %}
                                         </div>
                                     </div>
                                 </td>
@@ -1487,7 +1503,7 @@
                                 </td>
                                 <td data-label="Subtotal"><span class="line-subtotal" data-cart-item-subtotal>{{ item.subtotal|cop }}</span></td>
                                 <td data-label="Quitar">
-                                    <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form js-cart-update-form">
+                                    <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form js-cart-update-form" data-confirm-submit="Retirar {{ item.producto.nombre }} de tu lista">
                                         {% csrf_token %}
                                         <button type="submit" class="remove-btn" aria-label="Quitar {{ item.producto.nombre }}">
                                             <span aria-hidden="true">&times;</span>
@@ -1501,7 +1517,7 @@
                 </table>
             </section>
 
-            <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form">
+            <form method="post" action="{% url 'comprar_whatsapp' %}" class="checkout-form js-whatsapp-checkout-form" data-confirm-submit="Enviar esta lista a WhatsApp para confirmar disponibilidad, entrega y valor final">
                 {% csrf_token %}
 
                 <div class="mobile-checkout-panel" aria-label="Lista m&oacute;vil para cotizar">
@@ -1514,11 +1530,10 @@
 
                 <div class="checkout-experience">
                     <section class="checkout-card" aria-labelledby="checkout-details-title">
-                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">💌</span>Datos opcionales</span>
+                        <span class="cart-eyebrow"><span class="soft-emoji" aria-hidden="true">💌</span>Datos de entrega</span>
                         <h2 id="checkout-details-title">Datos para personalizar</h2>
                         <p>
-                            Completa solo lo necesario. Esta informaci&oacute;n se incluye en el mensaje de
-                            WhatsApp para agilizar la confirmaci&oacute;n.
+                            Indica destinatario y fecha para validar disponibilidad. Los dem&aacute;s datos son opcionales.
                         </p>
 
                         <div class="checkout-fields">
@@ -1528,8 +1543,13 @@
                             </div>
 
                             <div class="checkout-field">
-                                <label for="checkout-para">&iquest;Para qui&eacute;n es?</label>
-                                <input type="text" id="checkout-para" name="para_quien" maxlength="120" placeholder="Mam&aacute;, pareja, amiga, empresa" value="{{ checkout_prefill.para_quien|default:'' }}">
+                                <label for="checkout-para">&iquest;Para qui&eacute;n es? <span class="field-required">*</span></label>
+                                <input type="text" id="checkout-para" name="para_quien" maxlength="120" placeholder="Mam&aacute;, pareja, amiga, empresa" value="{{ checkout_prefill.para_quien|default:'' }}" required autocomplete="off">
+                            </div>
+
+                            <div class="checkout-field">
+                                <label for="checkout-fecha">Fecha de entrega <span class="field-required">*</span></label>
+                                <input type="date" id="checkout-fecha" name="fecha_entrega" value="{{ checkout_prefill.fecha_entrega|default:'' }}" data-min-today required>
                             </div>
 
                             <div class="checkout-field checkout-field--full">
@@ -1543,10 +1563,7 @@
                             </div>
                         </div>
 
-                        <p class="checkout-help">
-                            Tambi&eacute;n puedes dejar estos campos en blanco y completar la informaci&oacute;n
-                            directamente en el chat.
-                        </p>
+                        <p class="checkout-help">Los campos con * son necesarios para preparar una cotizaci&oacute;n viable.</p>
                     </section>
 
                     <aside class="cart-summary-card" aria-label="Lista para cotizar">

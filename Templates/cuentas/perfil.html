@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load moneda %}
+
+{% block title %}Mi cuenta | Casita de Regalos{% endblock %}
+{% block body_class %}account-page{% endblock %}
+
+{% block content %}
+<section class="account-dashboard">
+    <header class="account-dashboard-header">
+        <div>
+            <span class="account-kicker">Mi cuenta</span>
+            <h1>Hola, {{ request.user.first_name|default:request.user.username }}</h1>
+            <p>Tu lista, pedidos y preferencias en un solo lugar.</p>
+        </div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn-secondary">Cerrar sesi&oacute;n</button>
+        </form>
+    </header>
+
+    <div class="account-summary-grid">
+        <a href="{% url 'ver_carrito' %}" class="account-summary-card">
+            <span>Lista activa</span>
+            <strong>{{ cart_snapshot.references }} referencias</strong>
+            <small>{{ cart_snapshot.total_label }} de base</small>
+        </a>
+        <a href="{% url 'assistant_memory' %}" class="account-summary-card">
+            <span>Memoria de Cora</span>
+            <strong>{% if memory_profile.is_memory_active %}Activa{% elif memory_profile.memory_enabled %}Pausada{% else %}Desactivada{% endif %}</strong>
+            <small>{{ memory_count }} recuerdos bajo tu control</small>
+        </a>
+        <div class="account-summary-card">
+            <span>Pedidos</span>
+            <strong>{{ orders|length }} recientes</strong>
+            <small>Seguimiento desde tu cuenta</small>
+        </div>
+    </div>
+
+    <div class="account-dashboard-grid">
+        <section class="account-panel">
+            <div class="account-panel-heading">
+                <div><span class="account-kicker">Datos personales</span><h2>Tu perfil</h2></div>
+            </div>
+            <form method="post" action="{% url 'account_update' %}" class="account-form account-form--grid">
+                {% csrf_token %}
+                {% for field in profile_form %}
+                    <div class="field-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                <button type="submit" class="btn">Guardar cambios</button>
+            </form>
+        </section>
+
+        <section class="account-panel">
+            <div class="account-panel-heading">
+                <div><span class="account-kicker">Seguimiento</span><h2>Pedidos recientes</h2></div>
+            </div>
+            {% if orders %}
+                <div class="order-list">
+                    {% for order in orders %}
+                        <article class="order-row">
+                            <div><strong>Pedido #{{ order.pk }}</strong><span>{{ order.fecha|date:"d M Y" }}</span></div>
+                            <span class="order-status order-status--{{ order.estado }}">{{ order.get_estado_display }}</span>
+                            <strong>{{ order.total|cop }}</strong>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="account-empty"><p>A&uacute;n no tienes pedidos asociados a esta cuenta.</p><a href="{% url 'catalogo' %}" class="btn-secondary">Explorar cat&aacute;logo</a></div>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}

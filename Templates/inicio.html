@@ -3791,8 +3791,8 @@
             </div>
 
             <div class="hero-actions">
-                <a href="{% url 'catalogo' %}#catalogo" class="btn"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Ver cat&aacute;logo</a>
-                <a href="{% url 'disena_regalo' %}" class="btn-secondary"><span class="soft-emoji" aria-hidden="true">&#127872;</span>Armar regalo a medida</a>
+                <a href="{% url 'disena_regalo' %}" class="btn"><span class="soft-emoji" aria-hidden="true">&#127872;</span>Crear mi regalo</a>
+                <a href="{% url 'catalogo' %}#catalogo" class="btn-secondary">Explorar ideas</a>
             </div>
 
             <div class="hero-quicklinks" aria-label="Atajos r&aacute;pidos">
@@ -3802,52 +3802,41 @@
 
         </div>
 
-        <aside class="hero-panel hero-gallery-panel">
-            <div class="hero-gallery-copy">
-                <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#127872;</span>Inspiraci&oacute;n para regalar</span>
-                <h2>Detalles pensados para emocionar</h2>
-                <p>Desliza ideas especiales, elige una base que conecte con la ocasi&oacute;n y cotizamos juntos el acabado por WhatsApp.</p>
-            </div>
-
-            {% if destacados %}
-                <div class="hero-product-carousel carousel-shell js-carousel">
-                    <button type="button" class="carousel-btn" data-carousel-prev aria-label="Ver referencia anterior">&lsaquo;</button>
-                    <div class="hero-product-track carousel-track js-carousel-track" aria-label="Vista r&aacute;pida de productos destacados">
-                        {% for producto in destacados %}
-                            <a href="{% url 'detalle_producto' producto.id %}" class="hero-product-card">
-                                <div class="hero-product-media">
-                                    {% if producto.imagen %}
-                                        <img
-                                            src="{{ producto.imagen.url|optimized_image_url }}"
-                                            alt="{{ producto.nombre }}"
-                                            {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy" fetchpriority="low"{% endif %}
-                                            decoding="async"
-                                            sizes="(max-width: 680px) 58vw, 210px"
-                                        >
-                                    {% else %}
-                                        <span class="hero-product-placeholder">Imagen pendiente</span>
-                                    {% endif %}
-                                </div>
-                                <div class="hero-product-info">
-                                    <span class="hero-product-category">{{ producto.categoria.nombre|default:"Detalle" }}</span>
-                                    <strong class="hero-product-title">{{ producto.nombre }}</strong>
-                                    <span class="hero-product-meta">
-                                        <span class="hero-product-price">Desde {{ producto.precio|cop }}<span class="hero-price-currency"> COP</span></span>
-                                        <span class="hero-product-cta">Ver detalle</span>
-                                    </span>
-                                </div>
-                            </a>
-                        {% endfor %}
+        <aside class="hero-process-panel" aria-label="Proceso de elaboraci&oacute;n de Casita de Regalos">
+            {% if videos_elaboracion %}
+                {% with hero_video=videos_elaboracion.0 video_poster=videos_elaboracion.0.display_poster_url %}
+                    <div class="hero-process-media">
+                        <video
+                            id="hero-process-video"
+                            autoplay
+                            muted
+                            loop
+                            playsinline
+                            preload="metadata"
+                            data-autoplay-video
+                            {% if video_poster %}poster="{{ video_poster }}"{% endif %}
+                            aria-label="Video: {{ hero_video.titulo }}"
+                        >
+                            <source src="{{ hero_video.video.url }}" type="{{ hero_video.mime_type }}">
+                            Tu navegador no soporta video HTML5.
+                        </video>
+                        <div class="hero-process-overlay">
+                            <div>
+                                <span>Hecho en Casita</span>
+                                <strong>{{ hero_video.titulo }}</strong>
+                            </div>
+                            <button type="button" class="hero-process-sound" data-hero-video-sound="hero-process-video" aria-pressed="false" aria-label="Activar sonido del video">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Zm12.5 1.2a3 3 0 0 1 0 3.6M19.8 7a7 7 0 0 1 0 10"/></svg>
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" class="carousel-btn" data-carousel-next aria-label="Ver siguiente referencia">&rsaquo;</button>
-                </div>
+                {% endwith %}
             {% else %}
-                <p class="hero-product-empty">No hay productos destacados todav&iacute;a.</p>
+                <div class="hero-process-empty">
+                    <strong>Un detalle cuidado paso a paso</strong>
+                    <span>Muy pronto ver&aacute;s aqu&iacute; nuestro proceso real.</span>
+                </div>
             {% endif %}
-            <div class="hero-panel-note">
-                <span>Los precios son base y pueden variar seg&uacute;n personalizaci&oacute;n.</span>
-                <strong><span class="soft-emoji" aria-hidden="true">&#128172;</span>Cotiza antes de pagar</strong>
-            </div>
         </aside>
     </div>
 </section>
@@ -3904,7 +3893,7 @@
                                 <strong>Proceso real</strong>
                             </div>
                             {% with video_poster=video_item.display_poster_url %}
-                                <video controls muted loop preload="none" playsinline data-autoplay-video{% if video_poster %} poster="{{ video_poster }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
+                                <video muted loop preload="none" playsinline data-autoplay-video{% if video_poster %} poster="{{ video_poster }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
                                     <source data-src="{{ video_item.video.url }}" type="{{ video_item.mime_type }}">
                                     Tu navegador no soporta video HTML5.
                                 </video>

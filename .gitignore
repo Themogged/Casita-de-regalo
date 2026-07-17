@@ -7,6 +7,10 @@ __pycache__/
 .DS_Store
 Thumbs.db
 .tmp-test-media/
+.tmp/
+staticfiles/
+media/personalizaciones/
+design_versions/
 
 media/referencias/originales/
 media/productos/*.gif

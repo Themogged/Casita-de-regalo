@@ -61,6 +61,8 @@ INSTALLED_APPS = [
     "carrito",
     "categorias",
     "pedidos",
+    "cuentas",
+    "asistente",
 ]
 
 
@@ -96,6 +98,7 @@ TEMPLATES = [
                 "carrito.context_processors.carrito_total",
                 "productos.context_processors.categorias_menu",
                 "productos.context_processors.business_links",
+                "asistente.context_processors.assistant_account_context",
             ],
         },
     },
@@ -131,7 +134,14 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 # 🔥 MEDIA (IMÁGENES SUBIDAS)
@@ -152,11 +162,15 @@ CACHES = {
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_AGE = int(os.getenv("DJANGO_SESSION_COOKIE_AGE", str(60 * 60 * 8)))
+SESSION_COOKIE_AGE = int(os.getenv("DJANGO_SESSION_COOKIE_AGE", str(60 * 60 * 24 * 30)))
 SESSION_EXPIRE_AT_BROWSER_CLOSE = env_bool(
     "DJANGO_SESSION_EXPIRE_AT_BROWSER_CLOSE",
-    True,
+    False,
 )
+
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "account_profile"
+LOGOUT_REDIRECT_URL = "inicio"
 
 CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"

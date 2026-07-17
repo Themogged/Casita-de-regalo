@@ -1,0 +1,17 @@
+from django.contrib.auth import views as auth_views
+from django.urls import path
+
+from . import views
+
+
+urlpatterns = [
+    path("", views.profile, name="account_profile"),
+    path("actualizar/", views.update_profile, name="account_update"),
+    path("crear/", views.signup, name="account_signup"),
+    path(
+        "ingresar/",
+        auth_views.LoginView.as_view(template_name="cuentas/ingresar.html"),
+        name="login",
+    ),
+    path("salir/", auth_views.LogoutView.as_view(), name="logout"),
+]

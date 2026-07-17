@@ -122,8 +122,13 @@ def _serialize_catalog_context():
     return context
 
 
-def _build_system_prompt(cart_context=""):
+def _build_system_prompt(cart_context="", assistant_context=""):
     session_context = f"\nContexto de la sesión actual:\n{cart_context}" if cart_context else ""
+    trusted_context = (
+        f"\nContexto adicional confirmado o visible en la interfaz:\n{assistant_context}"
+        if assistant_context
+        else ""
+    )
     return (
         "Eres la asesora virtual oficial de Casita de Regalos. "
         "Respondes en español natural, cálido, claro y muy comercial. "
@@ -136,6 +141,7 @@ def _build_system_prompt(cart_context=""):
         "Contexto real del negocio y catálogo:\n"
         f"{_serialize_catalog_context()}"
         f"{session_context}"
+        f"{trusted_context}"
     )
 
 
@@ -238,7 +244,7 @@ def _extract_output_text(payload):
     return "\n".join(fragment.strip() for fragment in fragments if fragment.strip()).strip()
 
 
-def _call_openai_responses_api(message, history, cart_context=""):
+def _call_openai_responses_api(message, history, cart_context="", assistant_context=""):
     api_key = _get_openai_api_key()
     if not api_key:
         raise AssistantProviderError("OPENAI_API_KEY no está configurada.")
@@ -246,7 +252,12 @@ def _call_openai_responses_api(message, history, cart_context=""):
     inputs = [
         {
             "role": "system",
-            "content": [{"type": "input_text", "text": _build_system_prompt(cart_context)}],
+            "content": [
+                {
+                    "type": "input_text",
+                    "text": _build_system_prompt(cart_context, assistant_context),
+                }
+            ],
         }
     ]
 
@@ -411,6 +422,7 @@ def _detect_intent_and_context(message, history=None, cart=None):
         "ocasion": ["cumple", "aniversario", "amor", "romantico", "amistad", "gracias", "sorpresa", "desayuno", "novia", "novio"],
         "infantil": ["nino", "nina", "infantil", "tematico", "tematicos", "personaje", "bebe"],
         "compra": ["comprar", "carrito", "agregar", "pedido", "adquirir", "finalizar"],
+        "order_status": ["estado de mi pedido", "estado del pedido", "seguimiento", "rastrear", "como va mi pedido", "donde va mi pedido"],
         "lista": ["lista", "cotizar", "cotizacion", "resumen", "guardado", "guardados"],
         "pago": ["pago", "pagos", "pagar", "nequi", "bancolombia", "transferencia", "consignar"],
         "entrega": ["entrega", "envio", "domicilio", "medellin", "bello", "direccion", "tiempo"],
@@ -604,7 +616,9 @@ def _build_fallback_actions(context_data):
     if "medida" in intents or "personalizacion" in intents:
         actions.append({"label": "Armar regalo", "href": reverse("disena_regalo")})
 
-    if "lista" in intents or "compra" in intents:
+    if "order_status" in intents:
+        actions.append({"label": "Ver mis pedidos", "href": reverse("account_profile")})
+    elif "lista" in intents or "compra" in intents:
         actions.append({"label": "Ver mi lista", "href": reverse("ver_carrito")})
     elif "pago" in intents or "entrega" in intents:
         actions.append({"label": "Cómo comprar", "href": f"{reverse('inicio')}#como-comprar"})
@@ -650,8 +664,25 @@ def _build_fallback_message(context_data):
     products = _get_context_products(context_data)
     price_range = context_data["price_range"]
     cart_summary = context_data["cart"]
+    orders = context_data.get("orders", [])
 
     greeting = "Hola, te ayudo a encontrar un detalle lindo y bien pensado."
+    if "order_status" in intents:
+        if orders:
+            latest = orders[0]
+            delivery = (
+                f" La fecha solicitada es {latest['delivery_label']}."
+                if latest.get("delivery_label")
+                else ""
+            )
+            return (
+                f"Tu pedido #{latest['id']} figura como {latest['status_label'].lower()}.{delivery} "
+                "Si necesitas confirmar un cambio o la hora exacta, escríbenos por WhatsApp."
+            )
+        return (
+            "No encuentro pedidos vinculados a esta cuenta. Revisa que hayas iniciado sesión con la cuenta usada al cotizar "
+            "o escríbenos por WhatsApp con el nombre del destinatario."
+        )
     if "saludo" in intents and not intents - {"saludo"}:
         return (
             f"{greeting} Puedes preguntarme por categoría, presupuesto, pagos, personalización o entrega, "
@@ -786,7 +817,41 @@ def _fallback_reply(message, history=None, cart=None):
     }
 
 
-def get_assistant_reply(message, history=None, cart=None):
+def _personalize_fallback(message, response_text, memory_facts=None, page_context=None):
+    memory_facts = memory_facts or []
+    page_context = page_context or {}
+    normalized = _normalize_text(message)
+    parts = []
+
+    product_name = str(page_context.get("product_name", "")).strip()
+    if product_name and any(token in normalized for token in ("este", "esta", "producto", "regalo")):
+        parts.append(f"Veo que estás revisando {product_name}.")
+
+    fact_map = {fact.get("key"): fact.get("content") for fact in memory_facts if isinstance(fact, dict)}
+    favorite_color = fact_map.get("favorite_color")
+    favorite_style = fact_map.get("favorite_style")
+    usual_budget = fact_map.get("usual_budget")
+    if any(token in normalized for token in ("recomienda", "elegir", "personaliz", "medida")):
+        preferences = [value for value in (favorite_color, favorite_style) if value]
+        if preferences:
+            parts.append(f"Puedo priorizar {', '.join(preferences)} en las opciones.")
+        if usual_budget:
+            parts.append(f"También puedo mantenerme cerca de {usual_budget}.")
+
+    parts.append(response_text)
+    return " ".join(parts)
+
+
+def get_assistant_reply(
+    message,
+    history=None,
+    cart=None,
+    *,
+    assistant_context="",
+    memory_facts=None,
+    page_context=None,
+    order_context=None,
+):
     clean_message = (message or "").strip()
     if not clean_message:
         return {
@@ -805,11 +870,17 @@ def get_assistant_reply(message, history=None, cart=None):
         }
 
     context_data = _detect_intent_and_context(clean_message, history=history, cart=cart)
+    context_data["orders"] = order_context or []
     cart_context = _serialize_cart_context(context_data["cart"])
 
     if _get_openai_api_key():
         try:
-            ai_message = _call_openai_responses_api(clean_message, history or [], cart_context=cart_context)
+            ai_message = _call_openai_responses_api(
+                clean_message,
+                history or [],
+                cart_context=cart_context,
+                assistant_context=assistant_context,
+            )
             return {
                 "message": ai_message,
                 "mode": "ai",
@@ -819,8 +890,14 @@ def get_assistant_reply(message, history=None, cart=None):
         except AssistantProviderError as exc:
             logger.warning("El proveedor del asistente falló; se usará la respuesta local: %s", exc)
 
+    fallback_message = _personalize_fallback(
+        clean_message,
+        _build_fallback_message(context_data),
+        memory_facts=memory_facts,
+        page_context=page_context,
+    )
     return {
-        "message": _build_fallback_message(context_data),
+        "message": fallback_message,
         "mode": "fallback",
         "configured": False,
         "actions": _build_fallback_actions(context_data),

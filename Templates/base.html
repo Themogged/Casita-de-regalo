@@ -16,6 +16,7 @@
     {% block og_image %}{% endblock %}
     <title>{% block title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}</title>
     {% block structured_data %}{% endblock %}
+    <link rel="icon" href="{% static 'productos/img/logo-casita-admin.webp' %}" type="image/webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -82,8 +83,6 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            transition: none !important;
-            animation: none !important;
         }
 
         html {
@@ -2620,6 +2619,7 @@
         }
     </style>
     {% block extra_head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <header class="site-header">
@@ -2639,11 +2639,29 @@
                 <a href="#footer" class="header-link">Contacto</a>
             </nav>
 
+            <form class="header-search" action="{% url 'catalogo' %}" method="get" role="search">
+                <label class="sr-only" for="header-search-input">Buscar en el cat&aacute;logo</label>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/>
+                </svg>
+                <input id="header-search-input" type="search" name="q" placeholder="Buscar un regalo" autocomplete="off">
+                <button type="submit">Buscar</button>
+            </form>
+
             <div class="header-actions">
-                <a href="{% url 'ver_carrito' %}" class="cart-btn" aria-label="Ver lista para cotizar">
+                <a href="{% if request.user.is_authenticated %}{% url 'account_profile' %}{% else %}{% url 'login' %}?next={% url 'account_profile' %}{% endif %}" class="profile-btn" aria-label="{% if request.user.is_authenticated %}Abrir mi perfil{% else %}Ingresar a mi cuenta{% endif %}" title="{% if request.user.is_authenticated %}Mi perfil{% else %}Ingresar{% endif %}">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 12a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Zm7.25 8.5a7.25 7.25 0 0 0-14.5 0"/>
+                    </svg>
+                    <span class="profile-label">{% if request.user.is_authenticated %}Mi cuenta{% else %}Ingresar{% endif %}</span>
+                </a>
+                <button type="button" class="cart-btn" aria-label="Abrir lista para cotizar" data-cart-drawer-toggle>
+                    <svg class="cart-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M4 5h2l1.5 9.2a2 2 0 0 0 2 1.7h7.7a2 2 0 0 0 1.95-1.55L20.4 9H7.1M10 20h.01M17 20h.01"/>
+                    </svg>
                     <span class="cart-label">Lista</span>
                     <span class="cart-count">{{ carrito_total }}</span>
-                </a>
+                </button>
                 <button class="menu-toggle" type="button" aria-label="Abrir men&uacute;" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>
                     <span class="menu-toggle-lines" aria-hidden="true"></span>
                 </button>
@@ -2802,11 +2820,60 @@
         </svg>
     </a>
 
+    <div class="cart-drawer-layer" data-cart-drawer-layer hidden>
+        <button type="button" class="cart-drawer-backdrop" data-cart-drawer-close aria-label="Cerrar lista"></button>
+        <aside
+            class="cart-drawer"
+            id="cart-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="cart-drawer-title"
+            data-cart-drawer
+            data-cart-summary-endpoint="{% url 'resumen_carrito' %}"
+        >
+            <header class="cart-drawer-header">
+                <div>
+                    <span class="cart-drawer-eyebrow">Tu selecci&oacute;n</span>
+                    <h2 id="cart-drawer-title">Lista para cotizar</h2>
+                </div>
+                <button type="button" class="cart-drawer-close" data-cart-drawer-close aria-label="Cerrar lista">&times;</button>
+            </header>
+            <div class="cart-drawer-body" data-cart-drawer-items aria-live="polite">
+                <div class="cart-drawer-loading" role="status">
+                    <span></span><span></span><span></span>
+                    <p>Preparando tu lista...</p>
+                </div>
+            </div>
+            <footer class="cart-drawer-footer">
+                <div class="cart-drawer-total">
+                    <span>Subtotal base</span>
+                    <strong data-cart-drawer-total>$0</strong>
+                </div>
+                <a href="{% url 'ver_carrito' %}" class="btn" data-cart-drawer-checkout>Revisar y finalizar</a>
+                <button type="button" class="btn-secondary" data-cart-drawer-close>Seguir explorando</button>
+                <small>Confirmamos personalizaci&oacute;n, entrega y valor final antes de elaborar.</small>
+            </footer>
+        </aside>
+    </div>
+
+    <dialog class="confirm-dialog" data-confirm-dialog aria-labelledby="confirm-dialog-title">
+        <form method="dialog" class="confirm-dialog-card">
+            <span class="confirm-dialog-icon" aria-hidden="true">&times;</span>
+            <h2 id="confirm-dialog-title">&iquest;Retirar este producto?</h2>
+            <p data-confirm-dialog-copy>Se quitar&aacute; de tu lista para cotizar.</p>
+            <div class="confirm-dialog-actions">
+                <button value="cancel" class="btn-secondary">Conservar</button>
+                <button value="confirm" class="btn confirm-dialog-danger">S&iacute;, retirar</button>
+            </div>
+        </form>
+    </dialog>
+
     <div
         class="assistant-shell"
         data-assistant
         data-assistant-endpoint="{% url 'assistant_chat' %}"
         data-assistant-avatar="{% static 'productos/img/assistant-cora.webp' %}"
+        data-memory-active="{% if assistant_memory_active %}true{% else %}false{% endif %}"
     >
         <section
             class="assistant-panel"
@@ -2834,7 +2901,15 @@
                         <span data-assistant-status class="assistant-status">Asistente de Casita</span>
                     </div>
                 </div>
-                <button type="button" class="assistant-close" data-assistant-close aria-label="Cerrar asistente">×</button>
+                <div class="assistant-header-actions">
+                    <button type="button" class="assistant-icon-control" data-assistant-sound aria-pressed="false" aria-label="Activar sonido" title="Sonido desactivado">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Zm12.5 1.2a3 3 0 0 1 0 3.6M19.8 7a7 7 0 0 1 0 10"/></svg>
+                    </button>
+                    <a href="{% if request.user.is_authenticated %}{% url 'assistant_memory' %}{% else %}{% url 'login' %}?next={% url 'assistant_memory' %}{% endif %}" class="assistant-icon-control" aria-label="Abrir memoria del asistente" title="Memoria del asistente">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 4.5A3.5 3.5 0 0 0 6 8v1a3 3 0 0 0-1 5.83V16a3.5 3.5 0 0 0 5.5 2.87M14.5 4.5A3.5 3.5 0 0 1 18 8v1a3 3 0 0 1 1 5.83V16a3.5 3.5 0 0 1-5.5 2.87M12 4v16M9 9h3M12 15h3"/></svg>
+                    </a>
+                    <button type="button" class="assistant-close" data-assistant-close aria-label="Minimizar asistente">×</button>
+                </div>
             </header>
 
             <div class="assistant-body">
@@ -2849,6 +2924,11 @@
                         <button type="button" class="assistant-suggestion" data-assistant-prompt="Cómo funcionan la entrega y la reserva">Entrega</button>
                     </div>
                 </div>
+
+                <label class="assistant-private-toggle">
+                    <input type="checkbox" data-assistant-private>
+                    <span>No recordar esta conversaci&oacute;n</span>
+                </label>
 
                 <form class="assistant-form" data-assistant-form>
                     <input
@@ -3387,9 +3467,19 @@
 
         const assistantCategories = buildAssistantCategoryActions();
 
+        const readAssistantHistory = () => {
+            try {
+                const stored = JSON.parse(window.sessionStorage.getItem('coraConversation') || '[]');
+                return Array.isArray(stored) ? stored.slice(-20) : [];
+            } catch (error) {
+                return [];
+            }
+        };
+
         const assistantState = {
             greeted: false,
-            history: [],
+            history: readAssistantHistory(),
+            privateHistory: [],
             mode: 'fallback',
             pending: false,
         };
@@ -3405,6 +3495,7 @@
             send: document.querySelector('[data-assistant-send]'),
             suggestions: document.querySelector('[data-assistant-suggestions]'),
             status: document.querySelector('[data-assistant-status]'),
+            privateSession: document.querySelector('[data-assistant-private]'),
         };
 
         const assistantGestureTimers = {};
@@ -3496,8 +3587,16 @@
 
         const pushAssistantHistory = (role, text) => {
             if (!text) return;
-            assistantState.history.push({ role, text });
-            assistantState.history = assistantState.history.slice(-8);
+            const isPrivate = assistantElements.privateSession?.checked === true;
+            const target = isPrivate ? 'privateHistory' : 'history';
+            assistantState[target].push({ role, text });
+            assistantState[target] = assistantState[target].slice(-20);
+            if (isPrivate) return;
+            try {
+                window.sessionStorage.setItem('coraConversation', JSON.stringify(assistantState.history));
+            } catch (error) {
+                // La conversación sigue disponible en la sesión de Django.
+            }
         };
 
         const showAssistantTyping = () => {
@@ -3516,6 +3615,15 @@
         });
 
         const assistantEndpoint = assistantElements.shell?.dataset.assistantEndpoint || '';
+
+        const getAssistantPageContext = () => ({
+            path: window.location.pathname,
+            page_title: document.title,
+            product_id: document.querySelector('meta[name="assistant-product-id"]')?.content || '',
+            product_name: document.querySelector('meta[name="assistant-product-name"]')?.content || '',
+            category: document.querySelector('meta[name="assistant-product-category"]')?.content || '',
+            selected_options: document.querySelector('[data-designer-summary]')?.textContent?.trim() || '',
+        });
 
         const assistantFallbackKnowledge = (rawInput) => {
             const input = normalizeAssistantText(rawInput);
@@ -3677,6 +3785,8 @@
                 body: JSON.stringify({
                     message,
                     history,
+                    context: getAssistantPageContext(),
+                    private_session: assistantElements.privateSession?.checked === true,
                 }),
             });
 
@@ -3703,7 +3813,16 @@
 
             if (!assistantState.greeted) {
                 updateAssistantStatus('fallback');
-                appendAssistantMessage({ role: 'bot', ...getAssistantWelcome() });
+                if (assistantState.history.length) {
+                    assistantState.history.slice(-8).forEach((item) => {
+                        appendAssistantMessage({
+                            role: item.role === 'assistant' ? 'bot' : 'user',
+                            text: item.text,
+                        });
+                    });
+                } else {
+                    appendAssistantMessage({ role: 'bot', ...getAssistantWelcome() });
+                }
                 assistantState.greeted = true;
             }
 
@@ -3737,7 +3856,10 @@
             assistantState.pending = true;
             setAssistantPending(true);
             appendAssistantMessage({ role: 'user', text: cleanText });
-            const historyBeforeRequest = assistantState.history.slice(-8);
+            const activeHistory = assistantElements.privateSession?.checked
+                ? assistantState.privateHistory
+                : assistantState.history;
+            const historyBeforeRequest = activeHistory.slice(-8);
 
             const typingNode = showAssistantTyping();
 
@@ -3746,6 +3868,7 @@
                 typingNode?.remove();
                 updateAssistantStatus(response.mode || 'fallback');
                 appendAssistantMessage({ role: 'bot', text: response.reply, actions: response.actions || [] });
+                document.dispatchEvent(new CustomEvent('assistant:reply', { detail: response }));
                 playAssistantGesture('celebrating', 760);
                 pushAssistantHistory('user', cleanText);
                 pushAssistantHistory('assistant', response.reply);
@@ -3764,7 +3887,7 @@
         };
 
         const initAssistant = () => {
-            const { shell, panel, toggle, close, form, input, suggestions } = assistantElements;
+            const { shell, panel, toggle, close, form, input, suggestions, privateSession, messages } = assistantElements;
             if (!shell || !panel || !toggle || !close || !form || !input || !suggestions) return;
 
             toggle.addEventListener('click', () => {
@@ -3789,6 +3912,28 @@
                 if (!value) return;
                 await handleAssistantPrompt(value);
                 input.value = '';
+            });
+
+            privateSession?.addEventListener('change', () => {
+                messages.replaceChildren();
+                const activeHistory = privateSession.checked
+                    ? assistantState.privateHistory
+                    : assistantState.history;
+                if (activeHistory.length) {
+                    activeHistory.slice(-8).forEach((item) => {
+                        appendAssistantMessage({
+                            role: item.role === 'assistant' ? 'bot' : 'user',
+                            text: item.text,
+                        });
+                    });
+                } else {
+                    appendAssistantMessage({
+                        role: 'bot',
+                        text: privateSession.checked
+                            ? 'Conversación privada activa. Estos mensajes no se guardarán al salir.'
+                            : getAssistantWelcome().text,
+                    });
+                }
             });
 
             document.addEventListener('keydown', (event) => {
@@ -3906,6 +4051,7 @@
 
                     const data = await response.json();
                     updateCartPageState(data);
+                    document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
                     const updateOk = response.ok && data.ok !== false;
                     const updateVariant = updateOk
                         ? (data.item_removed ? 'cart-removed' : 'cart-updated')
@@ -4032,10 +4178,14 @@
                         'X-CSRFToken': getCsrfToken(form),
                     },
                     credentials: 'same-origin',
+                    body: new FormData(form),
                 });
 
                 const data = await response.json();
                 showAddToCartToast(data, response);
+                document.dispatchEvent(new CustomEvent('cart:updated', {
+                    detail: { ...data, openDrawer: data.ok === true && response.ok },
+                }));
 
                 if (typeof data.cart_total !== 'undefined') {
                     if (data.ok === true && response.ok) {
@@ -4109,5 +4259,6 @@
         initAutoplayVideos();
         initAssistant();
     </script>
+    <script src="{% static 'productos/js/storefront-v3.js' %}" defer></script>
 </body>
 </html>

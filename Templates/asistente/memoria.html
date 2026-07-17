@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Memoria del asistente | Casita de Regalos{% endblock %}
+{% block body_class %}memory-page{% endblock %}
+
+{% block content %}
+<section class="memory-shell">
+    <header class="memory-hero">
+        <div>
+            <span class="account-kicker">Privacidad y control</span>
+            <h1>Memoria del asistente</h1>
+            <p>T&uacute; decides qu&eacute; puede recordar Cora. Nada sensible se guarda sin autorizaci&oacute;n expl&iacute;cita.</p>
+        </div>
+        <div class="memory-status {% if memory_profile.is_memory_active %}is-active{% endif %}">
+            <span></span>
+            {% if memory_profile.is_memory_active %}Memoria activa{% elif memory_profile.memory_enabled %}Memoria pausada{% else %}Memoria desactivada{% endif %}
+        </div>
+    </header>
+
+    <div class="memory-layout">
+        <aside class="memory-controls account-panel">
+            <h2>Configuraci&oacute;n</h2>
+            <form method="post" action="{% url 'assistant_memory_settings' %}" class="memory-settings-form">
+                {% csrf_token %}
+                <label class="memory-master-switch">
+                    {{ settings_form.memory_enabled }}
+                    <span><strong>Permitir memoria</strong><small>Guarda solo datos autorizados y confirmados.</small></span>
+                </label>
+                <fieldset>
+                    <legend>Puede recordar</legend>
+                    {{ settings_form.allowed_categories }}
+                </fieldset>
+                <button type="submit" class="btn">Guardar configuraci&oacute;n</button>
+            </form>
+
+            {% if memory_profile.memory_enabled %}
+                <form method="post" action="{% url 'assistant_memory_pause' %}" class="memory-inline-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="hours" value="24">
+                    <button class="btn-secondary" type="submit">Pausar por 24 horas</button>
+                </form>
+            {% endif %}
+            <a href="{% url 'assistant_memory_export' %}" class="btn-secondary">Exportar mis datos</a>
+        </aside>
+
+        <section class="memory-list-panel account-panel">
+            <div class="account-panel-heading">
+                <div><span class="account-kicker">{{ memories|length }} guardados</span><h2>Lo que Cora recuerda</h2></div>
+            </div>
+            {% if memories %}
+                <div class="memory-list">
+                    {% for memory in memories %}
+                        <article class="memory-item">
+                            <div class="memory-item-main">
+                                <span>{{ memory.get_category_display }}</span>
+                                <strong>{{ memory.content }}</strong>
+                                <small>{{ memory.get_memory_type_display }} &middot; Actualizado {{ memory.updated_at|date:"d/m/Y H:i" }} &middot; {{ memory.get_source_display }}</small>
+                            </div>
+                            <div class="memory-item-actions">
+                                <a href="{% url 'assistant_memory_edit' memory.pk %}" class="btn-secondary">Editar</a>
+                                <form method="post" action="{% url 'assistant_memory_delete' memory.pk %}" data-confirm-submit="Eliminar este recuerdo">
+                                    {% csrf_token %}
+                                    <button type="submit" class="text-danger">Eliminar</button>
+                                </form>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="account-empty">
+                    <p>No hay recuerdos guardados. La memoria permanece bajo tu control y empieza desactivada.</p>
+                </div>
+            {% endif %}
+
+            {% if memories %}
+                <form method="post" action="{% url 'assistant_memory_clear' %}" class="memory-danger-zone" data-confirm-submit="Borrar toda la memoria de Cora">
+                    {% csrf_token %}
+                    <div><strong>Borrar toda la memoria</strong><span>Esta acci&oacute;n elimina recuerdos y conversaciones guardadas.</span></div>
+                    <button type="submit" class="text-danger">Borrar todo</button>
+                </form>
+            {% endif %}
+        </section>
+    </div>
+</section>
+{% endblock %}

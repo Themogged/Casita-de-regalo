@@ -1,6 +1,14 @@
+from datetime import date, timedelta
+from io import BytesIO
+
+from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
+from PIL import Image
 
+from carrito.models import Carrito, CarritoItem
 from pedidos.models import Pedido
 from productos.models import Categoria, Producto
 
@@ -15,6 +23,10 @@ class CarritoViewsTests(TestCase):
             stock=3,
             categoria=categoria,
         )
+        self.checkout_data = {
+            'para_quien': 'Laura',
+            'fecha_entrega': (date.today() + timedelta(days=2)).isoformat(),
+        }
 
     def test_agregar_redirige_al_catalogo_con_anchor_si_viene_del_inicio(self):
         response = self.client.post(
@@ -74,6 +86,8 @@ class CarritoViewsTests(TestCase):
         self.assertContains(response, 'Datos para personalizar')
         self.assertContains(response, 'name="ocasion"')
         self.assertContains(response, 'name="para_quien"')
+        self.assertContains(response, 'name="fecha_entrega"')
+        self.assertContains(response, 'data-min-today')
         self.assertContains(response, 'name="mensaje_tarjeta"')
         self.assertContains(response, 'name="detalle_extra"')
         self.assertContains(response, 'Cotizar por WhatsApp')
@@ -100,16 +114,14 @@ class CarritoViewsTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertJSONEqual(
-            response.content,
-            {
-                'ok': True,
-                'level': 'success',
-                'message': 'Desayuno prueba guardado para cotizar.',
-                'cart_total': 1,
-                'product_id': self.producto.id,
-            },
-        )
+        data = response.json()
+        self.assertEqual(data['ok'], True)
+        self.assertEqual(data['level'], 'success')
+        self.assertEqual(data['message'], 'Desayuno prueba guardado para cotizar.')
+        self.assertEqual(data['cart_total'], 1)
+        self.assertEqual(data['product_id'], self.producto.id)
+        self.assertEqual(data['cart']['units'], 1)
+        self.assertEqual(data['cart']['items'][0]['product_id'], self.producto.id)
 
     def test_catalogo_incluye_animacion_de_agregar_a_lista(self):
         response = self.client.get(reverse('inicio'), secure=True)
@@ -188,7 +200,7 @@ class CarritoViewsTests(TestCase):
         session['carrito'] = {str(self.producto.id): 1}
         session.save()
 
-        response = self.client.post(reverse('comprar_whatsapp'), secure=True)
+        response = self.client.post(reverse('comprar_whatsapp'), self.checkout_data, secure=True)
 
         pedido = Pedido.objects.get()
         self.assertEqual(response.status_code, 302)
@@ -201,6 +213,7 @@ class CarritoViewsTests(TestCase):
         self.producto.refresh_from_db()
         self.assertEqual(self.producto.stock, 2)
         self.assertEqual(self.client.session.get('carrito', {}), {})
+        self.assertEqual(pedido.fecha_entrega, date.fromisoformat(self.checkout_data['fecha_entrega']))
 
     def test_finalizar_compra_por_ajax_responde_con_url_de_whatsapp(self):
         session = self.client.session
@@ -209,6 +222,7 @@ class CarritoViewsTests(TestCase):
 
         response = self.client.post(
             reverse('comprar_whatsapp'),
+            self.checkout_data,
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
             secure=True,
         )
@@ -217,3 +231,131 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(response.json()['ok'], True)
         self.assertEqual(response.json()['cart_total'], 0)
         self.assertIn('https://wa.me/573116262155?text=', response.json()['whatsapp_url'])
+
+    def test_carrito_persistente_importa_y_refleja_la_sesion(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 2}
+        session.save()
+
+        response = self.client.get(reverse('ver_carrito'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        persistent_id = self.client.session['persistent_cart_id']
+        item = CarritoItem.objects.get(carrito_id=persistent_id, producto=self.producto)
+        self.assertEqual(item.cantidad, 2)
+        self.assertEqual(self.client.session['carrito'][str(self.producto.id)], 2)
+
+    def test_carrito_persistente_exige_un_solo_propietario(self):
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            Carrito.objects.create()
+
+    def test_carrito_anonimo_se_fusiona_al_iniciar_sesion(self):
+        self.client.post(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
+        user = get_user_model().objects.create_user('cliente-prueba', password='ClaveSegura123!')
+
+        self.assertTrue(self.client.login(username=user.username, password='ClaveSegura123!'))
+        response = self.client.get(reverse('ver_carrito'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        cart = Carrito.objects.get(usuario=user)
+        self.assertEqual(cart.items.get(producto=self.producto).cantidad, 1)
+        self.assertFalse(Carrito.objects.filter(usuario__isnull=True).exists())
+
+    def test_fusion_suma_cantidades_sin_superar_el_stock(self):
+        user = get_user_model().objects.create_user(
+            "cliente-con-lista",
+            password="ClaveSegura123!",
+        )
+        user_cart = Carrito.objects.create(usuario=user)
+        CarritoItem.objects.create(
+            carrito=user_cart,
+            producto=self.producto,
+            cantidad=1,
+        )
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), secure=True)
+
+        self.assertTrue(
+            self.client.login(username=user.username, password="ClaveSegura123!")
+        )
+
+        user_cart.refresh_from_db()
+        self.assertEqual(user_cart.items.get(producto=self.producto).cantidad, 2)
+
+    def test_agregar_guarda_personalizacion_y_la_expone_en_resumen(self):
+        delivery_date = (date.today() + timedelta(days=3)).isoformat()
+        response = self.client.post(
+            reverse('agregar_carrito', args=[self.producto.id]),
+            {
+                'texto_personalizado': 'Feliz cumple, Laura',
+                'color': 'Rosa suave',
+                'variante': 'Mediano',
+                'fecha_entrega': delivery_date,
+                'mensaje_regalo': 'Que tengas un dia hermoso',
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        item = CarritoItem.objects.get(producto=self.producto)
+        self.assertEqual(item.texto_personalizado, 'Feliz cumple, Laura')
+        self.assertEqual(item.fecha_entrega.isoformat(), delivery_date)
+        self.assertIn('Rosa suave', response.json()['cart']['items'][0]['personalization'])
+
+    def test_agregar_imagen_valida_la_expone_como_vista_previa(self):
+        image_buffer = BytesIO()
+        Image.new("RGB", (2, 2), "#f4a3c3").save(image_buffer, format="PNG")
+        upload = SimpleUploadedFile(
+            "referencia.png",
+            image_buffer.getvalue(),
+            content_type="image/png",
+        )
+
+        storages = {
+            "default": {
+                "BACKEND": "django.core.files.storage.InMemoryStorage",
+            },
+            "staticfiles": {
+                "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+            },
+        }
+        with self.settings(STORAGES=storages):
+            response = self.client.post(
+                reverse("agregar_carrito", args=[self.producto.id]),
+                {"imagen_cliente": upload},
+                HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+                secure=True,
+            )
+
+            self.assertEqual(response.status_code, 200)
+            item = CarritoItem.objects.get(producto=self.producto)
+            self.assertTrue(item.imagen_cliente.name.endswith(".png"))
+            preview_url = response.json()["cart"]["items"][0]["personalization_data"][
+                "customer_image_url"
+            ]
+            self.assertIn("/media/personalizaciones/", preview_url)
+
+    def test_agregar_rechaza_fecha_de_personalizacion_pasada_sin_mutar_carrito(self):
+        response = self.client.post(
+            reverse('agregar_carrito', args=[self.producto.id]),
+            {'fecha_entrega': (date.today() - timedelta(days=1)).isoformat()},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['ok'], False)
+        self.assertEqual(CarritoItem.objects.count(), 0)
+
+    def test_checkout_exige_destinatario_y_fecha(self):
+        self.client.post(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
+
+        response = self.client.post(
+            reverse('comprar_whatsapp'),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.json()['ok'], False)
+        self.assertEqual(Pedido.objects.count(), 0)

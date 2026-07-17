@@ -66,8 +66,8 @@ class SecurityHeadersMiddleware:
             "frame-ancestors 'none'",
             "img-src 'self' data:",
             "media-src 'self'",
-            "font-src 'self' data:",
-            "style-src 'self' 'unsafe-inline'",
+            "font-src 'self' data: https://fonts.gstatic.com",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
             "script-src 'self' 'unsafe-inline'",
             "connect-src 'self'",
             "form-action 'self'",
@@ -82,7 +82,7 @@ class SecurityHeadersMiddleware:
         response.setdefault("X-Permitted-Cross-Domain-Policies", "none")
         response.setdefault("Origin-Agent-Cluster", "?1")
 
-        if request.path.startswith("/admin/"):
+        if request.path.startswith(("/admin/", "/cuenta/", "/carrito/")):
             response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
             response["Pragma"] = "no-cache"
             response["Expires"] = "0"

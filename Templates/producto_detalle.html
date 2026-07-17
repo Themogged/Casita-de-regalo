@@ -20,6 +20,9 @@
 {% block body_class %}product-detail-page{% endblock %}
 
 {% block extra_head %}
+<meta name="assistant-product-id" content="{{ producto.id }}">
+<meta name="assistant-product-name" content="{{ producto.nombre }}">
+<meta name="assistant-product-category" content="{{ producto.categoria.nombre|default:'Detalle personalizado' }}">
 <style>
     .detail-layout {
         display: grid;
@@ -1931,12 +1934,55 @@
             </div>
         </div>
 
+        {% if producto.disponible %}
+            <form
+                id="product-customization-form"
+                method="post"
+                action="{% url 'agregar_carrito' producto.id %}"
+                enctype="multipart/form-data"
+                class="js-add-to-cart-form"
+            >
+                {% csrf_token %}
+                <details class="product-customization">
+                    <summary>Personalizar esta referencia</summary>
+                    <p class="product-customization-intro">Estos datos viajan con tu lista y puedes terminarlos de confirmar por WhatsApp.</p>
+                    <div class="product-customization-grid">
+                        <div class="field-group">
+                            <label for="custom-text">Texto o nombre</label>
+                            <input id="custom-text" name="texto_personalizado" type="text" maxlength="180" placeholder="Ej.: Feliz cumple, Laura">
+                        </div>
+                        <div class="field-group">
+                            <label for="custom-color">Color principal</label>
+                            <input id="custom-color" name="color" type="text" maxlength="80" placeholder="Ej.: rosa suave">
+                        </div>
+                        <div class="field-group">
+                            <label for="custom-variant">Tama&ntilde;o o variante</label>
+                            <input id="custom-variant" name="variante" type="text" maxlength="80" placeholder="Ej.: mediano">
+                        </div>
+                        <div class="field-group">
+                            <label for="custom-date">Fecha deseada</label>
+                            <input id="custom-date" name="fecha_entrega" type="date" data-min-today>
+                        </div>
+                        <div class="field-group field-group--wide">
+                            <label for="custom-message">Mensaje para el regalo</label>
+                            <textarea id="custom-message" name="mensaje_regalo" maxlength="500" placeholder="Escribe una dedicatoria corta"></textarea>
+                        </div>
+                        <div class="field-group field-group--wide">
+                            <label for="custom-image">Imagen de referencia <small>(JPG, PNG o WEBP, m&aacute;ximo 5 MB)</small></label>
+                            <input id="custom-image" name="imagen_cliente" type="file" accept="image/jpeg,image/png,image/webp" data-customer-image-input>
+                            <div class="customer-image-preview" data-customer-image-preview>
+                                <img alt="">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </details>
+            </form>
+        {% endif %}
+
         <div class="detail-actions">
             {% if producto.disponible %}
-                <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}"><span class="soft-emoji" aria-hidden="true">💗</span>Agregar a mi cotizaci&oacute;n</button>
-                </form>
+                <button type="submit" form="product-customization-form" class="btn js-add-to-cart" data-product-id="{{ producto.id }}"><span class="soft-emoji" aria-hidden="true">&#128151;</span>Agregar a mi cotizaci&oacute;n</button>
             {% else %}
                 <span class="btn-disabled">Producto agotado</span>
             {% endif %}
@@ -1992,10 +2038,7 @@
     </div>
     <div class="detail-mobile-bar-actions">
         {% if producto.disponible %}
-            <form method="post" action="{% url 'agregar_carrito' producto.id %}" class="js-add-to-cart-form">
-                {% csrf_token %}
-                <button type="submit" class="btn js-add-to-cart" data-product-id="{{ producto.id }}"><span class="soft-emoji" aria-hidden="true">💗</span>Agregar</button>
-            </form>
+            <button type="submit" form="product-customization-form" class="btn js-add-to-cart" data-product-id="{{ producto.id }}"><span class="soft-emoji" aria-hidden="true">&#128151;</span>Agregar</button>
         {% else %}
             <span class="btn-disabled">Agotado</span>
         {% endif %}
