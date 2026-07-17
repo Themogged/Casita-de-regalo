@@ -117,11 +117,35 @@ class CarritoViewsTests(TestCase):
         data = response.json()
         self.assertEqual(data['ok'], True)
         self.assertEqual(data['level'], 'success')
-        self.assertEqual(data['message'], 'Desayuno prueba guardado para cotizar.')
+        self.assertEqual(data['message'], 'Desayuno prueba agregado a tu lista.')
         self.assertEqual(data['cart_total'], 1)
         self.assertEqual(data['product_id'], self.producto.id)
+        self.assertEqual(data['product_name'], self.producto.nombre)
+        self.assertEqual(data['item_quantity'], 1)
+        self.assertEqual(data['quantity_updated'], False)
         self.assertEqual(data['cart']['units'], 1)
         self.assertEqual(data['cart']['items'][0]['product_id'], self.producto.id)
+
+    def test_agregar_mismo_producto_por_ajax_actualiza_cantidad(self):
+        self.client.post(
+            reverse('agregar_carrito', args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        response = self.client.post(
+            reverse('agregar_carrito', args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        data = response.json()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data['message'], 'Cantidad actualizada.')
+        self.assertEqual(data['quantity_updated'], True)
+        self.assertEqual(data['item_quantity'], 2)
+        self.assertEqual(data['cart_total'], 2)
+        self.assertEqual(len(data['cart']['items']), 1)
 
     def test_catalogo_incluye_animacion_de_agregar_a_lista(self):
         response = self.client.get(reverse('inicio'), secure=True)
@@ -134,6 +158,10 @@ class CarritoViewsTests(TestCase):
         self.assertContains(response, 'has-action')
         self.assertContains(response, '.message.message--toast')
         self.assertContains(response, 'toast-action')
+        self.assertContains(response, 'toast-thumbnail')
+        self.assertContains(response, 'toast-dismiss')
+        self.assertContains(response, "new CustomEvent('cart:open'")
+        self.assertNotContains(response, 'openDrawer: data.ok === true')
         self.assertContains(response, 'getToastMeta')
         self.assertNotContains(response, '#2d9d78')
         self.assertNotContains(response, '#d99114')

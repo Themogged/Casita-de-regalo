@@ -10,6 +10,7 @@ from django.contrib.staticfiles import finders
 from django.core.cache import cache
 from django.core.management import call_command
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.templatetags.static import static
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 from PIL import Image
@@ -388,10 +389,10 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'process-video-card')
         self.assertContains(response, 'Armado de detalle personalizado')
-        self.assertContains(response, '<video muted loop preload="none" playsinline')
+        self.assertContains(response, '<video autoplay muted loop preload="none" playsinline')
         self.assertContains(response, 'id="hero-process-video"')
         self.assertContains(response, 'autoplay')
-        self.assertContains(response, 'data-hero-video-sound="hero-process-video"')
+        self.assertNotContains(response, 'data-hero-video-sound')
         self.assertContains(response, 'Mira c&oacute;mo preparamos tu regalo')
         self.assertContains(response, 'Preparado especialmente para tu ocasi&oacute;n')
         self.assertNotContains(response, 'Hecho a mano')
@@ -400,8 +401,8 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'src="/media/procesos/videos/proceso.mp4"')
         self.assertContains(response, 'poster="/media/procesos/portadas/proceso.webp"')
         self.assertContains(response, 'data-video-load-state="idle"')
-        self.assertContains(response, 'data-video-play')
-        self.assertContains(response, 'data-video-play-label')
+        self.assertNotContains(response, 'data-video-play')
+        self.assertNotContains(response, 'data-video-play-label')
         self.assertContains(response, 'backgroundVideoHydrated')
         self.assertContains(response, 'type="video/mp4"')
         self.assertNotContains(response, 'Video oculto')
@@ -606,7 +607,7 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="assistant-title">Cora</strong>')
         self.assertContains(response, 'Abrir asistente Cora')
-        self.assertContains(response, '/static/productos/img/assistant-cora.webp', count=3)
+        self.assertContains(response, static('productos/img/assistant-cora.webp'), count=3)
         self.assertContains(response, '@keyframes coraIdle')
         self.assertContains(response, "playAssistantGesture('greeting', 820)")
         self.assertContains(response, "playAssistantGesture('celebrating', 760)")

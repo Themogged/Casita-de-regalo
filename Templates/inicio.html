@@ -897,9 +897,9 @@
         align-items: stretch;
         gap: clamp(22px, 3vw, 38px);
         overflow: hidden;
-        background:
-            radial-gradient(circle at 100% 0%, rgba(255, 222, 235, 0.68), transparent 34%),
-            linear-gradient(135deg, rgba(255, 253, 252, 0.99) 0%, rgba(255, 247, 251, 0.99) 100%);
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
     }
 
     .designer-gift-cta {
@@ -1086,8 +1086,7 @@
         position: relative;
         min-height: 370px;
         overflow: hidden;
-        background:
-            radial-gradient(circle at center, rgba(255, 230, 239, 0.92), rgba(255, 247, 251, 0.96));
+        background: transparent;
     }
 
     .process-video-media video {
@@ -1097,120 +1096,12 @@
         height: 100%;
         display: block;
         object-fit: cover;
-        opacity: 0;
-        transition: opacity 260ms ease;
+        background: transparent;
+        opacity: 1;
     }
 
     .process-video-media.is-video-ready video {
         opacity: 1;
-    }
-
-    .process-video-fallback {
-        position: absolute;
-        inset: 0;
-        z-index: 1;
-        display: grid;
-        place-content: center;
-        gap: 4px;
-        padding: 24px;
-        background:
-            radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.96), transparent 34%),
-            linear-gradient(160deg, #fff8fb, #fde6ef);
-        color: #9b5570;
-        text-align: center;
-        transition: opacity 240ms ease;
-    }
-
-    .process-video-media.is-video-ready .process-video-fallback {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .process-video-fallback span {
-        font-size: 0.72rem;
-        font-weight: var(--weight-bold);
-        text-transform: uppercase;
-    }
-
-    .process-video-fallback strong {
-        font-family: var(--font-display);
-        color: var(--ink-900);
-        font-size: 1.35rem;
-    }
-
-    .process-video-play {
-        position: absolute;
-        z-index: 4;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        min-height: 42px;
-        padding: 0 14px 0 9px;
-        border: 1px solid rgba(198, 68, 125, 0.13);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.94);
-        color: var(--rose-700);
-        font-size: 0.8rem;
-        font-weight: var(--weight-bold);
-        white-space: nowrap;
-        box-shadow: 0 12px 26px rgba(82, 29, 53, 0.16);
-        cursor: pointer;
-        transition: opacity 180ms ease, transform 180ms ease, box-shadow 180ms ease;
-    }
-
-    .process-video-play:hover {
-        transform: translate(-50%, calc(-50% - 2px));
-        box-shadow: 0 15px 30px rgba(82, 29, 53, 0.18);
-    }
-
-    .process-video-play-icon {
-        display: inline-grid;
-        place-items: center;
-        width: 28px;
-        height: 28px;
-        padding-left: 2px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #f28db5, #d65388);
-        color: #fff;
-        font-size: 0.7rem;
-    }
-
-    .process-video-media.is-playing .process-video-play {
-        opacity: 0;
-        pointer-events: none;
-    }
-
-    .process-video-media.is-loading .process-video-play {
-        cursor: progress;
-    }
-
-    .process-video-media.is-loading .process-video-play-icon {
-        color: transparent;
-    }
-
-    .process-video-media.is-loading .process-video-play-icon::after {
-        content: "";
-        width: 12px;
-        height: 12px;
-        border: 2px solid rgba(255, 255, 255, 0.48);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: processVideoSpin 720ms linear infinite;
-    }
-
-    .process-video-media.has-video-error .process-video-play {
-        color: #9d4168;
-        border-color: rgba(198, 68, 125, 0.2);
-    }
-
-    @keyframes processVideoSpin {
-        to {
-            transform: rotate(360deg);
-        }
     }
 
     .process-video-number {
@@ -2297,8 +2188,8 @@
         .process-video-card {
             grid-template-columns: minmax(0, 1fr);
             gap: 18px;
-            padding: 18px 14px 16px;
-            border-radius: 24px;
+            padding: 8px 0 12px;
+            border-radius: 0;
         }
 
         .process-video-header {
@@ -2406,13 +2297,6 @@
             min-height: 38px;
             padding-inline: 13px;
             font-size: 0.8rem;
-        }
-
-        .process-video-play {
-            top: 50%;
-            bottom: auto;
-            min-height: 40px;
-            font-size: 0.76rem;
         }
 
         .instagram-card {
@@ -3641,7 +3525,9 @@
     }
 
     .process-video-card {
-        background: linear-gradient(145deg, #ffffff 0%, #fff7fa 100%);
+        border-color: transparent;
+        background: transparent;
+        box-shadow: none;
     }
 
     .process-video-item {
@@ -3651,11 +3537,7 @@
     }
 
     .process-video-media {
-        background: linear-gradient(155deg, #fff3f7 0%, #ffeaf2 100%);
-    }
-
-    .process-video-fallback {
-        background: linear-gradient(160deg, rgba(255, 252, 253, 0.98), rgba(255, 233, 242, 0.96));
+        background: transparent;
     }
 
     .process-video-heading .section-kicker,
@@ -3752,10 +3634,8 @@
         }
 
         .process-video-card {
-            padding: 17px 13px 15px;
-            box-shadow:
-                0 14px 30px rgba(91, 43, 63, 0.065),
-                inset 0 1px 0 rgba(255, 255, 255, 0.92);
+            padding: 7px 0 10px;
+            box-shadow: none;
         }
 
         .process-video-item {
@@ -3825,9 +3705,6 @@
                                 <span>Hecho en Casita</span>
                                 <strong>{{ hero_video.titulo }}</strong>
                             </div>
-                            <button type="button" class="hero-process-sound" data-hero-video-sound="hero-process-video" aria-pressed="false" aria-label="Activar sonido del video">
-                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Zm12.5 1.2a3 3 0 0 1 0 3.6M19.8 7a7 7 0 0 1 0 10"/></svg>
-                            </button>
                         </div>
                     </div>
                 {% endwith %}
@@ -3888,20 +3765,12 @@
                 {% for video_item in videos_elaboracion %}
                     <article class="process-video-item">
                         <div class="process-video-media" data-video-load-state="idle">
-                            <div class="process-video-fallback" aria-hidden="true">
-                                <span>Casita de Regalos</span>
-                                <strong>Proceso real</strong>
-                            </div>
                             {% with video_poster=video_item.display_poster_url %}
-                                <video muted loop preload="none" playsinline data-autoplay-video{% if video_poster %} poster="{{ video_poster }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
+                                <video autoplay muted loop preload="none" playsinline disablepictureinpicture disableremoteplayback data-autoplay-video{% if video_poster %} poster="{{ video_poster }}"{% endif %} aria-label="Video: {{ video_item.titulo }}">
                                     <source data-src="{{ video_item.video.url }}" type="{{ video_item.mime_type }}">
                                     Tu navegador no soporta video HTML5.
                                 </video>
                             {% endwith %}
-                            <button type="button" class="process-video-play" data-video-play aria-label="Reproducir {{ video_item.titulo }}" aria-live="polite">
-                                <span class="process-video-play-icon" aria-hidden="true">&#9654;</span>
-                                <span data-video-play-label>Reproducir</span>
-                            </button>
                             <span class="process-video-number" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
                         </div>
                         <div class="process-video-copy">

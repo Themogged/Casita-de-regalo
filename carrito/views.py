@@ -220,6 +220,7 @@ def agregar_al_carrito(request, producto_id):
     try:
         with transaction.atomic():
             cantidad_actual = carrito.get(str(producto_id), 0)
+            cantidad_actualizada = cantidad_actual > 0
 
             if cantidad_actual >= producto.stock:
                 mensaje = f"Solo hay {producto.stock} unidades disponibles de {producto.nombre}."
@@ -261,7 +262,11 @@ def agregar_al_carrito(request, producto_id):
         messages.warning(request, mensaje)
         return _redirect_despues_de_agregar(request)
 
-    mensaje = f"{producto.nombre} guardado para cotizar."
+    mensaje = (
+        "Cantidad actualizada."
+        if cantidad_actualizada
+        else f"{producto.nombre} agregado a tu lista."
+    )
 
     if _es_ajax(request):
         return JsonResponse(
@@ -271,6 +276,10 @@ def agregar_al_carrito(request, producto_id):
                 "message": mensaje,
                 "cart_total": _carrito_total_items(carrito),
                 "product_id": producto.id,
+                "product_name": producto.nombre,
+                "product_image_url": producto.imagen.url if producto.imagen else "",
+                "item_quantity": carrito.get(str(producto_id), 0),
+                "quantity_updated": cantidad_actualizada,
                 "cart": cart_snapshot(request),
             }
         )

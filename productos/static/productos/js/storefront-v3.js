@@ -67,6 +67,7 @@
         let cartData = null;
         let requestPending = false;
         let closeTimer = null;
+        let dragState = null;
 
         function setLoading() {
             itemsContainer.replaceChildren();
@@ -230,6 +231,8 @@
         }
 
         function closeDrawer() {
+            drawer.classList.remove("is-dragging");
+            drawer.style.removeProperty("transform");
             layer.classList.remove("is-open");
             document.body.classList.remove("is-cart-drawer-open");
             toggles.forEach((toggle) => toggle.setAttribute("aria-expanded", "false"));
@@ -274,6 +277,37 @@
 
         toggles.forEach((toggle) => toggle.addEventListener("click", () => openDrawer()));
         selectAll("[data-cart-drawer-close]", layer).forEach((button) => button.addEventListener("click", closeDrawer));
+        const dragHandle = select(".cart-drawer-header", drawer);
+        dragHandle?.addEventListener("pointerdown", (event) => {
+            if (event.pointerType === "mouse" || event.button !== 0) return;
+            if (event.target.closest("button, a, input, select, textarea")) return;
+            dragState = {
+                pointerId: event.pointerId,
+                startY: event.clientY,
+                currentY: event.clientY,
+                startedAt: performance.now(),
+            };
+            drawer.classList.add("is-dragging");
+            dragHandle.setPointerCapture?.(event.pointerId);
+        });
+        dragHandle?.addEventListener("pointermove", (event) => {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+            dragState.currentY = event.clientY;
+            const distance = Math.max(0, event.clientY - dragState.startY);
+            drawer.style.transform = `translateY(${Math.min(distance, drawer.offsetHeight)}px)`;
+        });
+        const finishDrag = (event) => {
+            if (!dragState || event.pointerId !== dragState.pointerId) return;
+            const distance = Math.max(0, dragState.currentY - dragState.startY);
+            const elapsed = Math.max(1, performance.now() - dragState.startedAt);
+            const velocity = distance / elapsed;
+            dragState = null;
+            drawer.classList.remove("is-dragging");
+            drawer.style.removeProperty("transform");
+            if (distance >= 82 || velocity >= 0.55) closeDrawer();
+        };
+        dragHandle?.addEventListener("pointerup", finishDrag);
+        dragHandle?.addEventListener("pointercancel", finishDrag);
         layer.addEventListener("keydown", (event) => {
             if (event.key === "Escape") closeDrawer();
             if (event.key !== "Tab") return;
@@ -303,7 +337,9 @@
             const detail = event.detail || {};
             if (detail.cart) renderCart(detail.cart);
             else if (typeof detail.cart_total !== "undefined") updateCartCounters(detail.cart_total);
-            if (detail.openDrawer) openDrawer({ refresh: !detail.cart });
+        });
+        document.addEventListener("cart:open", (event) => {
+            openDrawer({ refresh: Boolean(event.detail?.refresh) });
         });
     }
 
@@ -426,30 +462,11 @@
     function initVideoExperience() {
         const videos = selectAll("video[data-autoplay-video]");
         videos.forEach((video) => {
-            const showControls = () => { video.controls = true; };
-            const hideControls = () => {
-                if (!video.matches(":focus-visible") && !video.matches(":hover")) video.controls = false;
-            };
-            video.addEventListener("pointerenter", showControls);
-            video.addEventListener("focus", showControls);
-            video.addEventListener("pointerleave", hideControls);
-            video.addEventListener("blur", hideControls);
-            video.addEventListener("touchstart", showControls, { passive: true });
-        });
-
-        selectAll("[data-hero-video-sound]").forEach((button) => {
-            const target = document.getElementById(button.dataset.heroVideoSound || "");
-            if (!target) return;
-            const render = () => {
-                button.setAttribute("aria-pressed", String(!target.muted));
-                button.setAttribute("aria-label", target.muted ? "Activar sonido del video" : "Silenciar video");
-            };
-            button.addEventListener("click", () => {
-                target.muted = !target.muted;
-                if (target.paused) target.play().catch(() => {});
-                render();
-            });
-            render();
+            video.controls = false;
+            video.removeAttribute("controls");
+            video.muted = true;
+            video.playsInline = true;
+            if ("disablePictureInPicture" in video) video.disablePictureInPicture = true;
         });
 
         const processSurfaces = [

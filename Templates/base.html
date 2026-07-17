@@ -883,6 +883,95 @@
             outline: none;
         }
 
+        .message.message--product-toast {
+            grid-template-columns: 48px minmax(0, 1fr) 30px;
+            gap: 10px;
+            width: min(390px, calc(100vw - 28px));
+            padding: 9px 9px 9px 10px;
+            border-radius: 20px;
+        }
+
+        .toast-thumbnail {
+            display: grid;
+            place-items: center;
+            width: 48px;
+            height: 48px;
+            overflow: hidden;
+            border: 1px solid rgba(209, 75, 130, 0.14);
+            border-radius: 14px;
+            color: #d72d74;
+            background: linear-gradient(145deg, #fff7fa, #ffe8f1);
+            box-shadow: 0 7px 16px rgba(104, 42, 68, 0.08);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .toast-thumbnail img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .message--product-toast .toast-copy {
+            gap: 3px;
+        }
+
+        .message--product-toast .toast-detail {
+            max-width: 100%;
+            color: #6f4054;
+            font-weight: 650;
+        }
+
+        .toast-inline-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .message--product-toast .toast-action {
+            min-height: 25px;
+            padding-inline: 10px;
+            border: 1px solid rgba(213, 58, 119, 0.16);
+            color: #bd356d;
+            background: #fff;
+            box-shadow: none;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
+
+        .message--product-toast .toast-action:hover,
+        .message--product-toast .toast-action:focus-visible {
+            color: #fff;
+            background: linear-gradient(135deg, #ee8db3, #d94f86);
+            box-shadow: 0 7px 14px rgba(201, 60, 118, 0.14);
+        }
+
+        .toast-dismiss {
+            align-self: start;
+            display: inline-grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: 0;
+            border-radius: 50%;
+            color: #9b6077;
+            background: rgba(255, 242, 247, 0.92);
+            font-size: 1.05rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .toast-dismiss:hover,
+        .toast-dismiss:focus-visible {
+            color: #b72e66;
+            background: #ffe3ee;
+            outline: 2px solid rgba(221, 73, 132, 0.16);
+            outline-offset: 1px;
+        }
+
         .message.is-leaving {
             animation: toastSoftOut 260ms ease-in forwards;
         }
@@ -1005,6 +1094,49 @@
                 padding: 0 10px;
                 font-size: 0.72rem;
             }
+
+            .message.message--product-toast {
+                grid-template-columns: 44px minmax(0, 1fr) 28px;
+                bottom: max(188px, calc(176px + env(safe-area-inset-bottom)));
+                width: min(346px, calc(100vw - 20px));
+                gap: 9px;
+                padding: 9px;
+                border-radius: 18px;
+            }
+
+            .message.message--product-toast .toast-thumbnail {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+            }
+
+            .message.message--product-toast .toast-title,
+            .message.message--product-toast .toast-detail {
+                display: block;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+
+            .message.message--product-toast .toast-title {
+                font-size: 0.8rem;
+                line-height: 1.12;
+            }
+
+            .message.message--product-toast .toast-detail {
+                font-size: 0.72rem;
+            }
+
+            .message.message--product-toast .toast-action {
+                min-height: 24px;
+                padding-inline: 9px;
+                font-size: 0.68rem;
+            }
+
+            .message.message--product-toast .toast-dismiss {
+                width: 28px;
+                height: 28px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -1023,6 +1155,29 @@
                 min-height: 28px;
                 padding: 0 8px;
                 font-size: 0.68rem;
+            }
+
+            .message.message--product-toast {
+                grid-template-columns: 40px minmax(0, 1fr) 26px;
+                width: calc(100vw - 16px);
+                gap: 7px;
+                padding: 8px;
+            }
+
+            .message.message--product-toast .toast-thumbnail {
+                width: 40px;
+                height: 40px;
+            }
+
+            .message.message--product-toast .toast-action {
+                min-height: 23px;
+                padding-inline: 8px;
+                font-size: 0.65rem;
+            }
+
+            .message.message--product-toast .toast-dismiss {
+                width: 26px;
+                height: 26px;
             }
         }
 
@@ -2655,7 +2810,7 @@
                     </svg>
                     <span class="profile-label">{% if request.user.is_authenticated %}Mi cuenta{% else %}Ingresar{% endif %}</span>
                 </a>
-                <button type="button" class="cart-btn" aria-label="Abrir lista para cotizar" data-cart-drawer-toggle>
+                <button type="button" class="cart-btn" aria-label="Abrir lista para cotizar" aria-expanded="false" aria-controls="cart-drawer" data-cart-drawer-toggle>
                     <svg class="cart-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M4 5h2l1.5 9.2a2 2 0 0 0 2 1.7h7.7a2 2 0 0 0 1.95-1.55L20.4 9H7.1M10 20h.01M17 20h.01"/>
                     </svg>
@@ -3074,6 +3229,22 @@
             const item = document.createElement('div');
             const meta = getToastMeta(level, options);
             const hasAction = Boolean(meta.actionHref);
+            const isProductToast = Boolean(meta.productName || meta.thumbnailUrl);
+            const duration = Number(meta.duration) || 3600;
+            let dismissTimer;
+            let removeTimer;
+
+            if (isProductToast) {
+                container.querySelectorAll('.message--product-toast').forEach((toast) => toast.remove());
+            }
+
+            const dismiss = () => {
+                if (item.classList.contains('is-leaving')) return;
+                window.clearTimeout(dismissTimer);
+                window.clearTimeout(removeTimer);
+                item.classList.add('is-leaving');
+                removeTimer = window.setTimeout(() => item.remove(), 280);
+            };
 
             item.className = `message message--toast ${level}`;
             if (meta.variant) {
@@ -3082,12 +3253,32 @@
             if (hasAction) {
                 item.classList.add('has-action');
             }
+            if (isProductToast) {
+                item.classList.add('message--product-toast');
+            }
             item.setAttribute('role', level === 'error' ? 'alert' : 'status');
 
-            const icon = document.createElement('span');
-            icon.className = 'toast-check';
-            icon.setAttribute('aria-hidden', 'true');
-            icon.textContent = meta.icon;
+            let icon;
+            if (isProductToast) {
+                icon = document.createElement('span');
+                icon.className = 'toast-thumbnail';
+                icon.setAttribute('aria-hidden', 'true');
+                if (meta.thumbnailUrl) {
+                    const image = document.createElement('img');
+                    image.src = meta.thumbnailUrl;
+                    image.alt = '';
+                    image.loading = 'eager';
+                    image.decoding = 'async';
+                    icon.append(image);
+                } else {
+                    icon.textContent = meta.icon;
+                }
+            } else {
+                icon = document.createElement('span');
+                icon.className = 'toast-check';
+                icon.setAttribute('aria-hidden', 'true');
+                icon.textContent = meta.icon;
+            }
 
             const copy = document.createElement('span');
             copy.className = 'toast-copy';
@@ -3098,41 +3289,82 @@
 
             const detail = document.createElement('span');
             detail.className = 'toast-detail';
-            detail.textContent = message || meta.detail;
+            detail.textContent = meta.productName || message || meta.detail;
 
             copy.append(title, detail);
             item.append(icon, copy);
 
             if (hasAction) {
-                const action = document.createElement('a');
+                const action = meta.actionCallback
+                    ? document.createElement('button')
+                    : document.createElement('a');
                 action.className = 'toast-action';
-                action.href = meta.actionHref;
+                if (meta.actionCallback) {
+                    action.type = 'button';
+                    action.addEventListener('click', () => {
+                        meta.actionCallback();
+                        dismiss();
+                    });
+                } else {
+                    action.href = meta.actionHref;
+                }
                 action.textContent = meta.actionLabel || 'Ver lista';
-                item.append(action);
+                if (isProductToast) {
+                    const actions = document.createElement('span');
+                    actions.className = 'toast-inline-actions';
+                    actions.append(action);
+                    copy.append(actions);
+                } else {
+                    item.append(action);
+                }
+            }
+
+            if (isProductToast) {
+                const close = document.createElement('button');
+                close.type = 'button';
+                close.className = 'toast-dismiss';
+                close.setAttribute('aria-label', 'Cerrar confirmación');
+                close.textContent = '\u00d7';
+                close.addEventListener('click', dismiss);
+                item.append(close);
             }
             container.appendChild(item);
 
-            setTimeout(() => {
-                item.classList.add('is-leaving');
-            }, 2200);
-
-            setTimeout(() => {
-                item.remove();
-            }, 2480);
+            dismissTimer = window.setTimeout(dismiss, duration);
         };
 
         const showAddToCartToast = (data, response) => {
             const level = data.level || (response.ok ? 'success' : 'warning');
             const isSuccessfulAdd = data.ok === true && response.ok;
+            const quantityUpdated = isSuccessfulAdd && data.quantity_updated === true;
+            const cartItem = Array.isArray(data.cart?.items)
+                ? data.cart.items.find((item) => item.product_id === data.product_id)
+                : null;
 
             showToast(
                 data.message || 'Producto actualizado.',
                 level,
                 {
-                    variant: isSuccessfulAdd ? 'cart-added' : 'warning',
-                    title: isSuccessfulAdd ? 'Agregado a la lista' : 'Revisa disponibilidad',
-                    actionHref: isSuccessfulAdd ? '{% url "ver_carrito" %}' : '',
+                    variant: isSuccessfulAdd
+                        ? (quantityUpdated ? 'cart-quantity' : 'cart-added')
+                        : 'warning',
+                    title: isSuccessfulAdd
+                        ? (quantityUpdated ? 'Cantidad actualizada' : 'Agregado a tu lista')
+                        : 'Revisa disponibilidad',
+                    productName: isSuccessfulAdd
+                        ? (data.product_name || cartItem?.name || data.message)
+                        : '',
+                    thumbnailUrl: isSuccessfulAdd
+                        ? (data.product_image_url || cartItem?.image_url || '')
+                        : '',
+                    actionHref: isSuccessfulAdd ? '#cart-drawer' : '',
+                    actionCallback: isSuccessfulAdd
+                        ? () => document.dispatchEvent(new CustomEvent('cart:open', {
+                            detail: { refresh: false },
+                        }))
+                        : null,
                     actionLabel: 'Ver lista',
+                    duration: 3800,
                 },
             );
         };
@@ -3302,22 +3534,16 @@
 
             const getVideoUi = (video) => {
                 const media = video?.closest('.process-video-media');
-                return {
-                    media,
-                    button: media?.querySelector('[data-video-play]'),
-                    label: media?.querySelector('[data-video-play-label]'),
-                };
+                return { media };
             };
 
-            const setVideoState = (video, state, labelText = '') => {
-                const { media, button, label } = getVideoUi(video);
+            const setVideoState = (video, state) => {
+                const { media } = getVideoUi(video);
                 if (!media) return;
 
                 media.dataset.videoLoadState = state;
                 media.classList.toggle('is-loading', state === 'loading');
                 media.classList.toggle('has-video-error', state === 'error');
-                if (button) button.setAttribute('aria-busy', state === 'loading' ? 'true' : 'false');
-                if (label && labelText) label.textContent = labelText;
             };
 
             const hydrateVideo = (video) => {
@@ -3329,7 +3555,7 @@
                 });
                 video.dataset.videoLoaded = 'true';
                 video.preload = 'metadata';
-                setVideoState(video, 'loading', 'Cargando');
+                setVideoState(video, 'loading');
                 video.load();
                 return true;
             };
@@ -3344,7 +3570,7 @@
                 const hydratedNow = hydrateVideo(video);
                 const { media } = getVideoUi(video);
                 if (!hydratedNow && media?.dataset.videoLoadState === 'error') {
-                    setVideoState(video, 'loading', 'Cargando');
+                    setVideoState(video, 'loading');
                     video.load();
                 }
                 videos.forEach((item) => {
@@ -3359,47 +3585,42 @@
                 } catch (error) {
                     activeVideo = null;
                     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-                        setVideoState(video, 'ready', 'Reproducir');
+                        setVideoState(video, 'ready');
                     }
                 }
             };
 
             videos.forEach((video) => {
                 const { media } = getVideoUi(video);
+                video.autoplay = true;
+                video.muted = true;
+                video.loop = true;
+                video.playsInline = true;
+                video.controls = false;
+                video.removeAttribute('controls');
                 video.addEventListener('canplay', () => {
                     media?.classList.add('is-video-ready');
-                    setVideoState(
-                        video,
-                        video.paused ? 'ready' : 'playing',
-                        video.paused ? 'Reproducir' : 'Reproduciendo',
-                    );
+                    setVideoState(video, video.paused ? 'ready' : 'playing');
                 });
                 video.addEventListener('play', () => {
                     media?.classList.add('is-playing', 'is-video-ready');
-                    setVideoState(video, 'playing', 'Reproduciendo');
+                    setVideoState(video, 'playing');
                 });
                 video.addEventListener('pause', () => {
                     media?.classList.remove('is-playing');
                     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-                        setVideoState(video, 'ready', 'Continuar');
+                        setVideoState(video, 'ready');
                     }
                 });
                 video.addEventListener('ended', () => {
                     media?.classList.remove('is-playing');
-                    setVideoState(video, 'ready', 'Volver a ver');
+                    setVideoState(video, 'ready');
                     if (activeVideo === video) activeVideo = null;
                 });
                 video.addEventListener('error', () => {
                     media?.classList.remove('is-playing', 'is-video-ready');
-                    setVideoState(video, 'error', 'Reintentar');
+                    setVideoState(video, 'error');
                     if (activeVideo === video) activeVideo = null;
-                });
-            });
-
-            scope.querySelectorAll('[data-video-play]').forEach((button) => {
-                button.addEventListener('click', async () => {
-                    const video = button.closest('.process-video-media')?.querySelector('video[data-autoplay-video]');
-                    await playVideo(video);
                 });
             });
 
@@ -3425,12 +3646,12 @@
 
             const observer = new IntersectionObserver((entries) => {
                 const candidate = entries
-                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.72)
+                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.55)
                     .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
 
                 entries.forEach((entry) => {
                     const video = entry.target;
-                    if (!entry.isIntersecting || entry.intersectionRatio < 0.72) {
+                    if (!entry.isIntersecting || entry.intersectionRatio < 0.55) {
                         if (activeVideo === video) activeVideo = null;
                         pauseVideo(video);
                     }
@@ -3438,8 +3659,8 @@
 
                 if (candidate) playVideo(candidate.target);
             }, {
-                threshold: [0, 0.4, 0.72, 0.86],
-                rootMargin: '-10% 0px -16% 0px',
+                threshold: [0, 0.35, 0.55, 0.8],
+                rootMargin: '-4% 0px -8% 0px',
             });
 
             videos.forEach((video) => observer.observe(video));
@@ -4184,7 +4405,7 @@
                 const data = await response.json();
                 showAddToCartToast(data, response);
                 document.dispatchEvent(new CustomEvent('cart:updated', {
-                    detail: { ...data, openDrawer: data.ok === true && response.ok },
+                    detail: data,
                 }));
 
                 if (typeof data.cart_total !== 'undefined') {
