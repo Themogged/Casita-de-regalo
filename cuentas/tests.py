@@ -1,10 +1,7 @@
 from datetime import date
-from smtplib import SMTPException
-from unittest import mock
 
 from django.contrib.auth import get_user_model
-from django.core import mail
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.urls import reverse
 
 from asistente.models import AssistantProfile
@@ -102,62 +99,64 @@ class AccountViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(get_user_model().objects.filter(username="robot").exists())
 
-    def test_flujo_de_recuperacion_tiene_todas_las_pantallas(self):
-        response = self.client.get(reverse("password_reset"), secure=True)
+    def test_cambio_de_contrasena_requiere_sesion(self):
+        response = self.client.get(reverse("password_change"), secure=True)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response["Location"])
+        self.assertIn("next=", response["Location"])
+
+        login_response = self.client.get(response["Location"], secure=True)
+        self.assertContains(login_response, "Cambio seguro")
+        self.assertContains(login_response, "enseguida podr")
+
+    def test_pantalla_de_cambio_explica_el_flujo_sin_correo(self):
+        user = get_user_model().objects.create_user("cliente-clave", password="ClaveActual2026!")
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("password_change"), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Recuperar acceso")
+        self.assertContains(response, "Actualiza tu contrase")
+        self.assertContains(response, "sin correos ni enlaces externos")
         self.assertContains(response, "brand-casita-isotype.svg")
+
+    def test_cambio_rechaza_una_contrasena_actual_incorrecta(self):
+        user = get_user_model().objects.create_user("cliente-error", password="ClaveActual2026!")
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("password_change"),
+            {
+                "old_password": "ClaveIncorrecta2026!",
+                "new_password1": "NuevaClave2026!Segura",
+                "new_password2": "NuevaClave2026!Segura",
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("ClaveActual2026!"))
+
+    def test_cambio_actualiza_la_clave_y_conserva_la_sesion(self):
+        user = get_user_model().objects.create_user("cliente-seguro", password="ClaveActual2026!")
+        self.client.force_login(user)
+
+        response = self.client.post(
+            reverse("password_change"),
+            {
+                "old_password": "ClaveActual2026!",
+                "new_password1": "NuevaClave2026!Segura",
+                "new_password2": "NuevaClave2026!Segura",
+            },
+            secure=True,
+        )
+
+        self.assertRedirects(response, reverse("account_profile"))
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("NuevaClave2026!Segura"))
         self.assertEqual(
-            self.client.get(reverse("password_reset_done"), secure=True).status_code,
+            self.client.get(reverse("account_profile"), secure=True).status_code,
             200,
         )
-
-    @override_settings(
-        EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
-        DEFAULT_FROM_EMAIL="Casita de Regalos <hola@example.com>",
-    )
-    def test_recuperacion_envia_un_enlace_real_al_backend_configurado(self):
-        get_user_model().objects.create_user(
-            "cliente-correo",
-            email="cliente@example.com",
-            password="ClaveSegura123!",
-        )
-
-        response = self.client.post(
-            reverse("password_reset"),
-            {"email": "cliente@example.com"},
-            secure=True,
-        )
-
-        self.assertRedirects(response, reverse("password_reset_done"))
-        self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(mail.outbox[0].to, ["cliente@example.com"])
-        self.assertIn("/cuenta/recuperar/", mail.outbox[0].body)
-
-    @override_settings(
-        EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend",
-        EMAIL_HOST="smtp.example.com",
-        EMAIL_HOST_USER="sender@example.com",
-        EMAIL_HOST_PASSWORD="app-password",
-    )
-    @mock.patch("cuentas.views.logger.exception")
-    @mock.patch(
-        "django.contrib.auth.forms.PasswordResetForm.save",
-        side_effect=SMTPException("delivery failed"),
-    )
-    def test_recuperacion_muestra_error_amigable_si_smtp_falla(
-        self,
-        mocked_save,
-        mocked_logger,
-    ):
-        response = self.client.post(
-            reverse("password_reset"),
-            {"email": "cliente@example.com"},
-            secure=True,
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "No pudimos enviar el enlace")
-        mocked_save.assert_called_once()
-        mocked_logger.assert_called_once_with("password_reset_email_delivery_failed")

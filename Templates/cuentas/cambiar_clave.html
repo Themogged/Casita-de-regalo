@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cambiar contrase&ntilde;a | Casita de Regalos{% endblock %}
+{% block body_class %}account-page{% endblock %}
+
+{% block content %}
+<section class="auth-shell auth-shell--single">
+    <div class="auth-card auth-card--security">
+        <img class="account-benefits-mark" src="{% static 'productos/img/brand-casita-isotype.svg' %}" alt="" width="58" height="58">
+        <span class="account-kicker">Seguridad de tu cuenta</span>
+        <h1>Actualiza tu contrase&ntilde;a</h1>
+        <p>Confirma tu contrase&ntilde;a actual y elige una nueva. El cambio se realiza aqu&iacute; mismo, sin correos ni enlaces externos.</p>
+
+        <form method="post" class="account-form">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% for field in form %}
+                <div class="field-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<div class="password-rules">{{ field.help_text|safe }}</div>{% endif %}
+                    {{ field.errors }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn">Guardar nueva contrase&ntilde;a</button>
+            <a href="{% url 'account_profile' %}" class="btn-secondary">Cancelar</a>
+        </form>
+
+        <p class="account-security-note">Tu sesi&oacute;n permanecer&aacute; abierta en este dispositivo al guardar el cambio.</p>
+    </div>
+</section>
+{% endblock %}

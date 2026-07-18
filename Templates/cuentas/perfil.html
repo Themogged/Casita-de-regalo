@@ -15,10 +15,13 @@
             <p>Tu lista, pedidos y preferencias en un solo lugar.</p>
             </div>
         </div>
-        <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn-secondary">Cerrar sesi&oacute;n</button>
-        </form>
+        <div class="account-header-actions">
+            <a href="{% url 'password_change' %}" class="btn-secondary">Cambiar contrase&ntilde;a</a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-secondary">Cerrar sesi&oacute;n</button>
+            </form>
+        </div>
     </header>
 
     <div class="account-summary-grid">

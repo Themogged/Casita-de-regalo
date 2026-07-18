@@ -5,9 +5,8 @@ Fecha de cierre técnico: 17 de julio de 2026.
 ## Fase 1: identidad y cuentas
 
 - Sistema de marca SVG con isotipo, versión circular, horizontal y favicon.
-- Identidad aplicada en acceso, registro, perfil y recuperación de contraseña.
-- Flujo completo de restablecimiento de contraseña con mensajes neutros.
-- Entrega SMTP configurable, prueba de envío y error amigable cuando el proveedor no responde.
+- Identidad aplicada en acceso, registro, perfil y seguridad de la cuenta.
+- Cambio de contraseña dentro de la sesión, con validación de la clave actual y sin servicios de correo externos.
 - Campo señuelo en registro y límites de intentos para accesos administrativos y de clientes.
 
 ## Fase 2: Cora
@@ -50,7 +49,7 @@ Fecha de cierre técnico: 17 de julio de 2026.
 - Header móvil medido entre 85 y 95 px, incluyendo búsqueda de 38 a 40 px.
 - Confirmación compacta al agregar, actualización de cantidad y apertura explícita del bottom sheet verificadas.
 - Cora verificada con voz apagada de inicio, selector disponible y activación manual.
-- Recuperación de contraseña y activos SVG verificados en móvil.
+- Cambio de contraseña y activos SVG verificados en móvil.
 
 ## Operación
 

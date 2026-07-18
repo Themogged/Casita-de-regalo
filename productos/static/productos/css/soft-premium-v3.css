@@ -735,16 +735,80 @@ body.is-cart-drawer-open {
     font-weight: 700;
 }
 
-.auth-card--recovery {
+.account-security-help {
+    margin: -3px 0 0;
+    color: var(--ui-muted);
+    font-size: 0.72rem;
+    line-height: 1.55;
+    text-align: center;
+}
+
+.account-security-help a {
+    color: var(--ui-rose-600);
+    font-weight: 750;
+}
+
+.account-security-prompt {
+    display: grid;
+    gap: 3px;
+    padding: 12px 14px;
+    border: 1px solid rgba(220, 112, 157, 0.2);
+    border-radius: 15px;
+    color: var(--ui-muted);
+    background: linear-gradient(135deg, #fff7fa, #fffdfd);
+    font-size: 0.74rem;
+    line-height: 1.5;
+}
+
+.account-security-prompt strong {
+    color: var(--ui-wine);
+    font-size: 0.78rem;
+}
+
+.auth-card--security {
     justify-items: start;
     width: min(100%, 620px);
     margin-inline: auto;
 }
 
-.auth-card--recovery .account-form,
-.auth-card--recovery .btn,
-.auth-card--recovery .btn-secondary {
+.auth-card--security > p {
+    max-width: 54ch;
+    color: var(--ui-muted);
+    line-height: 1.65;
+}
+
+.auth-card--security .account-form,
+.auth-card--security .btn,
+.auth-card--security .btn-secondary {
     width: 100%;
+}
+
+.auth-card--security .account-form {
+    margin-top: 3px;
+}
+
+.password-rules {
+    color: #8e6474;
+    font-size: 0.7rem;
+    line-height: 1.5;
+}
+
+.password-rules ul {
+    display: grid;
+    gap: 3px;
+    margin: 4px 0 0;
+    padding-left: 18px;
+}
+
+.account-security-note {
+    width: 100%;
+    margin: 2px 0 0;
+    padding: 11px 13px;
+    border: 1px solid rgba(220, 112, 157, 0.16);
+    border-radius: 14px;
+    background: #fff7fa;
+    font-size: 0.72rem;
+    text-align: center;
 }
 
 .account-profile-heading {
@@ -894,6 +958,22 @@ body.is-cart-drawer-open {
     border-radius: 28px;
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 242, 248, 0.94));
     box-shadow: var(--ui-shadow-soft);
+}
+
+.account-header-actions {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.account-header-actions form {
+    margin: 0;
+}
+
+.account-header-actions .btn-secondary {
+    min-height: 42px;
 }
 
 .account-summary-grid {
@@ -1572,6 +1652,18 @@ body.is-process-video-visible .floating-whatsapp {
     .account-dashboard-header h1,
     .memory-hero h1 {
         font-size: 2rem;
+    }
+
+    .account-header-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        width: 100%;
+    }
+
+    .account-header-actions .btn-secondary,
+    .account-header-actions form,
+    .account-header-actions form .btn-secondary {
+        width: 100%;
     }
 
     .account-panel {

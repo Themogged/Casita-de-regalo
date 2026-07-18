@@ -717,8 +717,8 @@
             if (component === "account") {
                 const mode = window.location.pathname.includes("crear")
                     ? "register"
-                    : window.location.pathname.includes("recuperar")
-                        ? "password_reset"
+                    : window.location.pathname.includes("cambiar-clave")
+                        ? "password_change"
                         : "login";
                 track("auth_submit", { context: { mode } });
             }

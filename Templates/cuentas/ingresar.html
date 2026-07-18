@@ -5,11 +5,19 @@
 {% block body_class %}account-page{% endblock %}
 
 {% block content %}
+{% url 'password_change' as password_change_url %}
 <section class="auth-shell">
     <div class="auth-card">
         <span class="account-kicker">Tu espacio en Casita</span>
         <h1>Vuelve a tus regalos</h1>
         <p>Recupera tu lista, consulta tus pedidos y decide qu&eacute; puede recordar Cora.</p>
+
+        {% if next == password_change_url %}
+            <div class="account-security-prompt" role="status">
+                <strong>Cambio seguro</strong>
+                <span>Ingresa con tu contrase&ntilde;a actual y enseguida podr&aacute;s crear la nueva.</span>
+            </div>
+        {% endif %}
 
         <form method="post" class="account-form">
             {% csrf_token %}
@@ -26,11 +34,15 @@
                 {{ form.password }}
                 {{ form.password.errors }}
             </div>
-            <a class="account-recovery-link" href="{% url 'password_reset' %}">&iquest;Olvidaste tu contrase&ntilde;a?</a>
+            <a class="account-recovery-link" href="{% url 'password_change' %}">Cambiar mi contrase&ntilde;a</a>
             {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             <button type="submit" class="btn">Ingresar</button>
         </form>
 
+        <p class="account-security-help">
+            &iquest;No recuerdas la contrase&ntilde;a actual?
+            <a href="{{ whatsapp_assistance_url }}" target="_blank" rel="noopener noreferrer">Solicitar ayuda por WhatsApp</a>
+        </p>
         <p class="account-switch">&iquest;A&uacute;n no tienes cuenta? <a href="{% url 'account_signup' %}">Crear cuenta</a></p>
     </div>
     <aside class="auth-intro" aria-label="Beneficios de tu cuenta">

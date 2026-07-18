@@ -14,34 +14,9 @@ urlpatterns = [
         name="login",
     ),
     path(
-        "recuperar/",
-        views.ReliablePasswordResetView.as_view(
-            template_name="cuentas/recuperar.html",
-            email_template_name="cuentas/correo_recuperacion.txt",
-            subject_template_name="cuentas/asunto_recuperacion.txt",
-        ),
-        name="password_reset",
-    ),
-    path(
-        "recuperar/enviado/",
-        auth_views.PasswordResetDoneView.as_view(
-            template_name="cuentas/recuperar_enviado.html"
-        ),
-        name="password_reset_done",
-    ),
-    path(
-        "recuperar/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(
-            template_name="cuentas/recuperar_confirmar.html"
-        ),
-        name="password_reset_confirm",
-    ),
-    path(
-        "recuperar/listo/",
-        auth_views.PasswordResetCompleteView.as_view(
-            template_name="cuentas/recuperar_listo.html"
-        ),
-        name="password_reset_complete",
+        "cambiar-clave/",
+        views.AccountPasswordChangeView.as_view(),
+        name="password_change",
     ),
     path("salir/", auth_views.LogoutView.as_view(), name="logout"),
 ]

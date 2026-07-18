@@ -2,7 +2,7 @@
 
 ## Antes de publicar
 
-1. Configurar `DJANGO_SECRET_KEY`, hosts, orígenes CSRF y correo fuera del repositorio.
+1. Configurar `DJANGO_SECRET_KEY`, hosts y orígenes CSRF fuera del repositorio.
 2. Ejecutar pruebas, `check` y revisión de migraciones.
 3. Ejecutar `collectstatic` y optimización de medios.
 4. Confirmar que no se versionan `.env`, bases SQLite, logs ni `media/personalizaciones/`.
@@ -45,26 +45,12 @@ Después, pulsa **Reload** en la pestaña Web. Si algo falla, revisa primero:
 
 El WSGI debe agregar el proyecto al `sys.path`, definir `DJANGO_SETTINGS_MODULE=tienda_regalos.settings_pythonanywhere` y cargar el secreto desde una variable privada de PythonAnywhere. Nunca subas el secreto al repositorio.
 
-Para que los enlaces de recuperación lleguen por correo, agrega también estas variables al WSGI antes de crear la aplicación Django:
-
-```python
-os.environ["DJANGO_EMAIL_BACKEND"] = "django.core.mail.backends.smtp.EmailBackend"
-os.environ["DJANGO_EMAIL_HOST"] = "smtp.gmail.com"
-os.environ["DJANGO_EMAIL_PORT"] = "587"
-os.environ["DJANGO_EMAIL_HOST_USER"] = "correo-remitente@gmail.com"
-os.environ["DJANGO_EMAIL_HOST_PASSWORD"] = "contrasena-de-aplicacion"
-os.environ["DJANGO_EMAIL_USE_TLS"] = "True"
-os.environ["DJANGO_DEFAULT_FROM_EMAIL"] = "Casita de Regalos <correo-remitente@gmail.com>"
-```
-
-En Gmail, `DJANGO_EMAIL_HOST_PASSWORD` debe ser una contraseña de aplicación, no la contraseña normal. Con otro proveedor, reemplaza host, puerto y TLS por sus datos SMTP. Tras recargar la web, solicita una recuperación con una cuenta de prueba y confirma recepción y apertura del enlace.
-
 ## Prueba posterior
 
 1. Inicio y catálogo en 320, 375, 390, 430 y escritorio.
 2. Agregar dos configuraciones distintas del mismo producto.
 3. Editar y quitar solo una línea.
 4. Abrir el drawer y finalizar por WhatsApp.
-5. Registro, acceso y recuperación de contraseña.
+5. Registro, acceso y cambio de contraseña desde una sesión autenticada.
 6. Abrir Cora, activar voz, pausar y cerrar.
 7. Confirmar que imágenes y videos no producen 404.
