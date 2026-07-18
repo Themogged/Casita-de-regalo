@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load moneda %}
+{% load moneda static %}
 
 {% block title %}Mi cuenta | Casita de Regalos{% endblock %}
 {% block body_class %}account-page{% endblock %}
@@ -7,10 +7,13 @@
 {% block content %}
 <section class="account-dashboard">
     <header class="account-dashboard-header">
-        <div>
+        <div class="account-profile-heading">
+            <img class="account-profile-mark" src="{% static 'productos/img/brand-casita-circle.svg' %}" alt="" width="54" height="54">
+            <div>
             <span class="account-kicker">Mi cuenta</span>
             <h1>Hola, {{ request.user.first_name|default:request.user.username }}</h1>
             <p>Tu lista, pedidos y preferencias en un solo lugar.</p>
+            </div>
         </div>
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}

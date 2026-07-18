@@ -1,6 +1,11 @@
+import logging
+from smtplib import SMTPException
+
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
@@ -9,6 +14,33 @@ from carrito.services import cart_snapshot, get_cart_for_request
 from pedidos.models import Pedido
 
 from .forms import ProfileForm, SignUpForm
+
+
+logger = logging.getLogger(__name__)
+
+
+class ReliablePasswordResetView(PasswordResetView):
+    """Sends reset links without exposing account existence or SMTP details."""
+
+    def form_valid(self, form):
+        uses_smtp = settings.EMAIL_BACKEND.endswith("smtp.EmailBackend")
+        if uses_smtp and not all(
+            (settings.EMAIL_HOST, settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        ):
+            form.add_error(
+                None,
+                "El correo de recuperación está temporalmente fuera de servicio. Intenta más tarde.",
+            )
+            return self.form_invalid(form)
+        try:
+            return super().form_valid(form)
+        except (SMTPException, OSError):
+            logger.exception("password_reset_email_delivery_failed")
+            form.add_error(
+                None,
+                "No pudimos enviar el enlace en este momento. Revisa el correo e intenta nuevamente.",
+            )
+            return self.form_invalid(form)
 
 
 def signup(request):

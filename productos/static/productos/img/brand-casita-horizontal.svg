@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 64" role="img" aria-labelledby="title desc">
+  <title id="title">Casita de Regalos</title>
+  <desc id="desc">Logo horizontal de Casita de Regalos.</desc>
+  <rect x="3" y="3" width="58" height="58" rx="19" fill="#fff4f8" stroke="#ef9fbd" stroke-width="2"/>
+  <path d="M17 27 32 14l15 13" fill="none" stroke="#bd3e72" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M45 25v23H19V25" fill="#fff" stroke="#d85b8e" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M39.5 30.5a10.5 10.5 0 1 0 0 13" fill="none" stroke="#a82f61" stroke-width="4.5" stroke-linecap="round"/>
+  <text x="76" y="29" fill="#5b263b" font-family="Georgia, serif" font-size="19" font-weight="700">Casita de Regalos</text>
+  <text x="77" y="45" fill="#b14c73" font-family="Arial, sans-serif" font-size="8.5" font-weight="700" letter-spacing="1.2">ACOMPAÑANDO TUS SENTIMIENTOS</text>
+</svg>

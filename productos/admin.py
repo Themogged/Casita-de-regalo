@@ -130,7 +130,7 @@ class ProductoImagenInline(admin.TabularInline):
     @admin.display(description='Vista previa')
     def preview(self, obj):
         if not obj.pk or not obj.imagen:
-            return format_html('<span class="casita-admin-empty">Sin imagen</span>')
+            return format_html('<span class="casita-admin-empty">{}</span>', 'Sin imagen')
         return format_html(
             '<img src="{}" class="casita-admin-thumb is-large" alt="">',
             obj.imagen.url,
@@ -194,7 +194,7 @@ class ProductoAdmin(admin.ModelAdmin):
     @admin.display(description='Imagen')
     def preview(self, obj):
         if not obj.imagen:
-            return format_html('<span class="casita-admin-empty">Sin imagen</span>')
+            return format_html('<span class="casita-admin-empty">{}</span>', 'Sin imagen')
         return format_html(
             '<img src="{}" class="casita-admin-thumb" alt="">',
             obj.imagen.url,
@@ -203,7 +203,7 @@ class ProductoAdmin(admin.ModelAdmin):
     @admin.display(description='Vista previa')
     def preview_grande(self, obj):
         if not obj.pk or not obj.imagen:
-            return format_html('<span class="casita-admin-empty">Sin imagen cargada</span>')
+            return format_html('<span class="casita-admin-empty">{}</span>', 'Sin imagen cargada')
         return format_html(
             '<img src="{}" class="casita-admin-preview" alt="">',
             obj.imagen.url,
@@ -347,7 +347,7 @@ class VideoElaboracionAdmin(admin.ModelAdmin):
     @admin.display(description='Portada')
     def preview_portada(self, obj):
         if not obj.portada:
-            return format_html('<span class="casita-admin-empty">Sin portada</span>')
+            return format_html('<span class="casita-admin-empty">{}</span>', 'Sin portada')
         return format_html(
             '<img src="{}" class="casita-admin-thumb is-large" alt="">',
             obj.portada.url,

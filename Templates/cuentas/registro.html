@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Crear cuenta | Casita de Regalos{% endblock %}
 {% block body_class %}account-page{% endblock %}
@@ -12,7 +13,8 @@
 
         <form method="post" class="account-form">
             {% csrf_token %}
-            {% for field in form %}
+            {% for field in form.hidden_fields %}{{ field }}{% endfor %}
+            {% for field in form.visible_fields %}
                 <div class="field-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                     {{ field }}
@@ -26,7 +28,7 @@
         <p class="account-switch">&iquest;Ya tienes cuenta? <a href="{% url 'login' %}">Ingresar</a></p>
     </div>
     <aside class="auth-intro" aria-label="Privacidad de la cuenta">
-        <span class="account-benefits-mark" aria-hidden="true">C</span>
+        <img class="account-benefits-mark" src="{% static 'productos/img/brand-casita-isotype.svg' %}" alt="" width="58" height="58">
         <h2>T&uacute; decides qu&eacute; recordar</h2>
         <p>La memoria de Cora comienza desactivada. Puedes habilitarla, pausarla o borrarla cuando quieras.</p>
     </aside>

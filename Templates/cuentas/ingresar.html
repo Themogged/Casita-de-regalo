@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Ingresar | Casita de Regalos{% endblock %}
 {% block body_class %}account-page{% endblock %}
@@ -25,6 +26,7 @@
                 {{ form.password }}
                 {{ form.password.errors }}
             </div>
+            <a class="account-recovery-link" href="{% url 'password_reset' %}">&iquest;Olvidaste tu contrase&ntilde;a?</a>
             {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             <button type="submit" class="btn">Ingresar</button>
         </form>
@@ -32,7 +34,7 @@
         <p class="account-switch">&iquest;A&uacute;n no tienes cuenta? <a href="{% url 'account_signup' %}">Crear cuenta</a></p>
     </div>
     <aside class="auth-intro" aria-label="Beneficios de tu cuenta">
-        <span class="account-benefits-mark" aria-hidden="true">C</span>
+        <img class="account-benefits-mark" src="{% static 'productos/img/brand-casita-isotype.svg' %}" alt="" width="58" height="58">
         <h2>Una experiencia m&aacute;s personal</h2>
         <ul>
             <li>Tu lista se mantiene sincronizada.</li>
