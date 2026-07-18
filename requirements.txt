@@ -3,5 +3,5 @@ Django==6.0.3
 pillow==12.1.1
 sqlparse==0.5.5
 tzdata==2025.3
-gunicorn
-whitenoise
+gunicorn==25.3.0
+whitenoise==6.12.0

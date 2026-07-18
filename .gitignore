@@ -1,8 +1,15 @@
 .venv/
+.env
+.env.*
+!.env.example
 .idea/
 __pycache__/
 *.py[cod]
 *.sqlite3
+*.sqlite3-*
+*.bak
+db-backup*
+db.backup*
 *.log
 .DS_Store
 Thumbs.db
@@ -10,6 +17,9 @@ Thumbs.db
 .tmp/
 staticfiles/
 media/personalizaciones/
+media/**/*-360w.webp
+media/**/*-720w.webp
+media/**/*-1080w.webp
 design_versions/
 
 media/referencias/originales/

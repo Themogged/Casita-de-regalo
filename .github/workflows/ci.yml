@@ -1,0 +1,30 @@
+name: Django CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python manage.py makemigrations --check --dry-run
+      - run: python manage.py check
+      - run: python manage.py test productos carrito cuentas asistente tienda_regalos
+      - run: python manage.py check --deploy
+        env:
+          DJANGO_SETTINGS_MODULE: tienda_regalos.settings_pythonanywhere
+          DJANGO_SECRET_KEY: ci-only-8f6ae4f31bff4479b16856970bc3a9810c969f05e1f144ca
+          PYTHONANYWHERE_HOST: daxian7.pythonanywhere.com
+      - run: python manage.py collectstatic --noinput
+        env:
+          DJANGO_SETTINGS_MODULE: tienda_regalos.settings_pythonanywhere
+          DJANGO_SECRET_KEY: ci-only-8f6ae4f31bff4479b16856970bc3a9810c969f05e1f144ca
+          PYTHONANYWHERE_HOST: daxian7.pythonanywhere.com
