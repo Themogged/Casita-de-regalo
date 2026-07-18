@@ -68,6 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",  # 🔥 IMPORTANTE
     "tienda_regalos.middleware.AdminRateLimitMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -98,6 +99,7 @@ TEMPLATES = [
                 "carrito.context_processors.carrito_total",
                 "productos.context_processors.categorias_menu",
                 "productos.context_processors.business_links",
+                "productos.context_processors.seo_context",
                 "asistente.context_processors.assistant_account_context",
             ],
         },
@@ -139,9 +141,14 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        "BACKEND": (
+            "django.contrib.staticfiles.storage.StaticFilesStorage"
+            if DEBUG
+            else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        ),
     },
 }
+WHITENOISE_MANIFEST_STRICT = False
 
 
 # 🔥 MEDIA (IMÁGENES SUBIDAS)
@@ -184,7 +191,41 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 ADMIN_LOGIN_MAX_ATTEMPTS = int(os.getenv("DJANGO_ADMIN_LOGIN_MAX_ATTEMPTS", "5"))
 ADMIN_LOGIN_BLOCK_MINUTES = int(os.getenv("DJANGO_ADMIN_LOGIN_BLOCK_MINUTES", "15"))
+CUSTOMER_LOGIN_MAX_ATTEMPTS = int(os.getenv("DJANGO_CUSTOMER_LOGIN_MAX_ATTEMPTS", "8"))
+CUSTOMER_LOGIN_BLOCK_MINUTES = int(os.getenv("DJANGO_CUSTOMER_LOGIN_BLOCK_MINUTES", "15"))
+TRUST_X_FORWARDED_FOR = env_bool("DJANGO_TRUST_X_FORWARDED_FOR", False)
+TELEMETRY_EVENTS_PER_MINUTE = int(os.getenv("DJANGO_TELEMETRY_EVENTS_PER_MINUTE", "90"))
 BUSINESS_WHATSAPP_NUMBER = os.getenv("BUSINESS_WHATSAPP_NUMBER", "573116262155")
+
+EMAIL_BACKEND = os.getenv(
+    "DJANGO_EMAIL_BACKEND",
+    "django.core.mail.backends.console.EmailBackend",
+)
+EMAIL_HOST = os.getenv("DJANGO_EMAIL_HOST", "")
+EMAIL_PORT = int(os.getenv("DJANGO_EMAIL_PORT", "587"))
+EMAIL_HOST_USER = os.getenv("DJANGO_EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("DJANGO_EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = env_bool("DJANGO_EMAIL_USE_TLS", True)
+EMAIL_TIMEOUT = int(os.getenv("DJANGO_EMAIL_TIMEOUT", "15"))
+DEFAULT_FROM_EMAIL = os.getenv("DJANGO_DEFAULT_FROM_EMAIL", "Casita de Regalos <no-reply@localhost>")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {"format": "{levelname} {name} {message}", "style": "{"},
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "simple"},
+    },
+    "loggers": {
+        "storefront.events": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_TELEMETRY_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
 
 
 # 🔥 PRODUCCIÓN

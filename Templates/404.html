@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}P&aacute;gina no encontrada | Casita de Regalos{% endblock %}
+{% block meta_description %}La p&aacute;gina que buscas no est&aacute; disponible. Explora el cat&aacute;logo de Casita de Regalos.{% endblock %}
+{% block body_class %}error-page{% endblock %}
+
+{% block content %}
+<section class="page-card error-state" aria-labelledby="error-title">
+    <span class="section-kicker">Error 404</span>
+    <h1 id="error-title">Este detalle ya no est&aacute; aqu&iacute;</h1>
+    <p>Puede que el enlace haya cambiado. Puedes volver al inicio o explorar las referencias disponibles.</p>
+    <div class="error-state__actions">
+        <a href="{% url 'inicio' %}" class="btn-secondary">Volver al inicio</a>
+        <a href="{% url 'catalogo' %}#catalogo" class="btn">Ver cat&aacute;logo</a>
+    </div>
+</section>
+{% endblock %}

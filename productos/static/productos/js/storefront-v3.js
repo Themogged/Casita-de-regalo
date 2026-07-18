@@ -127,7 +127,7 @@
 
         function createDrawerItem(item) {
             const article = createElement("article", "drawer-item");
-            article.dataset.productId = String(item.product_id);
+            article.dataset.itemId = String(item.id);
             article.append(createProductImage(item));
 
             const copy = createElement("div", "drawer-item-copy");
@@ -151,7 +151,7 @@
             controls.append(
                 createActionButton("-", "decrease", item.decrease_url, false),
                 createElement("strong", "", String(item.quantity)),
-                createActionButton("+", "increase", item.increase_url, item.quantity >= item.stock)
+                createActionButton("+", "increase", item.increase_url, item.can_increase === false)
             );
             copy.append(controls);
             article.append(copy);
@@ -346,50 +346,150 @@
     function initAssistantSound() {
         const controls = selectAll("[data-assistant-sound]");
         if (!controls.length) return;
-        let enabled = window.localStorage.getItem("coraSoundEnabled") === "true";
-        let audioContext = null;
+        const panel = select("[data-assistant-voice-panel]");
+        const voiceSelect = select("[data-assistant-voice]");
+        const pauseButton = select("[data-assistant-voice-pause]");
+        const status = select("[data-assistant-voice-status]");
+        const synthesis = window.speechSynthesis;
+        const supported = Boolean(synthesis && window.SpeechSynthesisUtterance);
+        let enabled = window.localStorage.getItem("coraVoiceEnabled") === "true";
+        let paused = false;
+        let voices = [];
+
+        function setStatus(message) {
+            if (status) status.textContent = message;
+        }
+
+        function normalizeSpeechText(value) {
+            return String(value || "")
+                .replace(/https?:\/\/\S+/gi, "")
+                .replace(/\$\s*([\d.]+)/g, (_, amount) => {
+                    const number = Number(String(amount).replace(/\./g, ""));
+                    return Number.isFinite(number) ? `${number.toLocaleString("es-CO")} pesos` : amount;
+                })
+                .replace(/[*_#`>|~]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim()
+                .slice(0, 520);
+        }
+
+        function preferredVoices() {
+            return synthesis.getVoices()
+                .filter((voice) => /^es([-_]|$)/i.test(voice.lang))
+                .sort((left, right) => {
+                    const rank = (voice) => (/^es[-_]CO/i.test(voice.lang) ? 0 : /^es[-_](MX|US)/i.test(voice.lang) ? 1 : 2);
+                    return rank(left) - rank(right) || left.name.localeCompare(right.name);
+                });
+        }
+
+        function loadVoices() {
+            if (!supported || !voiceSelect) return;
+            voices = preferredVoices();
+            const storedName = window.localStorage.getItem("coraVoiceName") || "";
+            voiceSelect.replaceChildren();
+            if (!voices.length) {
+                const option = new Option("Voz predeterminada", "");
+                voiceSelect.add(option);
+                voiceSelect.disabled = true;
+                return;
+            }
+            voices.forEach((voice) => voiceSelect.add(new Option(`${voice.name} (${voice.lang})`, voice.name)));
+            const selected = voices.find((voice) => voice.name === storedName) || voices[0];
+            voiceSelect.value = selected.name;
+            voiceSelect.disabled = !enabled;
+        }
 
         function render() {
+            if (!supported) {
+                enabled = false;
+                panel?.classList.add("is-unavailable");
+                setStatus("La voz no está disponible en este navegador.");
+            }
             controls.forEach((control) => {
                 control.setAttribute("aria-pressed", String(enabled));
-                control.setAttribute("aria-label", enabled ? "Desactivar sonido" : "Activar sonido");
-                control.title = enabled ? "Sonido activado" : "Sonido desactivado";
+                control.setAttribute("aria-label", enabled ? "Silenciar voz de Cora" : "Activar voz de Cora");
+                control.title = enabled ? "Voz activada" : "Voz desactivada";
             });
-        }
-
-        function chime() {
-            if (!enabled || !(window.AudioContext || window.webkitAudioContext)) return;
-            try {
-                const Context = window.AudioContext || window.webkitAudioContext;
-                audioContext = audioContext || new Context();
-                const now = audioContext.currentTime;
-                const gain = audioContext.createGain();
-                const oscillator = audioContext.createOscillator();
-                oscillator.type = "sine";
-                oscillator.frequency.setValueAtTime(620, now);
-                oscillator.frequency.exponentialRampToValueAtTime(820, now + 0.14);
-                gain.gain.setValueAtTime(0.0001, now);
-                gain.gain.exponentialRampToValueAtTime(0.035, now + 0.025);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.22);
-                oscillator.connect(gain);
-                gain.connect(audioContext.destination);
-                oscillator.start(now);
-                oscillator.stop(now + 0.24);
-            } catch (error) {
-                // Optional feedback must never interrupt the assistant.
+            if (voiceSelect) voiceSelect.disabled = !supported || !enabled || !voices.length;
+            if (pauseButton) {
+                pauseButton.disabled = !supported || !enabled || !synthesis.speaking;
+                pauseButton.textContent = paused ? "Continuar" : "Pausar";
             }
+            if (supported && !synthesis.speaking) setStatus(enabled ? "Voz activada" : "Voz desactivada");
         }
 
-        controls.forEach((control) => control.addEventListener("click", async () => {
-            enabled = !enabled;
-            window.localStorage.setItem("coraSoundEnabled", String(enabled));
+        function stopSpeech() {
+            if (!supported) return;
+            synthesis.cancel();
+            paused = false;
             render();
-            if (enabled) {
-                try { await audioContext?.resume?.(); } catch (error) { /* no-op */ }
-                chime();
+        }
+
+        function speak(event) {
+            if (!enabled || !supported) return;
+            const text = normalizeSpeechText(event.detail?.reply || event.detail?.text || "");
+            if (!text) return;
+            synthesis.cancel();
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = voices.find((voice) => voice.name === voiceSelect?.value) || voices[0];
+                if (selectedVoice) utterance.voice = selectedVoice;
+                utterance.lang = selectedVoice?.lang || "es-CO";
+                utterance.rate = 0.98;
+                utterance.pitch = 1.04;
+                utterance.volume = 0.94;
+                utterance.onstart = () => {
+                    paused = false;
+                    setStatus("Cora está hablando");
+                    render();
+                };
+                utterance.onend = () => {
+                    paused = false;
+                    render();
+                };
+                utterance.onerror = (speechError) => {
+                    if (speechError.error !== "interrupted" && speechError.error !== "canceled") {
+                        setStatus("No pudimos reproducir la voz.");
+                    }
+                    paused = false;
+                    render();
+                };
+                synthesis.speak(utterance);
+            } catch (error) {
+                setStatus("No pudimos reproducir la voz.");
             }
+        }
+
+        controls.forEach((control) => control.addEventListener("click", () => {
+            if (!supported) return;
+            enabled = !enabled;
+            window.localStorage.setItem("coraVoiceEnabled", String(enabled));
+            if (!enabled) stopSpeech();
+            render();
         }));
-        document.addEventListener("assistant:reply", chime);
+        voiceSelect?.addEventListener("change", () => {
+            window.localStorage.setItem("coraVoiceName", voiceSelect.value);
+        });
+        pauseButton?.addEventListener("click", () => {
+            if (!supported || !synthesis.speaking) return;
+            if (synthesis.paused) {
+                synthesis.resume();
+                paused = false;
+                setStatus("Cora está hablando");
+            } else {
+                synthesis.pause();
+                paused = true;
+                setStatus("Voz en pausa");
+            }
+            render();
+        });
+        if (supported) {
+            loadVoices();
+            synthesis.addEventListener?.("voiceschanged", loadVoices);
+        }
+        document.addEventListener("assistant:reply", speak);
+        document.addEventListener("assistant:closed", stopSpeech);
+        window.addEventListener("pagehide", stopSpeech);
         render();
     }
 
@@ -528,6 +628,137 @@
         });
     }
 
+    function initPrivacyFriendlyTelemetry() {
+        const endpoint = "/eventos/";
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || "";
+        const nativeFetch = window.fetch.bind(window);
+
+        function track(event, details = {}) {
+            if (!event || navigator.doNotTrack === "1") return;
+            const payload = {
+                event,
+                path: window.location.pathname,
+                product_id: details.product_id || null,
+                context: details.context || {},
+            };
+            nativeFetch(endpoint, {
+                method: "POST",
+                credentials: "same-origin",
+                keepalive: true,
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrfToken,
+                    "X-Requested-With": "XMLHttpRequest",
+                },
+                body: JSON.stringify(payload),
+            }).catch(() => {});
+        }
+
+        window.fetch = async (...args) => {
+            const target = typeof args[0] === "string" ? args[0] : args[0]?.url || "";
+            let isTelemetryRequest = false;
+            try {
+                isTelemetryRequest = new URL(target, window.location.origin).pathname === endpoint;
+            } catch (error) {
+                isTelemetryRequest = false;
+            }
+            try {
+                const response = await nativeFetch(...args);
+                if (!isTelemetryRequest && !response.ok) {
+                    track("server_error", {
+                        context: { component: "fetch", status: String(response.status), code: "http_error" },
+                    });
+                }
+                return response;
+            } catch (error) {
+                if (!isTelemetryRequest) {
+                    track("server_error", {
+                        context: { component: "fetch", status: "network", code: "request_failed" },
+                    });
+                }
+                throw error;
+            }
+        };
+
+        const pageKey = `telemetry:page:${window.location.pathname}`;
+        if (!window.sessionStorage.getItem(pageKey)) {
+            window.sessionStorage.setItem(pageKey, "1");
+            track("page_view", { context: { source: document.referrer ? "referral" : "direct" } });
+        }
+        const productId = document.querySelector('meta[name="assistant-product-id"]')?.content;
+        if (productId) track("product_view", { product_id: productId });
+        if (window.location.pathname.startsWith("/cuenta/")) track("auth_view");
+
+        document.addEventListener("cart:updated", (event) => {
+            const detail = event.detail || {};
+            if (detail.ok && detail.product_id && detail.product_name) {
+                track("cart_add", {
+                    product_id: detail.product_id,
+                    context: { status: detail.quantity_updated ? "quantity_updated" : "added" },
+                });
+            }
+        });
+        document.addEventListener("cart:open", () => track("cart_open"));
+        document.addEventListener("assistant:reply", (event) => {
+            track("assistant_interaction", { context: { mode: event.detail?.mode || "fallback" } });
+        });
+        document.addEventListener("quote:complete", () => track("quote_complete"));
+        document.addEventListener("submit", (event) => {
+            const form = event.target.closest("form");
+            if (!form) return;
+            let component = "form";
+            if (form.matches(".js-add-to-cart-form")) component = "product";
+            if (form.matches(".cart-item-editor__form")) component = "cart_personalization";
+            if (form.matches(".js-whatsapp-checkout-form")) component = "quote";
+            if (form.matches(".account-form")) component = "account";
+
+            track("form_submitted", { context: { component } });
+            if (component === "quote") track("quote_start");
+            if (component === "account") {
+                const mode = window.location.pathname.includes("crear")
+                    ? "register"
+                    : window.location.pathname.includes("recuperar")
+                        ? "password_reset"
+                        : "login";
+                track("auth_submit", { context: { mode } });
+            }
+
+            if (form.matches(".js-add-to-cart-form")) {
+                const hasPersonalization = [...form.elements].some((field) => {
+                    if (!field.name || field.name === "csrfmiddlewaretoken" || field.disabled) return false;
+                    if (field.type === "file") return Boolean(field.files?.[0]?.size);
+                    if (["submit", "button", "hidden"].includes(field.type)) return false;
+                    return String(field.value || "").trim().length > 0;
+                });
+                if (hasPersonalization) {
+                    track("product_personalized", { product_id: productId || null });
+                }
+            }
+        }, true);
+        if (document.querySelector(".errorlist, .form-error, [aria-invalid='true']")) {
+            track("form_error", {
+                context: { component: document.querySelector(".account-form") ? "account" : "form", code: "validation_failed" },
+            });
+        }
+        document.addEventListener("error", (event) => {
+            const media = event.target?.closest?.("img, video");
+            if (media) {
+                track("media_error", {
+                    context: { component: media.tagName.toLowerCase(), code: media.currentSrc ? "load_failed" : "missing_source" },
+                });
+            }
+        }, true);
+        window.addEventListener("error", (event) => {
+            const filename = String(event.filename || "inline").split("/").pop();
+            track("client_error", {
+                context: { component: filename || "inline", code: `line_${event.lineno || 0}` },
+            });
+        });
+        window.addEventListener("unhandledrejection", () => {
+            track("client_error", { context: { component: "promise", code: "unhandled_rejection" } });
+        });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         initConfirmationDialog();
         initCartDrawer();
@@ -535,5 +766,6 @@
         initAssistantDrag();
         initVideoExperience();
         initCustomerImagePreview();
+        initPrivacyFriendlyTelemetry();
     });
 })();

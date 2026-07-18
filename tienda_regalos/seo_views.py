@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils.html import escape
 
@@ -72,3 +73,7 @@ def sitemap_xml(request):
     lines.append('</urlset>')
 
     return HttpResponse('\n'.join(lines), content_type='application/xml; charset=utf-8')
+
+
+def custom_404(request, exception):
+    return render(request, "404.html", status=404)

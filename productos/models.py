@@ -14,6 +14,27 @@ def validate_video_size(video_file):
         raise ValidationError(f'El video no debe superar {MAX_VIDEO_SIZE_MB} MB.')
 
 
+def validate_video_content(video_file):
+    allowed_content_types = {
+        'video/mp4',
+        'video/webm',
+        'video/quicktime',
+        'application/octet-stream',
+    }
+    declared_type = getattr(video_file, 'content_type', '')
+    if declared_type and declared_type not in allowed_content_types:
+        raise ValidationError('El archivo seleccionado no tiene un formato de video permitido.')
+
+    position = video_file.tell() if hasattr(video_file, 'tell') else 0
+    header = video_file.read(16)
+    if hasattr(video_file, 'seek'):
+        video_file.seek(position)
+    is_iso_video = len(header) >= 12 and header[4:8] == b'ftyp'
+    is_webm = header.startswith(b'\x1aE\xdf\xa3')
+    if not (is_iso_video or is_webm):
+        raise ValidationError('No pudimos validar el contenido del video.')
+
+
 class Categoria(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
 
@@ -88,7 +109,11 @@ class VideoElaboracion(models.Model):
     descripcion = models.TextField(blank=True)
     video = models.FileField(
         upload_to='procesos/videos/',
-        validators=[FileExtensionValidator(['mp4', 'webm', 'mov']), validate_video_size],
+        validators=[
+            FileExtensionValidator(['mp4', 'webm', 'mov']),
+            validate_video_size,
+            validate_video_content,
+        ],
         help_text=f'Formatos permitidos: MP4, WEBM o MOV. Tamaño máximo: {MAX_VIDEO_SIZE_MB} MB.',
     )
     portada = models.ImageField(upload_to='procesos/portadas/', blank=True, null=True)

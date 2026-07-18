@@ -1,11 +1,14 @@
+import json
 import os
 
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.management import call_command
 from django.http import HttpResponse
-from django.test import RequestFactory, SimpleTestCase, TestCase
+from django.test import RequestFactory, SimpleTestCase, TestCase, override_settings
+from django.urls import reverse
 
-from tienda_regalos.middleware import SecurityHeadersMiddleware
+from tienda_regalos.middleware import AdminRateLimitMiddleware, SecurityHeadersMiddleware
 
 
 class EnsureSuperuserCommandTests(TestCase):
@@ -81,3 +84,84 @@ class SecurityHeadersMiddlewareTests(SimpleTestCase):
                     response["Cache-Control"],
                     "no-store, no-cache, must-revalidate, max-age=0",
                 )
+
+
+class LoginRateLimitMiddlewareTests(SimpleTestCase):
+    def setUp(self):
+        cache.clear()
+        self.factory = RequestFactory()
+
+    @override_settings(
+        CUSTOMER_LOGIN_MAX_ATTEMPTS=1,
+        CUSTOMER_LOGIN_BLOCK_MINUTES=5,
+    )
+    def test_bloquea_temporalmente_login_de_cliente_sin_exponer_credenciales(self):
+        cache.set("customer-login-attempts:127.0.0.1", 1, timeout=300)
+        request = self.factory.post(
+            "/cuenta/ingresar/",
+            {"username": "cliente", "password": "secreto"},
+            REMOTE_ADDR="127.0.0.1",
+        )
+        middleware = AdminRateLimitMiddleware(lambda request: HttpResponse("ok"))
+
+        response = middleware(request)
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response["Retry-After"], "300")
+        self.assertNotContains(response, "cliente", status_code=429)
+        self.assertNotContains(response, "secreto", status_code=429)
+
+
+class ResponseCompressionTests(TestCase):
+    def test_comprime_html_publico_para_clientes_compatibles(self):
+        response = self.client.get("/", HTTP_ACCEPT_ENCODING="gzip")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response["Content-Encoding"], "gzip")
+        self.assertIn("Accept-Encoding", response["Vary"])
+
+
+class TelemetryTests(TestCase):
+    def setUp(self):
+        cache.clear()
+
+    def test_acepta_evento_y_descarta_contexto_no_autorizado(self):
+        with self.assertLogs("storefront.events", level="INFO") as captured:
+            response = self.client.post(
+                reverse("collect_event"),
+                data=json.dumps(
+                    {
+                        "event": "cart_add",
+                        "path": "/catalogo/?correo=privado@example.com",
+                        "product_id": 12,
+                        "context": {
+                            "status": "added",
+                            "email": "privado@example.com",
+                        },
+                    }
+                ),
+                content_type="application/json",
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 202)
+        self.assertIn('\"path\":\"/catalogo/\"', captured.output[0])
+        self.assertNotIn("privado@example.com", captured.output[0])
+
+    def test_rechaza_evento_desconocido(self):
+        response = self.client.post(
+            reverse("collect_event"),
+            data=json.dumps({"event": "capturar_datos"}),
+            content_type="application/json",
+            secure=True,
+        )
+        self.assertEqual(response.status_code, 400)
+
+    @override_settings(TELEMETRY_EVENTS_PER_MINUTE=1)
+    def test_limita_rafagas_de_eventos(self):
+        payload = json.dumps({"event": "page_view"})
+        first = self.client.post(reverse("collect_event"), payload, content_type="application/json")
+        second = self.client.post(reverse("collect_event"), payload, content_type="application/json")
+
+        self.assertEqual(first.status_code, 202)
+        self.assertEqual(second.status_code, 429)

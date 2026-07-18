@@ -30,3 +30,7 @@ def business_links(request):
         'whatsapp_personalization_url': build_whatsapp_url(PERSONALIZATION_MESSAGE),
         'whatsapp_coverage_url': build_whatsapp_url(COVERAGE_INFO_MESSAGE),
     }
+
+
+def seo_context(request):
+    return {"canonical_page_url": request.build_absolute_uri(request.path)}

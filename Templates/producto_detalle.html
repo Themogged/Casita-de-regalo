@@ -1827,15 +1827,20 @@
         <div class="detail-media detail-gallery-stage">
             {% if galeria_imagenes %}
                 {% for imagen in galeria_imagenes %}
+                    {% with image_srcset=imagen.url|responsive_image_srcset %}
                     <img
                         src="{{ imagen.url|optimized_image_url }}"
+                        {% if image_srcset %}srcset="{{ image_srcset }}"{% endif %}
+                        sizes="(max-width: 760px) 94vw, 54vw"
                         alt="{{ imagen.alt }}"
                         class="detail-gallery-image"
                         data-gallery-image
                         loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
                         decoding="async"
+                        {% if forloop.first %}fetchpriority="high"{% endif %}
                         {% if not forloop.first %}hidden{% endif %}
                     >
+                    {% endwith %}
                 {% endfor %}
 
                 {% if galeria_imagenes|length > 1 %}
@@ -1866,7 +1871,7 @@
                         data-gallery-index="{{ forloop.counter0 }}"
                         aria-label="Ver imagen {{ forloop.counter }} de {{ producto.nombre }}"
                     >
-                        <img src="{{ imagen.url|optimized_image_url }}" alt="{{ imagen.alt }}" loading="lazy" decoding="async">
+                        <img src="{{ imagen.url|optimized_image_url }}" alt="{{ imagen.alt }}" loading="lazy" decoding="async" sizes="96px">
                     </button>
                 {% endfor %}
             </div>

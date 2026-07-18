@@ -5,7 +5,17 @@
             <span class="product-ribbon">Top regalo</span>
         {% endif %}
         {% if producto.imagen %}
-            <img src="{{ producto.imagen.url|optimized_image_url }}" alt="{{ producto.nombre }}" loading="lazy" decoding="async">
+            {% with image_srcset=producto.imagen.url|responsive_image_srcset %}
+                <img
+                    src="{{ producto.imagen.url|optimized_image_url }}"
+                    {% if image_srcset %}srcset="{{ image_srcset }}"{% endif %}
+                    sizes="(max-width: 680px) 46vw, (max-width: 1100px) 30vw, 260px"
+                    alt="{{ producto.nombre }}"
+                    loading="{% if forloop.first and request.resolver_match.url_name == 'inicio' %}eager{% else %}lazy{% endif %}"
+                    decoding="async"
+                    {% if forloop.first and request.resolver_match.url_name == 'inicio' %}fetchpriority="high"{% endif %}
+                >
+            {% endwith %}
         {% else %}
             <div class="product-placeholder">Imagen pendiente de cargar</div>
         {% endif %}

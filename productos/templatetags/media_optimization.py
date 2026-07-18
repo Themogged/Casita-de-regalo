@@ -40,3 +40,28 @@ def webp_url(url):
 @register.filter
 def optimized_image_url(url):
     return webp_url(url) or url
+
+
+@register.filter
+def responsive_image_srcset(url):
+    if not url:
+        return ""
+    value = str(url)
+    media_url = settings.MEDIA_URL
+    if not value.startswith(media_url):
+        return ""
+    relative_path = Path(value[len(media_url):].lstrip("/"))
+    media_root = Path(settings.MEDIA_ROOT).resolve()
+    source_path = (media_root / relative_path).resolve()
+    try:
+        source_path.relative_to(media_root)
+    except ValueError:
+        return ""
+
+    candidates = []
+    for width in (360, 720, 1080):
+        candidate = source_path.with_name(f"{source_path.stem}-{width}w.webp")
+        if candidate.exists():
+            relative = candidate.relative_to(media_root).as_posix()
+            candidates.append(f'{media_url.rstrip("/")}/{relative} {width}w')
+    return ", ".join(candidates)

@@ -1100,6 +1100,41 @@
         opacity: 1;
     }
 
+    .video-a11y-controls {
+        position: absolute;
+        right: 9px;
+        bottom: 9px;
+        z-index: 5;
+        display: flex;
+        gap: 6px;
+    }
+
+    .hero-process-media .video-a11y-controls {
+        top: 10px;
+        right: 10px;
+        bottom: auto;
+    }
+
+    .video-a11y-controls button {
+        min-width: 42px;
+        min-height: 34px;
+        padding: 6px 9px;
+        border: 1px solid rgba(255, 255, 255, 0.64);
+        border-radius: 999px;
+        color: #5e2b3e;
+        background: rgba(255, 252, 254, 0.9);
+        box-shadow: 0 6px 16px rgba(61, 22, 39, 0.12);
+        backdrop-filter: blur(8px);
+        font-size: 0.65rem;
+        font-weight: 800;
+        cursor: pointer;
+    }
+
+    .video-a11y-controls button:focus-visible {
+        outline: 3px solid rgba(231, 54, 131, 0.28);
+        outline-offset: 2px;
+    }
+
     .process-video-media.is-video-ready video {
         opacity: 1;
     }
@@ -3700,6 +3735,10 @@
                             <source src="{{ hero_video.video.url }}" type="{{ hero_video.mime_type }}">
                             Tu navegador no soporta video HTML5.
                         </video>
+                        <div class="video-a11y-controls" aria-label="Controles del video">
+                            <button type="button" data-video-toggle aria-label="Pausar video">Pausar</button>
+                            <button type="button" data-video-mute aria-label="Activar audio">Audio</button>
+                        </div>
                         <div class="hero-process-overlay">
                             <div>
                                 <span>Hecho en Casita</span>
@@ -3771,6 +3810,10 @@
                                     Tu navegador no soporta video HTML5.
                                 </video>
                             {% endwith %}
+                            <div class="video-a11y-controls" aria-label="Controles del video">
+                                <button type="button" data-video-toggle aria-label="Reproducir video">Reproducir</button>
+                                <button type="button" data-video-mute aria-label="Activar audio">Audio</button>
+                            </div>
                             <span class="process-video-number" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
                         </div>
                         <div class="process-video-copy">

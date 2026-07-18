@@ -8,7 +8,7 @@
     <meta name="description" content="{% block meta_description %}Regalos personalizados, desayunos sorpresa y detalles especiales en Bello, Medellín y área metropolitana. Cotiza por WhatsApp con Casita de Regalos.{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}regalos personalizados Bello, regalos personalizados Medellín, desayunos sorpresa Medellín, desayunos sorpresa Bello, detalles románticos, regalos de cumpleaños, regalos personalizados área metropolitana{% endblock %}">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <link rel="canonical" href="{% block canonical_url %}{{ canonical_page_url }}{% endblock %}">
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Desayunos sorpresa, detalles románticos y regalos de cumpleaños personalizados para Bello, Medellín y el área metropolitana.{% endblock %}">
@@ -16,7 +16,8 @@
     {% block og_image %}{% endblock %}
     <title>{% block title %}Casita de Regalos | Regalos personalizados en Bello y Medellín{% endblock %}</title>
     {% block structured_data %}{% endblock %}
-    <link rel="icon" href="{% static 'productos/img/logo-casita-admin.webp' %}" type="image/webp">
+    <link rel="icon" href="{% static 'productos/img/brand-casita-favicon.svg' %}" type="image/svg+xml">
+    <link rel="alternate icon" href="{% static 'productos/img/logo-casita-admin.webp' %}" type="image/webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -2777,6 +2778,7 @@
     <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}">
 </head>
 <body class="{% block body_class %}{% endblock %}">
+    <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
     <header class="site-header">
         <div class="header-inner">
             <a href="{% url 'inicio' %}" class="brand">
@@ -2877,7 +2879,7 @@
         </div>
     {% endif %}
 
-    <main class="page-shell">
+    <main class="page-shell" id="main-content" tabindex="-1">
         {% block hero %}{% endblock %}
         {% block content %}{% endblock %}
     </main>
@@ -3057,7 +3059,7 @@
                     </div>
                 </div>
                 <div class="assistant-header-actions">
-                    <button type="button" class="assistant-icon-control" data-assistant-sound aria-pressed="false" aria-label="Activar sonido" title="Sonido desactivado">
+                    <button type="button" class="assistant-icon-control" data-assistant-sound aria-pressed="false" aria-label="Activar voz de Cora" title="Voz desactivada">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Zm12.5 1.2a3 3 0 0 1 0 3.6M19.8 7a7 7 0 0 1 0 10"/></svg>
                     </button>
                     <a href="{% if request.user.is_authenticated %}{% url 'assistant_memory' %}{% else %}{% url 'login' %}?next={% url 'assistant_memory' %}{% endif %}" class="assistant-icon-control" aria-label="Abrir memoria del asistente" title="Memoria del asistente">
@@ -3068,6 +3070,16 @@
             </header>
 
             <div class="assistant-body">
+                <div class="assistant-voice-controls" data-assistant-voice-panel>
+                    <label>
+                        <span>Voz de Cora</span>
+                        <select data-assistant-voice aria-label="Elegir voz de Cora" disabled>
+                            <option value="">Voz en espa&ntilde;ol</option>
+                        </select>
+                    </label>
+                    <button type="button" data-assistant-voice-pause disabled>Pausar</button>
+                    <span data-assistant-voice-status role="status">Voz desactivada</span>
+                </div>
                 <div class="assistant-messages" data-assistant-messages role="log" aria-live="polite" aria-label="Conversaci&oacute;n con el asistente"></div>
 
                 <div class="assistant-suggestions-wrap">
@@ -3338,7 +3350,7 @@
             const isSuccessfulAdd = data.ok === true && response.ok;
             const quantityUpdated = isSuccessfulAdd && data.quantity_updated === true;
             const cartItem = Array.isArray(data.cart?.items)
-                ? data.cart.items.find((item) => item.product_id === data.product_id)
+                ? data.cart.items.find((item) => item.id === data.item_id)
                 : null;
 
             showToast(
@@ -3419,8 +3431,8 @@
                 });
             }
 
-            const row = data.product_id
-                ? document.querySelector(`[data-cart-row="${data.product_id}"]`)
+            const row = data.item_id
+                ? document.querySelector(`[data-cart-row="${data.item_id}"]`)
                 : null;
 
             if (row && data.item_removed) {
@@ -3533,8 +3545,24 @@
             let backgroundVideoHydrated = false;
 
             const getVideoUi = (video) => {
-                const media = video?.closest('.process-video-media');
-                return { media };
+                const media = video?.closest('.process-video-media, .hero-process-media');
+                return {
+                    media,
+                    toggle: media?.querySelector('[data-video-toggle]'),
+                    mute: media?.querySelector('[data-video-mute]'),
+                };
+            };
+
+            const syncVideoControls = (video) => {
+                const { toggle, mute } = getVideoUi(video);
+                if (toggle) {
+                    toggle.textContent = video.paused ? 'Reproducir' : 'Pausar';
+                    toggle.setAttribute('aria-label', video.paused ? 'Reproducir video' : 'Pausar video');
+                }
+                if (mute) {
+                    mute.textContent = video.muted ? 'Audio' : 'Silenciar';
+                    mute.setAttribute('aria-label', video.muted ? 'Activar audio' : 'Silenciar video');
+                }
             };
 
             const setVideoState = (video, state) => {
@@ -3565,8 +3593,8 @@
                 video.pause();
             };
 
-            const playVideo = async (video) => {
-                if (!video || (activeVideo === video && !video.paused)) return;
+            const playVideo = async (video, { preserveAudio = false } = {}) => {
+                if (!video || video.dataset.userPaused === 'true' || (activeVideo === video && !video.paused)) return;
                 const hydratedNow = hydrateVideo(video);
                 const { media } = getVideoUi(video);
                 if (!hydratedNow && media?.dataset.videoLoadState === 'error') {
@@ -3577,7 +3605,7 @@
                     if (item !== video) pauseVideo(item);
                 });
                 activeVideo = video;
-                video.muted = true;
+                if (!preserveAudio) video.muted = true;
                 video.playsInline = true;
 
                 try {
@@ -3601,16 +3629,19 @@
                 video.addEventListener('canplay', () => {
                     media?.classList.add('is-video-ready');
                     setVideoState(video, video.paused ? 'ready' : 'playing');
+                    syncVideoControls(video);
                 });
                 video.addEventListener('play', () => {
                     media?.classList.add('is-playing', 'is-video-ready');
                     setVideoState(video, 'playing');
+                    syncVideoControls(video);
                 });
                 video.addEventListener('pause', () => {
                     media?.classList.remove('is-playing');
                     if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
                         setVideoState(video, 'ready');
                     }
+                    syncVideoControls(video);
                 });
                 video.addEventListener('ended', () => {
                     media?.classList.remove('is-playing');
@@ -3622,6 +3653,28 @@
                     setVideoState(video, 'error');
                     if (activeVideo === video) activeVideo = null;
                 });
+
+                const { toggle, mute } = getVideoUi(video);
+                toggle?.addEventListener('click', async () => {
+                    if (video.paused) {
+                        video.dataset.userPaused = 'false';
+                        await playVideo(video, { preserveAudio: true });
+                    } else {
+                        video.dataset.userPaused = 'true';
+                        if (activeVideo === video) activeVideo = null;
+                        pauseVideo(video);
+                    }
+                    syncVideoControls(video);
+                });
+                mute?.addEventListener('click', async () => {
+                    video.muted = !video.muted;
+                    if (!video.muted && video.paused) {
+                        video.dataset.userPaused = 'false';
+                        await playVideo(video, { preserveAudio: true });
+                    }
+                    syncVideoControls(video);
+                });
+                syncVideoControls(video);
             });
 
             if (!('IntersectionObserver' in window) || avoidsBackgroundLoading) return;
@@ -3646,7 +3699,7 @@
 
             const observer = new IntersectionObserver((entries) => {
                 const candidate = entries
-                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.55)
+                    .filter((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.55 && entry.target.dataset.userPaused !== 'true')
                     .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
 
                 entries.forEach((entry) => {
@@ -4058,6 +4111,7 @@
             panel.hidden = true;
             toggle.setAttribute('aria-expanded', 'false');
             toggle.setAttribute('aria-label', 'Abrir asistente Cora');
+            document.dispatchEvent(new CustomEvent('assistant:closed'));
             toggle.focus({ preventScroll: true });
         };
 
@@ -4098,6 +4152,9 @@
                 const fallback = assistantFallbackKnowledge(cleanText);
                 updateAssistantStatus('fallback');
                 appendAssistantMessage({ role: 'bot', text: fallback.text, actions: fallback.actions || [] });
+                document.dispatchEvent(new CustomEvent('assistant:reply', {
+                    detail: { reply: fallback.text, actions: fallback.actions || [], mode: 'fallback' },
+                }));
                 playAssistantGesture('celebrating', 760);
                 pushAssistantHistory('user', cleanText);
                 pushAssistantHistory('assistant', fallback.text);
@@ -4348,6 +4405,9 @@
                     }
 
                     if (data.whatsapp_url) {
+                        document.dispatchEvent(new CustomEvent('quote:complete', {
+                            detail: { order_id: data.order_id || null },
+                        }));
                         window.location.assign(data.whatsapp_url);
                         return;
                     }

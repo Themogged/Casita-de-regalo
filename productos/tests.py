@@ -6,6 +6,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
 from django.contrib.admin.sites import AdminSite
+from django.contrib.auth import get_user_model
 from django.contrib.staticfiles import finders
 from django.core.cache import cache
 from django.core.management import call_command
@@ -76,6 +77,11 @@ class WhatsappUrlTests(TestCase):
 class CatalogoAdminTests(TestCase):
     def setUp(self):
         self.site = AdminSite()
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="admin-catalogo",
+            email="admin@example.com",
+            password="AdminSegura123!",
+        )
         self.categoria = Categoria.objects.create(nombre='Regalos')
         self.producto = Producto.objects.create(
             nombre='Caja sorpresa',
@@ -86,6 +92,26 @@ class CatalogoAdminTests(TestCase):
             destacado=True,
             imagen='productos/caja-sorpresa.jpeg',
         )
+
+    def test_panel_de_productos_y_videos_carga_sin_error(self):
+        self.client.force_login(self.admin_user)
+        video = VideoElaboracion.objects.create(
+            titulo="Proceso publicado",
+            video="procesos/videos/proceso.mp4",
+        )
+        urls = (
+            reverse("admin:productos_producto_changelist"),
+            reverse("admin:productos_producto_add"),
+            reverse("admin:productos_producto_change", args=[self.producto.pk]),
+            reverse("admin:productos_videoelaboracion_changelist"),
+            reverse("admin:productos_videoelaboracion_add"),
+            reverse("admin:productos_videoelaboracion_change", args=[video.pk]),
+        )
+
+        for url in urls:
+            with self.subTest(url=url):
+                response = self.client.get(url, secure=True)
+                self.assertEqual(response.status_code, 200)
 
     def test_producto_admin_exporta_productos_a_csv(self):
         producto_admin = ProductoAdmin(Producto, self.site)
