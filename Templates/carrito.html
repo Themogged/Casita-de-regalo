@@ -1369,6 +1369,81 @@
         box-shadow: 0 8px 18px rgba(101, 53, 70, 0.04);
     }
 
+    .cart-item-editor {
+        width: min(100%, 560px);
+        margin-top: 10px;
+        border: 1px solid rgba(205, 83, 133, 0.14);
+        border-radius: 13px;
+        background: rgba(255, 249, 252, 0.88);
+    }
+
+    .cart-item-editor summary {
+        padding: 9px 12px;
+        color: #9c466b;
+        cursor: pointer;
+        font-size: 0.74rem;
+        font-weight: 800;
+        list-style-position: inside;
+    }
+
+    .cart-item-editor__form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 4px 12px 13px;
+    }
+
+    .cart-item-editor__form label {
+        display: grid;
+        gap: 5px;
+        color: #744154;
+        font-size: 0.69rem;
+        font-weight: 700;
+    }
+
+    .cart-item-editor__form input,
+    .cart-item-editor__form textarea {
+        width: 100%;
+        min-height: 40px;
+        padding: 9px 10px;
+        border: 1px solid rgba(145, 67, 96, 0.17);
+        border-radius: 10px;
+        color: #4f2636;
+        background: #fff;
+        font: inherit;
+    }
+
+    .cart-item-editor__form textarea {
+        min-height: 72px;
+        resize: vertical;
+    }
+
+    .cart-item-editor__wide {
+        grid-column: 1 / -1;
+    }
+
+    .cart-item-editor__remove {
+        display: flex !important;
+        grid-template-columns: none !important;
+        align-items: center;
+    }
+
+    .cart-item-editor__remove input {
+        width: 18px;
+        min-height: 18px;
+    }
+
+    .cart-item-editor__save {
+        min-height: 40px;
+        grid-column: 1 / -1;
+        border: 0;
+        border-radius: 11px;
+        color: #fff;
+        background: linear-gradient(135deg, #e985ae, #cf5d8e);
+        font-weight: 800;
+        cursor: pointer;
+    }
+
     @media (max-width: 760px) {
         .hero-card {
             padding: 16px 14px;
@@ -1386,6 +1461,15 @@
         .empty-cart,
         .cart-table tr {
             border-radius: 17px;
+        }
+
+        .cart-item-editor__form {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-item-editor__wide,
+        .cart-item-editor__save {
+            grid-column: auto;
         }
     }
 </style>
@@ -1439,7 +1523,7 @@
                     </thead>
                     <tbody>
                         {% for item in productos %}
-                            <tr data-cart-row="{{ item.producto.id }}">
+                            <tr id="item-{{ item.cart_item.id }}" data-cart-row="{{ item.cart_item.id }}">
                                 <td data-label="Producto">
                                     <div class="product-info">
                                         <div class="product-thumb">
@@ -1447,8 +1531,45 @@
                                                 <img src="{{ item.producto.imagen.url|optimized_image_url }}" alt="{{ item.producto.nombre }}" loading="lazy" decoding="async">
                                             {% else %}
                                                 <div class="thumb-placeholder">Sin imagen</div>
-                                            {% endif %}
-                                        </div>
+                                                  {% endif %}
+                                                 <details class="cart-item-editor">
+                                                     <summary>Editar personalizaci&oacute;n</summary>
+                                                     <form method="post" action="{% url 'editar_item_personalizacion' item.cart_item.id %}" enctype="multipart/form-data" class="cart-item-editor__form">
+                                                         {% csrf_token %}
+                                                         <label>
+                                                             <span>Texto</span>
+                                                             <input type="text" name="texto_personalizado" maxlength="180" value="{{ item.cart_item.texto_personalizado }}" placeholder="Nombre o frase corta">
+                                                         </label>
+                                                         <label>
+                                                             <span>Color</span>
+                                                             <input type="text" name="color" maxlength="80" value="{{ item.cart_item.color }}" placeholder="Rosa suave, lila, azul...">
+                                                         </label>
+                                                         <label>
+                                                             <span>Variante</span>
+                                                             <input type="text" name="variante" maxlength="80" value="{{ item.cart_item.variante }}" placeholder="Tama&ntilde;o o presentaci&oacute;n">
+                                                         </label>
+                                                         <label>
+                                                             <span>Fecha</span>
+                                                             <input type="date" name="fecha_entrega" value="{% if item.cart_item.fecha_entrega %}{{ item.cart_item.fecha_entrega|date:'Y-m-d' }}{% endif %}" data-min-today>
+                                                         </label>
+                                                         <label class="cart-item-editor__wide">
+                                                             <span>Mensaje</span>
+                                                             <textarea name="mensaje_regalo" maxlength="500" placeholder="Dedicatoria para este detalle">{{ item.cart_item.mensaje_regalo }}</textarea>
+                                                         </label>
+                                                         <label class="cart-item-editor__wide">
+                                                             <span>{% if item.cart_item.imagen_cliente %}Cambiar imagen{% else %}Imagen de referencia{% endif %}</span>
+                                                             <input type="file" name="imagen_cliente" accept="image/jpeg,image/png,image/webp">
+                                                         </label>
+                                                         {% if item.cart_item.imagen_cliente %}
+                                                             <label class="cart-item-editor__remove cart-item-editor__wide">
+                                                                 <input type="checkbox" name="eliminar_imagen" value="1">
+                                                                 <span>Quitar imagen actual</span>
+                                                             </label>
+                                                         {% endif %}
+                                                         <button type="submit" class="cart-item-editor__save">Guardar cambios</button>
+                                                     </form>
+                                                 </details>
+                                         </div>
                                         <div class="product-copy">
                                             <strong>{{ item.producto.nombre }}</strong>
                                             <span class="product-note">
@@ -1484,26 +1605,26 @@
                                 <td data-label="Precio base"><span class="line-price">{{ item.producto.precio|cop }}</span></td>
                                 <td data-label="Cantidad">
                                     <div class="qty-controls" aria-label="Cantidad de {{ item.producto.nombre }}">
-                                        <form method="post" action="{% url 'restar_producto' item.producto.id %}" class="qty-form js-cart-update-form">
+                                        <form method="post" action="{% url 'restar_item' item.cart_item.id %}" class="qty-form js-cart-update-form">
                                             {% csrf_token %}
                                             <button type="submit" class="qty-btn" aria-label="Restar {{ item.producto.nombre }}">-</button>
                                         </form>
                                         <strong class="qty-value" data-cart-item-qty>{{ item.cantidad }}</strong>
-                                        <form method="post" action="{% url 'sumar_producto' item.producto.id %}" class="qty-form js-cart-update-form">
+                                        <form method="post" action="{% url 'sumar_item' item.cart_item.id %}" class="qty-form js-cart-update-form">
                                             {% csrf_token %}
                                             <button
                                                 type="submit"
-                                                class="qty-btn {% if item.cantidad >= item.producto.stock %}is-disabled{% endif %}"
+                                                class="qty-btn {% if not item.can_increase %}is-disabled{% endif %}"
                                                 aria-label="Sumar {{ item.producto.nombre }}"
                                                 data-cart-increase-button
-                                                {% if item.cantidad >= item.producto.stock %}disabled{% endif %}
+                                                {% if not item.can_increase %}disabled{% endif %}
                                             >+</button>
                                         </form>
                                     </div>
                                 </td>
                                 <td data-label="Subtotal"><span class="line-subtotal" data-cart-item-subtotal>{{ item.subtotal|cop }}</span></td>
                                 <td data-label="Quitar">
-                                    <form method="post" action="{% url 'eliminar_producto' item.producto.id %}" class="remove-form js-cart-update-form" data-confirm-submit="Retirar {{ item.producto.nombre }} de tu lista">
+                                    <form method="post" action="{% url 'eliminar_item' item.cart_item.id %}" class="remove-form js-cart-update-form" data-confirm-submit="Retirar {{ item.producto.nombre }} de tu lista">
                                         {% csrf_token %}
                                         <button type="submit" class="remove-btn" aria-label="Quitar {{ item.producto.nombre }}">
                                             <span aria-hidden="true">&times;</span>

@@ -375,6 +375,110 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(response.json()['ok'], False)
         self.assertEqual(CarritoItem.objects.count(), 0)
 
+    def test_mismo_producto_con_personalizacion_distinta_crea_lineas_separadas(self):
+        first = self.client.post(
+            reverse("agregar_carrito", args=[self.producto.id]),
+            {"color": "Rosa"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+            secure=True,
+        )
+        second = self.client.post(
+            reverse("agregar_carrito", args=[self.producto.id]),
+            {"color": "Lila"},
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+            secure=True,
+        )
+
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(CarritoItem.objects.filter(producto=self.producto).count(), 2)
+        self.assertEqual(second.json()["cart"]["references"], 2)
+        self.assertEqual(second.json()["cart"]["units"], 2)
+        self.assertEqual(self.client.session["carrito"][str(self.producto.id)], 2)
+
+    def test_personalizacion_identica_incrementa_la_misma_linea(self):
+        payload = {"texto_personalizado": "Para Laura", "color": "Rosa"}
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), payload, secure=True)
+        response = self.client.post(
+            reverse("agregar_carrito", args=[self.producto.id]),
+            payload,
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+            secure=True,
+        )
+
+        item = CarritoItem.objects.get(producto=self.producto)
+        self.assertEqual(item.cantidad, 2)
+        self.assertTrue(response.json()["quantity_updated"])
+        self.assertEqual(response.json()["item_id"], item.id)
+
+    def test_cantidad_se_actualiza_por_linea_sin_tocar_otra_personalizacion(self):
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Rosa"}, secure=True)
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Lila"}, secure=True)
+        pink = CarritoItem.objects.get(color="Rosa")
+        lilac = CarritoItem.objects.get(color="Lila")
+
+        response = self.client.post(
+            reverse("sumar_item", args=[pink.id]),
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+            secure=True,
+        )
+
+        pink.refresh_from_db()
+        lilac.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["item_id"], pink.id)
+        self.assertEqual(pink.cantidad, 2)
+        self.assertEqual(lilac.cantidad, 1)
+
+    def test_ruta_heredada_no_falla_si_existen_variantes_del_mismo_producto(self):
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Rosa"}, secure=True)
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Lila"}, secure=True)
+        first_item = CarritoItem.objects.filter(producto=self.producto).order_by("id").first()
+
+        response = self.client.post(
+            reverse("sumar_producto", args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+            secure=True,
+        )
+
+        first_item.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(first_item.cantidad, 2)
+        self.assertEqual(CarritoItem.objects.filter(producto=self.producto).count(), 2)
+
+    def test_editar_personalizacion_independiente_actualiza_su_clave(self):
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Rosa"}, secure=True)
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Lila"}, secure=True)
+        item = CarritoItem.objects.get(color="Rosa")
+        original_key = item.configuration_key
+
+        response = self.client.post(
+            reverse("editar_item_personalizacion", args=[item.id]),
+            {"color": "Coral", "texto_personalizado": "Para mamá"},
+            secure=True,
+        )
+
+        item.refresh_from_db()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(item.color, "Coral")
+        self.assertEqual(item.texto_personalizado, "Para mamá")
+        self.assertNotEqual(item.configuration_key, original_key)
+        self.assertTrue(CarritoItem.objects.filter(color="Lila").exists())
+
+    def test_checkout_conserva_cada_configuracion_como_linea(self):
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Rosa"}, secure=True)
+        self.client.post(reverse("agregar_carrito", args=[self.producto.id]), {"color": "Lila"}, secure=True)
+
+        response = self.client.post(reverse("comprar_whatsapp"), self.checkout_data, secure=True)
+
+        self.assertEqual(response.status_code, 302)
+        order = Pedido.objects.get()
+        self.assertEqual(order.items.count(), 2)
+        self.assertEqual(
+            {item.personalizacion["color"] for item in order.items.all()},
+            {"Rosa", "Lila"},
+        )
+
     def test_checkout_exige_destinatario_y_fecha(self):
         self.client.post(reverse('agregar_carrito', args=[self.producto.id]), secure=True)
 

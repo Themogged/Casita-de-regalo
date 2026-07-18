@@ -5,7 +5,8 @@ from urllib.parse import urlparse
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import transaction
-from django.http import JsonResponse
+from django.db.models import Sum
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
@@ -14,307 +15,185 @@ from pedidos.models import Pedido, PedidoItem
 from productos.models import Producto
 from productos.whatsapp import build_whatsapp_url
 
+from .models import CarritoItem
 from .services import (
+    add_configured_item,
     cart_snapshot,
+    clear_cart,
     get_cart_for_request,
     mirror_cart_to_session,
-    set_cart_mapping,
     update_item_personalization,
 )
 
 
-def _format_cop(valor):
-    entero = int(Decimal(valor).quantize(Decimal("1")))
-    return f"${entero:,}".replace(",", ".")
+def _format_cop(value):
+    integer = int(Decimal(value).quantize(Decimal("1")))
+    return f"${integer:,}".replace(",", ".")
 
 
-def _normalize_carrito(raw_carrito):
-    carrito = {}
-
-    for producto_id, cantidad in (raw_carrito or {}).items():
-        try:
-            producto_id_int = int(producto_id)
-            cantidad_int = int(cantidad)
-        except (TypeError, ValueError):
-            continue
-
-        if cantidad_int > 0:
-            carrito[str(producto_id_int)] = cantidad_int
-
-    return carrito
-
-
-def _get_carrito(request):
-    cart = get_cart_for_request(request)
-    return mirror_cart_to_session(request, cart)
-
-
-def _set_carrito(request, carrito):
-    set_cart_mapping(request, _normalize_carrito(carrito))
-
-
-def _carrito_total_items(carrito):
-    return sum(carrito.values())
-
-
-def _build_cart_items(carrito):
-    productos_ids = [int(producto_id) for producto_id in carrito.keys()]
-    productos_map = {
-        producto.id: producto for producto in Producto.objects.filter(id__in=productos_ids)
-    }
-
-    productos = []
-    total = Decimal("0.00")
-    carrito_actualizado = {}
-
-    for producto_id, cantidad in carrito.items():
-        producto = productos_map.get(int(producto_id))
-        if not producto:
-            continue
-
-        subtotal = producto.precio * cantidad
-        total += subtotal
-        carrito_actualizado[str(producto.id)] = cantidad
-        productos.append(
-            {
-                "producto": producto,
-                "cantidad": cantidad,
-                "subtotal": subtotal,
-            }
-        )
-
-    return productos, total, carrito_actualizado
-
-
-def _es_ajax(request):
+def _is_ajax(request):
     return request.headers.get("x-requested-with") == "XMLHttpRequest"
 
 
-def _json_cart_update(request, producto_id, message, level="success", status=200):
-    persistent_cart = get_cart_for_request(request)
-    carrito = mirror_cart_to_session(request, persistent_cart)
-    productos, total, carrito_actualizado = _build_cart_items(carrito)
-
-    if carrito_actualizado != carrito:
-        _set_carrito(request, carrito_actualizado)
-        carrito = carrito_actualizado
-
-    item_actual = next(
-        (
-            item for item in productos
-            if item["producto"].id == producto_id
-        ),
-        None,
+def _cart_item_for_request(request, item_id):
+    cart = get_cart_for_request(request)
+    return get_object_or_404(
+        cart.items.select_related("producto", "producto__categoria"),
+        pk=item_id,
     )
 
+
+def _json_cart_update(request, item_id, message, level="success", status=200, product_id=None):
+    cart = get_cart_for_request(request)
+    snapshot = cart_snapshot(request, cart)
+    current = next((item for item in snapshot["items"] if item["id"] == item_id), None)
     payload = {
         "ok": status < 400,
         "level": level,
         "message": message,
-        "product_id": producto_id,
-        "cart_total": _carrito_total_items(carrito),
-        "references_count": len(productos),
-        "total_label": _format_cop(total),
-        "cart_url": reverse("ver_carrito"),
-        "is_empty": not productos,
-        "item_removed": item_actual is None,
-        "item_quantity": item_actual["cantidad"] if item_actual else 0,
-        "item_subtotal_label": _format_cop(item_actual["subtotal"]) if item_actual else _format_cop(0),
-        "item_stock": item_actual["producto"].stock if item_actual else 0,
-        "cart": cart_snapshot(request),
+        "item_id": item_id,
+        "product_id": product_id or (current["product_id"] if current else None),
+        "cart_total": snapshot["units"],
+        "references_count": snapshot["references"],
+        "total_label": snapshot["total_label"],
+        "cart_url": snapshot["cart_url"],
+        "is_empty": snapshot["is_empty"],
+        "item_removed": current is None,
+        "item_quantity": current["quantity"] if current else 0,
+        "item_subtotal_label": current["subtotal_label"] if current else _format_cop(0),
+        "item_stock": current["stock"] if current else 0,
+        "cart": snapshot,
     }
     return JsonResponse(payload, status=status)
 
 
 def _json_checkout_error(message, status=400, redirect_url=None):
-    payload = {
-        "ok": False,
-        "level": "warning",
-        "message": message,
-    }
+    payload = {"ok": False, "level": "warning", "message": message}
     if redirect_url:
         payload["redirect_url"] = redirect_url
     return JsonResponse(payload, status=status)
 
 
-def _build_whatsapp_url_for_pedido(pedido, checkout_data=None):
-    lineas = [
-        "*Pedido - Casita de Regalos*",
-        "",
-        f"Pedido #{pedido.id}",
-    ]
+def _build_whatsapp_url_for_order(order, checkout_data=None):
+    lines = ["*Pedido - Casita de Regalos*", "", f"Pedido #{order.id}"]
+    labels = {
+        "texto_personalizado": "Texto",
+        "color": "Color",
+        "variante": "Tamaño o variante",
+        "fecha_entrega": "Fecha",
+        "mensaje_regalo": "Mensaje",
+        "imagen_cliente": "Imagen",
+        "opciones": "Opciones",
+    }
+    for item in order.items.all():
+        lines.append(f"- {item.producto_nombre} x{item.cantidad} = {_format_cop(item.subtotal())}")
+        for key, value in (item.personalizacion or {}).items():
+            if value:
+                lines.append(f"  · {labels.get(key, key)}: {value}")
 
-    for item in pedido.items.all():
-        lineas.append(
-            f"- {item.producto_nombre} x{item.cantidad} = {_format_cop(item.subtotal())}"
-        )
-        if item.personalizacion:
-            labels = {
-                "texto_personalizado": "Texto",
-                "color": "Color",
-                "variante": "Tamaño o variante",
-                "fecha_entrega": "Fecha",
-                "mensaje_regalo": "Mensaje",
-                "imagen_cliente": "Imagen",
-            }
-            for key, value in item.personalizacion.items():
-                if value:
-                    lineas.append(f"  · {labels.get(key, key)}: {value}")
-
-    lineas.extend(
-        [
-            "",
-            f"Total: {_format_cop(pedido.total)}",
-        ]
-    )
-
+    lines.extend(["", f"Total: {_format_cop(order.total)}"])
     checkout_data = checkout_data or {}
-    detalle_personalizacion = [
-        ("Ocasion", checkout_data.get("ocasion")),
+    details = [
+        ("Ocasión", checkout_data.get("ocasion")),
         ("Para", checkout_data.get("para_quien")),
         ("Fecha de entrega", checkout_data.get("fecha_entrega")),
         ("Mensaje en tarjeta", checkout_data.get("mensaje_tarjeta")),
         ("Detalle adicional", checkout_data.get("detalle_extra")),
     ]
-
-    datos_visibles = [(titulo, valor) for titulo, valor in detalle_personalizacion if valor]
-    if datos_visibles:
-        lineas.extend(["", "*Detalles para personalizar:*"])
-        for titulo, valor in datos_visibles:
-            lineas.append(f"- {titulo}: {valor}")
-
-    lineas.extend(
-        [
-            "",
-            "Quiero confirmar mi pedido y revisar disponibilidad final.",
-        ]
-    )
-
-    return build_whatsapp_url("\n".join(lineas))
+    visible_details = [(title, value) for title, value in details if value]
+    if visible_details:
+        lines.extend(["", "*Detalles para personalizar:*"])
+        lines.extend(f"- {title}: {value}" for title, value in visible_details)
+    lines.extend(["", "Quiero confirmar mi pedido y revisar disponibilidad final."])
+    return build_whatsapp_url("\n".join(lines))
 
 
-def _redirect_despues_de_agregar(request):
+def _redirect_after_add(request):
     fallback = f"{reverse('catalogo')}#catalogo"
     referer = request.META.get("HTTP_REFERER")
-
     if not referer:
         return redirect(fallback)
-
     parsed = urlparse(referer)
-
     if parsed.path == reverse("inicio"):
-        limpio = referer.split("#", 1)[0]
-        return redirect(f"{reverse('catalogo')}#catalogo")
-
+        return redirect(fallback)
     return redirect(referer)
 
 
 @require_POST
 def agregar_al_carrito(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-    # Create/load the session-backed cart before the transaction. Otherwise a
-    # validation rollback can also remove a freshly created database session,
-    # causing SessionMiddleware to raise SessionInterrupted on the response.
-    carrito = _get_carrito(request)
-
+    product = get_object_or_404(Producto, id=producto_id)
+    # Persist the session/cart before the validation transaction so an invalid
+    # personalization cannot roll back the database-backed session itself.
+    get_cart_for_request(request)
     try:
-        with transaction.atomic():
-            cantidad_actual = carrito.get(str(producto_id), 0)
-            cantidad_actualizada = cantidad_actual > 0
-
-            if cantidad_actual >= producto.stock:
-                mensaje = f"Solo hay {producto.stock} unidades disponibles de {producto.nombre}."
-                if _es_ajax(request):
-                    return JsonResponse(
-                        {
-                            "ok": False,
-                            "level": "warning",
-                            "message": mensaje,
-                            "cart_total": _carrito_total_items(carrito),
-                            "cart": cart_snapshot(request),
-                        },
-                        status=400,
-                    )
-
-                messages.warning(request, mensaje)
-                return _redirect_despues_de_agregar(request)
-
-            carrito[str(producto_id)] = cantidad_actual + 1
-            _set_carrito(request, carrito)
-            persistent_cart = get_cart_for_request(request)
-            persistent_item = persistent_cart.items.select_for_update().get(producto=producto)
-            update_item_personalization(persistent_item, request.POST, request.FILES)
+        item, quantity_updated = add_configured_item(request, product, request.POST, request.FILES)
     except ValidationError as exc:
-        persistent_cart.refresh_from_db()
-        carrito = mirror_cart_to_session(request, persistent_cart)
-        mensaje = exc.messages[0] if exc.messages else "Revisa los datos de personalización."
-        if _es_ajax(request):
+        message = exc.messages[0] if exc.messages else "Revisa los datos de personalización."
+        if _is_ajax(request):
+            snapshot = cart_snapshot(request)
             return JsonResponse(
                 {
                     "ok": False,
                     "level": "warning",
-                    "message": mensaje,
-                    "cart_total": _carrito_total_items(carrito),
-                    "cart": cart_snapshot(request, persistent_cart),
+                    "message": message,
+                    "cart_total": snapshot["units"],
+                    "cart": snapshot,
                 },
                 status=400,
             )
-        messages.warning(request, mensaje)
-        return _redirect_despues_de_agregar(request)
+        messages.warning(request, message)
+        return _redirect_after_add(request)
 
-    mensaje = (
-        "Cantidad actualizada."
-        if cantidad_actualizada
-        else f"{producto.nombre} agregado a tu lista."
-    )
-
-    if _es_ajax(request):
+    message = "Cantidad actualizada." if quantity_updated else f"{product.nombre} agregado a tu lista."
+    if _is_ajax(request):
+        snapshot = cart_snapshot(request)
         return JsonResponse(
             {
                 "ok": True,
                 "level": "success",
-                "message": mensaje,
-                "cart_total": _carrito_total_items(carrito),
-                "product_id": producto.id,
-                "product_name": producto.nombre,
-                "product_image_url": producto.imagen.url if producto.imagen else "",
-                "item_quantity": carrito.get(str(producto_id), 0),
-                "quantity_updated": cantidad_actualizada,
-                "cart": cart_snapshot(request),
+                "message": message,
+                "cart_total": snapshot["units"],
+                "product_id": product.id,
+                "item_id": item.id,
+                "product_name": product.nombre,
+                "product_image_url": product.imagen.url if product.imagen else "",
+                "item_quantity": item.cantidad,
+                "quantity_updated": quantity_updated,
+                "cart": snapshot,
             }
         )
-
-    messages.success(request, mensaje)
-    return _redirect_despues_de_agregar(request)
+    messages.success(request, message)
+    return _redirect_after_add(request)
 
 
 @require_GET
 def ver_carrito(request):
-    persistent_cart = get_cart_for_request(request)
-    persistent_items = list(
-        persistent_cart.items.select_related("producto", "producto__categoria")
-    )
-    productos = [
+    cart = get_cart_for_request(request)
+    persistent_items = list(cart.items.select_related("producto", "producto__categoria"))
+    units_by_product = {}
+    for item in persistent_items:
+        units_by_product[item.producto_id] = units_by_product.get(item.producto_id, 0) + item.cantidad
+    products = [
         {
             "producto": item.producto,
             "cantidad": item.cantidad,
             "subtotal": item.subtotal,
             "personalizacion": item.personalization_summary,
             "cart_item": item,
+            "can_increase": units_by_product[item.producto_id] < item.producto.stock,
         }
         for item in persistent_items
     ]
-    total = sum((item["subtotal"] for item in productos), Decimal("0.00"))
-    mirror_cart_to_session(request, persistent_cart)
-
+    total = sum((item["subtotal"] for item in products), Decimal("0.00"))
+    mirror_cart_to_session(request, cart)
     return render(
         request,
         "carrito.html",
         {
-            "productos": productos,
+            "productos": products,
             "total": total,
             "checkout_prefill": request.session.get("checkout_prefill", {}),
-            "cart_snapshot": cart_snapshot(request, persistent_cart),
+            "cart_snapshot": cart_snapshot(request, cart),
         },
     )
 
@@ -324,69 +203,112 @@ def resumen_carrito(request):
     return JsonResponse({"ok": True, "cart": cart_snapshot(request)})
 
 
+def _change_item_quantity(request, item, delta):
+    product_id = item.producto_id
+    cart = item.carrito
+    if delta > 0:
+        product_units = cart.items.filter(producto_id=product_id).aggregate(total=Sum("cantidad"))["total"] or 0
+        if product_units >= item.producto.stock:
+            message = "Stock máximo alcanzado."
+            if _is_ajax(request):
+                return _json_cart_update(
+                    request, item.id, message, level="warning", status=400, product_id=product_id
+                )
+            messages.warning(request, message)
+            return redirect("ver_carrito")
+
+    item.cantidad += delta
+    item_id = item.id
+    if item.cantidad <= 0:
+        item.delete()
+    else:
+        item.save(update_fields=["cantidad", "actualizado"])
+    mirror_cart_to_session(request, cart)
+    if _is_ajax(request):
+        return _json_cart_update(request, item_id, "Cantidad actualizada.", product_id=product_id)
+    return redirect("ver_carrito")
+
+
+@require_POST
+def sumar_item(request, item_id):
+    return _change_item_quantity(request, _cart_item_for_request(request, item_id), 1)
+
+
+@require_POST
+def restar_item(request, item_id):
+    return _change_item_quantity(request, _cart_item_for_request(request, item_id), -1)
+
+
+@require_POST
+def eliminar_item(request, item_id):
+    item = _cart_item_for_request(request, item_id)
+    product_id = item.producto_id
+    cart = item.carrito
+    item.delete()
+    mirror_cart_to_session(request, cart)
+    if _is_ajax(request):
+        return _json_cart_update(
+            request,
+            item_id,
+            "Producto retirado de la lista.",
+            product_id=product_id,
+        )
+    messages.success(request, "Producto retirado de la lista.")
+    return redirect("ver_carrito")
+
+
+@require_POST
+def editar_item_personalizacion(request, item_id):
+    item = _cart_item_for_request(request, item_id)
+    try:
+        updated_item = update_item_personalization(item, request.POST, request.FILES)
+    except ValidationError as exc:
+        message = exc.messages[0] if exc.messages else "Revisa los datos de personalización."
+        if _is_ajax(request):
+            return _json_cart_update(request, item.id, message, level="warning", status=400)
+        messages.warning(request, message)
+        return redirect(f"{reverse('ver_carrito')}#item-{item.id}")
+
+    mirror_cart_to_session(request, updated_item.carrito)
+    if _is_ajax(request):
+        return _json_cart_update(request, updated_item.id, "Personalización actualizada.")
+    messages.success(request, "Personalización actualizada.")
+    return redirect(f"{reverse('ver_carrito')}#item-{updated_item.id}")
+
+
+def _legacy_item(request, product_id):
+    cart = get_cart_for_request(request)
+    item = (
+        cart.items.select_related("producto", "producto__categoria")
+        .filter(producto_id=product_id)
+        .order_by("id")
+        .first()
+    )
+    if item is None:
+        raise Http404("La referencia no está en la lista.")
+    return item
+
+
 @require_POST
 def sumar_producto(request, producto_id):
-    producto = get_object_or_404(Producto, id=producto_id)
-    carrito = _get_carrito(request)
-
-    cantidad_actual = carrito.get(str(producto_id), 0)
-
-    if cantidad_actual >= producto.stock:
-        mensaje = "Stock maximo alcanzado."
-        if _es_ajax(request):
-            return _json_cart_update(
-                request,
-                producto.id,
-                mensaje,
-                level="warning",
-                status=400,
-            )
-        messages.warning(request, mensaje)
-        return redirect("ver_carrito")
-
-    carrito[str(producto_id)] = cantidad_actual + 1
-    _set_carrito(request, carrito)
-    if _es_ajax(request):
-        return _json_cart_update(request, producto.id, "Cantidad actualizada.")
-    return redirect("ver_carrito")
+    return _change_item_quantity(request, _legacy_item(request, producto_id), 1)
 
 
 @require_POST
 def restar_producto(request, producto_id):
-    carrito = _get_carrito(request)
-
-    if str(producto_id) in carrito:
-        carrito[str(producto_id)] -= 1
-        if carrito[str(producto_id)] <= 0:
-            del carrito[str(producto_id)]
-
-    _set_carrito(request, carrito)
-    if _es_ajax(request):
-        return _json_cart_update(request, producto_id, "Cantidad actualizada.")
-    return redirect("ver_carrito")
+    return _change_item_quantity(request, _legacy_item(request, producto_id), -1)
 
 
 @require_POST
 def eliminar_producto(request, producto_id):
-    carrito = _get_carrito(request)
-
-    if str(producto_id) in carrito:
-        del carrito[str(producto_id)]
-
-    _set_carrito(request, carrito)
-    if _es_ajax(request):
-        return _json_cart_update(request, producto_id, "Producto retirado de la lista.")
-    return redirect("ver_carrito")
+    item = _legacy_item(request, producto_id)
+    return eliminar_item(request, item.id)
 
 
 @require_POST
 def enviar_carrito_whatsapp(request):
-    carrito = _get_carrito(request)
-    persistent_cart = get_cart_for_request(request)
-    persistent_items = {
-        item.producto_id: item
-        for item in persistent_cart.items.select_related("producto")
-    }
+    cart = get_cart_for_request(request)
+    cart_items = list(cart.items.select_related("producto"))
     checkout_data = {
         "ocasion": request.POST.get("ocasion", "").strip(),
         "para_quien": request.POST.get("para_quien", "").strip(),
@@ -397,11 +319,11 @@ def enviar_carrito_whatsapp(request):
     request.session["checkout_prefill"] = checkout_data
     request.session.modified = True
 
-    if not carrito:
-        mensaje = "Aún no has guardado detalles para cotizar."
-        if _es_ajax(request):
-            return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
-        messages.warning(request, mensaje)
+    if not cart_items:
+        message = "Aún no has guardado detalles para cotizar."
+        if _is_ajax(request):
+            return _json_checkout_error(message, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, message)
         return redirect("ver_carrito")
 
     missing_fields = []
@@ -410,104 +332,86 @@ def enviar_carrito_whatsapp(request):
     if not checkout_data["fecha_entrega"]:
         missing_fields.append("fecha de entrega")
     if missing_fields:
-        mensaje = "Completa " + " y ".join(missing_fields) + " antes de continuar."
-        if _es_ajax(request):
-            return _json_checkout_error(mensaje, status=400, redirect_url=reverse("ver_carrito"))
-        messages.warning(request, mensaje)
+        message = "Completa " + " y ".join(missing_fields) + " antes de continuar."
+        if _is_ajax(request):
+            return _json_checkout_error(message, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, message)
         return redirect("ver_carrito")
 
     try:
         delivery_date = date.fromisoformat(checkout_data["fecha_entrega"])
     except ValueError:
-        mensaje = "Selecciona una fecha de entrega válida."
-        if _es_ajax(request):
-            return _json_checkout_error(mensaje, status=400, redirect_url=reverse("ver_carrito"))
-        messages.warning(request, mensaje)
+        message = "Selecciona una fecha de entrega válida."
+        if _is_ajax(request):
+            return _json_checkout_error(message, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, message)
         return redirect("ver_carrito")
     if delivery_date < date.today():
-        mensaje = "La fecha de entrega no puede estar en el pasado."
-        if _es_ajax(request):
-            return _json_checkout_error(mensaje, status=400, redirect_url=reverse("ver_carrito"))
-        messages.warning(request, mensaje)
+        message = "La fecha de entrega no puede estar en el pasado."
+        if _is_ajax(request):
+            return _json_checkout_error(message, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, message)
         return redirect("ver_carrito")
-
-    total = Decimal("0.00")
-    items_pedido = []
 
     try:
         with transaction.atomic():
-            productos_ids = [int(producto_id) for producto_id in carrito.keys()]
-            productos = {
-                producto.id: producto
-                for producto in Producto.objects.select_for_update().filter(id__in=productos_ids)
+            product_ids = {item.producto_id for item in cart_items}
+            locked_products = {
+                product.id: product
+                for product in Producto.objects.select_for_update().filter(id__in=product_ids)
             }
-
-            for producto_id, cantidad in carrito.items():
-                producto = productos.get(int(producto_id))
-
-                if not producto:
-                    mensaje = "Uno de los productos ya no está disponible."
-                    if _es_ajax(request):
-                        return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
-                    messages.error(request, mensaje)
-                    return redirect("ver_carrito")
-
-                if cantidad > producto.stock:
-                    mensaje = (
-                        f"Solo hay {producto.stock} unidades disponibles de {producto.nombre}. "
-                        "Revisa tu carrito antes de continuar."
+            units_by_product = {}
+            for item in cart_items:
+                units_by_product[item.producto_id] = units_by_product.get(item.producto_id, 0) + item.cantidad
+            for product_id, quantity in units_by_product.items():
+                product = locked_products.get(product_id)
+                if not product:
+                    raise ValidationError("Uno de los productos ya no está disponible.")
+                if quantity > product.stock:
+                    raise ValidationError(
+                        f"Solo hay {product.stock} unidades disponibles de {product.nombre}."
                     )
-                    if _es_ajax(request):
-                        return _json_checkout_error(mensaje, redirect_url=reverse("ver_carrito"))
-                    messages.warning(request, mensaje)
-                    return redirect("ver_carrito")
 
-                subtotal = producto.precio * cantidad
-                total += subtotal
-                cart_item = persistent_items.get(producto.id)
-                personalization = {}
-                if cart_item:
-                    personalization = {
-                        "texto_personalizado": cart_item.texto_personalizado,
-                        "color": cart_item.color,
-                        "variante": cart_item.variante,
-                        "fecha_entrega": cart_item.fecha_entrega.isoformat() if cart_item.fecha_entrega else "",
-                        "mensaje_regalo": cart_item.mensaje_regalo,
-                        "imagen_cliente": cart_item.imagen_cliente.url if cart_item.imagen_cliente else "",
-                    }
-                items_pedido.append((producto, cantidad, subtotal, personalization))
-
-            pedido = Pedido.objects.create(
+            total = sum((item.subtotal for item in cart_items), Decimal("0.00"))
+            order = Pedido.objects.create(
                 total=total,
                 usuario=request.user if request.user.is_authenticated else None,
                 fecha_entrega=delivery_date,
                 detalles_personalizacion=checkout_data,
             )
-
-            for producto, cantidad, subtotal, personalization in items_pedido:
+            for item in cart_items:
+                personalization = {
+                    "texto_personalizado": item.texto_personalizado,
+                    "color": item.color,
+                    "variante": item.variante,
+                    "fecha_entrega": item.fecha_entrega.isoformat() if item.fecha_entrega else "",
+                    "mensaje_regalo": item.mensaje_regalo,
+                    "imagen_cliente": item.imagen_cliente.url if item.imagen_cliente else "",
+                    "opciones": item.opciones,
+                }
                 PedidoItem.objects.create(
-                    pedido=pedido,
-                    producto_nombre=producto.nombre,
-                    cantidad=cantidad,
-                    precio=producto.precio,
+                    pedido=order,
+                    producto_nombre=item.producto.nombre,
+                    cantidad=item.cantidad,
+                    precio=item.producto.precio,
                     personalizacion=personalization,
                 )
-
-                producto.stock -= cantidad
-                producto.save(update_fields=["stock"])
-    except ValueError:
-        mensaje = "Hubo un problema con el carrito. Intenta nuevamente."
-        if _es_ajax(request):
-            return _json_checkout_error(mensaje, status=500, redirect_url=reverse("ver_carrito"))
-        messages.error(request, mensaje)
+            for product_id, quantity in units_by_product.items():
+                product = locked_products[product_id]
+                product.stock -= quantity
+                product.save(update_fields=["stock"])
+    except ValidationError as exc:
+        message = exc.messages[0]
+        if _is_ajax(request):
+            return _json_checkout_error(message, redirect_url=reverse("ver_carrito"))
+        messages.warning(request, message)
         return redirect("ver_carrito")
 
-    _set_carrito(request, {})
+    clear_cart(request, cart)
     request.session.pop("checkout_prefill", None)
     request.session.modified = True
-    whatsapp_url = _build_whatsapp_url_for_pedido(pedido, checkout_data=checkout_data)
-
-    if _es_ajax(request):
+    whatsapp_url = _build_whatsapp_url_for_order(order, checkout_data)
+    if _is_ajax(request):
         return JsonResponse(
             {
                 "ok": True,
@@ -515,8 +419,7 @@ def enviar_carrito_whatsapp(request):
                 "message": "Abriendo WhatsApp con tu pedido...",
                 "whatsapp_url": whatsapp_url,
                 "cart_total": 0,
-                "order_id": pedido.id,
+                "order_id": order.id,
             }
         )
-
     return redirect(whatsapp_url)

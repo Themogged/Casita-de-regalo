@@ -1,3 +1,8 @@
+import hashlib
+import json
+from pathlib import Path
+from uuid import uuid4
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -7,6 +12,16 @@ from PIL import Image, UnidentifiedImageError
 from productos.models import Producto
 
 
+ALLOWED_CUSTOMER_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP"}
+
+
+def customer_image_upload_to(instance, filename):
+    suffix = Path(filename).suffix.lower()
+    if suffix not in {".jpg", ".jpeg", ".png", ".webp"}:
+        suffix = ".jpg"
+    return f"personalizaciones/{uuid4().hex}{suffix}"
+
+
 def validate_customer_image_size(image):
     if image.size > 5 * 1024 * 1024:
         raise ValidationError("La imagen no debe superar 5 MB.")
@@ -14,6 +29,8 @@ def validate_customer_image_size(image):
     try:
         with Image.open(image) as opened:
             opened.verify()
+            if opened.format not in ALLOWED_CUSTOMER_IMAGE_FORMATS:
+                raise ValidationError("Usa una imagen JPG, PNG o WebP.")
             if opened.width * opened.height > 20_000_000:
                 raise ValidationError("La imagen tiene dimensiones demasiado grandes.")
     except (UnidentifiedImageError, OSError, ValueError) as exc:
@@ -67,8 +84,11 @@ class CarritoItem(models.Model):
     variante = models.CharField(max_length=80, blank=True)
     fecha_entrega = models.DateField(blank=True, null=True)
     mensaje_regalo = models.TextField(max_length=500, blank=True)
+    opciones = models.JSONField(default=dict, blank=True)
+    configuration_key = models.CharField(max_length=64, editable=False, db_index=True)
+    imagen_hash = models.CharField(max_length=64, blank=True, editable=False)
     imagen_cliente = models.ImageField(
-        upload_to="personalizaciones/%Y/%m/",
+        upload_to=customer_image_upload_to,
         blank=True,
         null=True,
         validators=[
@@ -93,7 +113,34 @@ class CarritoItem(models.Model):
             self.mensaje_regalo,
             "Imagen adjunta" if self.imagen_cliente else "",
         ]
+        values.extend(str(value) for value in self.opciones.values() if value)
         return [value for value in values if value]
+
+    def configuration_payload(self):
+        return {
+            "texto_personalizado": self.texto_personalizado.strip(),
+            "color": self.color.strip(),
+            "variante": self.variante.strip(),
+            "fecha_entrega": self.fecha_entrega.isoformat() if self.fecha_entrega else "",
+            "mensaje_regalo": self.mensaje_regalo.strip(),
+            "opciones": self.opciones or {},
+            "imagen_hash": self.imagen_hash,
+        }
+
+    def refresh_configuration_key(self):
+        canonical = json.dumps(
+            self.configuration_payload(),
+            ensure_ascii=True,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        self.configuration_key = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+        return self.configuration_key
+
+    def save(self, *args, **kwargs):
+        if not self.configuration_key:
+            self.refresh_configuration_key()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.producto.nombre} x{self.cantidad}"
@@ -102,8 +149,8 @@ class CarritoItem(models.Model):
         ordering = ["creado", "id"]
         constraints = [
             models.UniqueConstraint(
-                fields=["carrito", "producto"],
-                name="unique_product_per_persistent_cart",
+                fields=["carrito", "producto", "configuration_key"],
+                name="unique_configured_product_per_cart",
             ),
         ]
         indexes = [models.Index(fields=["carrito", "producto"])]
