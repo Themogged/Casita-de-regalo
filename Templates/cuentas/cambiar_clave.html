@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}Cambiar contrase&ntilde;a | Casita de Regalos{% endblock %}
-{% block body_class %}account-page{% endblock %}
+{% block body_class %}account-page account-security-page{% endblock %}
 
 {% block content %}
 <section class="auth-shell auth-shell--single">
@@ -10,7 +10,18 @@
         <img class="account-benefits-mark" src="{% static 'productos/img/brand-casita-isotype.svg' %}" alt="" width="58" height="58">
         <span class="account-kicker">Seguridad de tu cuenta</span>
         <h1>Actualiza tu contrase&ntilde;a</h1>
-        <p>Confirma tu contrase&ntilde;a actual y elige una nueva. El cambio se realiza aqu&iacute; mismo, sin correos ni enlaces externos.</p>
+        <p>Valida tu acceso y crea una nueva contrase&ntilde;a aqu&iacute; mismo. No necesitas correo ni un enlace de recuperaci&oacute;n.</p>
+
+        <div class="account-security-flow" aria-label="Proceso de cambio de contrase&ntilde;a">
+            <div class="account-security-step">
+                <b>01</b>
+                <span><strong>Verifica tu acceso</strong><small>Usuario y contrase&ntilde;a actual</small></span>
+            </div>
+            <div class="account-security-step">
+                <b>02</b>
+                <span><strong>Crea la nueva</strong><small>Conf&iacute;rmala y guarda el cambio</small></span>
+            </div>
+        </div>
 
         <form method="post" class="account-form">
             {% csrf_token %}
@@ -18,18 +29,36 @@
                 <div class="form-error" role="alert">{{ form.non_field_errors }}</div>
             {% endif %}
             {% for field in form %}
-                <div class="field-group">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% if field.is_hidden %}
                     {{ field }}
-                    {% if field.help_text %}<div class="password-rules">{{ field.help_text|safe }}</div>{% endif %}
-                    {{ field.errors }}
-                </div>
+                {% else %}
+                    <div class="field-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}<div class="password-rules">{{ field.help_text|safe }}</div>{% endif %}
+                        {{ field.errors }}
+                    </div>
+                {% endif %}
             {% endfor %}
             <button type="submit" class="btn">Guardar nueva contrase&ntilde;a</button>
-            <a href="{% url 'account_profile' %}" class="btn-secondary">Cancelar</a>
+            {% if request.user.is_authenticated %}
+                <a href="{% url 'account_profile' %}" class="btn-secondary">Cancelar</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn-secondary">Volver a ingresar</a>
+            {% endif %}
         </form>
 
-        <p class="account-security-note">Tu sesi&oacute;n permanecer&aacute; abierta en este dispositivo al guardar el cambio.</p>
+        <p class="account-security-help">
+            &iquest;No recuerdas la contrase&ntilde;a actual?
+            <a href="{{ whatsapp_assistance_url }}" target="_blank" rel="noopener noreferrer">Solicitar ayuda por WhatsApp</a>
+        </p>
+        <p class="account-security-note">
+            {% if request.user.is_authenticated %}
+                Tu sesi&oacute;n permanecer&aacute; abierta en este dispositivo.
+            {% else %}
+                Al guardar, ingresar&aacute;s autom&aacute;ticamente en tu cuenta.
+            {% endif %}
+        </p>
     </div>
 </section>
 {% endblock %}

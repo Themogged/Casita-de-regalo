@@ -1,25 +1,32 @@
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordChangeView
 from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 
 from asistente.memory import get_memory_profile
 from carrito.services import cart_snapshot, get_cart_for_request
 from pedidos.models import Pedido
 
-from .forms import ProfileForm, SignUpForm
+from .forms import DirectPasswordChangeForm, ProfileForm, SignUpForm
 
 
-class AccountPasswordChangeView(PasswordChangeView):
-    template_name = "cuentas/cambiar_clave.html"
-    success_url = reverse_lazy("account_profile")
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, "Tu contraseña se actualizó correctamente.")
-        return response
+def change_password(request):
+    current_user = request.user if request.user.is_authenticated else None
+    form = DirectPasswordChangeForm(
+        request.POST or None,
+        request=request,
+        user=current_user,
+    )
+    if request.method == "POST" and form.is_valid():
+        user = form.save()
+        if current_user is not None:
+            update_session_auth_hash(request, user)
+        else:
+            login(request, user)
+        messages.success(request, "Tu contraseña se actualizó correctamente.")
+        return redirect("account_profile")
+    return render(request, "cuentas/cambiar_clave.html", {"form": form})
 
 
 def signup(request):

@@ -6,7 +6,7 @@ Fecha de cierre técnico: 17 de julio de 2026.
 
 - Sistema de marca SVG con isotipo, versión circular, horizontal y favicon.
 - Identidad aplicada en acceso, registro, perfil y seguridad de la cuenta.
-- Cambio de contraseña dentro de la sesión, con validación de la clave actual y sin servicios de correo externos.
+- Cambio directo de contraseña con usuario, clave actual y nueva clave, sin servicios de correo externos.
 - Campo señuelo en registro y límites de intentos para accesos administrativos y de clientes.
 
 ## Fase 2: Cora

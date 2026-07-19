@@ -748,23 +748,6 @@ body.is-cart-drawer-open {
     font-weight: 750;
 }
 
-.account-security-prompt {
-    display: grid;
-    gap: 3px;
-    padding: 12px 14px;
-    border: 1px solid rgba(220, 112, 157, 0.2);
-    border-radius: 15px;
-    color: var(--ui-muted);
-    background: linear-gradient(135deg, #fff7fa, #fffdfd);
-    font-size: 0.74rem;
-    line-height: 1.5;
-}
-
-.account-security-prompt strong {
-    color: var(--ui-wine);
-    font-size: 0.78rem;
-}
-
 .auth-card--security {
     justify-items: start;
     width: min(100%, 620px);
@@ -785,6 +768,53 @@ body.is-cart-drawer-open {
 
 .auth-card--security .account-form {
     margin-top: 3px;
+}
+
+.account-security-flow {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    border-block: 1px solid rgba(220, 112, 157, 0.16);
+}
+
+.account-security-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    padding: 12px 10px;
+}
+
+.account-security-step + .account-security-step {
+    border-left: 1px solid rgba(220, 112, 157, 0.16);
+}
+
+.account-security-step b {
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 29px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--ui-rose-500);
+    font-size: 0.66rem;
+}
+
+.account-security-step span {
+    display: grid;
+    min-width: 0;
+}
+
+.account-security-step strong {
+    color: var(--ui-wine);
+    font-size: 0.72rem;
+}
+
+.account-security-step small {
+    color: var(--ui-muted);
+    font-size: 0.64rem;
+    line-height: 1.4;
 }
 
 .password-rules {
@@ -1532,6 +1562,12 @@ body.is-process-video-visible .floating-whatsapp {
 }
 
 @media (max-width: 640px) {
+    .account-security-page .floating-designer,
+    .account-security-page .floating-whatsapp,
+    .account-security-page .assistant-shell {
+        display: none !important;
+    }
+
     .header-inner {
         padding: 6px;
     }

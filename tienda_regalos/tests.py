@@ -111,6 +111,26 @@ class LoginRateLimitMiddlewareTests(SimpleTestCase):
         self.assertNotContains(response, "cliente", status_code=429)
         self.assertNotContains(response, "secreto", status_code=429)
 
+    @override_settings(
+        CUSTOMER_LOGIN_MAX_ATTEMPTS=1,
+        CUSTOMER_LOGIN_BLOCK_MINUTES=5,
+    )
+    def test_bloquea_intentos_repetidos_de_cambio_de_contrasena(self):
+        cache.set("customer-login-attempts:127.0.0.1", 1, timeout=300)
+        request = self.factory.post(
+            "/cuenta/cambiar-clave/",
+            {"username": "cliente", "current_password": "secreto"},
+            REMOTE_ADDR="127.0.0.1",
+        )
+        middleware = AdminRateLimitMiddleware(lambda request: HttpResponse("ok"))
+
+        response = middleware(request)
+
+        self.assertEqual(response.status_code, 429)
+        self.assertEqual(response["Retry-After"], "300")
+        self.assertNotContains(response, "cliente", status_code=429)
+        self.assertNotContains(response, "secreto", status_code=429)
+
 
 class ResponseCompressionTests(TestCase):
     def test_comprime_html_publico_para_clientes_compatibles(self):

@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     path(
         "cambiar-clave/",
-        views.AccountPasswordChangeView.as_view(),
+        views.change_password,
         name="password_change",
     ),
     path("salir/", auth_views.LogoutView.as_view(), name="logout"),

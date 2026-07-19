@@ -51,6 +51,6 @@ El WSGI debe agregar el proyecto al `sys.path`, definir `DJANGO_SETTINGS_MODULE=
 2. Agregar dos configuraciones distintas del mismo producto.
 3. Editar y quitar solo una línea.
 4. Abrir el drawer y finalizar por WhatsApp.
-5. Registro, acceso y cambio de contraseña desde una sesión autenticada.
+5. Registro, acceso y cambio directo de contraseña con validación de la clave actual.
 6. Abrir Cora, activar voz, pausar y cerrar.
 7. Confirmar que imágenes y videos no producen 404.

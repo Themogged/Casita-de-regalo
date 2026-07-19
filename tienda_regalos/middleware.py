@@ -20,6 +20,10 @@ def _customer_cache_key(ip_address):
     return f"customer-login-attempts:{ip_address}"
 
 
+def _is_customer_auth_path(path):
+    return path.startswith(("/cuenta/ingresar/", "/cuenta/cambiar-clave/"))
+
+
 @receiver(user_login_failed, dispatch_uid="tienda_regalos_failed_login")
 def register_failed_login(sender, credentials, request, **kwargs):
     if request is None:
@@ -27,7 +31,7 @@ def register_failed_login(sender, credentials, request, **kwargs):
     if request.path.startswith("/admin/login/"):
         cache_key = _admin_cache_key(client_ip(request))
         timeout = settings.ADMIN_LOGIN_BLOCK_MINUTES * 60
-    elif request.path.startswith("/cuenta/ingresar/"):
+    elif _is_customer_auth_path(request.path):
         cache_key = _customer_cache_key(client_ip(request))
         timeout = settings.CUSTOMER_LOGIN_BLOCK_MINUTES * 60
     else:
@@ -43,7 +47,7 @@ class AdminRateLimitMiddleware:
 
     def __call__(self, request):
         is_admin_login = request.path.startswith("/admin/login/")
-        is_customer_login = request.path.startswith("/cuenta/ingresar/")
+        is_customer_login = _is_customer_auth_path(request.path)
         if is_admin_login:
             cache_key = _admin_cache_key(client_ip(request))
             limit = settings.ADMIN_LOGIN_MAX_ATTEMPTS
@@ -59,7 +63,7 @@ class AdminRateLimitMiddleware:
 
         if cache_key and request.method == "POST" and cache.get(cache_key, 0) >= limit:
             response = HttpResponse(
-                "Demasiados intentos de inicio de sesión. Espera unos minutos e intenta de nuevo.",
+                "Demasiados intentos de acceso. Espera unos minutos e intenta de nuevo.",
                 status=429,
             )
             response["Retry-After"] = str(retry_after)

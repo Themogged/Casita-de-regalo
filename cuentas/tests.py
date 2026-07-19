@@ -99,16 +99,13 @@ class AccountViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertFalse(get_user_model().objects.filter(username="robot").exists())
 
-    def test_cambio_de_contrasena_requiere_sesion(self):
+    def test_cambio_de_contrasena_abre_directamente_sin_sesion(self):
         response = self.client.get(reverse("password_change"), secure=True)
 
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse("login"), response["Location"])
-        self.assertIn("next=", response["Location"])
-
-        login_response = self.client.get(response["Location"], secure=True)
-        self.assertContains(login_response, "Cambio seguro")
-        self.assertContains(login_response, "enseguida podr")
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Actualiza tu contrase")
+        self.assertContains(response, 'name="username"')
+        self.assertContains(response, "Usuario y contrase")
 
     def test_pantalla_de_cambio_explica_el_flujo_sin_correo(self):
         user = get_user_model().objects.create_user("cliente-clave", password="ClaveActual2026!")
@@ -118,8 +115,9 @@ class AccountViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Actualiza tu contrase")
-        self.assertContains(response, "sin correos ni enlaces externos")
+        self.assertContains(response, "No necesitas correo")
         self.assertContains(response, "brand-casita-isotype.svg")
+        self.assertNotContains(response, 'name="username" type="text"')
 
     def test_cambio_rechaza_una_contrasena_actual_incorrecta(self):
         user = get_user_model().objects.create_user("cliente-error", password="ClaveActual2026!")
@@ -128,7 +126,7 @@ class AccountViewsTests(TestCase):
         response = self.client.post(
             reverse("password_change"),
             {
-                "old_password": "ClaveIncorrecta2026!",
+                "current_password": "ClaveIncorrecta2026!",
                 "new_password1": "NuevaClave2026!Segura",
                 "new_password2": "NuevaClave2026!Segura",
             },
@@ -146,7 +144,7 @@ class AccountViewsTests(TestCase):
         response = self.client.post(
             reverse("password_change"),
             {
-                "old_password": "ClaveActual2026!",
+                "current_password": "ClaveActual2026!",
                 "new_password1": "NuevaClave2026!Segura",
                 "new_password2": "NuevaClave2026!Segura",
             },
@@ -160,3 +158,38 @@ class AccountViewsTests(TestCase):
             self.client.get(reverse("account_profile"), secure=True).status_code,
             200,
         )
+
+    def test_cambio_sin_sesion_valida_la_clave_actual_e_inicia_sesion(self):
+        user = get_user_model().objects.create_user("cliente-directo", password="ClaveActual2026!")
+
+        response = self.client.post(
+            reverse("password_change"),
+            {
+                "username": "cliente-directo",
+                "current_password": "ClaveActual2026!",
+                "new_password1": "NuevaClave2026!Segura",
+                "new_password2": "NuevaClave2026!Segura",
+            },
+            secure=True,
+        )
+
+        self.assertRedirects(response, reverse("account_profile"))
+        user.refresh_from_db()
+        self.assertTrue(user.check_password("NuevaClave2026!Segura"))
+        self.assertEqual(int(self.client.session["_auth_user_id"]), user.pk)
+
+    def test_cambio_sin_sesion_no_revela_si_el_usuario_existe(self):
+        response = self.client.post(
+            reverse("password_change"),
+            {
+                "username": "usuario-inexistente",
+                "current_password": "ClaveIncorrecta2026!",
+                "new_password1": "NuevaClave2026!Segura",
+                "new_password2": "NuevaClave2026!Segura",
+            },
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No pudimos validar el usuario y la contrase")
+        self.assertNotContains(response, "usuario inexistente")

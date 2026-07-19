@@ -5,19 +5,11 @@
 {% block body_class %}account-page{% endblock %}
 
 {% block content %}
-{% url 'password_change' as password_change_url %}
 <section class="auth-shell">
     <div class="auth-card">
         <span class="account-kicker">Tu espacio en Casita</span>
         <h1>Vuelve a tus regalos</h1>
         <p>Recupera tu lista, consulta tus pedidos y decide qu&eacute; puede recordar Cora.</p>
-
-        {% if next == password_change_url %}
-            <div class="account-security-prompt" role="status">
-                <strong>Cambio seguro</strong>
-                <span>Ingresa con tu contrase&ntilde;a actual y enseguida podr&aacute;s crear la nueva.</span>
-            </div>
-        {% endif %}
 
         <form method="post" class="account-form">
             {% csrf_token %}
