@@ -9,25 +9,14 @@
 <section class="login-experience" aria-labelledby="login-title">
     <aside class="login-brand-panel" aria-labelledby="login-brand-title">
         <a class="login-official-logo" href="{% url 'inicio' %}" aria-label="Volver al inicio de Casita de Regalos">
-            <picture>
-                <source
-                    type="image/webp"
-                    srcset="
-                        {{ MEDIA_URL }}branding/logo-casita-360w.webp 360w,
-                        {{ MEDIA_URL }}branding/logo-casita-720w.webp 720w,
-                        {{ MEDIA_URL }}branding/logo-casita-1080w.webp 1080w
-                    "
-                    sizes="(max-width: 640px) 94px, 154px"
-                >
-                <img
-                    src="{{ MEDIA_URL }}branding/logo-casita.jpeg"
-                    alt="Logo oficial de Casita de Regalos, una casa rosada con un coraz&oacute;n"
-                    width="1080"
-                    height="1018"
-                    decoding="async"
-                    fetchpriority="high"
-                >
-            </picture>
+            <img
+                src="{{ MEDIA_URL }}branding/logo-casita.jpeg"
+                alt="Logo oficial de Casita de Regalos, una casa rosada con un coraz&oacute;n"
+                width="1080"
+                height="1018"
+                decoding="async"
+                fetchpriority="high"
+            >
         </a>
 
         <div class="login-brand-copy">

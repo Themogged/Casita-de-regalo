@@ -26,7 +26,8 @@ class AccountViewsTests(TestCase):
         response = self.client.get(reverse("login"), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "logo-casita-720w.webp")
+        self.assertContains(response, "branding/logo-casita.jpeg")
+        self.assertNotContains(response, "logo-casita-720w.webp")
         self.assertContains(
             response,
             "Logo oficial de Casita de Regalos, una casa rosada con un coraz&oacute;n",
