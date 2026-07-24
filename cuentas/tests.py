@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -20,6 +21,88 @@ class AccountViewsTests(TestCase):
             stock=5,
             categoria=category,
         )
+
+    def test_login_usa_identidad_oficial_y_controles_accesibles(self):
+        response = self.client.get(reverse("login"), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "logo-casita-720w.webp")
+        self.assertContains(
+            response,
+            "Logo oficial de Casita de Regalos, una casa rosada con un coraz&oacute;n",
+        )
+        self.assertContains(response, 'autocomplete="username"')
+        self.assertContains(response, 'autocomplete="current-password"')
+        self.assertContains(response, 'data-password-toggle')
+        self.assertContains(response, 'name="remember_me"')
+        self.assertContains(response, 'data-login-submit')
+        self.assertContains(response, 'aria-live="polite"')
+        self.assertContains(response, 'class="profile-brand-icon"')
+        self.assertContains(response, "brand-casita-account.svg")
+
+    def test_login_invalido_conserva_usuario_sin_revelar_la_contrasena(self):
+        get_user_model().objects.create_user(
+            "cliente-login",
+            password="ClaveCorrecta2026!",
+        )
+
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": "cliente-login",
+                "password": "ClaveIncorrecta2026!",
+            },
+            secure=True,
+            REMOTE_ADDR="10.0.0.21",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "No pudimos iniciar sesi")
+        self.assertContains(response, 'value="cliente-login"')
+        self.assertNotContains(response, "ClaveIncorrecta2026!")
+
+    def test_login_recordarme_extiende_la_sesion(self):
+        get_user_model().objects.create_user(
+            "cliente-recordado",
+            password="ClaveSegura2026!",
+        )
+
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": "cliente-recordado",
+                "password": "ClaveSegura2026!",
+                "remember_me": "on",
+            },
+            secure=True,
+            REMOTE_ADDR="10.0.0.22",
+        )
+
+        self.assertRedirects(response, reverse("account_profile"))
+        self.assertFalse(self.client.session.get_expire_at_browser_close())
+        self.assertGreaterEqual(
+            self.client.session.get_expiry_age(),
+            settings.SESSION_COOKIE_AGE - 10,
+        )
+
+    def test_login_sin_recordarme_expira_al_cerrar_el_navegador(self):
+        get_user_model().objects.create_user(
+            "cliente-temporal",
+            password="ClaveSegura2026!",
+        )
+
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": "cliente-temporal",
+                "password": "ClaveSegura2026!",
+            },
+            secure=True,
+            REMOTE_ADDR="10.0.0.23",
+        )
+
+        self.assertRedirects(response, reverse("account_profile"))
+        self.assertTrue(self.client.session.get_expire_at_browser_close())
 
     def test_registro_inicia_sesion_y_conserva_lista_anonima(self):
         self.client.post(reverse("agregar_carrito", args=[self.product.pk]), secure=True)

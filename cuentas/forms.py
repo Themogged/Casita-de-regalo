@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.password_validation import (
     password_validators_help_text_html,
     validate_password,
@@ -9,6 +9,53 @@ from django.core.exceptions import ValidationError
 
 
 User = get_user_model()
+
+
+class AccountAuthenticationForm(AuthenticationForm):
+    """Authentication form with storefront-specific UX and session choice."""
+
+    remember_me = forms.BooleanField(
+        required=False,
+        label="Mantener sesi\u00f3n iniciada",
+        widget=forms.CheckboxInput(
+            attrs={
+                "class": "auth-remember-input",
+            }
+        ),
+    )
+    error_messages = {
+        **AuthenticationForm.error_messages,
+        "invalid_login": (
+            "No pudimos iniciar sesi\u00f3n con esos datos. "
+            "Revisa tu usuario y contrase\u00f1a."
+        ),
+        "inactive": "Esta cuenta no est\u00e1 disponible. Solicita ayuda para revisarla.",
+    }
+
+    def __init__(self, request=None, *args, **kwargs):
+        super().__init__(request=request, *args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["username"].widget.attrs.update(
+            {
+                "class": "login-control",
+                "placeholder": "Tu usuario",
+                "autocomplete": "username",
+                "autocapitalize": "none",
+                "spellcheck": "false",
+                "enterkeyhint": "next",
+                "aria-describedby": "login-username-feedback",
+            }
+        )
+        self.fields["password"].label = "Contrase\u00f1a"
+        self.fields["password"].widget.attrs.update(
+            {
+                "class": "login-control",
+                "placeholder": "Tu contrase\u00f1a",
+                "autocomplete": "current-password",
+                "enterkeyhint": "go",
+                "aria-describedby": "login-password-feedback",
+            }
+        )
 
 
 class DirectPasswordChangeForm(forms.Form):

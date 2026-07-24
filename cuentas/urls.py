@@ -10,7 +10,7 @@ urlpatterns = [
     path("crear/", views.signup, name="account_signup"),
     path(
         "ingresar/",
-        auth_views.LoginView.as_view(template_name="cuentas/ingresar.html"),
+        views.AccountLoginView.as_view(),
         name="login",
     ),
     path(

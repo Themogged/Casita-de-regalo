@@ -1,5 +1,7 @@
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth import login, update_session_auth_hash
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -8,7 +10,26 @@ from asistente.memory import get_memory_profile
 from carrito.services import cart_snapshot, get_cart_for_request
 from pedidos.models import Pedido
 
-from .forms import DirectPasswordChangeForm, ProfileForm, SignUpForm
+from .forms import (
+    AccountAuthenticationForm,
+    DirectPasswordChangeForm,
+    ProfileForm,
+    SignUpForm,
+)
+
+
+class AccountLoginView(LoginView):
+    template_name = "cuentas/ingresar.html"
+    authentication_form = AccountAuthenticationForm
+    redirect_authenticated_user = True
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get("remember_me"):
+            self.request.session.set_expiry(settings.SESSION_COOKIE_AGE)
+        else:
+            self.request.session.set_expiry(0)
+        return response
 
 
 def change_password(request):

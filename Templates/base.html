@@ -2807,9 +2807,16 @@
 
             <div class="header-actions">
                 <a href="{% if request.user.is_authenticated %}{% url 'account_profile' %}{% else %}{% url 'login' %}?next={% url 'account_profile' %}{% endif %}" class="profile-btn" aria-label="{% if request.user.is_authenticated %}Abrir mi perfil{% else %}Ingresar a mi cuenta{% endif %}" title="{% if request.user.is_authenticated %}Mi perfil{% else %}Ingresar{% endif %}">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 12a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Zm7.25 8.5a7.25 7.25 0 0 0-14.5 0"/>
-                    </svg>
+                    <span class="profile-brand-mark" aria-hidden="true">
+                        <img
+                            class="profile-brand-icon"
+                            src="{% static 'productos/img/brand-casita-account.svg' %}"
+                            alt=""
+                            width="64"
+                            height="64"
+                            decoding="async"
+                        >
+                    </span>
                     <span class="profile-label">{% if request.user.is_authenticated %}Mi cuenta{% else %}Ingresar{% endif %}</span>
                 </a>
                 <button type="button" class="cart-btn" aria-label="Abrir lista para cotizar" aria-expanded="false" aria-controls="cart-drawer" data-cart-drawer-toggle>
