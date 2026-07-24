@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Cambiar contrase&ntilde;a | Casita de Regalos{% endblock %}
 {% block body_class %}account-page account-security-page{% endblock %}
@@ -7,7 +6,9 @@
 {% block content %}
 <section class="auth-shell auth-shell--single">
     <div class="auth-card auth-card--security">
-        <img class="account-benefits-mark" src="{% static 'productos/img/brand-casita-isotype.svg' %}" alt="" width="58" height="58">
+        <span class="account-benefits-mark" aria-hidden="true">
+            {% include "partials/brand_account_icon.html" %}
+        </span>
         <span class="account-kicker">Seguridad de tu cuenta</span>
         <h1>Actualiza tu contrase&ntilde;a</h1>
         <p>Valida tu acceso y crea una nueva contrase&ntilde;a aqu&iacute; mismo. No necesitas correo ni un enlace de recuperaci&oacute;n.</p>

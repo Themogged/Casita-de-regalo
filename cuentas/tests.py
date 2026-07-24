@@ -26,13 +26,9 @@ class AccountViewsTests(TestCase):
         response = self.client.get(reverse("login"), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "branding/logo-casita.jpeg")
+        self.assertNotContains(response, "branding/logo-casita.jpeg")
         self.assertNotContains(response, "logo-casita-720w.webp")
-        self.assertContains(response, 'class="login-mobile-mark"')
-        self.assertContains(
-            response,
-            "Logo oficial de Casita de Regalos, una casa rosada con un coraz&oacute;n",
-        )
+        self.assertContains(response, 'class="login-brand-mark"')
         self.assertContains(response, 'autocomplete="username"')
         self.assertContains(response, 'autocomplete="current-password"')
         self.assertContains(response, 'data-password-toggle')
@@ -41,6 +37,14 @@ class AccountViewsTests(TestCase):
         self.assertContains(response, 'aria-live="polite"')
         self.assertContains(response, 'class="profile-brand-icon"')
         self.assertContains(response, 'class="profile-brand-heart"')
+
+    def test_registro_usa_la_nueva_identidad_de_cuenta(self):
+        response = self.client.get(reverse("account_signup"), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="account-benefits-mark"')
+        self.assertContains(response, 'class="profile-brand-icon"')
+        self.assertNotContains(response, "brand-casita-isotype.svg")
 
     def test_login_invalido_conserva_usuario_sin_revelar_la_contrasena(self):
         get_user_model().objects.create_user(
@@ -206,7 +210,9 @@ class AccountViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Actualiza tu contrase")
         self.assertContains(response, "No necesitas correo")
-        self.assertContains(response, "brand-casita-isotype.svg")
+        self.assertContains(response, 'class="account-benefits-mark"')
+        self.assertContains(response, 'class="profile-brand-icon"')
+        self.assertNotContains(response, "brand-casita-isotype.svg")
         self.assertNotContains(response, 'name="username" type="text"')
 
     def test_cambio_rechaza_una_contrasena_actual_incorrecta(self):
