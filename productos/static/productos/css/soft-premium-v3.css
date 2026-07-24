@@ -179,6 +179,28 @@ body {
     flex: 0 0 auto;
 }
 
+.profile-brand-icon {
+    color-scheme: light;
+    forced-color-adjust: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.profile-brand-icon .profile-brand-body {
+    fill: #fa6596 !important;
+    stroke: #3a202a !important;
+}
+
+.profile-brand-icon .profile-brand-roof {
+    fill: #fffdfd !important;
+    stroke: #3a202a !important;
+}
+
+.profile-brand-icon .profile-brand-heart {
+    fill: #a8ecdc !important;
+    stroke: #3a202a !important;
+}
+
 .profile-btn .profile-brand-icon {
     display: block;
     width: 100%;

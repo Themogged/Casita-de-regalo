@@ -138,6 +138,7 @@ class AccountViewsTests(TestCase):
         self.assertContains(response, "Memoria de Cora")
         self.assertContains(response, "account-profile-page")
         self.assertContains(response, 'class="account-profile-mark"')
+        self.assertContains(response, 'class="profile-brand-body"')
         self.assertContains(response, 'class="profile-brand-heart"')
         self.assertNotContains(response, "brand-casita-circle.svg")
 
