@@ -878,13 +878,43 @@ body.is-cart-drawer-open {
     display: flex;
     align-items: center;
     gap: 14px;
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 480px;
 }
 
 .account-profile-mark {
-    width: 54px;
-    height: 54px;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
     flex: 0 0 auto;
-    filter: drop-shadow(0 8px 14px rgba(151, 54, 94, 0.11));
+    padding: 9px;
+    border: 1px solid rgba(202, 63, 121, 0.14);
+    border-radius: 19px;
+    background: linear-gradient(145deg, #ffffff 0%, #fff3f8 100%);
+    box-shadow:
+        0 10px 22px rgba(105, 41, 68, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.account-profile-mark .profile-brand-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 7px rgba(88, 34, 56, 0.11));
+}
+
+.account-profile-heading > div,
+.account-dashboard-header,
+.account-summary-card,
+.account-panel {
+    min-width: 0;
+}
+
+.account-profile-heading h1 {
+    font-size: clamp(1.8rem, 4vw, 2.65rem);
+    overflow-wrap: anywhere;
 }
 
 .error-state {
@@ -1015,6 +1045,7 @@ body.is-cart-drawer-open {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 24px;
     padding: clamp(24px, 4vw, 38px);
     border: 1px solid var(--ui-line);
@@ -1057,6 +1088,7 @@ body.is-cart-drawer-open {
     display: grid;
     gap: 4px;
     padding: 20px;
+    overflow-wrap: anywhere;
 }
 
 .account-summary-card span,
@@ -1080,6 +1112,7 @@ body.is-cart-drawer-open {
 
 .account-panel {
     padding: clamp(20px, 3vw, 28px);
+    overflow: hidden;
 }
 
 .account-panel-heading {
@@ -1585,12 +1618,26 @@ body.is-process-video-visible .floating-whatsapp {
     }
 
     .account-summary-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .account-summary-card:last-child {
+        grid-column: 1 / -1;
     }
 
     .account-dashboard-grid,
     .memory-layout {
         grid-template-columns: 1fr;
+    }
+
+    .account-dashboard-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .account-header-actions {
+        width: 100%;
+        justify-content: flex-start;
     }
 }
 
@@ -1720,7 +1767,7 @@ body.is-process-video-visible .floating-whatsapp {
 
     .account-dashboard-header h1,
     .memory-hero h1 {
-        font-size: 2rem;
+        font-size: clamp(1.65rem, 8vw, 2rem);
     }
 
     .account-header-actions {
@@ -1738,6 +1785,13 @@ body.is-process-video-visible .floating-whatsapp {
     .account-panel {
         padding: 18px 15px;
         border-radius: 20px;
+    }
+
+    .account-profile-mark {
+        width: 52px;
+        height: 52px;
+        padding: 8px;
+        border-radius: 17px;
     }
 
     .account-form--grid,

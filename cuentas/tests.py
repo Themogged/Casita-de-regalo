@@ -136,6 +136,10 @@ class AccountViewsTests(TestCase):
         self.assertContains(response, "Mi cuenta")
         self.assertContains(response, "Pedidos recientes")
         self.assertContains(response, "Memoria de Cora")
+        self.assertContains(response, "account-profile-page")
+        self.assertContains(response, 'class="account-profile-mark"')
+        self.assertContains(response, 'class="profile-brand-heart"')
+        self.assertNotContains(response, "brand-casita-circle.svg")
 
     def test_perfil_y_memoria_requieren_autenticacion(self):
         profile = self.client.get(reverse("account_profile"), secure=True)
