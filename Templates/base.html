@@ -2808,14 +2808,33 @@
             <div class="header-actions">
                 <a href="{% if request.user.is_authenticated %}{% url 'account_profile' %}{% else %}{% url 'login' %}?next={% url 'account_profile' %}{% endif %}" class="profile-btn" aria-label="{% if request.user.is_authenticated %}Abrir mi perfil{% else %}Ingresar a mi cuenta{% endif %}" title="{% if request.user.is_authenticated %}Mi perfil{% else %}Ingresar{% endif %}">
                     <span class="profile-brand-mark" aria-hidden="true">
-                        <img
-                            class="profile-brand-icon"
-                            src="{% static 'productos/img/brand-casita-account.svg' %}"
-                            alt=""
-                            width="64"
-                            height="64"
-                            decoding="async"
-                        >
+                        <svg class="profile-brand-icon" viewBox="0 0 64 64" focusable="false">
+                            <path
+                                d="M16.5 30.5v22h31v-22"
+                                fill="#fa6596"
+                                stroke="#3a202a"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="4.5"
+                            />
+                            <path
+                                d="m8.5 31.3 23.5-22 23.5 22-6.7 6.4L32 22.1 15.2 37.7Z"
+                                fill="#fffdfd"
+                                stroke="#3a202a"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="4.5"
+                            />
+                            <path
+                                class="profile-brand-heart"
+                                d="M32 49.2c-2.7-1.9-9.5-6.7-9.5-12.3 0-3.8 2.8-6.5 6.3-6.5 1.6 0 2.5.6 3.2 1.5.7-.9 1.6-1.5 3.2-1.5 3.5 0 6.3 2.7 6.3 6.5 0 5.6-6.8 10.4-9.5 12.3Z"
+                                fill="#a8ecdc"
+                                stroke="#3a202a"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="4"
+                            />
+                        </svg>
                     </span>
                     <span class="profile-label">{% if request.user.is_authenticated %}Mi cuenta{% else %}Ingresar{% endif %}</span>
                 </a>

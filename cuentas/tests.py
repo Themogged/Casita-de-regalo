@@ -38,7 +38,7 @@ class AccountViewsTests(TestCase):
         self.assertContains(response, 'data-login-submit')
         self.assertContains(response, 'aria-live="polite"')
         self.assertContains(response, 'class="profile-brand-icon"')
-        self.assertContains(response, "brand-casita-account.svg")
+        self.assertContains(response, 'class="profile-brand-heart"')
 
     def test_login_invalido_conserva_usuario_sin_revelar_la_contrasena(self):
         get_user_model().objects.create_user(
