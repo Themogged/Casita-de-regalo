@@ -868,6 +868,16 @@
         transform: translateY(-1px);
     }
 
+    .payment-list li:nth-child(-n + 2) {
+        border-color: rgba(221, 74, 134, 0.14);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 240, 247, 0.9));
+        box-shadow: 0 12px 24px rgba(111, 39, 72, 0.045);
+    }
+
+    .payment-list li:nth-child(-n + 2) strong {
+        color: var(--rose-700);
+    }
+
     .payment-logo-frame {
         width: 154px;
         min-width: 154px;
@@ -888,6 +898,22 @@
         object-position: center;
         border-radius: 0;
         box-shadow: none;
+    }
+
+    @media (max-width: 640px) {
+        .payment-list li {
+            grid-template-columns: 108px minmax(0, 1fr);
+            gap: 12px;
+            padding: 12px;
+        }
+
+        .payment-list .payment-logo-frame {
+            width: 108px;
+            min-width: 108px;
+            height: 50px;
+            padding: 8px 10px;
+            border-radius: 15px;
+        }
     }
 
     .process-video-card {
@@ -3910,8 +3936,8 @@
     <section class="meta-grid">
         <article class="section-card page-card">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#128179;</span>Medios de pago</span>
-            <h2>Reserva tu detalle de forma segura</h2>
-            <p class="meta-copy">Una vez definido el detalle, te compartimos el valor final y los datos para reservar tu pedido.</p>
+            <h2>Paga de forma simple y segura</h2>
+            <p class="meta-copy">Puedes pagar por Nequi o Bancolombia. Te compartimos los datos oficiales por WhatsApp cuando confirmemos tu pedido.</p>
             <ul class="payment-list">
                 {% for metodo in metodos_pago %}
                     <li>

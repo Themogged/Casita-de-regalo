@@ -99,6 +99,16 @@
         padding: 16px;
     }
 
+    .payment-item:nth-child(-n + 2) {
+        border-color: rgba(221, 74, 134, 0.14);
+        background: linear-gradient(135deg, #ffffff, #fff2f7);
+        box-shadow: 0 12px 24px rgba(111, 39, 72, 0.045);
+    }
+
+    .payment-item:nth-child(-n + 2) strong {
+        color: var(--rose-700);
+    }
+
     .payment-logo-frame {
         width: 142px;
         min-width: 142px;
@@ -161,10 +171,19 @@
 
     @media (max-width: 640px) {
         .payment-item {
-            grid-template-columns: 1fr;
+            grid-template-columns: 108px minmax(0, 1fr);
+            gap: 12px;
+            padding: 12px;
         }
 
-        .payment-logo-frame,
+        .payment-logo-frame {
+            width: 108px;
+            min-width: 108px;
+            height: 50px;
+            padding: 8px 10px;
+            border-radius: 15px;
+        }
+
         .buy-cta .btn,
         .buy-cta .btn-secondary {
             width: 100%;
@@ -204,11 +223,11 @@
     </section>
 
     <section class="page-card buy-card">
-        <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">💳</span>Medios de pago</span>
-        <h2>Reserva tu detalle de forma segura</h2>
+        <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#128179;</span>Medios de pago</span>
+        <h2>Paga de forma simple y segura</h2>
         <p class="buy-note">
-            Los datos de pago se usan cuando el detalle ya est&aacute; definido. Primero confirmamos
-            disponibilidad, personalizaci&oacute;n y valor final por WhatsApp.
+            Puedes pagar por Nequi o Bancolombia. Te compartimos los datos oficiales por WhatsApp
+            cuando confirmemos disponibilidad y valor final.
         </p>
         <div class="payment-grid">
             {% for metodo in metodos_pago %}

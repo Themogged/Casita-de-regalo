@@ -306,17 +306,17 @@ PASOS_COMPRA = [
 METODOS_PAGO = [
     {
         'titulo': 'Nequi',
-        'descripcion': 'Disponible para reservas confirmadas. Los datos oficiales se comparten por WhatsApp después de validar el pedido.',
+        'descripcion': 'Pago rápido para reservar tu pedido confirmado.',
         'logo': 'productos/img/logo-nequi.svg',
     },
     {
         'titulo': 'Bancolombia',
-        'descripcion': 'Transferencia disponible para pedidos confirmados. Los datos oficiales se comparten únicamente al finalizar la cotización.',
+        'descripcion': 'Transferencia disponible para pedidos confirmados.',
         'logo': 'productos/img/logo-bancolombia.svg',
     },
     {
-        'titulo': 'Pago validado',
-        'descripcion': 'Primero se valida disponibilidad, personalización y precio final. Luego se confirma el abono o pago completo.',
+        'titulo': 'Confirmación segura',
+        'descripcion': 'Los datos oficiales se comparten por WhatsApp al finalizar la cotización.',
         'logo': 'productos/img/icon-payment-ok.svg',
     },
 ]
