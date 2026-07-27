@@ -306,12 +306,12 @@ PASOS_COMPRA = [
 METODOS_PAGO = [
     {
         'titulo': 'Nequi',
-        'descripcion': '311 626 2155 a nombre de Mónica Gutiérrez. Ideal para confirmar rápido y enviar comprobante por WhatsApp.',
+        'descripcion': 'Disponible para reservas confirmadas. Los datos oficiales se comparten por WhatsApp después de validar el pedido.',
         'logo': 'productos/img/logo-nequi.svg',
     },
     {
         'titulo': 'Bancolombia',
-        'descripcion': 'Cuenta de ahorros 58066610009 para reservas y pedidos personalizados confirmados.',
+        'descripcion': 'Transferencia disponible para pedidos confirmados. Los datos oficiales se comparten únicamente al finalizar la cotización.',
         'logo': 'productos/img/logo-bancolombia.svg',
     },
     {

@@ -364,6 +364,17 @@ class CatalogoViewsTests(TestCase):
         self.assertNotContains(response, 'registrar_interaccion')
         self.assertNotContains(response, 'Premium floral')
 
+    def test_paginas_publicas_no_exponen_datos_bancarios(self):
+        for url_name in ('inicio', 'como_comprar'):
+            with self.subTest(url_name=url_name):
+                response = self.client.get(reverse(url_name), secure=True)
+
+                self.assertEqual(response.status_code, 200)
+                self.assertNotContains(response, '58066610009')
+                self.assertNotContains(response, 'Cuenta de ahorros')
+                self.assertNotContains(response, 'a nombre de M')
+                self.assertContains(response, 'datos oficiales')
+
     def test_disena_regalo_muestra_configurador_completo(self):
         response = self.client.get(reverse('disena_regalo'), secure=True)
 
