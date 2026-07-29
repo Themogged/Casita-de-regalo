@@ -113,6 +113,16 @@ class CatalogoAdminTests(TestCase):
                 response = self.client.get(url, secure=True)
                 self.assertEqual(response.status_code, 200)
 
+    def test_admin_usa_nuevo_favicon(self):
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(reverse("admin:index"), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "brand-casita-favicon-32.png")
+        self.assertContains(response, "brand-casita-apple-touch-icon.png")
+        self.assertNotContains(response, "brand-casita-favicon.svg")
+
     def test_producto_admin_exporta_productos_a_csv(self):
         producto_admin = ProductoAdmin(Producto, self.site)
 
@@ -345,6 +355,10 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Medios de pago')
         self.assertContains(response, 'Regalos m&aacute;s pedidos')
         self.assertContains(response, 'Ideas principales para elegir r&aacute;pido')
+        self.assertContains(response, 'brand-casita-favicon-32.png')
+        self.assertContains(response, 'brand-casita-apple-touch-icon.png')
+        self.assertContains(response, 'productos/site.webmanifest')
+        self.assertNotContains(response, 'brand-casita-favicon.svg')
         self.assertContains(response, 'Ver cat&aacute;logo completo')
         self.assertContains(response, 'Armar regalo a medida')
         self.assertContains(response, 'Ver sugeridos')

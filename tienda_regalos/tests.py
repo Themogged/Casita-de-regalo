@@ -1,7 +1,9 @@
 import json
 import os
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.staticfiles import finders
 from django.core.cache import cache
 from django.core.management import call_command
 from django.http import HttpResponse
@@ -9,6 +11,56 @@ from django.test import RequestFactory, SimpleTestCase, TestCase, override_setti
 from django.urls import reverse
 
 from tienda_regalos.middleware import AdminRateLimitMiddleware, SecurityHeadersMiddleware
+
+
+class BrandAssetTests(SimpleTestCase):
+    def test_favicons_optimizados_estan_disponibles(self):
+        assets = (
+            "productos/img/brand-casita-favicon-16.png",
+            "productos/img/brand-casita-favicon-32.png",
+            "productos/img/brand-casita-favicon-48.png",
+            "productos/img/brand-casita-favicon.ico",
+            "productos/img/brand-casita-apple-touch-icon.png",
+            "productos/img/brand-casita-icon-192.png",
+            "productos/img/brand-casita-icon-512.png",
+            "productos/site.webmanifest",
+        )
+
+        for asset in assets:
+            with self.subTest(asset=asset):
+                self.assertIsNotNone(finders.find(asset))
+
+    def test_rutas_convencionales_apuntan_a_los_nuevos_iconos(self):
+        redirects = {
+            "/favicon.ico": (
+                f"{settings.STATIC_URL.rstrip('/')}/productos/img/brand-casita-favicon.ico"
+            ),
+            "/apple-touch-icon.png": (
+                f"{settings.STATIC_URL.rstrip('/')}/productos/img/brand-casita-apple-touch-icon.png"
+            ),
+        }
+
+        for path, expected_url in redirects.items():
+            with self.subTest(path=path):
+                response = self.client.get(path)
+                self.assertRedirects(
+                    response,
+                    expected_url,
+                    status_code=301,
+                    fetch_redirect_response=False,
+                )
+
+    def test_manifest_declara_iconos_de_alta_resolucion(self):
+        manifest_path = finders.find("productos/site.webmanifest")
+
+        with open(manifest_path, encoding="utf-8") as manifest_file:
+            manifest = json.load(manifest_file)
+
+        self.assertEqual(manifest["name"], "Casita de Regalos")
+        self.assertEqual(
+            {icon["sizes"] for icon in manifest["icons"]},
+            {"192x192", "512x512"},
+        )
 
 
 class EnsureSuperuserCommandTests(TestCase):
