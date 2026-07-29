@@ -35,6 +35,7 @@
 
     .meta-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch;
     }
 
     .catalog-layout {
@@ -840,21 +841,48 @@
         border: 1px solid rgba(233, 72, 134, 0.08);
     }
 
+    .payment-section,
+    .policy-section {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+    }
+
+    .policy-section .meta-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .policy-section .meta-list li {
+        display: flex;
+        min-height: 78px;
+        align-items: center;
+        padding: 13px 14px;
+        line-height: 1.5;
+    }
+
+    .policy-section .meta-list li:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+
     .payment-list {
         list-style: none;
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
-        margin-top: 18px;
+        flex: 1;
+        align-content: center;
+        min-height: 170px;
+        margin-top: 16px;
     }
 
     .payment-list li {
         display: grid;
         grid-template-columns: 1fr;
         justify-items: center;
-        gap: 12px;
         align-items: center;
-        padding: 14px 16px;
+        min-height: 112px;
+        padding: 18px 14px;
         text-align: center;
         border-radius: 18px;
         background: rgba(255, 248, 251, 0.86);
@@ -877,45 +905,69 @@
         box-shadow: 0 12px 24px rgba(111, 39, 72, 0.045);
     }
 
-    .payment-list li:nth-child(-n + 2) strong {
-        color: var(--rose-700);
-    }
-
     .payment-logo-frame {
-        width: 154px;
-        min-width: 154px;
+        width: min(170px, 100%);
+        min-width: 0;
         height: 58px;
         display: grid;
         place-items: center;
-        padding: 10px 14px;
-        border-radius: 18px;
-        background: linear-gradient(145deg, rgba(255, 255, 255, 0.96), rgba(255, 246, 251, 0.9));
-        border: 1px solid rgba(233, 72, 134, 0.14);
-        box-shadow: 0 12px 24px rgba(75, 24, 46, 0.08);
+        padding: 0 8px;
     }
 
     .payment-logo {
-        width: 100%;
-        height: 100%;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 44px;
         object-fit: contain;
         object-position: center;
         border-radius: 0;
         box-shadow: none;
     }
 
+    .payment-logo[alt="Nequi"] {
+        width: min(112px, 80%);
+    }
+
+    .payment-logo[alt="Bancolombia"] {
+        width: min(138px, 94%);
+    }
+
     @media (max-width: 640px) {
+        .payment-list {
+            min-height: 0;
+            margin-top: 12px;
+        }
+
         .payment-list li {
-            grid-template-columns: 1fr;
-            gap: 9px;
-            padding: 11px 8px;
+            min-height: 82px;
+            padding: 11px 7px;
         }
 
         .payment-list .payment-logo-frame {
-            width: min(108px, 100%);
-            min-width: 0;
-            height: 50px;
-            padding: 8px 10px;
-            border-radius: 15px;
+            width: min(118px, 100%);
+            height: 44px;
+            padding-inline: 5px;
+        }
+
+        .payment-logo[alt="Nequi"] {
+            width: min(86px, 80%);
+        }
+
+        .payment-logo[alt="Bancolombia"] {
+            width: min(108px, 94%);
+        }
+
+        .policy-section .meta-list {
+            grid-template-columns: 1fr;
+            gap: 9px;
+        }
+
+        .policy-section .meta-list li,
+        .policy-section .meta-list li:last-child:nth-child(odd) {
+            grid-column: auto;
+            min-height: 0;
+            padding: 12px 13px;
         }
     }
 
@@ -3774,6 +3826,219 @@
 </style>
 {% endblock %}
 
+{% block page_styles %}
+<style>
+    @media (max-width: 680px) {
+        #proceso-real.process-video-card {
+            display: grid;
+            gap: 13px;
+            padding: 15px 13px 14px;
+            border: 1px solid rgba(198, 68, 125, 0.09);
+            border-radius: 24px;
+            background:
+                radial-gradient(circle at 92% 8%, rgba(255, 221, 233, 0.5), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 251, 0.96));
+            box-shadow:
+                0 14px 32px rgba(91, 43, 63, 0.055),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        #proceso-real .process-video-header {
+            display: grid;
+            gap: 10px;
+        }
+
+        #proceso-real .process-video-heading {
+            gap: 7px;
+        }
+
+        #proceso-real .process-video-heading .section-kicker {
+            min-height: 28px;
+            width: fit-content;
+            padding: 0 10px;
+            font-size: 0.64rem;
+        }
+
+        #proceso-real .process-video-heading h2 {
+            max-width: 18ch;
+            font-size: clamp(1.5rem, 7vw, 1.82rem);
+            line-height: 1.05;
+        }
+
+        #proceso-real .process-video-support {
+            display: -webkit-box;
+            max-width: 38ch;
+            overflow: hidden;
+            font-size: 0.82rem;
+            line-height: 1.48;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        #proceso-real .process-video-sequence {
+            display: none;
+        }
+
+        #proceso-real .process-video-instagram {
+            width: fit-content;
+            min-height: 34px;
+            padding-inline: 11px;
+            font-size: 0.73rem;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 7px 16px rgba(91, 43, 63, 0.05);
+        }
+
+        #proceso-real .process-video-carousel {
+            position: relative;
+            display: block;
+            margin-inline: -5px;
+        }
+
+        #proceso-real .process-video-grid {
+            width: 100%;
+            gap: 10px;
+            padding: 2px 20px 7px;
+            scrollbar-width: none;
+        }
+
+        #proceso-real .process-video-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        #proceso-real .process-video-item {
+            position: relative;
+            display: block;
+            flex: 0 0 min(78vw, 304px);
+            width: min(78vw, 304px);
+            aspect-ratio: 9 / 14;
+            overflow: hidden;
+            border-radius: 19px;
+            scroll-snap-align: center;
+            box-shadow: 0 12px 25px rgba(91, 43, 63, 0.075);
+        }
+
+        #proceso-real .process-video-item:hover {
+            transform: none;
+        }
+
+        #proceso-real .process-video-media {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            aspect-ratio: auto;
+            background:
+                linear-gradient(135deg, rgba(255, 238, 245, 0.95), rgba(255, 249, 251, 0.98));
+        }
+
+        #proceso-real .process-video-media video {
+            object-fit: contain;
+            object-position: center;
+        }
+
+        #proceso-real .process-video-copy {
+            position: absolute;
+            z-index: 4;
+            inset: auto 8px 8px;
+            display: grid;
+            gap: 5px;
+            padding: 11px 12px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 15px;
+            background: rgba(255, 251, 253, 0.88);
+            box-shadow: 0 10px 24px rgba(70, 27, 47, 0.12);
+            backdrop-filter: blur(12px);
+        }
+
+        #proceso-real .process-video-copy .mini-pill {
+            padding: 3px 7px;
+            font-size: 0.56rem;
+        }
+
+        #proceso-real .process-video-copy h3 {
+            display: -webkit-box;
+            overflow: hidden;
+            font-size: 1.02rem;
+            line-height: 1.12;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        #proceso-real .process-video-copy p {
+            display: -webkit-box;
+            overflow: hidden;
+            font-size: 0.73rem;
+            line-height: 1.38;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+
+        #proceso-real .video-a11y-controls {
+            top: 9px;
+            right: auto;
+            bottom: auto;
+            left: 9px;
+        }
+
+        #proceso-real .video-a11y-controls button {
+            min-width: 36px;
+            min-height: 30px;
+            padding: 4px 7px;
+            font-size: 0.58rem;
+        }
+
+        #proceso-real .process-video-number {
+            top: 9px;
+            right: 9px;
+            min-width: 28px;
+            height: 25px;
+            padding-inline: 7px;
+            font-size: 0.62rem;
+        }
+
+        #proceso-real .process-video-carousel .carousel-btn {
+            position: absolute;
+            z-index: 6;
+            top: 50%;
+            grid-row: auto;
+            width: 32px;
+            height: 32px;
+            border-color: rgba(198, 68, 125, 0.11);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 8px 18px rgba(91, 43, 63, 0.11);
+            transform: translateY(-50%);
+            backdrop-filter: blur(8px);
+        }
+
+        #proceso-real .process-video-nav--prev {
+            left: 0;
+        }
+
+        #proceso-real .process-video-nav--next {
+            right: 0;
+        }
+    }
+
+    @media (max-width: 360px) {
+        #proceso-real.process-video-card {
+            padding-inline: 10px;
+        }
+
+        #proceso-real .process-video-heading h2 {
+            font-size: 1.46rem;
+        }
+
+        #proceso-real .process-video-item {
+            flex-basis: min(80vw, 270px);
+            width: min(80vw, 270px);
+        }
+
+        #proceso-real .process-video-copy p {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block hero %}
 <section class="hero-card home-hero">
     <div class="hero-grid">
@@ -3937,7 +4202,7 @@
     </section>
 
     <section class="meta-grid">
-        <article class="section-card page-card">
+        <article class="section-card page-card payment-section">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#128179;</span>Medios de pago</span>
             <h2>Opciones de pago seguras</h2>
             <p class="meta-copy">
@@ -3946,17 +4211,16 @@
             </p>
             <ul class="payment-list">
                 {% for metodo in metodos_pago %}
-                    <li>
+                    <li aria-label="Pago por {{ metodo.titulo }}">
                         <span class="payment-logo-frame">
                             <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo" loading="lazy" decoding="async">
                         </span>
-                        <span><strong>{{ metodo.titulo }}</strong></span>
                     </li>
                 {% endfor %}
             </ul>
         </article>
 
-        <article class="section-card page-card">
+        <article class="section-card page-card policy-section">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#128204;</span>Informaci&oacute;n importante</span>
             <h2>Lo esencial antes de confirmar</h2>
             <p class="meta-copy">Estas recomendaciones evitan confusiones y ayudan a preparar tu detalle con el cuidado que merece.</p>
