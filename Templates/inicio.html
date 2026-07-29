@@ -843,16 +843,19 @@
     .payment-list {
         list-style: none;
         display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
         margin-top: 18px;
     }
 
     .payment-list li {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 1fr;
+        justify-items: center;
         gap: 12px;
         align-items: center;
         padding: 14px 16px;
+        text-align: center;
         border-radius: 18px;
         background: rgba(255, 248, 251, 0.86);
         color: var(--ink-700);
@@ -902,14 +905,14 @@
 
     @media (max-width: 640px) {
         .payment-list li {
-            grid-template-columns: 108px minmax(0, 1fr);
-            gap: 12px;
-            padding: 12px;
+            grid-template-columns: 1fr;
+            gap: 9px;
+            padding: 11px 8px;
         }
 
         .payment-list .payment-logo-frame {
-            width: 108px;
-            min-width: 108px;
+            width: min(108px, 100%);
+            min-width: 0;
             height: 50px;
             padding: 8px 10px;
             border-radius: 15px;
@@ -3936,15 +3939,18 @@
     <section class="meta-grid">
         <article class="section-card page-card">
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#128179;</span>Medios de pago</span>
-            <h2>Paga de forma simple y segura</h2>
-            <p class="meta-copy">Puedes pagar por Nequi o Bancolombia. Te compartimos los datos oficiales por WhatsApp cuando confirmemos tu pedido.</p>
+            <h2>Opciones de pago seguras</h2>
+            <p class="meta-copy">
+                Aceptamos pagos mediante Nequi y Bancolombia. Los datos oficiales se comparten
+                exclusivamente por WhatsApp una vez confirmados la disponibilidad y el valor final.
+            </p>
             <ul class="payment-list">
                 {% for metodo in metodos_pago %}
                     <li>
                         <span class="payment-logo-frame">
                             <img src="{% static metodo.logo %}" alt="{{ metodo.titulo }}" class="payment-logo" loading="lazy" decoding="async">
                         </span>
-                        <span><strong>{{ metodo.titulo }}</strong><br>{{ metodo.descripcion }}</span>
+                        <span><strong>{{ metodo.titulo }}</strong></span>
                     </li>
                 {% endfor %}
             </ul>

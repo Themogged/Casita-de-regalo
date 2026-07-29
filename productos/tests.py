@@ -374,6 +374,9 @@ class CatalogoViewsTests(TestCase):
                 self.assertNotContains(response, 'Cuenta de ahorros')
                 self.assertNotContains(response, 'a nombre de M')
                 self.assertContains(response, 'datos oficiales')
+                self.assertContains(response, 'Opciones de pago seguras')
+                self.assertContains(response, 'class="payment-logo"', count=2)
+                self.assertNotContains(response, 'Confirmaci&oacute;n segura')
 
     def test_disena_regalo_muestra_configurador_completo(self):
         response = self.client.get(reverse('disena_regalo'), secure=True)
