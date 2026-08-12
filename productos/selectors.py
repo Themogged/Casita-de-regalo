@@ -6,6 +6,9 @@ from django.db.models import Count, Q
 from .models import Categoria, Producto, VideoElaboracion
 
 
+INFANTIL_CATEGORY_ALIASES = ("Temáticos e infantiles", "Tematicos e infantiles", "Niños")
+
+
 CATALOG_ORDERINGS = {
     "destacados": ("-destacado", "nombre"),
     "precio_asc": ("precio", "nombre"),
@@ -219,7 +222,10 @@ def get_catalog_queryset(
     if str(category_id).isdigit():
         current_category = categories.filter(id=int(category_id)).first()
         if current_category:
-            products = products.filter(categoria=current_category)
+            if current_category.nombre in INFANTIL_CATEGORY_ALIASES:
+                products = products.filter(categoria__nombre__in=INFANTIL_CATEGORY_ALIASES)
+            else:
+                products = products.filter(categoria=current_category)
 
     products = _apply_price_filter(products, price_range)
 

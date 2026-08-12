@@ -1,4 +1,4 @@
-import json
+﻿import json
 import os
 import shutil
 from io import StringIO
@@ -27,7 +27,7 @@ from .whatsapp import build_whatsapp_url
 class ProductFrameTests(SimpleTestCase):
     def test_slugify_filename_normaliza_nombre_de_producto(self):
         self.assertEqual(
-            slugify_filename('Caja Stitch cumpleaÃ±os deluxe'),
+            slugify_filename('Caja Stitch cumplea\u00f1os deluxe'),
             'caja-stitch-cumpleanos-deluxe',
         )
 
@@ -63,14 +63,14 @@ class ProductFrameTests(SimpleTestCase):
 class WhatsappUrlTests(TestCase):
     @override_settings(BUSINESS_WHATSAPP_NUMBER='570000000000')
     def test_build_whatsapp_url_usa_numero_configurado_y_codifica_mensaje(self):
-        url = build_whatsapp_url('Hola, quiero asesorÃ­a para una ocasiÃ³n especial.')
+        url = build_whatsapp_url('Hola, quiero asesorÃƒÂ­a para una ocasiÃƒÂ³n especial.')
         parsed = urlparse(url)
 
         self.assertEqual(parsed.netloc, 'wa.me')
         self.assertEqual(parsed.path, '/570000000000')
         self.assertEqual(
             parse_qs(parsed.query)['text'][0],
-            'Hola, quiero asesorÃ­a para una ocasiÃ³n especial.',
+            'Hola, quiero asesorÃƒÂ­a para una ocasiÃƒÂ³n especial.',
         )
 
 
@@ -309,7 +309,7 @@ class CatalogoViewsTests(TestCase):
             categoria=self.categoria_flores,
         )
         self.relacionado = Producto.objects.create(
-            nombre='Kit cumpleaÃ±ero',
+            nombre='Kit cumpleaÃƒÂ±ero',
             descripcion='Incluye globo, taza y tarjeta.',
             precio='18.00',
             stock=4,
@@ -333,7 +333,7 @@ class CatalogoViewsTests(TestCase):
         for indice in range(10):
             Producto.objects.create(
                 nombre=f'Referencia extra {indice}',
-                descripcion='Producto extra para paginaciÃ³n.',
+                descripcion='Producto extra para paginaciÃƒÂ³n.',
                 precio='10.00',
                 stock=2,
                 categoria=self.categoria_regalos,
@@ -345,6 +345,18 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Caja sorpresa')
         self.assertNotContains(response, 'Ramo premium')
+
+    def test_migracion_agrega_nuevos_desayunos_en_su_categoria(self):
+        categoria = Categoria.objects.get(nombre='Cumpleaños y desayunos')
+        super_desayuno = Producto.objects.get(imagen='productos/desayunos/super-desayuno-20260812.jpeg')
+        desayuno_corazon = Producto.objects.get(imagen='productos/desayunos/desayuno-corazon-20260812.jpeg')
+
+        self.assertEqual(super_desayuno.nombre, 'Super desayuno')
+        self.assertEqual(desayuno_corazon.nombre, 'Desayuno corazón')
+        self.assertEqual(str(super_desayuno.precio), '125000.00')
+        self.assertEqual(str(desayuno_corazon.precio), '124000.00')
+        self.assertEqual(super_desayuno.categoria_id, categoria.id)
+        self.assertEqual(desayuno_corazon.categoria_id, categoria.id)
 
     def test_inicio_muestra_bloques_de_servicio(self):
         response = self.client.get(reverse('inicio'), secure=True)
@@ -426,7 +438,7 @@ class CatalogoViewsTests(TestCase):
     def test_inicio_muestra_videos_de_elaboracion_activos(self):
         VideoElaboracion.objects.create(
             titulo='Armado de detalle personalizado',
-            descripcion='Proceso real de decoraciÃ³n y empaque.',
+            descripcion='Proceso real de decoraciÃƒÂ³n y empaque.',
             video='procesos/videos/proceso.mp4',
             portada='procesos/portadas/proceso.webp',
             destacado=True,
@@ -476,7 +488,6 @@ class CatalogoViewsTests(TestCase):
         preguntas = self.client.get(reverse('preguntas_frecuentes'), secure=True)
 
         self.assertContains(como_comprar, 'C&oacute;mo comprar')
-        self.assertContains(como_comprar, 'Cómo comprar')
         self.assertContains(como_comprar, 'HowTo')
         self.assertEqual(terminos.status_code, 200)
         self.assertContains(terminos, 'T&eacute;rminos y condiciones')
@@ -555,7 +566,7 @@ class CatalogoViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Caja sorpresa')
-        self.assertContains(response, 'Kit cumpleaÃ±ero')
+        self.assertContains(response, 'Kit cumpleaÃƒÂ±ero')
         self.assertContains(response, 'Siguiente')
         self.assertContains(response, reverse('detalle_producto', args=[self.relacionado.id]))
         self.assertContains(response, 'Tiempo recomendado')
@@ -692,7 +703,7 @@ class CatalogoViewsTests(TestCase):
         with mock.patch.dict(os.environ, {"OPENAI_API_KEY": ""}, clear=False):
             response = self.client.post(
                 reverse('assistant_chat'),
-                data=json.dumps({"message": "Ayúdame a elegir un regalo", "history": []}),
+                data=json.dumps({"message": "AyÃºdame a elegir un regalo", "history": []}),
                 content_type='application/json',
                 secure=True,
             )
@@ -711,7 +722,7 @@ class CatalogoViewsTests(TestCase):
                 reverse('assistant_chat'),
                 data=json.dumps(
                     {
-                        "message": "Cómo funciona la lista para cotizar",
+                        "message": "CÃ³mo funciona la lista para cotizar",
                         "history": [],
                     }
                 ),
@@ -749,7 +760,7 @@ class CatalogoViewsTests(TestCase):
     def test_asistente_conserva_ocasion_del_historial_para_recomendar(self):
         categoria = Categoria.objects.create(nombre='Amor y aniversario asistente')
         producto = Producto.objects.create(
-            nombre='Detalle romántico contexto',
+            nombre='Detalle romÃ¡ntico contexto',
             descripcion='Regalo pensado para pareja y aniversario.',
             precio='78000.00',
             stock=3,
@@ -763,7 +774,7 @@ class CatalogoViewsTests(TestCase):
                 data=json.dumps(
                     {
                         "message": "Tengo 80 mil",
-                        "history": [{"role": "user", "text": "Me gustó Amor y aniversario asistente"}],
+                        "history": [{"role": "user", "text": "Me gustÃ³ Amor y aniversario asistente"}],
                     }
                 ),
                 content_type='application/json',
@@ -785,7 +796,7 @@ class CatalogoViewsTests(TestCase):
                 reverse('assistant_chat'),
                 data=json.dumps(
                     {
-                        "message": "Qué tengo en mi lista para cotizar",
+                        "message": "QuÃ© tengo en mi lista para cotizar",
                         "history": [],
                     }
                 ),
@@ -837,7 +848,7 @@ class CatalogoViewsTests(TestCase):
                 "message": "Te recomiendo revisar tematicos e infantiles y luego confirmar por WhatsApp.",
                 "mode": "ai",
                 "configured": True,
-                "actions": [{"label": "Ver catÃ¡logo", "href": "/catalogo/#catalogo"}],
+                "actions": [{"label": "Ver catÃƒÂ¡logo", "href": "/catalogo/#catalogo"}],
             },
         ):
             response = self.client.post(

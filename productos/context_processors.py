@@ -13,11 +13,31 @@ from .whatsapp import (
 
 
 def categorias_menu(request):
-    categorias = (
+    categorias = list(
         Categoria.objects.annotate(total_productos=Count('producto'))
-        .filter(total_productos__gt=0)
+        .filter(
+            total_productos__gt=0,
+        )
         .order_by('nombre')
     )
+
+    infantil_preferida = None
+    for nombre_preferido in ("Temáticos e infantiles", "Tematicos e infantiles", "Niños"):
+        for categoria in categorias:
+            if categoria.nombre == nombre_preferido:
+                infantil_preferida = categoria
+                break
+        if infantil_preferida:
+            break
+
+    if infantil_preferida:
+        categorias = [
+            categoria
+            for categoria in categorias
+            if categoria.nombre not in {"Niños", "Temáticos e infantiles", "Tematicos e infantiles"}
+        ]
+        categorias.append(infantil_preferida)
+
     return {'categorias_menu': categorias}
 
 
