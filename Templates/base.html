@@ -18,13 +18,13 @@
     {% block structured_data %}{% endblock %}
     <meta name="theme-color" content="#fff5f8">
     <meta name="msapplication-TileColor" content="#fff5f8">
-    <meta name="msapplication-TileImage" content="{% static 'productos/img/brand-casita-icon-192.png' %}?v=20260728">
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'productos/img/brand-casita-favicon-16.png' %}?v=20260728">
-    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'productos/img/brand-casita-favicon-32.png' %}?v=20260728">
-    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'productos/img/brand-casita-favicon-48.png' %}?v=20260728">
-    <link rel="shortcut icon" href="{% static 'productos/img/brand-casita-favicon.ico' %}?v=20260728">
-    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'productos/img/brand-casita-apple-touch-icon.png' %}?v=20260728">
-    <link rel="manifest" href="{% static 'productos/site.webmanifest' %}?v=20260728">
+    <meta name="msapplication-TileImage" content="{% static 'productos/img/brand-casita-icon-192.png' %}?v=20260902">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'productos/img/brand-casita-favicon-16.png' %}?v=20260902">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'productos/img/brand-casita-favicon-32.png' %}?v=20260902">
+    <link rel="icon" type="image/png" sizes="48x48" href="{% static 'productos/img/brand-casita-favicon-48.png' %}?v=20260902">
+    <link rel="shortcut icon" href="{% static 'productos/img/brand-casita-favicon.ico' %}?v=20260902">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'productos/img/brand-casita-apple-touch-icon.png' %}?v=20260902">
+    <link rel="manifest" href="{% static 'productos/site.webmanifest' %}?v=20260902">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -2888,7 +2888,7 @@
         }
     </style>
     {% block extra_head %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}">
+    <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}?v=20260902">
     {% block page_styles %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -2896,7 +2896,7 @@
     <header class="site-header">
         <div class="header-inner">
             <a href="{% url 'inicio' %}" class="brand">
-                <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos" class="brand-mark">
+                <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos" class="brand-mark" width="52" height="52" decoding="async" fetchpriority="high">
                 <div class="brand-copy">
                     <small>ACOMPA&Ntilde;ANDO TUS SENTIMIENTOS</small>
                     <strong>Casita de Regalos</strong>
@@ -3002,7 +3002,7 @@
         <div class="footer-inner">
             <div class="footer-card">
                 <div class="footer-brand">
-                    <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos">
+                    <img src="{{ MEDIA_URL|add:'branding/logo-casita.jpeg'|optimized_image_url }}" alt="Logo Casita de Regalos" width="52" height="52" loading="lazy" decoding="async">
                     <div>
                         <h3>Casita de Regalos</h3>
                         <p>acompa&ntilde;ando tus sentimientos</p>
@@ -4431,11 +4431,15 @@
                 const params = new URLSearchParams();
 
                 for (const [key, value] of formData.entries()) {
-                    params.append(key, value);
+                    const cleanValue = typeof value === 'string' ? value.trim() : value;
+                    if (!cleanValue) continue;
+                    if (key === 'orden' && cleanValue === 'destacados') continue;
+                    params.append(key, cleanValue);
                 }
 
                 const baseUrl = catalogForm.action.split('#', 1)[0];
-                const targetUrl = `${baseUrl}?${params.toString()}#catalogo`;
+                const queryString = params.toString();
+                const targetUrl = `${baseUrl}${queryString ? `?${queryString}` : ''}#catalogo`;
                 await fetchCatalogSection(targetUrl);
                 return;
             }
@@ -4679,6 +4683,6 @@
         initAutoplayVideos();
         initAssistant();
     </script>
-    <script src="{% static 'productos/js/storefront-v3.js' %}" defer></script>
+    <script src="{% static 'productos/js/storefront-v3.js' %}?v=20260902" defer></script>
 </body>
 </html>

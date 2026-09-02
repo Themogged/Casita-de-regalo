@@ -1,10 +1,9 @@
-from .services import get_cart_for_request, mirror_cart_to_session
+from .services import cart_units_for_request
 
 
 def carrito_total(request):
     try:
-        cart = get_cart_for_request(request)
-        total = sum(mirror_cart_to_session(request, cart).values())
+        total = cart_units_for_request(request)
     except Exception:
         # El encabezado debe seguir disponible durante una migración o mantenimiento.
         total = 0
