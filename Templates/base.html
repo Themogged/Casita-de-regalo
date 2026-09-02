@@ -623,6 +623,81 @@
             flex: 0 0 auto;
         }
 
+        .category-more > summary.category-pill,
+        .catalog-chip-more > summary.catalog-chip-more-toggle {
+            appearance: none;
+            -webkit-appearance: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 37px;
+            padding: 0 13px 0 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            background: linear-gradient(180deg, #ffc8dd 0%, #ffa2c7 56%, #f583b4 100%);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.88rem;
+            white-space: nowrap;
+            flex: 0 0 auto;
+            text-shadow: 0 1px 0 rgba(129, 36, 74, 0.14);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 8px 16px rgba(229, 72, 132, 0.14);
+        }
+
+        .category-more > summary.category-pill::after,
+        .catalog-chip-more > summary.catalog-chip-more-toggle::after {
+            content: "+";
+            margin-left: 8px;
+            width: 17px;
+            height: 17px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.24);
+            color: var(--white);
+            font-size: 0.82rem;
+            font-weight: 800;
+            line-height: 1;
+            flex: 0 0 auto;
+        }
+
+        .category-more > summary.category-pill:hover,
+        .category-more > summary.category-pill:focus-visible,
+        .catalog-chip-more > summary.catalog-chip-more-toggle:hover,
+        .catalog-chip-more > summary.catalog-chip-more-toggle:focus-visible {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, #ffd2e3 0%, #ffa8cb 52%, #f077aa 100%);
+            border-color: rgba(255, 255, 255, 0.86);
+            box-shadow:
+                0 0 0 3px rgba(255, 226, 238, 0.82),
+                inset 0 1px 0 rgba(255, 255, 255, 0.68),
+                0 11px 22px rgba(229, 72, 132, 0.2);
+            outline: none;
+        }
+
+        .category-more[open] > summary.category-pill,
+        .catalog-chip-more[open] > summary.catalog-chip-more-toggle {
+            background: linear-gradient(180deg, #f9b6d2 0%, #ea6fa7 100%);
+            color: var(--white);
+            border-color: rgba(255, 255, 255, 0.78);
+            box-shadow:
+                0 0 0 3px rgba(255, 226, 238, 0.82),
+                inset 0 1px 0 rgba(255, 255, 255, 0.62),
+                inset 0 -1px 0 rgba(196, 33, 105, 0.08),
+                0 11px 22px rgba(229, 72, 132, 0.2);
+        }
+
+        .category-more[open] > summary.category-pill::after,
+        .catalog-chip-more[open] > summary.catalog-chip-more-toggle::after {
+            content: "-";
+            background: rgba(255, 255, 255, 0.22);
+            color: var(--white);
+        }
+
         .category-more summary {
             list-style: none;
             cursor: pointer;
@@ -2195,25 +2270,56 @@
 
             .category-strip-inner {
                 flex-wrap: nowrap;
+                align-items: center;
                 overflow-x: auto;
                 border-radius: 999px;
                 gap: 6px;
                 padding: 5px;
                 scroll-padding-inline: 10px;
+                overscroll-behavior-inline: contain;
             }
 
             .category-more {
                 position: static;
+                display: inline-flex;
+                align-items: center;
+                flex: 0 0 auto;
+            }
+
+            .category-more[open] {
+                gap: 6px;
+            }
+
+            .category-more > summary.category-pill,
+            .catalog-chip-more > summary.catalog-chip-more-toggle {
+                min-height: 34px;
+                padding: 0 11px 0 13px;
+                font-size: 0.74rem;
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+                    0 7px 13px rgba(229, 72, 132, 0.13);
+            }
+
+            .category-more > summary.category-pill::after,
+            .catalog-chip-more > summary.catalog-chip-more-toggle::after {
+                width: 15px;
+                height: 15px;
+                margin-left: 6px;
+                font-size: 0.72rem;
             }
 
             .category-more-panel {
                 position: static;
-                display: inline-flex;
+                display: flex;
+                align-items: center;
+                flex-wrap: nowrap;
+                flex: 0 0 auto;
                 min-width: 0;
                 padding: 0;
-                gap: 8px;
+                gap: 6px;
                 background: transparent;
                 border: 0;
+                border-radius: 0;
                 box-shadow: none;
             }
 
@@ -3539,6 +3645,29 @@
             });
         };
 
+        const initMobileCategoryMore = (scope = document) => {
+            scope.querySelectorAll('.category-more, .catalog-chip-more').forEach((details) => {
+                if (details.dataset.mobileCategoryReady === 'true') return;
+                details.dataset.mobileCategoryReady = 'true';
+
+                details.addEventListener('toggle', () => {
+                    if (!details.open || !window.matchMedia('(max-width: 760px)').matches) return;
+
+                    const row = details.closest('.category-strip-inner, .catalog-chip-row');
+                    const summary = details.querySelector(':scope > summary');
+                    if (!row || !summary) return;
+
+                    window.requestAnimationFrame(() => {
+                        summary.scrollIntoView({
+                            block: 'nearest',
+                            inline: 'start',
+                            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                        });
+                    });
+                });
+            });
+        };
+
         const initAutoplayVideos = (scope = document) => {
             const videos = Array.from(scope.querySelectorAll('video[data-autoplay-video]'));
             if (!videos.length) return;
@@ -4269,6 +4398,7 @@
 
                 currentCatalog.replaceWith(nextCatalog);
                 initMobileCatalogPanels(nextCatalog);
+                initMobileCategoryMore(nextCatalog);
                 initCarousels(nextCatalog);
                 if (options.pushState !== false) {
                     window.history.pushState({ catalog: true }, '', url);
@@ -4545,6 +4675,7 @@
         initCarousels();
         initMobileMenu();
         initMobileCatalogPanels();
+        initMobileCategoryMore();
         initAutoplayVideos();
         initAssistant();
     </script>

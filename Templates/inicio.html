@@ -2527,25 +2527,38 @@
 
         .catalog-chip-row {
             flex-wrap: nowrap;
+            align-items: center;
             overflow-x: auto;
             margin-inline: -16px;
             padding: 2px 16px 7px;
             scroll-snap-type: x proximity;
             scroll-padding-inline: 16px;
+            overscroll-behavior-inline: contain;
         }
 
         .catalog-chip-more {
             position: static;
+            display: inline-flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .catalog-chip-more[open] {
+            gap: 6px;
         }
 
         .catalog-chip-more-panel {
             position: static;
-            display: inline-flex;
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            flex: 0 0 auto;
             min-width: 0;
             padding: 0;
-            gap: 8px;
+            gap: 6px;
             background: transparent;
             border: 0;
+            border-radius: 0;
             box-shadow: none;
         }
 
