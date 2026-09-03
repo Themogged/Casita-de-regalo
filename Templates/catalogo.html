@@ -662,16 +662,229 @@
 </style>
 {% endblock %}
 
+{% block page_styles %}
+<style>
+    .catalog-title-mobile,
+    .catalog-mobile-brand {
+        display: none;
+    }
+
+    @media (max-width: 680px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .catalog-landing-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            min-height: 0;
+            gap: 0;
+            padding: 0 0 8px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: #f5ede8;
+            border-color: rgba(116, 64, 84, 0.12);
+            box-shadow: 0 18px 36px rgba(83, 34, 55, 0.09);
+        }
+
+        .catalog-landing-hero::before,
+        .catalog-landing-hero::after {
+            display: none;
+        }
+
+        .catalog-hero-bg {
+            position: relative;
+            inset: auto;
+            z-index: 0;
+            order: 0;
+            height: clamp(185px, 57vw, 245px);
+            overflow: hidden;
+            background: #eadeda;
+        }
+
+        .catalog-hero-bg img {
+            width: 100%;
+            height: 100%;
+            opacity: 1;
+            object-fit: cover;
+            object-position: center 54%;
+            filter: saturate(0.86) contrast(0.94);
+        }
+
+        .catalog-hero-bg::after {
+            background: linear-gradient(180deg, rgba(255, 246, 243, 0.05) 25%, rgba(255, 248, 246, 0.92) 100%);
+        }
+
+        .catalog-hero-content {
+            position: relative;
+            z-index: 2;
+            order: 1;
+            justify-items: center;
+            width: auto;
+            margin: -32px 11px 0;
+            padding: 15px 15px 16px;
+            gap: 9px;
+            border: 1px solid rgba(116, 64, 84, 0.11);
+            border-radius: 22px;
+            background: rgba(255, 252, 249, 0.95);
+            box-shadow: 0 14px 28px rgba(83, 34, 55, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .catalog-mobile-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 3px 12px 3px 4px;
+            border: 1px solid rgba(164, 88, 116, 0.13);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.68);
+            color: #5f3448;
+            font-family: var(--font-brand);
+            font-size: 0.78rem;
+            font-weight: 700;
+            box-shadow: 0 7px 15px rgba(83, 34, 55, 0.05);
+        }
+
+        .catalog-mobile-brand img {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(164, 88, 116, 0.11);
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .catalog-title-default {
+            display: none;
+        }
+
+        .catalog-title-mobile {
+            display: inline;
+        }
+
+        .catalog-location-pill {
+            min-height: 28px;
+            padding-inline: 10px;
+            font-size: 0.63rem;
+            letter-spacing: 0.04em;
+        }
+
+        .catalog-landing-hero h1 {
+            max-width: none;
+            color: #4c293a;
+            font-size: clamp(2rem, 9.5vw, 2.45rem);
+            line-height: 1.03;
+            text-align: center;
+        }
+
+        .catalog-landing-hero .meta-copy {
+            max-width: 31ch;
+            color: #765d69;
+            font-size: 0.79rem;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        .catalog-hero-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+            gap: 7px;
+            margin-top: 2px;
+        }
+
+        .catalog-hero-actions .btn,
+        .catalog-hero-actions .btn-secondary {
+            min-width: 0;
+            min-height: 42px;
+            padding-inline: 7px;
+            border-radius: 12px;
+            font-size: 0.68rem;
+            white-space: nowrap;
+        }
+
+        .catalog-hero-notes,
+        .catalog-hero-showcase {
+            display: none;
+        }
+
+        .catalog-page {
+            gap: 14px;
+        }
+
+        .catalog-page .catalog-toolbar {
+            padding: 12px;
+            border-radius: 20px;
+        }
+
+        .catalog-page .catalog-toolbar-top {
+            gap: 8px;
+        }
+
+        .catalog-page .catalog-toolbar-copy strong {
+            font-size: clamp(1.3rem, 7vw, 1.7rem);
+        }
+
+        .catalog-page .catalog-chip-row {
+            gap: 6px;
+            margin-inline: -4px;
+            padding-inline: 4px;
+            scroll-padding-inline: 4px;
+        }
+
+        .catalog-page .catalog-chip {
+            min-height: 32px;
+            padding-inline: 11px;
+            font-size: 0.74rem;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .catalog-hero-bg {
+            height: 178px;
+        }
+
+        .catalog-hero-content {
+            margin-inline: 9px;
+            padding-inline: 12px;
+        }
+
+        .catalog-landing-hero h1 {
+            font-size: 1.9rem;
+        }
+
+        .catalog-landing-hero .meta-copy {
+            font-size: 0.75rem;
+        }
+
+        .catalog-hero-actions .btn,
+        .catalog-hero-actions .btn-secondary {
+            padding-inline: 5px;
+            font-size: 0.63rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block hero %}
 <section class="hero-card catalog-landing-hero">
     <div class="catalog-hero-bg" aria-hidden="true">
         {% if productos.0.imagen %}
-            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="eager" decoding="async">
+            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="lazy" decoding="async" fetchpriority="low" sizes="100vw">
         {% endif %}
     </div>
     <div class="catalog-hero-content">
+        <div class="catalog-mobile-brand" aria-hidden="true">
+            <img src="{{ MEDIA_URL|add:'branding/logo-casita.webp'|optimized_image_url }}" alt="" width="44" height="44" decoding="async">
+            <span>Casita de Regalos</span>
+        </div>
         <span class="catalog-location-pill"><span class="soft-emoji" aria-hidden="true">&#127800;</span>Regalos en Bello y Medell&iacute;n</span>
-        <h1>Elige un detalle bonito</h1>
+        <h1>
+            <span class="catalog-title-default">Elige un detalle bonito</span>
+            <span class="catalog-title-mobile">Cat&aacute;logo de regalos</span>
+        </h1>
         <p class="meta-copy">
             Mira opciones reales, guarda tus favoritas y escr&iacute;benos por WhatsApp para ajustar colores, precio y detalles.
         </p>
@@ -687,7 +900,7 @@
     </div>
     <div class="catalog-hero-showcase" aria-hidden="true">
         {% if productos.0.imagen %}
-            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="eager" decoding="async">
+            <img src="{{ productos.0.imagen.url|optimized_image_url }}" alt="" loading="eager" decoding="async" fetchpriority="high" sizes="(max-width: 760px) 0px, 36vw">
         {% endif %}
         <span class="catalog-hero-showcase-label">
             <span>Ideas reales para regalar</span>

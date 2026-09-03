@@ -2527,25 +2527,38 @@
 
         .catalog-chip-row {
             flex-wrap: nowrap;
+            align-items: center;
             overflow-x: auto;
             margin-inline: -16px;
             padding: 2px 16px 7px;
             scroll-snap-type: x proximity;
             scroll-padding-inline: 16px;
+            overscroll-behavior-inline: contain;
         }
 
         .catalog-chip-more {
             position: static;
+            display: inline-flex;
+            align-items: center;
+            flex: 0 0 auto;
+        }
+
+        .catalog-chip-more[open] {
+            gap: 6px;
         }
 
         .catalog-chip-more-panel {
             position: static;
-            display: inline-flex;
+            display: flex;
+            align-items: center;
+            flex-wrap: nowrap;
+            flex: 0 0 auto;
             min-width: 0;
             padding: 0;
-            gap: 8px;
+            gap: 6px;
             background: transparent;
             border: 0;
+            border-radius: 0;
             box-shadow: none;
         }
 
@@ -3824,6 +3837,310 @@
 
     }
 </style>
+<style>
+    /* Mobile cover proof inspired by the attached catalog reference. */
+    .mobile-cover-media,
+    .mobile-cover-discovery,
+    .mobile-cover-brand {
+        display: none;
+    }
+
+    @media (max-width: 680px) {
+        body {
+            overflow-x: hidden;
+        }
+
+        .home-hero {
+            position: relative;
+            isolation: isolate;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: clamp(520px, calc(100svh - 124px), 690px);
+            padding: 22px 12px 42px;
+            overflow: hidden;
+            background: #f5eeeb;
+            border-color: rgba(116, 64, 84, 0.12);
+            box-shadow: 0 18px 36px rgba(83, 34, 55, 0.08);
+        }
+
+        .home-hero::before {
+            inset: 9px;
+            z-index: 1;
+            border-color: rgba(255, 255, 255, 0.72);
+            border-radius: 22px;
+        }
+
+        .home-hero::after {
+            display: none;
+        }
+
+        .mobile-cover-media {
+            position: absolute;
+            z-index: -2;
+            inset: 0;
+            display: block;
+            overflow: hidden;
+            background: #eadeda;
+        }
+
+        .mobile-cover-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 248, 246, 0.68);
+        }
+
+        .mobile-cover-media img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            opacity: 0.72;
+            filter: saturate(0.78) contrast(0.92);
+            transform: scale(1.035);
+        }
+
+        .home-hero .hero-grid {
+            position: relative;
+            z-index: 2;
+            display: block;
+            width: 100%;
+        }
+
+        .home-hero .hero-copy {
+            display: grid;
+            justify-items: center;
+            row-gap: 0;
+            width: min(100%, 370px);
+            margin-inline: auto;
+            padding: clamp(23px, 7vw, 34px) clamp(18px, 6vw, 30px) clamp(24px, 7vw, 32px);
+            border: 1px solid rgba(116, 64, 84, 0.11);
+            border-radius: 27px;
+            background: rgba(255, 252, 249, 0.91);
+            box-shadow:
+                0 18px 36px rgba(83, 34, 55, 0.11),
+                inset 0 1px 0 rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+        }
+
+        .home-hero .mobile-cover-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 42px;
+            margin-bottom: 4px;
+            padding: 4px 12px 4px 5px;
+            border: 1px solid rgba(164, 88, 116, 0.13);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.62);
+            color: #5f3448;
+            font-family: var(--font-brand);
+            font-size: 0.78rem;
+            font-weight: 700;
+            box-shadow: 0 7px 15px rgba(83, 34, 55, 0.05);
+        }
+
+        .home-hero .mobile-cover-brand img {
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(164, 88, 116, 0.11);
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .home-hero .section-kicker {
+            justify-self: center;
+            min-height: 28px;
+            padding-inline: 11px;
+            color: #884d67;
+            background: rgba(255, 250, 248, 0.8);
+            border-color: rgba(164, 88, 116, 0.15);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+
+        .home-hero .hero-title {
+            max-width: 11ch;
+            margin-top: 10px;
+            color: #4c293a;
+            font-size: clamp(2.08rem, 10vw, 2.72rem);
+            line-height: 1.04;
+            letter-spacing: -0.02em;
+            text-align: center;
+        }
+
+        .home-hero .hero-title span,
+        .home-hero .hero-title em {
+            display: block;
+        }
+
+        .home-hero .hero-title em {
+            color: #c65383;
+            font-style: normal;
+        }
+
+        .home-hero .hero-intro {
+            max-width: 33ch;
+            margin-top: 9px;
+            color: #765d69;
+            font-size: clamp(0.8rem, 3.5vw, 0.92rem);
+            line-height: 1.52;
+            text-align: center;
+        }
+
+        .home-hero .hero-assurance {
+            width: 100%;
+            margin-top: 11px;
+            padding-top: 11px;
+            border-top: 1px solid rgba(164, 88, 116, 0.14);
+            justify-content: center;
+            text-align: center;
+        }
+
+        .home-hero .hero-assurance-copy {
+            align-items: center;
+        }
+
+        .home-hero .hero-assurance-copy strong {
+            color: #854b66;
+            font-size: 0.72rem;
+        }
+
+        .home-hero .hero-assurance-copy small {
+            color: #987987;
+            font-size: 0.64rem;
+        }
+
+        .home-hero .hero-actions {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .home-hero .hero-actions a {
+            width: 100%;
+            min-height: 44px;
+            justify-content: center;
+            min-width: 0;
+            padding-inline: 8px;
+            border-radius: 12px;
+            font-size: 0.69rem;
+            white-space: nowrap;
+        }
+
+        .home-hero .hero-quicklinks {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            width: 100%;
+            gap: 7px;
+            margin-top: 9px;
+            padding-right: 55px;
+        }
+
+        .home-hero .hero-quicklinks a,
+        .home-hero .hero-quicklinks a:last-child {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            min-height: 37px;
+            padding: 6px 7px;
+            border: 1px solid rgba(164, 88, 116, 0.13);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.66);
+            color: #8e526d;
+            font-size: 0.65rem;
+            text-align: center;
+        }
+
+        .home-hero .hero-process-panel {
+            display: none !important;
+        }
+
+        .mobile-cover-discovery {
+            position: absolute;
+            z-index: 3;
+            bottom: 13px;
+            left: 50%;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 6px 12px;
+            border: 1px solid rgba(116, 64, 84, 0.12);
+            border-radius: 999px;
+            background: rgba(255, 252, 249, 0.78);
+            color: #8a4c68;
+            font-size: 0.64rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            transform: translateX(-50%);
+            box-shadow: 0 8px 18px rgba(83, 34, 55, 0.08);
+        }
+
+        .mobile-cover-discovery span:last-child {
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .home-hero {
+            min-height: 505px;
+            padding: 16px 10px 39px;
+        }
+
+        .home-hero .hero-copy {
+            padding: 20px 15px 21px;
+            border-radius: 23px;
+        }
+
+        .home-hero .hero-title {
+            margin-top: 13px;
+            font-size: clamp(1.85rem, 9.8vw, 2.16rem);
+        }
+
+        .home-hero .hero-intro {
+            margin-top: 8px;
+            font-size: 0.77rem;
+        }
+
+        .home-hero .hero-assurance,
+        .home-hero .hero-actions {
+            margin-top: 13px;
+        }
+
+        .home-hero .hero-actions a {
+            min-height: 42px;
+        }
+
+        .home-hero .hero-quicklinks {
+            margin-top: 9px;
+        }
+    }
+
+    @media (max-width: 320px) {
+        .home-hero .hero-title {
+            font-size: 1.78rem;
+        }
+
+        .home-hero .hero-quicklinks a {
+            font-size: 0.6rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .mobile-cover-media img {
+            transform: none;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block page_styles %}
@@ -4043,6 +4360,10 @@
 <section class="hero-card home-hero">
     <div class="hero-grid">
         <div class="hero-copy">
+            <div class="mobile-cover-brand" aria-hidden="true">
+                <img src="{{ MEDIA_URL|add:'branding/logo-casita.webp'|optimized_image_url }}" alt="" width="42" height="42" decoding="async">
+                <span>Casita de Regalos</span>
+            </div>
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Acompa&ntilde;ando tus sentimientos</span>
             <h1 class="hero-title">
                 <span>Regalos con amor para momentos</span>
@@ -4083,7 +4404,7 @@
                             muted
                             loop
                             playsinline
-                            preload="metadata"
+                            preload="none"
                             data-autoplay-video
                             {% if video_poster %}poster="{{ video_poster }}"{% endif %}
                             aria-label="Video: {{ hero_video.titulo }}"
@@ -4111,6 +4432,17 @@
             {% endif %}
         </aside>
     </div>
+    <div class="mobile-cover-media" aria-hidden="true">
+        {% if videos_elaboracion and videos_elaboracion.0.display_poster_url %}
+            <img src="{{ videos_elaboracion.0.display_poster_url }}" alt="" width="720" height="960" fetchpriority="high" decoding="async">
+        {% elif productos_destacados_home and productos_destacados_home.0.imagen %}
+            <img src="{{ productos_destacados_home.0.imagen.url|optimized_image_url }}" alt="" width="720" height="960" fetchpriority="high" decoding="async">
+        {% endif %}
+    </div>
+    <a class="mobile-cover-discovery" href="#mas-pedidos">
+        <span>Descubre</span>
+        <span aria-hidden="true">&darr;</span>
+    </a>
 </section>
 {% endblock %}
 
