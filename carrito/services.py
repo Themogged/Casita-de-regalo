@@ -145,6 +145,37 @@ def mirror_cart_to_session(request, cart):
     return mapping
 
 
+def cart_units_for_request(request):
+    legacy = normalize_cart_mapping(request.session.get(LEGACY_CART_SESSION_KEY, {}))
+
+    if request.user.is_authenticated:
+        cart = Carrito.objects.filter(usuario=request.user).only("pk").first()
+        if cart:
+            return cart.items.aggregate(total=Sum("cantidad"))["total"] or 0
+        return sum(legacy.values())
+
+    stored_cart_id = request.session.get(PERSISTENT_CART_SESSION_KEY)
+    cart = None
+    if stored_cart_id:
+        cart = (
+            Carrito.objects.filter(pk=stored_cart_id, usuario__isnull=True)
+            .only("pk")
+            .first()
+        )
+
+    if cart is None and request.session.session_key:
+        cart = (
+            Carrito.objects.filter(session_key=request.session.session_key, usuario__isnull=True)
+            .only("pk")
+            .first()
+        )
+
+    if cart:
+        return cart.items.aggregate(total=Sum("cantidad"))["total"] or 0
+
+    return sum(legacy.values())
+
+
 def clear_cart(request, cart=None):
     cart = cart or get_cart_for_request(request)
     cart.items.all().delete()

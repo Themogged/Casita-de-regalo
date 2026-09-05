@@ -346,6 +346,44 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Caja sorpresa')
         self.assertNotContains(response, 'Ramo premium')
 
+    def test_desktop_design_is_default_without_preview_controls(self):
+        for params in ({}, {'vista': 'invalid'}, {'vista': '<script>'}):
+            response = self.client.get(reverse('inicio'), params, secure=True, follow=True)
+            self.assertContains(response, 'desktop-atelier.css')
+            self.assertNotContains(response, 'desktop-atelier.js')
+            self.assertNotContains(response, 'desktop-preview-intro')
+            self.assertContains(response, 'class="desktop-store-intro" hidden')
+            self.assertNotContains(response, '?vista=atelier')
+
+    def test_desktop_design_keeps_original_home_for_mobile(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+        self.assertContains(response, 'desktop-atelier.css')
+        self.assertContains(response, 'media="(min-width: 768px)"')
+        self.assertContains(response, 'class="desktop-store-intro" hidden')
+        self.assertContains(response, 'home-hero')
+        self.assertContains(response, 'mobile-boutique.css')
+
+    def test_desktop_design_preserves_catalog_filters_and_products(self):
+        params = {'q': 'sorpresa', 'categoria': self.categoria_regalos.pk}
+        original = self.client.get(reverse('catalogo'), params, secure=True)
+        preview = self.client.get(reverse('catalogo'), {**params, 'vista': 'atelier'}, secure=True)
+        self.assertEqual(preview.status_code, 200)
+        self.assertEqual(
+            [p.pk for p in original.context['productos']],
+            [p.pk for p in preview.context['productos']],
+        )
+        self.assertContains(preview, reverse('agregar_carrito', args=[self.producto_principal.pk]))
+        self.assertContains(preview, 'desktop-atelier.css')
+        self.assertNotContains(preview, 'desktop-atelier.js')
+
+    def test_desktop_design_keeps_legacy_home_filter_redirect(self):
+        response = self.client.get(reverse('inicio'), {'vista': 'atelier', 'q': 'sorpresa'}, secure=True)
+        self.assertRedirects(response, reverse('catalogo') + '?q=sorpresa#catalogo')
+
+    def test_old_desktop_preview_bookmark_redirects_to_home(self):
+        response = self.client.get(reverse('inicio'), {'vista': 'atelier'}, secure=True)
+        self.assertRedirects(response, reverse('inicio'))
+
     def test_migracion_agrega_nuevos_desayunos_en_su_categoria(self):
         categoria = Categoria.objects.get(nombre='Cumpleaños y desayunos')
         super_desayuno = Producto.objects.get(imagen='productos/desayunos/super-desayuno-20260812.jpeg')

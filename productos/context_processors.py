@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db.models import Count
 
 from .models import Categoria
@@ -11,32 +12,39 @@ from .whatsapp import (
     build_whatsapp_url,
 )
 
+CATEGORIES_MENU_CACHE_KEY = "productos:categorias-menu:v2"
+CATEGORIES_MENU_CACHE_SECONDS = 300
+
 
 def categorias_menu(request):
-    categorias = list(
-        Categoria.objects.annotate(total_productos=Count('producto'))
-        .filter(
-            total_productos__gt=0,
+    categorias = cache.get(CATEGORIES_MENU_CACHE_KEY)
+    if categorias is None:
+        categorias = list(
+            Categoria.objects.annotate(total_productos=Count('producto'))
+            .filter(
+                total_productos__gt=0,
+            )
+            .order_by('nombre')
+            .values('id', 'nombre')
         )
-        .order_by('nombre')
-    )
-
-    infantil_preferida = None
-    for nombre_preferido in ("Temáticos e infantiles", "Tematicos e infantiles", "Niños"):
-        for categoria in categorias:
-            if categoria.nombre == nombre_preferido:
-                infantil_preferida = categoria
+        infantil_preferida = None
+        for nombre_preferido in ("Temáticos e infantiles", "Tematicos e infantiles", "Niños"):
+            for categoria in categorias:
+                if categoria["nombre"] == nombre_preferido:
+                    infantil_preferida = categoria
+                    break
+            if infantil_preferida:
                 break
-        if infantil_preferida:
-            break
 
-    if infantil_preferida:
-        categorias = [
-            categoria
-            for categoria in categorias
-            if categoria.nombre not in {"Niños", "Temáticos e infantiles", "Tematicos e infantiles"}
-        ]
-        categorias.append(infantil_preferida)
+        if infantil_preferida:
+            categorias = [
+                categoria
+                for categoria in categorias
+                if categoria["nombre"] not in {"Niños", "Temáticos e infantiles", "Tematicos e infantiles"}
+            ]
+            categorias.append(infantil_preferida)
+
+        cache.set(CATEGORIES_MENU_CACHE_KEY, categorias, CATEGORIES_MENU_CACHE_SECONDS)
 
     return {'categorias_menu': categorias}
 

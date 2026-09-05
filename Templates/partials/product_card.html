@@ -11,6 +11,8 @@
                     {% if image_srcset %}srcset="{{ image_srcset }}"{% endif %}
                     sizes="(max-width: 680px) 46vw, (max-width: 1100px) 30vw, 260px"
                     alt="{{ producto.nombre }}"
+                    width="720"
+                    height="720"
                     loading="{% if forloop.first and request.resolver_match.url_name == 'inicio' %}eager{% else %}lazy{% endif %}"
                     decoding="async"
                     {% if forloop.first and request.resolver_match.url_name == 'inicio' %}fetchpriority="high"{% endif %}

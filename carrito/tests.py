@@ -106,6 +106,26 @@ class CarritoViewsTests(TestCase):
         self.assertContains(response, 'Explorar cat&aacute;logo')
         self.assertNotContains(response, 'Tu carrito est&aacute; vac&iacute;o')
 
+    def test_home_no_crea_carrito_para_visitante_nuevo(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Carrito.objects.count(), 0)
+        self.assertContains(response, '<span class="cart-count">0</span>')
+
+    def test_header_muestra_total_de_carrito_persistente_sin_mutarlo(self):
+        cart = Carrito.objects.create(session_key='session-test')
+        CarritoItem.objects.create(carrito=cart, producto=self.producto, cantidad=2)
+        session = self.client.session
+        session['persistent_cart_id'] = cart.pk
+        session.save()
+
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Carrito.objects.count(), 1)
+        self.assertContains(response, '<span class="cart-count">2</span>')
+
     def test_agregar_por_ajax_responde_sin_redireccion(self):
         response = self.client.post(
             reverse('agregar_carrito', args=[self.producto.id]),

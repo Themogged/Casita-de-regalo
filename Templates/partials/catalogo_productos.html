@@ -106,7 +106,7 @@
                 {% endfor %}
                 {% if categorias|length > 6 %}
                     <details class="catalog-chip-more">
-                        <summary class="catalog-chip">Ver m&aacute;s</summary>
+                        <summary class="catalog-chip catalog-chip-more-toggle">Ver m&aacute;s</summary>
                         <div class="catalog-chip-more-panel">
                             {% for categoria in categorias %}
                                 {% if forloop.counter > 6 %}

@@ -751,10 +751,15 @@ def _prepare_home_products(products):
 
 
 def inicio(request):
-    if request.GET:
-        query_string = request.GET.urlencode()
+    catalog_filters = request.GET.copy()
+    # Old preview bookmarks still work, without passing presentation flags to filters.
+    catalog_filters.pop('vista', None)
+    if catalog_filters:
+        query_string = catalog_filters.urlencode()
         target = reverse('catalogo')
         return redirect(f'{target}?{query_string}#catalogo' if query_string else f'{target}#catalogo')
+    if 'vista' in request.GET:
+        return redirect('inicio')
 
     destacados = _prepare_home_products(
         get_featured_products(
