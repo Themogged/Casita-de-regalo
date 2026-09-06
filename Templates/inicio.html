@@ -4361,18 +4361,13 @@
 <section class="hero-card home-hero">
     <div class="hero-grid">
         <div class="hero-copy">
-            <div class="mobile-cover-brand" aria-hidden="true">
-                <img src="{{ MEDIA_URL|add:'branding/logo-casita.webp'|optimized_image_url }}" alt="" width="42" height="42" decoding="async">
-                <span>Casita de Regalos</span>
-            </div>
             <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#10024;</span>Acompa&ntilde;ando tus sentimientos</span>
             <h1 class="hero-title">
-                <span>Regalos con amor para momentos</span>
-                <em>que se quedan en el coraz&oacute;n.</em>
+                {% include 'partials/home_sentiment.html' %}
             </h1>
             <p class="hero-intro">
-                Desayunos sorpresa, cajas tem&aacute;ticas y detalles personalizados, preparados en Bello
-                para celebrar en Medell&iacute;n y el &aacute;rea metropolitana.
+                Desayunos sorpresa y detalles a tu medida, hechos en Bello para regalar en Medell&iacute;n
+                y el &aacute;rea metropolitana.
             </p>
 
             <div class="hero-assurance">
@@ -4433,17 +4428,6 @@
             {% endif %}
         </aside>
     </div>
-    <div class="mobile-cover-media" aria-hidden="true">
-        {% if videos_elaboracion and videos_elaboracion.0.display_poster_url %}
-            <img src="{{ videos_elaboracion.0.display_poster_url }}" alt="" width="720" height="960" fetchpriority="high" decoding="async">
-        {% elif productos_destacados_home and productos_destacados_home.0.imagen %}
-            <img src="{{ productos_destacados_home.0.imagen.url|optimized_image_url }}" alt="" width="720" height="960" fetchpriority="high" decoding="async">
-        {% endif %}
-    </div>
-    <a class="mobile-cover-discovery" href="#mas-pedidos">
-        <span>Descubre</span>
-        <span aria-hidden="true">&darr;</span>
-    </a>
 </section>
 {% endblock %}
 
@@ -4454,10 +4438,10 @@
         <div class="featured-catalog-header">
             <div>
                 <span class="section-kicker"><span class="soft-emoji" aria-hidden="true">&#127873;</span>Regalos m&aacute;s pedidos</span>
-                <h2>Ideas principales para elegir r&aacute;pido</h2>
+                <h2><span class="featured-desktop-copy">Ideas principales para elegir r&aacute;pido</span><span class="featured-mobile-copy" hidden>Regalos favoritos</span></h2>
                 <p class="meta-copy">Una selecci&oacute;n corta de referencias favoritas para inspirarte sin cargar todo el cat&aacute;logo en el inicio.</p>
             </div>
-            <a href="{% url 'catalogo' %}#catalogo" class="btn-secondary">Ver cat&aacute;logo completo</a>
+            <a href="{% url 'catalogo' %}#catalogo" class="btn-secondary"><span class="featured-desktop-copy">Ver cat&aacute;logo completo</span><span class="featured-mobile-copy" hidden>Ver todos <span aria-hidden="true">&rarr;</span></span></a>
         </div>
 
         {% if productos_destacados_home %}

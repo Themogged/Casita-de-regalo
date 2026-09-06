@@ -26,8 +26,9 @@ class AccountViewsTests(TestCase):
         response = self.client.get(reverse("login"), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "branding/logo-casita.jpeg")
-        self.assertNotContains(response, "logo-casita-720w.webp")
+        login_content = response.content.decode().split('<section class="login-experience"', 1)[1].split('</section>', 1)[0]
+        self.assertNotIn("branding/logo-casita.jpeg", login_content)
+        self.assertNotIn("logo-casita-720w.webp", login_content)
         self.assertContains(response, 'class="login-brand-mark"')
         self.assertContains(response, 'autocomplete="username"')
         self.assertContains(response, 'autocomplete="current-password"')
@@ -37,6 +38,20 @@ class AccountViewsTests(TestCase):
         self.assertContains(response, 'aria-live="polite"')
         self.assertContains(response, 'class="profile-brand-icon"')
         self.assertContains(response, 'class="profile-brand-heart"')
+
+    def test_login_movil_conserva_formulario_y_destino(self):
+        response = self.client.get(reverse("login"), {"next": reverse("account_profile")}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'mobile-boutique.css?v=20260906-home')
+        self.assertContains(response, 'media="(max-width: 767px)"')
+        self.assertContains(response, 'method="post" class="account-login-form"')
+        self.assertContains(response, 'name="csrfmiddlewaretoken"')
+        self.assertContains(response, f'name="next" value="{reverse("account_profile")}"')
+        self.assertContains(response, 'id="login-username-feedback"')
+        self.assertContains(response, 'id="login-password-feedback"')
+        self.assertContains(response, reverse("password_change"))
+        self.assertContains(response, reverse("account_signup"))
 
     def test_registro_usa_la_nueva_identidad_de_cuenta(self):
         response = self.client.get(reverse("account_signup"), secure=True)

@@ -258,23 +258,21 @@
     .category-more[open] > summary.category-pill, .catalog-chip-more[open] > summary.catalog-chip-more-toggle { background: var(--boutique-blush); border-color: #d9a6b3; color: var(--boutique-accent); box-shadow: none; }
     .category-more-panel, .catalog-chip-more-panel { gap: 8px; }
 
-    /* Reuse the real cover photograph and brand, with an editorial plate. */
+    /* An open introduction keeps the real product photographs close to the fold. */
     .home-hero.hero-card {
         display: block;
         min-height: 0;
-        padding: 14px;
-        margin: 0 0 32px;
-        border: 1px solid #f0d1d9;
-        border-radius: 28px;
-        background: #fbeef2;
+        padding: 20px 0 28px;
+        margin: 0 0 24px;
+        border: 0;
+        border-bottom: 1px solid var(--boutique-line);
+        border-radius: 0;
+        background: transparent;
         box-shadow: none;
-        isolation: isolate;
+        overflow: visible;
     }
     .home-hero::before { display: none; }
     .home-hero::after { display: none; }
-    .home-hero .mobile-cover-media { display: block; position: absolute; inset: 0; z-index: -1; }
-    .home-hero .mobile-cover-media img { width: 100%; height: 100%; object-fit: cover; opacity: 0.28; transform: none; filter: none; }
-    .home-hero .mobile-cover-media::after { background: rgba(253,248,246,0.32); }
     .home-hero .hero-grid { display: block; padding: 0; }
     .home-hero .hero-copy {
         display: flex;
@@ -282,69 +280,52 @@
         align-items: center;
         gap: 0;
         width: 100%;
-        max-width: 480px;
+        max-width: 440px;
         min-height: 0;
         margin: 0 auto;
-        padding: 16px 16px 12px;
-        border: 1px solid rgba(234,223,226,0.85);
-        border-radius: 22px;
-        color: var(--boutique-ink);
-        background: rgba(255,252,250,0.98);
-        text-align: center;
-        box-shadow: var(--boutique-shadow);
-        backdrop-filter: none;
-    }
-    .home-hero .mobile-cover-brand {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin: 0 0 8px;
         padding: 0;
         border: 0;
         border-radius: 0;
         color: var(--boutique-ink);
-        background: none;
+        background: transparent;
+        text-align: center;
         box-shadow: none;
-        font-family: var(--font-display);
-        font-size: 15px;
-        font-weight: 500;
+        backdrop-filter: none;
     }
-    .home-hero .mobile-cover-brand img { width: 52px; height: 52px; border: 1px solid #e6d5b8; padding: 4px; border-radius: 50%; object-fit: contain; }
-    .home-hero .mobile-cover-brand span { display: none; }
-    .home-hero .hero-copy .section-kicker { font-size: 9px; min-height: 20px; padding: 0; margin: 0; border: 0; background: none; box-shadow: none; }
+    .home-hero .hero-copy .section-kicker { font-size: 11px; line-height: 1.5; min-height: 20px; padding: 0; margin: 0; border: 0; background: none; box-shadow: none; letter-spacing: 0; }
     .home-hero .hero-copy .hero-title {
         width: 100%;
-        max-width: 18ch;
-        margin: 8px auto;
+        max-width: 20ch;
+        margin: 12px auto 14px;
         color: var(--boutique-ink);
-        font-size: 28px;
+        font-size: 34px;
         font-weight: 500;
-        line-height: 1.13;
+        line-height: 1.12;
         text-wrap: balance;
     }
     .home-hero .hero-title em { color: var(--boutique-accent); font-style: italic; font-weight: 500; }
-    .home-hero .hero-copy .hero-intro { max-width: 40ch !important; margin: 0; color: var(--boutique-muted) !important; font-size: 12px !important; line-height: 1.65 !important; }
+    .home-hero .hero-copy .hero-intro { max-width: 42ch !important; margin: 0; color: var(--boutique-muted) !important; font-size: 14px !important; line-height: 1.6 !important; }
     .home-hero .hero-assurance {
+        order: 3;
         width: 100%;
-        margin: 12px 0 0;
-        padding: 8px 0 0;
+        gap: 7px;
+        margin: 16px 0 0;
+        padding: 0;
         border: 0;
-        border-top: 1px solid #e6d5b8;
         background: none;
         box-shadow: none;
         justify-content: center;
         text-align: center;
     }
-    .home-hero .hero-assurance-mark { width: 24px; height: 24px; background: var(--boutique-blush); color: var(--boutique-accent); box-shadow: none; }
-    .home-hero .hero-assurance-copy strong { color: var(--boutique-ink); font-size: 11px; }
-    .home-hero .hero-assurance-copy small { color: var(--boutique-muted); font-size: 10px; }
-    .home-hero .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; margin: 16px 0 0; }
-    .home-hero .hero-actions a { min-width: 0; min-height: 44px; padding: 10px 6px; font-size: 12px; }
+    .home-hero .hero-assurance-mark { flex: 0 0 14px; width: 14px; height: 20px; background: none; color: var(--boutique-accent); box-shadow: none; font-size: 12px; }
+    .home-hero .hero-assurance-copy { min-width: 0; }
+    .home-hero .hero-assurance-copy strong { display: none; }
+    .home-hero .hero-assurance-copy small { color: var(--boutique-muted); font-size: 12px; line-height: 1.5; }
+    .home-hero .hero-actions { order: 2; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; width: 100%; margin: 20px 0 0; }
+    .home-hero .hero-actions a { min-width: 0; min-height: 48px; padding: 12px 8px; border-radius: 14px; font-size: 13px; white-space: normal; }
     .home-hero .hero-actions .soft-emoji { margin-right: 2px; }
-    .home-hero .hero-quicklinks { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 12px; margin: 4px 0 0; padding: 0; width: 100%; }
-    .home-hero .hero-copy .hero-quicklinks a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 2px; border: 0; background: none; box-shadow: none; font-size: 11px; color: var(--boutique-muted); }
+    .home-hero .hero-quicklinks { display: none; }
     .home-hero .hero-process-panel { display: none; }
-    .home-hero .mobile-cover-discovery { display: flex; position: static; justify-content: center; align-items: center; gap: 8px; width: 100%; min-height: 40px; margin: 4px 0 -4px; padding: 4px; border: 0; background: none; box-shadow: none; transform: none; color: var(--boutique-ink); font-size: 10px; letter-spacing: 0; }
 
     .section-stack, .home-flow { gap: 32px; }
     .section-stack > .section-card, .section-stack > .designer-entry-card,
@@ -357,10 +338,11 @@
         box-shadow: none;
     }
     .section-stack .featured-catalog { padding-top: 0; border: 0; }
-    .featured-catalog-header { display: grid; gap: 16px; align-items: start; margin-bottom: 20px; }
-    .featured-catalog-header h2 { margin-top: 8px; max-width: 19ch; }
-    .featured-catalog-header .meta-copy { margin-top: 12px; }
-    .featured-catalog-header > .btn-secondary { width: fit-content; }
+    .featured-catalog-header { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .featured-catalog-header h2 { margin: 0; max-width: none; font-size: 23px; line-height: 1.25; }
+    .featured-catalog-header :is(.section-kicker, .meta-copy, .featured-desktop-copy) { display: none; }
+    .featured-catalog-header .featured-mobile-copy[hidden] { display: inline; }
+    .featured-catalog-header > .btn-secondary { width: fit-content; min-height: 44px; padding: 10px 0 10px 4px; border: 0; border-radius: 0; background: none; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; }
 
     /* Product data and all actions stay in their existing template. */
     .catalog-grid, .catalog-grid.featured-catalog-grid {
@@ -656,18 +638,54 @@
     .designer-color { width: 44px; height: 44px; }
     .designer-product { border-radius: 16px; border-color: var(--boutique-line); box-shadow: none; }
     .designer-preview { position: static; }
-    .login-experience { display: grid; grid-template-columns: 1fr; gap: 24px; border: 0; background: none; box-shadow: none; }
-    .login-brand-panel { padding: 20px 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
-    .login-brand-copy h1 { font-family: var(--font-display); font-size: 30px; line-height: 1.2; font-weight: 500; color: var(--boutique-ink); }
-    .login-brand-copy p { font-size: 14px; line-height: 1.65; color: var(--boutique-muted); }
-    .login-form-inner { padding: 0; }
-    .login-form-heading h2 { font-size: 29px; }
-    .login-input-shell { border-radius: 14px; }
-    .page-shell .login-input-shell input { padding-left: 42px; padding-right: 44px; }
-    .password-visibility { min-width: 44px; min-height: 44px; }
-    .login-options { display: flex; flex-wrap: wrap; gap: 8px; }
-    .login-options > * { min-height: 40px; }
-    .login-submit { min-height: 48px; border-radius: 14px; box-shadow: none; font-size: 15px; }
+    /* One mobile login surface; keep desktop and authentication behavior intact. */
+    .account-login-page { background: var(--boutique-paper); padding-bottom: env(safe-area-inset-bottom,0px); }
+    .account-login-page .page-shell { width: calc(100% - 32px); max-width: 460px; padding-block: 20px 32px; }
+    .account-login-page .login-experience { display: grid; grid-template-columns: minmax(0,1fr); gap: 0; min-height: 0; margin: 0; border: 1px solid var(--boutique-line); border-radius: 22px; overflow: hidden; background: white; box-shadow: 0 6px 22px #963f6106; }
+    .account-login-page .login-brand-panel { display: grid; grid-template-columns: 48px minmax(0,1fr); align-items: center; align-content: start; justify-items: stretch; gap: 12px; padding: 18px; border: 0; border-bottom: 1px solid var(--boutique-line); border-radius: 0; background: #fff5f8; }
+    .account-login-page .login-official-logo { display: grid; place-items: center; width: 48px; height: 48px; margin: 0; border: 1px solid #efdce4; border-radius: 15px; background: white; box-shadow: none; filter: none; transform: none; }
+    .account-login-page .login-brand-mark { width: 34px; height: 34px; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+    .account-login-page .login-brand-mark .profile-brand-icon { width: 100%; height: 100%; filter: none; }
+    .account-login-page .login-brand-copy { display: grid; gap: 4px; min-width: 0; text-align: left; }
+    .account-login-page .login-kicker { width: auto; padding: 0; border: 0; background: none; color: var(--boutique-accent); font-size: 10px; line-height: 1.5; letter-spacing: 0; }
+    .account-login-page .login-brand-copy h1 { max-width: none; margin: 0; font-family: var(--font-display); font-size: 20px; line-height: 1.25; font-weight: 500; color: var(--boutique-ink); }
+    .account-login-page .login-brand-copy p, .account-login-page .login-benefits, .account-login-page .login-form-eyebrow { display: none; }
+    .account-login-page .login-form-panel { display: grid; place-items: start stretch; padding: 22px 18px 18px; border: 0; border-radius: 0; background: white; box-shadow: none; }
+    .account-login-page .login-form-inner { width: 100%; min-width: 0; padding: 0; gap: 18px; }
+    .account-login-page .login-form-heading { gap: 6px; }
+    .account-login-page .login-form-heading h2 { margin: 0; font-size: 28px; line-height: 1.2; font-weight: 500; }
+    .account-login-page .login-form-heading p { margin: 0; font-size: 13px; line-height: 1.6; }
+    .account-login-page .account-login-form { gap: 14px; }
+    .account-login-page .login-form-feedback { min-height: 0; }
+    .account-login-page .login-form-status { min-height: 0; padding: 0; border: 0; border-radius: 0; background: none; color: var(--boutique-muted); font-size: 12px; }
+    .account-login-page .login-alert { min-width: 0; padding: 12px; border-radius: 12px; font-size: 13px; line-height: 1.6; align-items: flex-start; overflow-wrap: anywhere; }
+    .account-login-page .login-alert svg { margin-top: 3px; }
+    .account-login-page .login-field { min-width: 0; gap: 7px; }
+    .account-login-page .page-shell .login-field > label { font-size: 13px; line-height: 1.5; font-weight: 600; }
+    .account-login-page .page-shell .login-input-shell input.login-control { min-height: 50px; padding: 12px 48px 12px 42px; border: 1px solid #e9d5df; border-radius: 13px; background: #fffcfd; color: var(--boutique-ink); font-size: 16px; line-height: 1.5; box-shadow: none; }
+    .account-login-page .page-shell .login-input-shell input.login-control:focus { border-color: #b56383; outline: 2px solid #f6dee8; outline-offset: 2px; background: white; }
+    .account-login-page .page-shell .login-field.has-error input.login-control,
+    .account-login-page .page-shell .login-field.has-client-error input.login-control:invalid { border-color: #aa355e; background: #fff6f8; }
+    .account-login-page .login-input-icon { left: 14px; width: 18px; height: 18px; color: var(--boutique-muted); pointer-events: none; }
+    .account-login-page .password-visibility { width: 44px; min-width: 44px; height: 44px; min-height: 44px; right: 3px; border-radius: 10px; color: var(--boutique-accent); }
+    .account-login-page .login-field-feedback { min-height: 0; font-size: 12px; line-height: 1.5; }
+    .account-login-page .login-field-feedback:not(:has(.login-field-error)) { display: none; }
+    .account-login-page .login-options { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0 12px; }
+    .account-login-page .login-options > * { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; line-height: 1.5; }
+    .account-login-page .login-remember { gap: 8px; }
+    .account-login-page .login-checkbox { flex: 0 0 20px; width: 20px; height: 20px; border-radius: 6px; }
+    .account-login-page .login-recovery-link { text-underline-offset: 4px; }
+    .account-login-page .login-submit { min-height: 50px; padding: 12px 16px; border: 1px solid #e5b4c7; border-radius: 13px; background: #f2c8d5; color: #71354c; box-shadow: none; font-size: 16px; font-weight: 600; transform: none; }
+    .account-login-page .login-submit:hover:not(:disabled) { background: #edbfd0; box-shadow: none; transform: none; }
+    .account-login-page .login-support { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--boutique-line); }
+    .account-login-page .login-support p { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 5px; margin: 0; font-size: 12px; line-height: 1.6; }
+    .account-login-page .login-support a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; font-weight: 600; text-underline-offset: 4px; }
+    .account-login-page .login-privacy-note { margin: 0; font-size: 11px; line-height: 1.6; color: var(--boutique-muted); }
+    @media (max-width: 360px) {
+        .account-login-page .page-shell { width: calc(100% - 24px); }
+        .account-login-page .login-brand-panel { padding: 16px 14px; gap: 10px; }
+        .account-login-page .login-form-panel { padding-inline: 14px; }
+    }
     .cart-items-card, .cart-summary-card, .checkout-form { border-color: var(--boutique-line); border-radius: 20px; background: var(--boutique-card); box-shadow: none; }
     .cart-drawer { height: min(86dvh,780px); max-height: 90dvh; border-radius: 24px 24px 0 0; background: var(--boutique-card); }
     .cart-drawer-header { padding: 20px 16px 16px; border-bottom: 1px solid var(--boutique-line); }
@@ -731,10 +749,7 @@
         .site-header .brand { gap: 6px; }
         .site-header .brand-mark { width: 32px; height: 32px; flex-basis: 32px; }
         .site-header .brand-copy strong { font-size: 14px; }
-        .home-hero.hero-card { padding: 10px; }
-        .home-hero .hero-copy { padding: 16px 12px 8px; }
-        .home-hero .hero-copy .hero-title { font-size: 27px; }
-        .home-hero .hero-actions a { font-size: 11px; }
+        .home-hero .hero-copy .hero-title { font-size: 32px; }
         .catalog-grid, .catalog-grid.featured-catalog-grid { gap: 16px 8px; }
         .catalog-grid .product-body { padding: 10px 8px 8px; }
         .catalog-grid .product-body h3 { font-size: 15px; }
@@ -742,8 +757,6 @@
         .meta-grid > .section-card { padding: 20px 16px; }
     }
     @media (min-width: 412px) {
-        .home-hero .hero-copy { padding: 20px 20px 12px; }
-        .home-hero .hero-copy .hero-title { font-size: 30px; }
         .catalog-grid .product-body { padding: 14px 12px 12px; }
     }
     @media (prefers-reduced-motion: reduce) {

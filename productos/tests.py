@@ -363,6 +363,24 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'home-hero')
         self.assertContains(response, 'mobile-boutique.css')
 
+    def test_inicio_comparte_frase_entre_movil_y_pc(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertTemplateUsed(response, 'partials/home_sentiment.html')
+        self.assertContains(response, 'Regalos con amor para momentos', count=2)
+        self.assertContains(response, 'que se quedan en el coraz&oacute;n.', count=2)
+        self.assertContains(response, 'class="atelier-intro-sentiment"')
+        self.assertNotContains(response, 'Detalles que se sienten.')
+
+    def test_inicio_no_carga_imagenes_de_la_portada_decorativa(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertNotContains(response, 'class="mobile-cover-media"')
+        self.assertNotContains(response, 'class="mobile-cover-brand"')
+        self.assertContains(response, reverse('disena_regalo'))
+        self.assertContains(response, reverse('catalogo') + '#catalogo')
+        self.assertContains(response, 'id="mas-pedidos"')
+
     def test_desktop_design_preserves_catalog_filters_and_products(self):
         params = {'q': 'sorpresa', 'categoria': self.categoria_regalos.pk}
         original = self.client.get(reverse('catalogo'), params, secure=True)
