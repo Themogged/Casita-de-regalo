@@ -43,7 +43,7 @@ class AccountViewsTests(TestCase):
         response = self.client.get(reverse("login"), {"next": reverse("account_profile")}, secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'mobile-boutique.css?v=20260906-home')
+        self.assertContains(response, 'mobile-boutique.css?v=20260913')
         self.assertContains(response, 'media="(max-width: 767px)"')
         self.assertContains(response, 'method="post" class="account-login-form"')
         self.assertContains(response, 'name="csrfmiddlewaretoken"')

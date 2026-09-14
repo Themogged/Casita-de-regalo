@@ -149,8 +149,8 @@ def _expanded_search_terms(search):
 
 def _price_from_search(search):
     normalized = search.lower().replace(".", "").replace(",", "")
-    digits = "".join(character if character.isdigit() else " " for character in normalized).split()
-    if not digits:
+    digits = "".join(character if character.isdecimal() else " " for character in normalized).split()
+    if not digits or len(digits[0]) > 12:
         return None
 
     amount = Decimal(digits[0])
@@ -207,6 +207,7 @@ def get_catalog_queryset(
     categories = get_categories_with_products()
     current_category = None
     attributes = attributes or []
+    search = str(search)[:256]
 
     if search:
         parsed_price = _price_from_search(search)
@@ -219,7 +220,8 @@ def get_catalog_queryset(
             elif operator == "gte":
                 products = products.filter(precio__gte=amount)
 
-    if str(category_id).isdigit():
+    category_id = str(category_id)
+    if category_id.isdecimal() and len(category_id) <= 18:
         current_category = categories.filter(id=int(category_id)).first()
         if current_category:
             if current_category.nombre in INFANTIL_CATEGORY_ALIASES:

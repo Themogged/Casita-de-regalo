@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import quote, unquote, urlsplit
 
 from django import template
 from django.conf import settings
@@ -17,7 +18,9 @@ def webp_url(url):
     if not value.startswith(media_url):
         return ''
 
-    relative_path = value[len(media_url):].lstrip('/')
+    relative_path = unquote(urlsplit(value).path[len(media_url):]).lstrip('/')
+    if '\x00' in relative_path:
+        return ''
     if not relative_path:
         return ''
 
@@ -34,7 +37,7 @@ def webp_url(url):
         return ''
 
     webp_relative_path = Path(relative_path).with_suffix('.webp').as_posix()
-    return f'{media_url.rstrip("/")}/{webp_relative_path}'
+    return f'{media_url.rstrip("/")}/{quote(webp_relative_path, safe="/")}'
 
 
 @register.filter
@@ -50,7 +53,10 @@ def responsive_image_srcset(url):
     media_url = settings.MEDIA_URL
     if not value.startswith(media_url):
         return ""
-    relative_path = Path(value[len(media_url):].lstrip("/"))
+    decoded = unquote(urlsplit(value).path[len(media_url):]).lstrip("/")
+    if not decoded or '\x00' in decoded:
+        return ""
+    relative_path = Path(decoded)
     media_root = Path(settings.MEDIA_ROOT).resolve()
     source_path = (media_root / relative_path).resolve()
     try:
@@ -63,5 +69,5 @@ def responsive_image_srcset(url):
         candidate = source_path.with_name(f"{source_path.stem}-{width}w.webp")
         if candidate.exists():
             relative = candidate.relative_to(media_root).as_posix()
-            candidates.append(f'{media_url.rstrip("/")}/{relative} {width}w')
+            candidates.append(f'{media_url.rstrip("/")}/{quote(relative, safe="/")} {width}w')
     return ", ".join(candidates)

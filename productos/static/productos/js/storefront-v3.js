@@ -309,7 +309,6 @@
         dragHandle?.addEventListener("pointerup", finishDrag);
         dragHandle?.addEventListener("pointercancel", finishDrag);
         layer.addEventListener("keydown", (event) => {
-            if (event.key === "Escape") closeDrawer();
             if (event.key !== "Tab") return;
             const focusable = selectAll('a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex="-1"])', drawer)
                 .filter((node) => !node.hidden && node.offsetParent !== null);
@@ -323,6 +322,11 @@
                 event.preventDefault();
                 first.focus();
             }
+        });
+        document.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape" || layer.hidden) return;
+            event.preventDefault();
+            closeDrawer();
         });
         itemsContainer.addEventListener("click", (event) => {
             const button = event.target.closest("[data-drawer-action]");
@@ -607,16 +611,29 @@
             if (!preview || !image || !label) return;
             let objectUrl = "";
             input.addEventListener("change", () => {
-                if (objectUrl) URL.revokeObjectURL(objectUrl);
+                input.setCustomValidity("");
+                if (objectUrl) {
+                    URL.revokeObjectURL(objectUrl);
+                    objectUrl = "";
+                }
                 const file = input.files?.[0];
                 if (!file) {
                     preview.classList.remove("is-visible");
                     image.removeAttribute("src");
                     return;
                 }
-                if (!file.type.startsWith("image/")) {
+                if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
                     input.value = "";
                     preview.classList.remove("is-visible");
+                    input.setCustomValidity("Usa una imagen JPG, PNG o WebP.");
+                    input.reportValidity();
+                    return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                    input.value = "";
+                    preview.classList.remove("is-visible");
+                    input.setCustomValidity("La imagen no debe superar 5 MB.");
+                    input.reportValidity();
                     return;
                 }
                 objectUrl = URL.createObjectURL(file);
@@ -681,9 +698,13 @@
         };
 
         const pageKey = `telemetry:page:${window.location.pathname}`;
-        if (!window.sessionStorage.getItem(pageKey)) {
-            window.sessionStorage.setItem(pageKey, "1");
-            track("page_view", { context: { source: document.referrer ? "referral" : "direct" } });
+        try {
+            if (!window.sessionStorage.getItem(pageKey)) {
+                window.sessionStorage.setItem(pageKey, "1");
+                track("page_view", { context: { source: document.referrer ? "referral" : "direct" } });
+            }
+        } catch {
+            // Storage can be disabled; analytics must never interrupt shopping.
         }
         const productId = document.querySelector('meta[name="assistant-product-id"]')?.content;
         if (productId) track("product_view", { product_id: productId });

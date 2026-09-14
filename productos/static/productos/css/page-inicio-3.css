@@ -1,0 +1,208 @@
+@media (max-width: 680px) {
+        #proceso-real.process-video-card {
+            display: grid;
+            gap: 13px;
+            padding: 15px 13px 14px;
+            border: 1px solid rgba(198, 68, 125, 0.09);
+            border-radius: 24px;
+            background:
+                radial-gradient(circle at 92% 8%, rgba(255, 221, 233, 0.5), transparent 30%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 248, 251, 0.96));
+            box-shadow:
+                0 14px 32px rgba(91, 43, 63, 0.055),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        #proceso-real .process-video-header {
+            display: grid;
+            gap: 10px;
+        }
+
+        #proceso-real .process-video-heading {
+            gap: 7px;
+        }
+
+        #proceso-real .process-video-heading .section-kicker {
+            min-height: 28px;
+            width: fit-content;
+            padding: 0 10px;
+            font-size: 0.64rem;
+        }
+
+        #proceso-real .process-video-heading h2 {
+            max-width: 18ch;
+            font-size: clamp(1.5rem, 7vw, 1.82rem);
+            line-height: 1.05;
+        }
+
+        #proceso-real .process-video-support {
+            display: -webkit-box;
+            max-width: 38ch;
+            overflow: hidden;
+            font-size: 0.82rem;
+            line-height: 1.48;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        #proceso-real .process-video-sequence {
+            display: none;
+        }
+
+        #proceso-real .process-video-instagram {
+            width: fit-content;
+            min-height: 34px;
+            padding-inline: 11px;
+            font-size: 0.73rem;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 7px 16px rgba(91, 43, 63, 0.05);
+        }
+
+        #proceso-real .process-video-carousel {
+            position: relative;
+            display: block;
+            margin-inline: -5px;
+        }
+
+        #proceso-real .process-video-grid {
+            width: 100%;
+            gap: 10px;
+            padding: 2px 20px 7px;
+            scrollbar-width: none;
+        }
+
+        #proceso-real .process-video-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        #proceso-real .process-video-item {
+            position: relative;
+            display: block;
+            flex: 0 0 min(78vw, 304px);
+            width: min(78vw, 304px);
+            aspect-ratio: 9 / 14;
+            overflow: hidden;
+            border-radius: 19px;
+            scroll-snap-align: center;
+            box-shadow: 0 12px 25px rgba(91, 43, 63, 0.075);
+        }
+
+        #proceso-real .process-video-item:hover {
+            transform: none;
+        }
+
+        #proceso-real .process-video-media {
+            width: 100%;
+            height: 100%;
+            min-height: 0;
+            aspect-ratio: auto;
+            background:
+                linear-gradient(135deg, rgba(255, 238, 245, 0.95), rgba(255, 249, 251, 0.98));
+        }
+
+        #proceso-real .process-video-media video {
+            object-fit: contain;
+            object-position: center;
+        }
+
+        #proceso-real .process-video-copy {
+            position: absolute;
+            z-index: 4;
+            inset: auto 8px 8px;
+            display: grid;
+            gap: 5px;
+            padding: 11px 12px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 15px;
+            background: rgba(255, 251, 253, 0.88);
+            box-shadow: 0 10px 24px rgba(70, 27, 47, 0.12);
+            backdrop-filter: blur(12px);
+        }
+
+        #proceso-real .process-video-copy .mini-pill {
+            padding: 3px 7px;
+            font-size: 0.56rem;
+        }
+
+        #proceso-real .process-video-copy h3 {
+            display: -webkit-box;
+            overflow: hidden;
+            font-size: 1.02rem;
+            line-height: 1.12;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+        }
+
+        #proceso-real .process-video-copy p {
+            display: -webkit-box;
+            overflow: hidden;
+            font-size: 0.73rem;
+            line-height: 1.38;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+        }
+
+        #proceso-real .video-a11y-controls {
+            top: 9px;
+            right: auto;
+            bottom: auto;
+            left: 9px;
+        }
+
+        #proceso-real .video-a11y-controls button {
+            min-width: 36px;
+            min-height: 30px;
+            padding: 4px 7px;
+            font-size: 0.58rem;
+        }
+
+        #proceso-real .process-video-number {
+            top: 9px;
+            right: 9px;
+            min-width: 28px;
+            height: 25px;
+            padding-inline: 7px;
+            font-size: 0.62rem;
+        }
+
+        #proceso-real .process-video-carousel .carousel-btn {
+            position: absolute;
+            z-index: 6;
+            top: 50%;
+            grid-row: auto;
+            width: 32px;
+            height: 32px;
+            border-color: rgba(198, 68, 125, 0.11);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 8px 18px rgba(91, 43, 63, 0.11);
+            transform: translateY(-50%);
+            backdrop-filter: blur(8px);
+        }
+
+        #proceso-real .process-video-nav--prev {
+            left: 0;
+        }
+
+        #proceso-real .process-video-nav--next {
+            right: 0;
+        }
+    }
+
+    @media (max-width: 360px) {
+        #proceso-real.process-video-card {
+            padding-inline: 10px;
+        }
+
+        #proceso-real .process-video-heading h2 {
+            font-size: 1.46rem;
+        }
+
+        #proceso-real .process-video-item {
+            flex-basis: min(80vw, 270px);
+            width: min(80vw, 270px);
+        }
+
+        #proceso-real .process-video-copy p {
+            display: none;
+        }
+    }

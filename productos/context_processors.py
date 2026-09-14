@@ -1,5 +1,7 @@
 from django.core.cache import cache
+from urllib.parse import urlencode
 from django.db.models import Count
+from django.templatetags.static import static
 
 from .models import Categoria
 from .whatsapp import (
@@ -61,4 +63,18 @@ def business_links(request):
 
 
 def seo_context(request):
-    return {"canonical_page_url": request.build_absolute_uri(request.path)}
+    canonical = request.build_absolute_uri(request.path)
+    pagination = {}
+    if request.path == "/catalogo/":
+        for key in ("categoria", "page"):
+            value = request.GET.get(key, "")
+            if value.isdecimal() and len(value) <= 18 and int(value) > 0:
+                pagination[key] = str(int(value))
+    if pagination:
+        canonical += "?" + urlencode(pagination)
+    private = request.path.startswith(("/cuenta/", "/carrito/", "/admin/", "/pedidos/"))
+    return {
+        "canonical_page_url": canonical,
+        "default_og_image_url": request.build_absolute_uri(static("productos/img/brand-casita-icon-512.png")),
+        "robots_policy": "noindex, follow" if private or request.GET.get("q") else "index, follow",
+    }

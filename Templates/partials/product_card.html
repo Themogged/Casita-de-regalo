@@ -9,7 +9,7 @@
                 <img
                     src="{{ producto.imagen.url|optimized_image_url }}"
                     {% if image_srcset %}srcset="{{ image_srcset }}"{% endif %}
-                    sizes="(max-width: 680px) 46vw, (max-width: 1100px) 30vw, 260px"
+                    sizes="(max-width: 767px) calc((100vw - 40px) / 2), (max-width: 1100px) 30vw, {% if request.resolver_match.url_name == 'inicio' %}360px{% else %}280px{% endif %}"
                     alt="{{ producto.nombre }}"
                     width="720"
                     height="720"

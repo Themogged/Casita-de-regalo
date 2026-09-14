@@ -1,7 +1,9 @@
 from datetime import date, timedelta
 from io import BytesIO
+from pathlib import Path
 
 from django.contrib.auth import get_user_model
+from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError, transaction
 from django.test import TestCase
@@ -171,18 +173,15 @@ class CarritoViewsTests(TestCase):
         response = self.client.get(reverse('inicio'), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'confirmAddToCart')
-        self.assertContains(response, 'is-confirmed')
-        self.assertContains(response, 'message--toast')
-        self.assertContains(response, 'cart-added')
-        self.assertContains(response, 'has-action')
-        self.assertContains(response, '.message.message--toast')
-        self.assertContains(response, 'toast-action')
-        self.assertContains(response, 'toast-thumbnail')
-        self.assertContains(response, 'toast-dismiss')
-        self.assertContains(response, "new CustomEvent('cart:open'")
-        self.assertNotContains(response, 'openDrawer: data.ok === true')
-        self.assertContains(response, 'getToastMeta')
+        self.assertContains(response, 'storefront-core.js')
+        core_js = Path(finders.find('productos/js/storefront-core.js')).read_text(encoding='utf-8')
+        for token in ('confirmAddToCart', 'is-confirmed', 'message--toast', 'cart-added', 'has-action'):
+            self.assertIn(token, core_js)
+        self.assertContains(response, 'page-base-1.css')
+        self.assertIn('.message.message--toast', Path(finders.find('productos/css/page-base-1.css')).read_text(encoding='utf-8'))
+        for token in ('toast-action', 'toast-thumbnail', 'toast-dismiss', "new CustomEvent('cart:open'", 'getToastMeta'):
+            self.assertIn(token, core_js)
+        self.assertNotIn('openDrawer: data.ok === true', core_js)
         self.assertNotContains(response, '#2d9d78')
         self.assertNotContains(response, '#d99114')
         self.assertNotContains(response, '#d65a5a')
@@ -238,10 +237,11 @@ class CarritoViewsTests(TestCase):
         response = self.client.get(reverse('ver_carrito'), secure=True)
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'cart-updated')
-        self.assertContains(response, 'cart-removed')
-        self.assertContains(response, 'Retirado de la lista')
-        self.assertContains(response, 'No se pudo actualizar')
+        self.assertContains(response, 'storefront-core.js')
+        core_js = Path(finders.find('productos/js/storefront-core.js')).read_text(encoding='utf-8')
+        for token in ('cart-updated', 'cart-removed', 'Retirado de la lista'):
+            self.assertIn(token, core_js)
+        self.assertIn('No se pudo actualizar', core_js)
 
     def test_finalizar_compra_redirige_a_whatsapp_y_descuenta_stock(self):
         session = self.client.session
@@ -262,6 +262,20 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(self.producto.stock, 2)
         self.assertEqual(self.client.session.get('carrito', {}), {})
         self.assertEqual(pedido.fecha_entrega, date.fromisoformat(self.checkout_data['fecha_entrega']))
+
+    def test_finalizar_dos_veces_no_duplica_pedido_ni_descuenta_stock(self):
+        session = self.client.session
+        session['carrito'] = {str(self.producto.id): 1}
+        session.save()
+
+        first = self.client.post(reverse('comprar_whatsapp'), self.checkout_data, secure=True)
+        second = self.client.post(reverse('comprar_whatsapp'), self.checkout_data, secure=True)
+
+        self.assertEqual(first.status_code, 302)
+        self.assertRedirects(second, reverse('ver_carrito'))
+        self.assertEqual(Pedido.objects.count(), 1)
+        self.producto.refresh_from_db()
+        self.assertEqual(self.producto.stock, 2)
 
     def test_finalizar_compra_por_ajax_responde_con_url_de_whatsapp(self):
         session = self.client.session

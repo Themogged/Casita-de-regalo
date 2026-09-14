@@ -22,6 +22,13 @@ from .templatetags.moneda import cop as format_cop
 from .whatsapp import build_whatsapp_url
 
 
+def _serialize_schema(schema):
+    # Prevent product text from terminating an embedded JSON-LD script.
+    return json.dumps(schema, ensure_ascii=False).translate(
+        str.maketrans({"<": "\\u003C", ">": "\\u003E", "&": "\\u0026"})
+    )
+
+
 QUIENES_SOMOS = {
     'titulo': 'Regalos personalizados en Bello y Medellín para fechas que se sienten especiales',
     'descripcion': (
@@ -442,7 +449,7 @@ def _build_home_schema(request):
             'Anchetas personalizadas',
         ],
     }
-    return json.dumps(schema, ensure_ascii=False)
+    return _serialize_schema(schema)
 
 
 def _build_faq_schema():
@@ -462,7 +469,7 @@ def _build_faq_schema():
         '@type': 'FAQPage',
         'mainEntity': questions,
     }
-    return json.dumps(schema, ensure_ascii=False)
+    return _serialize_schema(schema)
 
 
 def _build_how_to_schema(request):
@@ -486,7 +493,7 @@ def _build_how_to_schema(request):
             for index, paso in enumerate(PASOS_COMPRA, start=1)
         ],
     }
-    return json.dumps(schema, ensure_ascii=False)
+    return _serialize_schema(schema)
 
 
 def _truncate_text(value, limit=155):
@@ -529,7 +536,7 @@ def _build_product_schema(request, producto):
     }
     if producto.imagen:
         schema['image'] = [request.build_absolute_uri(producto.imagen.url)]
-    return json.dumps(schema, ensure_ascii=False)
+    return _serialize_schema(schema)
 
 
 def _product_text(producto):
@@ -754,12 +761,18 @@ def inicio(request):
     catalog_filters = request.GET.copy()
     # Old preview bookmarks still work, without passing presentation flags to filters.
     catalog_filters.pop('vista', None)
-    if catalog_filters:
+    catalog_keys = {
+        'q', 'categoria', 'orden', 'presupuesto', 'ocasion', 'persona',
+        'tipo', 'tiempo', 'atributos', 'page',
+    }
+    if any(key in catalog_filters for key in catalog_keys):
         query_string = catalog_filters.urlencode()
         target = reverse('catalogo')
         return redirect(f'{target}?{query_string}#catalogo' if query_string else f'{target}#catalogo')
     if 'vista' in request.GET:
-        return redirect('inicio')
+        query_string = catalog_filters.urlencode()
+        target = reverse('inicio')
+        return redirect(f'{target}?{query_string}' if query_string else target)
 
     destacados = _prepare_home_products(
         get_featured_products(

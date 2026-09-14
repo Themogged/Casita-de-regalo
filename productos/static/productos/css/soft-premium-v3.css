@@ -863,7 +863,7 @@ body.is-cart-drawer-open {
     flex: 0 0 auto;
     border-radius: 50%;
     color: #fff;
-    background: var(--ui-rose-500);
+    background: #ac3264;
     font-size: 0.66rem;
 }
 
@@ -2627,7 +2627,7 @@ body.is-process-video-visible .floating-whatsapp {
 
 .login-field-feedback {
     min-height: 17px;
-    color: #987a88;
+    color: #765564;
     font-size: 0.64rem;
     line-height: 1.45;
 }
@@ -2818,7 +2818,7 @@ body.is-process-video-visible .floating-whatsapp {
     justify-content: center;
     gap: 7px;
     margin: 0;
-    color: #9b7b89;
+    color: #765564;
     font-size: 0.62rem;
     line-height: 1.45;
     text-align: center;

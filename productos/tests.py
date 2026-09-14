@@ -402,6 +402,21 @@ class CatalogoViewsTests(TestCase):
         response = self.client.get(reverse('inicio'), {'vista': 'atelier'}, secure=True)
         self.assertRedirects(response, reverse('inicio'))
 
+    def test_home_keeps_campaign_parameters_without_opening_catalog(self):
+        response = self.client.get(reverse('inicio'), {'utm_source': 'instagram'}, secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Casita de Regalos')
+
+    def test_old_preview_flag_is_removed_without_losing_campaign(self):
+        response = self.client.get(
+            reverse('inicio'),
+            {'vista': 'atelier', 'utm_source': 'instagram'},
+            secure=True,
+        )
+
+        self.assertRedirects(response, reverse('inicio') + '?utm_source=instagram')
+
     def test_migracion_agrega_nuevos_desayunos_en_su_categoria(self):
         categoria = Categoria.objects.get(nombre='Cumpleaños y desayunos')
         super_desayuno = Producto.objects.get(imagen='productos/desayunos/super-desayuno-20260812.jpeg')
@@ -511,7 +526,8 @@ class CatalogoViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'process-video-card')
         self.assertContains(response, 'Armado de detalle personalizado')
-        self.assertContains(response, '<video autoplay muted loop preload="none" playsinline')
+        self.assertContains(response, '<video muted loop preload="none" playsinline')
+        self.assertNotContains(response, '<video autoplay')
         self.assertContains(response, 'id="hero-process-video"')
         self.assertContains(response, 'autoplay')
         self.assertNotContains(response, 'data-hero-video-sound')
@@ -525,7 +541,9 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'data-video-load-state="idle"')
         self.assertNotContains(response, 'data-video-play')
         self.assertNotContains(response, 'data-video-play-label')
-        self.assertContains(response, 'backgroundVideoHydrated')
+        self.assertContains(response, 'storefront-core.js')
+        core_js = Path(finders.find('productos/js/storefront-core.js')).read_text(encoding='utf-8')
+        self.assertIn('backgroundVideoHydrated', core_js)
         self.assertContains(response, 'type="video/mp4"')
         self.assertNotContains(response, 'Video oculto')
 
@@ -629,9 +647,11 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'Ideal para')
         self.assertContains(response, 'Puede variar')
         self.assertContains(response, 'Detalles del pedido')
-        self.assertContains(response, '.detail-selling-points')
-        self.assertContains(response, 'display: grid !important;')
-        self.assertContains(response, 'grid-template-columns: 1fr !important;')
+        self.assertContains(response, 'page-producto_detalle-1.css')
+        detail_css = Path(finders.find('productos/css/page-producto_detalle-1.css')).read_text(encoding='utf-8')
+        self.assertIn('.detail-selling-points', detail_css)
+        self.assertIn('display: grid !important;', detail_css)
+        self.assertIn('grid-template-columns: 1fr !important;', detail_css)
         self.assertContains(response, 'Agregar a mi cotizaci&oacute;n')
         self.assertContains(response, 'Cotizar por WhatsApp')
         self.assertContains(response, 'class="product-detail-page"')
@@ -692,9 +712,11 @@ class CatalogoViewsTests(TestCase):
             f'<a href="{reverse("detalle_producto", args=[self.producto_principal.id])}" class="btn-outline product-detail-action">Ver detalle</a>',
             html=True,
         )
-        self.assertContains(response, '.catalog-layout .product-actions .product-detail-action')
-        self.assertContains(response, '.catalog-layout .product-actions')
-        self.assertContains(response, 'display: inline-flex !important;')
+        self.assertContains(response, 'page-partials-storefront_styles-1.css')
+        catalog_css = Path(finders.find('productos/css/page-base-1.css')).read_text(encoding='utf-8')
+        self.assertIn('.catalog-layout .product-actions .product-detail-action', catalog_css)
+        self.assertIn('.catalog-layout .product-actions', catalog_css)
+        self.assertIn('display: inline-flex !important;', catalog_css)
         self.assertNotContains(response, 'class="product-detail-inline"')
         self.assertNotIn(
             '.catalog-page .product-actions .btn-outline {\n            display: none;',
@@ -729,9 +751,13 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, 'id="assistant-title">Cora</strong>')
         self.assertContains(response, 'Abrir asistente Cora')
         self.assertContains(response, static('productos/img/assistant-cora.webp'), count=3)
-        self.assertContains(response, '@keyframes coraIdle')
-        self.assertContains(response, "playAssistantGesture('greeting', 820)")
-        self.assertContains(response, "playAssistantGesture('celebrating', 760)")
+        self.assertContains(response, 'page-base-1.css')
+        base_css = Path(finders.find('productos/css/page-base-1.css')).read_text(encoding='utf-8')
+        self.assertIn('@keyframes coraIdle', base_css)
+        self.assertContains(response, 'storefront-core.js')
+        core_js = Path(finders.find('productos/js/storefront-core.js')).read_text(encoding='utf-8')
+        self.assertIn("playAssistantGesture('greeting', 820)", core_js)
+        self.assertIn("playAssistantGesture('celebrating', 760)", core_js)
         self.assertIsNotNone(finders.find('productos/img/assistant-cora.webp'))
 
     def test_asistente_devuelve_fallback_si_no_hay_api_key(self):

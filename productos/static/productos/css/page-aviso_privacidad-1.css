@@ -1,0 +1,35 @@
+.privacy-hero h1 {
+        font-family: Georgia, "Palatino Linotype", serif;
+        font-size: clamp(2.1rem, 5vw, 3.4rem);
+        line-height: 1;
+        margin-bottom: 12px;
+    }
+
+    .privacy-hero p,
+    .privacy-card p,
+    .privacy-card li {
+        color: var(--ink-700);
+        line-height: 1.72;
+    }
+
+    .privacy-card {
+        padding: clamp(22px, 4vw, 34px);
+    }
+
+    .privacy-card h2 {
+        margin-bottom: 12px;
+    }
+
+    .privacy-list {
+        display: grid;
+        gap: 12px;
+        margin-top: 18px;
+        list-style: none;
+    }
+
+    .privacy-list li {
+        padding: 16px;
+        border-radius: 20px;
+        background: #fff7fb;
+        border: 1px solid rgba(198, 68, 125, 0.08);
+    }

@@ -9,13 +9,14 @@ from django.db.models import Sum
 from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST
 
 from pedidos.models import Pedido, PedidoItem
 from productos.models import Producto
 from productos.whatsapp import build_whatsapp_url
 
-from .models import CarritoItem
+from .models import Carrito, CarritoItem
 from .services import (
     add_configured_item,
     cart_snapshot,
@@ -111,7 +112,9 @@ def _build_whatsapp_url_for_order(order, checkout_data=None):
 def _redirect_after_add(request):
     fallback = f"{reverse('catalogo')}#catalogo"
     referer = request.META.get("HTTP_REFERER")
-    if not referer:
+    if not referer or not url_has_allowed_host_and_scheme(
+        referer, allowed_hosts={request.get_host()}, require_https=request.is_secure()
+    ):
         return redirect(fallback)
     parsed = urlparse(referer)
     if parsed.path == reverse("inicio"):
@@ -355,6 +358,11 @@ def enviar_carrito_whatsapp(request):
 
     try:
         with transaction.atomic():
+            locked_cart = Carrito.objects.select_for_update().get(pk=cart.pk)
+            cart_items = list(locked_cart.items.select_related("producto"))
+            if not cart_items:
+                raise ValidationError("Aún no has guardado detalles para cotizar.")
+
             product_ids = {item.producto_id for item in cart_items}
             locked_products = {
                 product.id: product
@@ -372,7 +380,10 @@ def enviar_carrito_whatsapp(request):
                         f"Solo hay {product.stock} unidades disponibles de {product.nombre}."
                     )
 
-            total = sum((item.subtotal for item in cart_items), Decimal("0.00"))
+            total = sum(
+                (locked_products[item.producto_id].precio * item.cantidad for item in cart_items),
+                Decimal("0.00"),
+            )
             order = Pedido.objects.create(
                 total=total,
                 usuario=request.user if request.user.is_authenticated else None,
@@ -380,6 +391,7 @@ def enviar_carrito_whatsapp(request):
                 detalles_personalizacion=checkout_data,
             )
             for item in cart_items:
+                product = locked_products[item.producto_id]
                 personalization = {
                     "texto_personalizado": item.texto_personalizado,
                     "color": item.color,
@@ -391,15 +403,16 @@ def enviar_carrito_whatsapp(request):
                 }
                 PedidoItem.objects.create(
                     pedido=order,
-                    producto_nombre=item.producto.nombre,
+                    producto_nombre=product.nombre,
                     cantidad=item.cantidad,
-                    precio=item.producto.precio,
+                    precio=product.precio,
                     personalizacion=personalization,
                 )
             for product_id, quantity in units_by_product.items():
                 product = locked_products[product_id]
                 product.stock -= quantity
                 product.save(update_fields=["stock"])
+            clear_cart(request, locked_cart)
     except ValidationError as exc:
         message = exc.messages[0]
         if _is_ajax(request):
@@ -407,7 +420,6 @@ def enviar_carrito_whatsapp(request):
         messages.warning(request, message)
         return redirect("ver_carrito")
 
-    clear_cart(request, cart)
     request.session.pop("checkout_prefill", None)
     request.session.modified = True
     whatsapp_url = _build_whatsapp_url_for_order(order, checkout_data)
