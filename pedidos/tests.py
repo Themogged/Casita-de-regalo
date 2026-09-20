@@ -58,6 +58,14 @@ class PedidoAdminReportTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="pedido_form"', html=False)
 
+    def test_changelist_muestra_resumen_y_acceso_a_reportes(self):
+        response = self.client.get(reverse("admin:pedidos_pedido_changelist"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Seguimiento comercial más claro")
+        self.assertContains(response, "Abrir reportes y exportaciones")
+        self.assertContains(response, "$254.000")
+
     def test_reportes_view_filters_by_estado(self):
         response = self.client.get(
             reverse("admin:pedidos_pedido_reportes"),

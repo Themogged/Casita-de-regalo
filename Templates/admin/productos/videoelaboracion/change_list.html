@@ -1,0 +1,19 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+<section class="casita-workspace-summary" aria-label="Resumen de videos">
+    <div class="casita-workspace-copy">
+        <span class="casita-dashboard-kicker">Contenido audiovisual</span>
+        <h2>Videos de elaboración claros y verificables</h2>
+        <p>Activa, ordena y revisa cada archivo antes de mostrarlo en la portada.</p>
+    </div>
+    <div class="casita-workspace-metrics">
+        <a href="?" class="casita-workspace-metric"><strong>{{ video_stats.total }}</strong><span>Total</span></a>
+        <a href="?activo__exact=1" class="casita-workspace-metric is-success"><strong>{{ video_stats.active }}</strong><span>Activos</span></a>
+        <a href="?activo__exact=0" class="casita-workspace-metric"><strong>{{ video_stats.inactive }}</strong><span>Inactivos</span></a>
+        <a href="?destacado__exact=1" class="casita-workspace-metric"><strong>{{ video_stats.featured }}</strong><span>Destacados</span></a>
+        <span class="casita-workspace-metric{% if video_stats.missing_files %} is-danger{% endif %}"><strong>{{ video_stats.missing_files }}</strong><span>Archivos faltantes</span></span>
+    </div>
+</section>
+{{ block.super }}
+{% endblock %}

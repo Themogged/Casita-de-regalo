@@ -19,6 +19,7 @@ from unittest import mock
 
 from .admin import CategoriaAdmin, GaleriaProductoFilter, ImagenProductoFilter, ProductoAdmin, VideoElaboracionAdmin
 from .assistant_service import _serialize_catalog_context
+from .forms import ProductoAdminForm
 from .image_frames import generate_yellow_child_frame, slugify_filename
 from .models import Categoria, Producto, ProductoImagen, VideoElaboracion
 from .whatsapp import build_whatsapp_url
@@ -122,6 +123,54 @@ class CatalogoAdminTests(TestCase):
         self.assertContains(response, "brand-casita-favicon-32.png")
         self.assertContains(response, "brand-casita-apple-touch-icon.png")
         self.assertNotContains(response, "brand-casita-favicon.svg")
+
+    def test_admin_principal_muestra_panel_operativo(self):
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(reverse("admin:index"), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Todo lo importante, en un solo lugar")
+        self.assertContains(response, "¿Qué necesitas hacer?")
+        self.assertContains(response, "Catálogo y contenido")
+        self.assertContains(response, "casita_admin.js")
+
+    def test_listado_de_productos_limita_la_carga_y_usa_imagen_diferida(self):
+        Producto.objects.bulk_create(
+            [
+                Producto(
+                    nombre=f"Referencia admin {indice}",
+                    descripcion="Producto para validar paginación.",
+                    precio="25000.00",
+                    stock=5,
+                    categoria=self.categoria,
+                )
+                for indice in range(24)
+            ]
+        )
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(reverse("admin:productos_producto_changelist"), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.context["cl"].result_list), 20)
+        self.assertContains(response, 'loading="lazy"')
+        self.assertContains(response, "Gestiona productos sin perder contexto")
+
+    def test_formulario_de_producto_rechaza_precio_no_valido(self):
+        form = ProductoAdminForm(
+            data={
+                "nombre": "Producto sin precio",
+                "descripcion": "Prueba",
+                "precio": "0",
+                "stock": "2",
+                "categoria": self.categoria.pk,
+                "destacado": False,
+            }
+        )
+
+        self.assertFalse(form.is_valid())
+        self.assertIn("El precio debe ser mayor que cero.", form.errors["precio"])
 
     def test_producto_admin_exporta_productos_a_csv(self):
         producto_admin = ProductoAdmin(Producto, self.site)
@@ -252,6 +301,21 @@ class CatalogoAdminTests(TestCase):
         self.assertTrue(video.destacado)
         self.assertIn('Activo', str(video_admin.estado_publicacion(video)))
         self.assertIn('MP4', str(video_admin.archivo_video(video)))
+
+    def test_video_admin_distingue_archivo_disponible_y_faltante(self):
+        video = VideoElaboracion.objects.create(
+            titulo='Proceso verificable',
+            video='procesos/videos/verificable.mp4',
+        )
+        video_admin = VideoElaboracionAdmin(VideoElaboracion, self.site)
+
+        with mock.patch.object(video.video.storage, 'exists', return_value=True):
+            self.assertIn('MP4 listo', str(video_admin.archivo_video(video)))
+            self.assertIn('<video', str(video_admin.preview_video(video)))
+
+        with mock.patch.object(video.video.storage, 'exists', return_value=False):
+            self.assertIn('MP4 faltante', str(video_admin.archivo_video(video)))
+            self.assertIn('Video no disponible', str(video_admin.preview_video(video)))
 
     def test_video_usa_portada_generada_cuando_no_hay_portada_manual(self):
         media_root = Path('.tmp-test-media') / 'video-poster'

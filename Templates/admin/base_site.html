@@ -8,6 +8,7 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{% static 'productos/img/brand-casita-favicon-32.png' %}?v=20260902">
 <link rel="shortcut icon" href="{% static 'productos/img/brand-casita-favicon.ico' %}?v=20260902">
 <link rel="apple-touch-icon" sizes="180x180" href="{% static 'productos/img/brand-casita-apple-touch-icon.png' %}?v=20260902">
+<script src="{% static 'admin/js/casita_admin.js' %}?v=20260919" defer></script>
 {% endblock %}
 
 {% block branding %}
@@ -21,10 +22,13 @@
 {% endblock %}
 
 {% block nav-global %}
-<a href="/" class="casita-admin-public-link" target="_blank" rel="noopener">Ver tienda</a>
+<nav id="nav-global" aria-label="Accesos principales">
+    <a href="{% url 'admin:index' %}" class="casita-admin-home-link">Centro</a>
+    <a href="/" class="casita-admin-public-link" target="_blank" rel="noopener">Ver tienda</a>
+</nav>
 {% endblock %}
 
 {% block extrastyle %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'admin/css/casita_admin.css' %}">
+<link rel="stylesheet" href="{% static 'admin/css/casita_admin.css' %}?v=20260919">
 {% endblock %}

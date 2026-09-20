@@ -1,5 +1,24 @@
 {% extends "admin/change_list.html" %}
 
+{% block content %}
+<section class="casita-workspace-summary casita-orders-summary" aria-label="Resumen de pedidos">
+    <div class="casita-workspace-copy">
+        <span class="casita-dashboard-kicker">Pedidos</span>
+        <h2>Seguimiento comercial más claro</h2>
+        <p>Cambia el estado directamente en la tabla y pulsa <strong>Guardar</strong>. Para análisis y descargas usa Reportes.</p>
+        <a class="casita-inline-action" href="{% url 'admin:pedidos_pedido_reportes' %}">Abrir reportes y exportaciones</a>
+    </div>
+    <div class="casita-workspace-metrics">
+        <a href="?" class="casita-workspace-metric"><strong>{{ order_stats.orders_count }}</strong><span>Total</span></a>
+        <a href="?estado__exact=pendiente" class="casita-workspace-metric is-warning"><strong>{{ order_stats.pending }}</strong><span>Pendientes</span></a>
+        <a href="?estado__exact=confirmado" class="casita-workspace-metric is-success"><strong>{{ order_stats.confirmed }}</strong><span>Confirmados</span></a>
+        <a href="?estado__exact=enviado" class="casita-workspace-metric"><strong>{{ order_stats.sent }}</strong><span>Enviados</span></a>
+        <span class="casita-workspace-metric is-sales"><strong>{{ order_sales_formatted }}</strong><span>Ventas registradas</span></span>
+    </div>
+</section>
+{{ block.super }}
+{% endblock %}
+
 {% block object-tools-items %}
 <li>
     <a href="{% url 'admin:pedidos_pedido_reportes' %}" class="historylink">Ver reportes</a>

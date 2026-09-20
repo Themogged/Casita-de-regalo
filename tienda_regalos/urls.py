@@ -13,7 +13,7 @@ handler404 = "tienda_regalos.seo_views.custom_404"
 
 admin.site.site_header = "Casita de Regalos"
 admin.site.site_title = "Casita de Regalos"
-admin.site.index_title = "Panel de gestión"
+admin.site.index_title = "Centro de gestión"
 
 
 urlpatterns = [

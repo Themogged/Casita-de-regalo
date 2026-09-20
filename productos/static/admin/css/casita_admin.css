@@ -793,3 +793,914 @@ html[data-theme="dark"] #nav-sidebar .current-model {
         padding: 24px;
     }
 }
+
+/* Operational dashboard and clearer daily workflows. */
+body:not(.login) {
+    background: #fff9fb;
+}
+
+#header {
+    min-height: 68px;
+    padding-block: 10px;
+}
+
+#nav-global {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.casita-admin-home-link,
+.casita-admin-public-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.casita-admin-home-link {
+    border: 1px solid var(--casita-border);
+    background: var(--casita-card-strong);
+    color: var(--link-fg) !important;
+}
+
+.casita-admin-public-link {
+    box-shadow: 0 10px 24px rgba(215, 38, 109, 0.18);
+}
+
+.casita-admin-dashboard #content {
+    display: block;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 28px clamp(18px, 4vw, 56px) 56px;
+}
+
+.casita-dashboard-shell {
+    width: min(1380px, 100%);
+    margin: 0 auto;
+}
+
+.casita-dashboard-hero {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px;
+    padding: clamp(26px, 4vw, 42px);
+    border: 1px solid var(--casita-border);
+    border-radius: 22px;
+    background: linear-gradient(135deg, #fff 0%, #fff5f8 100%);
+    box-shadow: var(--casita-shadow-soft);
+}
+
+.casita-dashboard-kicker {
+    display: block;
+    margin-bottom: 9px;
+    color: #b91d5c;
+    font-size: 0.72rem;
+    font-weight: 950;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.casita-dashboard-hero h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 3.45rem);
+    line-height: 1.03;
+}
+
+.casita-dashboard-hero p {
+    max-width: 720px;
+    margin: 14px 0 0;
+    color: var(--body-quiet-color);
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.casita-dashboard-store-link {
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0 20px;
+    border: 1px solid rgba(215, 38, 109, 0.22);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--link-fg) !important;
+    font-weight: 900;
+    line-height: 44px;
+    text-decoration: none;
+}
+
+.casita-dashboard-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 0;
+}
+
+.casita-metric-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 7px 16px;
+    min-height: 122px;
+    padding: 22px;
+    border: 1px solid var(--casita-border);
+    border-radius: 18px;
+    background: var(--casita-card-strong);
+    color: var(--body-fg) !important;
+    text-decoration: none;
+    box-shadow: 0 12px 28px rgba(92, 33, 62, 0.06);
+}
+
+.casita-metric-card > span {
+    align-self: center;
+    font-weight: 850;
+}
+
+.casita-metric-card strong {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    align-self: center;
+    color: #841244;
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.casita-metric-card small {
+    color: var(--body-quiet-color);
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.casita-dashboard-section {
+    margin-top: 22px;
+    padding: 24px;
+    border: 1px solid var(--casita-border);
+    border-radius: 20px;
+    background: var(--casita-card-strong);
+    box-shadow: 0 12px 30px rgba(92, 33, 62, 0.055);
+}
+
+.casita-dashboard-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.casita-dashboard-heading h2 {
+    margin: 0;
+    color: var(--body-loud-color);
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: 1.55rem;
+    line-height: 1.15;
+}
+
+.casita-dashboard-status {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: #f3fff8;
+    color: #08744d;
+    font-size: 0.7rem;
+    font-weight: 850;
+}
+
+.casita-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.casita-quick-action {
+    display: grid;
+    gap: 7px;
+    min-height: 102px;
+    padding: 18px;
+    border: 1px solid var(--casita-border);
+    border-radius: 16px;
+    background: #fff;
+    color: var(--body-fg) !important;
+    text-decoration: none;
+}
+
+.casita-quick-action strong {
+    color: #841244;
+    font-size: 0.94rem;
+}
+
+.casita-quick-action span {
+    color: var(--body-quiet-color);
+    font-size: 0.78rem;
+    line-height: 1.5;
+}
+
+.casita-quick-action.is-primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, #d7266d, #941448);
+    color: #fff !important;
+}
+
+.casita-quick-action.is-primary strong,
+.casita-quick-action.is-primary span {
+    color: #fff;
+}
+
+.casita-quick-action:hover,
+.casita-metric-card:hover,
+.casita-attention-item:hover {
+    border-color: rgba(215, 38, 109, 0.38);
+    transform: translateY(-1px);
+    box-shadow: 0 16px 34px rgba(92, 33, 62, 0.1);
+}
+
+.casita-dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+    gap: 22px;
+}
+
+.casita-attention-list {
+    display: grid;
+    gap: 10px;
+}
+
+.casita-attention-item {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border: 1px solid var(--casita-border);
+    border-radius: 14px;
+    color: var(--body-fg) !important;
+    text-decoration: none;
+}
+
+.casita-attention-count {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #fff1f6;
+    color: #a31550;
+    font-weight: 950;
+}
+
+.casita-attention-item > span:nth-child(2) {
+    display: grid;
+    gap: 4px;
+}
+
+.casita-attention-item small {
+    color: var(--body-quiet-color);
+    line-height: 1.45;
+}
+
+.casita-attention-arrow {
+    color: #b91d5c;
+    font-size: 1.2rem;
+}
+
+.casita-dashboard-ok {
+    display: grid;
+    gap: 5px;
+    padding: 18px;
+    border: 1px solid rgba(5, 150, 105, 0.2);
+    border-radius: 14px;
+    background: #f3fff8;
+    color: #08744d;
+}
+
+.casita-app-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.casita-app-card {
+    overflow: hidden;
+    border: 1px solid var(--casita-border);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.casita-app-card h3 {
+    margin: 0;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--casita-border);
+    background: #fff7fa;
+    color: #6c163b;
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.casita-model-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 16px;
+    border-bottom: 1px solid rgba(198, 68, 125, 0.1);
+}
+
+.casita-model-row:last-child {
+    border-bottom: 0;
+}
+
+.casita-model-name {
+    color: var(--body-fg) !important;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.casita-model-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.casita-model-actions a {
+    padding: 5px 8px;
+    border-radius: 999px;
+    background: #fff0f5;
+    color: #a31550 !important;
+    font-size: 0.7rem;
+    font-weight: 850;
+    text-decoration: none;
+}
+
+.casita-recent-actions ul {
+    display: grid;
+    gap: 9px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.casita-recent-actions li {
+    display: grid;
+    gap: 3px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--casita-border);
+}
+
+.casita-recent-actions li:last-child {
+    border-bottom: 0;
+}
+
+.casita-recent-actions a,
+.casita-recent-actions strong {
+    color: var(--body-fg) !important;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.casita-recent-actions span {
+    color: var(--body-quiet-color);
+    font-size: 0.72rem;
+}
+
+.casita-dashboard-empty {
+    color: var(--body-quiet-color);
+    line-height: 1.6;
+}
+
+/* Product and video workspaces. */
+.casita-workspace-summary {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.8fr) minmax(480px, 1.2fr);
+    gap: 24px;
+    margin: 0 0 20px;
+    padding: 22px;
+    border: 1px solid var(--casita-border);
+    border-radius: 18px;
+    background: linear-gradient(135deg, #fff, #fff6f9);
+    box-shadow: 0 12px 28px rgba(92, 33, 62, 0.055);
+}
+
+.casita-workspace-copy h2 {
+    margin: 0 0 8px;
+    color: var(--body-loud-color);
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: 1.55rem;
+}
+
+.casita-workspace-copy p {
+    margin: 0;
+    color: var(--body-quiet-color);
+    line-height: 1.55;
+}
+
+.casita-inline-action {
+    display: inline-flex;
+    align-items: center;
+    min-height: 38px;
+    margin-top: 14px;
+    padding: 0 14px;
+    border: 1px solid rgba(215, 38, 109, 0.2);
+    border-radius: 999px;
+    background: #fff;
+    color: #a31550 !important;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.casita-workspace-metrics {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(86px, 1fr));
+    gap: 8px;
+}
+
+.casita-workspace-metric {
+    display: grid;
+    align-content: center;
+    gap: 3px;
+    min-height: 76px;
+    padding: 10px;
+    border: 1px solid var(--casita-border);
+    border-radius: 13px;
+    background: #fff;
+    color: var(--body-fg) !important;
+    text-align: center;
+    text-decoration: none;
+}
+
+.casita-workspace-metric strong {
+    color: #841244;
+    font-size: 1.35rem;
+}
+
+.casita-workspace-metric span {
+    color: var(--body-quiet-color);
+    font-size: 0.68rem;
+    line-height: 1.2;
+}
+
+.casita-workspace-metric.is-success strong {
+    color: #08744d;
+}
+
+.casita-workspace-metric.is-warning strong {
+    color: #a15c05;
+}
+
+.casita-workspace-metric.is-danger strong {
+    color: #b91c1c;
+}
+
+.casita-workspace-metric.is-sales strong {
+    font-size: clamp(0.86rem, 1.35vw, 1.15rem);
+    line-height: 1.2;
+}
+
+.change-list #content {
+    max-width: 1720px;
+    margin: 0 auto;
+}
+
+.change-list #changelist {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+.change-list #changelist .changelist-form-container > div:last-child {
+    min-width: 0;
+}
+
+.change-list #changelist-filter,
+.change-list #toolbar,
+.change-list .actions,
+.change-list .results,
+.change-list .changelist-footer {
+    border: 1px solid var(--casita-border);
+    background: var(--casita-card-strong);
+}
+
+.change-list #changelist-filter {
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(92, 33, 62, 0.05);
+}
+
+.change-list #toolbar {
+    margin-bottom: 10px;
+    border-radius: 14px;
+}
+
+.change-list .actions {
+    border-radius: 14px 14px 0 0;
+}
+
+.change-list .results {
+    overflow-x: auto;
+    border-top: 0;
+}
+
+.change-list .changelist-footer {
+    border-top: 0;
+    border-radius: 0 0 14px 14px;
+}
+
+.change-list #result_list {
+    min-width: 940px;
+}
+
+.model-producto.change-list #result_list {
+    min-width: 1060px;
+}
+
+.change-list #result_list th,
+.change-list #result_list td {
+    vertical-align: middle;
+}
+
+.model-producto.change-list #result_list input[type="number"] {
+    width: 108px;
+    min-width: 0;
+}
+
+.casita-admin-row-actions {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.casita-admin-link.is-secondary {
+    border-color: var(--casita-border);
+    background: #fff;
+    color: var(--body-quiet-color) !important;
+}
+
+.casita-admin-video-preview {
+    display: block;
+    width: min(320px, 100%);
+    max-height: 500px;
+    border: 1px solid var(--casita-border);
+    border-radius: 16px;
+    background: #20151b;
+    box-shadow: 0 16px 36px rgba(45, 17, 31, 0.16);
+}
+
+.casita-admin-file-warning {
+    display: grid;
+    gap: 5px;
+    max-width: 420px;
+    padding: 14px 16px;
+    border: 1px solid rgba(185, 28, 28, 0.18);
+    border-radius: 14px;
+    background: #fff5f5;
+    color: #8f1d2c;
+}
+
+.casita-admin-file-warning span {
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.casita-file-preview {
+    display: none;
+    width: min(280px, 100%);
+    margin-top: 12px;
+    padding: 10px;
+    border: 1px solid var(--casita-border);
+    border-radius: 14px;
+    background: #fff7fa;
+}
+
+.casita-file-preview.is-visible {
+    display: block;
+}
+
+.casita-file-preview img,
+.casita-file-preview video {
+    display: block;
+    width: 100%;
+    max-height: 360px;
+    border-radius: 10px;
+    object-fit: contain;
+    background: #25151d;
+}
+
+.form-row .help,
+.help {
+    max-width: 760px;
+    color: var(--body-quiet-color);
+    line-height: 1.55;
+}
+
+#nav-sidebar table th:last-child,
+#nav-sidebar table td:last-child {
+    display: none;
+}
+
+#nav-sidebar .module table th {
+    width: auto;
+}
+
+html[data-theme="dark"] body:not(.login) {
+    background: #24101b;
+}
+
+html[data-theme="dark"] .casita-dashboard-hero,
+html[data-theme="dark"] .casita-workspace-summary {
+    background: linear-gradient(135deg, rgba(67, 26, 47, 0.98), rgba(45, 16, 31, 0.98));
+}
+
+html[data-theme="dark"] .casita-dashboard-store-link,
+html[data-theme="dark"] .casita-quick-action,
+html[data-theme="dark"] .casita-app-card,
+html[data-theme="dark"] .casita-workspace-metric,
+html[data-theme="dark"] .casita-inline-action,
+html[data-theme="dark"] .casita-admin-link.is-secondary {
+    background: rgba(45, 16, 31, 0.82);
+}
+
+html[data-theme="dark"] .casita-app-card h3,
+html[data-theme="dark"] .casita-model-actions a,
+html[data-theme="dark"] .casita-file-preview {
+    background: rgba(89, 32, 61, 0.7);
+}
+
+html[data-theme="dark"] .casita-app-card h3,
+html[data-theme="dark"] .casita-quick-action strong,
+html[data-theme="dark"] .casita-metric-card strong,
+html[data-theme="dark"] .casita-workspace-metric strong,
+html[data-theme="dark"] .casita-inline-action {
+    color: #ffb8d2 !important;
+}
+
+html[data-theme="dark"] .casita-quick-action.is-primary,
+html[data-theme="dark"] .casita-attention-count {
+    background: linear-gradient(135deg, #b91d5c, #72143a);
+}
+
+html[data-theme="dark"] .casita-attention-count,
+html[data-theme="dark"] .casita-quick-action.is-primary strong,
+html[data-theme="dark"] .casita-quick-action.is-primary span {
+    color: #fff !important;
+}
+
+html[data-theme="dark"] .casita-dashboard-status,
+html[data-theme="dark"] .casita-dashboard-ok {
+    background: rgba(5, 150, 105, 0.14);
+    color: #8ff0c9;
+}
+
+html[data-theme="dark"] .casita-admin-file-warning {
+    background: rgba(185, 28, 28, 0.15);
+    color: #ffc6cc;
+}
+
+#nav-sidebar #nav-filter {
+    box-sizing: border-box;
+    width: calc(100% - 24px);
+    min-height: 40px;
+    margin: 12px;
+    padding: 9px 12px;
+    border: 1px solid var(--casita-border);
+    border-radius: 11px;
+    background: #fff;
+    color: var(--body-fg);
+    box-shadow: 0 5px 18px rgba(91, 42, 62, 0.05);
+}
+
+#nav-sidebar #nav-filter::placeholder {
+    color: #9a7c88;
+    opacity: 1;
+}
+
+#nav-sidebar #nav-filter:focus {
+    border-color: var(--casita-pink);
+    outline: 3px solid rgba(219, 76, 126, 0.12);
+}
+
+html[data-theme="dark"] #nav-sidebar #nav-filter {
+    border-color: rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff7fa;
+    box-shadow: none;
+}
+
+html[data-theme="dark"] #nav-sidebar #nav-filter::placeholder {
+    color: #cdb4bf;
+}
+
+@media (max-width: 1180px) {
+    .casita-quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .casita-dashboard-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .casita-workspace-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 900px) {
+    .casita-dashboard-metrics,
+    .casita-app-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .casita-workspace-metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .model-producto.change-list .column-categoria,
+    .model-producto.change-list .field-categoria,
+    .model-producto.change-list .column-estado_publico,
+    .model-producto.change-list .field-estado_publico,
+    .model-videoelaboracion.change-list .column-estado_publicacion,
+    .model-videoelaboracion.change-list .field-estado_publicacion,
+    .model-videoelaboracion.change-list .column-ver_seccion,
+    .model-videoelaboracion.change-list .field-ver_seccion {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .casita-admin-dashboard #header,
+    body.change-list #header,
+    body.change-form #header {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        box-sizing: border-box;
+        height: 114px;
+        min-height: 114px;
+        padding: 9px 12px;
+        gap: 8px 12px;
+    }
+
+    #branding {
+        grid-column: 1;
+        min-width: 0;
+    }
+
+    #nav-global {
+        grid-column: 2;
+        grid-row: 1;
+        width: auto;
+        justify-content: flex-end;
+        margin: 0;
+    }
+
+    #user-tools {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        box-sizing: border-box;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        height: 36px;
+        min-height: 36px;
+        padding: 0 9px;
+        overflow-x: auto;
+        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 7px;
+        white-space: nowrap;
+        font-size: 0;
+        scrollbar-width: none;
+    }
+
+    #user-tools::-webkit-scrollbar {
+        display: none;
+    }
+
+    #user-tools > a,
+    #user-tools form button {
+        font-size: 0.68rem;
+    }
+
+    #user-tools > strong {
+        display: none;
+    }
+
+    #user-tools > a[href="/"] {
+        display: none;
+    }
+
+    #user-tools .theme-toggle {
+        margin-left: 4px;
+    }
+
+    .casita-admin-home-link,
+    .casita-admin-public-link {
+        flex: 0 0 auto;
+        min-height: 36px;
+        padding: 0 12px;
+        font-size: 0.76rem;
+    }
+
+    .casita-admin-home-link {
+        display: none;
+    }
+
+    .casita-admin-dashboard #content {
+        padding: 14px 12px 34px;
+    }
+
+    .casita-dashboard-hero {
+        display: grid;
+        padding: 22px 18px;
+        border-radius: 18px;
+    }
+
+    .casita-dashboard-hero h1 {
+        font-size: clamp(1.72rem, 7vw, 2rem);
+    }
+
+    .casita-dashboard-store-link {
+        width: fit-content;
+    }
+
+    .casita-dashboard-metrics,
+    .casita-quick-actions,
+    .casita-app-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .casita-dashboard-section {
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .casita-metric-card {
+        min-height: 94px;
+        padding: 17px;
+    }
+
+    .casita-dashboard-heading {
+        display: grid;
+    }
+
+    .casita-attention-item {
+        grid-template-columns: 38px minmax(0, 1fr);
+    }
+
+    .casita-attention-count {
+        width: 38px;
+        height: 38px;
+    }
+
+    .casita-attention-arrow {
+        display: none;
+    }
+
+    .casita-workspace-summary {
+        gap: 16px;
+        padding: 18px 14px;
+        border-radius: 16px;
+    }
+
+    .casita-workspace-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .casita-workspace-metric {
+        min-height: 68px;
+    }
+
+    .change-list #result_list,
+    .model-producto.change-list #result_list {
+        min-width: 720px;
+    }
+
+    .model-producto.change-list .column-preview,
+    .model-producto.change-list .field-preview,
+    .model-producto.change-list .column-destacado,
+    .model-producto.change-list .field-destacado,
+    .model-videoelaboracion.change-list .column-destacado,
+    .model-videoelaboracion.change-list .field-destacado {
+        display: none;
+    }
+
+    .model-pedido.change-list .column-estado_badge,
+    .model-pedido.change-list .field-estado_badge,
+    .model-pedido.change-list .column-items_vista_previa,
+    .model-pedido.change-list .field-items_vista_previa {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .casita-quick-action,
+    .casita-metric-card,
+    .casita-attention-item {
+        transition: none;
+    }
+}

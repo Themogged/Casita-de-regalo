@@ -51,7 +51,7 @@ CSRF_TRUSTED_ORIGINS = list(
 
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "tienda_regalos.admin_apps.CasitaAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

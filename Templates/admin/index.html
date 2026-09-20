@@ -1,0 +1,152 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static log %}
+
+{% block coltype %}colM{% endblock %}
+{% block bodyclass %}{{ block.super }} dashboard casita-admin-dashboard{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+
+{% block content %}
+<div class="casita-dashboard-shell">
+    <section class="casita-dashboard-hero" aria-labelledby="dashboard-title">
+        <div>
+            <span class="casita-dashboard-kicker">Centro de gestión</span>
+            <h1 id="dashboard-title">Todo lo importante, en un solo lugar</h1>
+            <p>Administra el catálogo, revisa pedidos y publica contenido sin perderte entre opciones técnicas.</p>
+        </div>
+        <a class="casita-dashboard-store-link" href="/" target="_blank" rel="noopener">Abrir tienda</a>
+    </section>
+
+    {% if dashboard_ready %}
+    <section class="casita-dashboard-metrics" aria-label="Resumen de la tienda">
+        <a href="{% url 'admin:productos_producto_changelist' %}" class="casita-metric-card">
+            <span>Productos</span>
+            <strong>{{ dashboard_stats.products }}</strong>
+            <small>{{ dashboard_stats.available }} con stock suficiente</small>
+        </a>
+        <a href="{% url 'admin:pedidos_pedido_changelist' %}?estado__exact=pendiente" class="casita-metric-card">
+            <span>Pedidos pendientes</span>
+            <strong>{{ dashboard_stats.pending_orders }}</strong>
+            <small>{{ dashboard_stats.today_orders }} creados hoy</small>
+        </a>
+        <a href="{% url 'admin:productos_videoelaboracion_changelist' %}" class="casita-metric-card">
+            <span>Videos activos</span>
+            <strong>{{ dashboard_stats.active_videos }}</strong>
+            <small>Procesos visibles en la portada</small>
+        </a>
+    </section>
+    {% endif %}
+
+    <section class="casita-dashboard-section" aria-labelledby="quick-actions-title">
+        <div class="casita-dashboard-heading">
+            <div>
+                <span class="casita-dashboard-kicker">Accesos rápidos</span>
+                <h2 id="quick-actions-title">¿Qué necesitas hacer?</h2>
+            </div>
+        </div>
+        <div class="casita-quick-actions">
+            {% for action in dashboard_quick_actions %}
+            <a class="casita-quick-action is-{{ action.tone }}" href="{{ action.url }}">
+                <strong>{{ action.label }}</strong>
+                <span>{{ action.description }}</span>
+            </a>
+            {% empty %}
+            <p class="casita-dashboard-empty">No tienes acciones rápidas disponibles con tus permisos actuales.</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="casita-dashboard-layout">
+        <main class="casita-dashboard-main">
+            {% if dashboard_ready %}
+            <section class="casita-dashboard-section" aria-labelledby="attention-title">
+                <div class="casita-dashboard-heading">
+                    <div>
+                        <span class="casita-dashboard-kicker">Seguimiento</span>
+                        <h2 id="attention-title">Requiere atención</h2>
+                    </div>
+                    <span class="casita-dashboard-status">Actualizado ahora</span>
+                </div>
+                <div class="casita-attention-list">
+                    {% for item in dashboard_attention %}
+                    <a href="{{ item.url }}" class="casita-attention-item is-{{ item.tone }}">
+                        <span class="casita-attention-count">{{ item.count }}</span>
+                        <span>
+                            <strong>{{ item.label }}</strong>
+                            <small>{{ item.description }}</small>
+                        </span>
+                        <span class="casita-attention-arrow" aria-hidden="true">→</span>
+                    </a>
+                    {% empty %}
+                    <div class="casita-dashboard-ok">
+                        <strong>Todo está al día</strong>
+                        <span>No hay alertas de catálogo o pedidos pendientes.</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="casita-dashboard-section" aria-labelledby="management-title">
+                <div class="casita-dashboard-heading">
+                    <div>
+                        <span class="casita-dashboard-kicker">Herramientas</span>
+                        <h2 id="management-title">Administración completa</h2>
+                    </div>
+                </div>
+                <div class="casita-app-grid">
+                    {% for app in app_list %}
+                    <section class="casita-app-card">
+                        <h3>{{ app.name }}</h3>
+                        <div class="casita-model-list">
+                            {% for model in app.models %}
+                            <div class="casita-model-row">
+                                {% if model.admin_url %}
+                                <a class="casita-model-name" href="{{ model.admin_url }}">{{ model.name }}</a>
+                                {% else %}
+                                <span class="casita-model-name">{{ model.name }}</span>
+                                {% endif %}
+                                <span class="casita-model-actions">
+                                    {% if model.add_url %}<a href="{{ model.add_url }}">Nuevo</a>{% endif %}
+                                    {% if model.admin_url %}<a href="{{ model.admin_url }}">Ver</a>{% endif %}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                    {% empty %}
+                    <p class="casita-dashboard-empty">No tienes módulos administrativos disponibles.</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </main>
+
+        <aside class="casita-dashboard-aside" aria-labelledby="recent-title">
+            <section class="casita-dashboard-section casita-recent-actions">
+                <div class="casita-dashboard-heading">
+                    <div>
+                        <span class="casita-dashboard-kicker">Historial</span>
+                        <h2 id="recent-title">Actividad reciente</h2>
+                    </div>
+                </div>
+                {% get_admin_log 8 as admin_log for_user user %}
+                <ul>
+                    {% for entry in admin_log %}
+                    <li>
+                        {% if entry.is_deletion or not entry.get_admin_url %}
+                        <strong>{{ entry.object_repr }}</strong>
+                        {% else %}
+                        <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                        {% endif %}
+                        <span>{{ entry.content_type.name|capfirst|default:"Registro" }}</span>
+                    </li>
+                    {% empty %}
+                    <li class="casita-dashboard-empty">Aún no hay movimientos recientes.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+        </aside>
+    </div>
+</div>
+{% endblock %}

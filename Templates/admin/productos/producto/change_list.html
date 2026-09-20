@@ -1,0 +1,19 @@
+{% extends "admin/change_list.html" %}
+
+{% block content %}
+<section class="casita-workspace-summary" aria-label="Resumen del catálogo">
+    <div class="casita-workspace-copy">
+        <span class="casita-dashboard-kicker">Catálogo</span>
+        <h2>Gestiona productos sin perder contexto</h2>
+        <p>Busca una referencia, ajusta precio o stock y abre su vista pública desde la misma fila.</p>
+    </div>
+    <div class="casita-workspace-metrics">
+        <a href="?" class="casita-workspace-metric"><strong>{{ catalog_stats.total }}</strong><span>Total</span></a>
+        <a href="?disponibilidad=disponible" class="casita-workspace-metric is-success"><strong>{{ catalog_stats.available }}</strong><span>Disponibles</span></a>
+        <a href="?disponibilidad=bajo" class="casita-workspace-metric is-warning"><strong>{{ catalog_stats.low_stock }}</strong><span>Stock bajo</span></a>
+        <a href="?disponibilidad=agotado" class="casita-workspace-metric is-danger"><strong>{{ catalog_stats.out_of_stock }}</strong><span>Agotados</span></a>
+        <a href="?imagen_estado=sin_imagen" class="casita-workspace-metric"><strong>{{ catalog_stats.without_image }}</strong><span>Sin imagen</span></a>
+    </div>
+</section>
+{{ block.super }}
+{% endblock %}

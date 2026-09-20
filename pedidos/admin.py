@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.contrib import admin, messages
-from django.db.models import DecimalField, ExpressionWrapper, F, Q, Sum
+from django.db.models import Count, DecimalField, ExpressionWrapper, F, Q, Sum
 from django.http import Http404, HttpResponse
 from django.template.response import TemplateResponse
 from django.urls import path, reverse
@@ -63,6 +63,9 @@ class PedidoAdmin(admin.ModelAdmin):
     inlines = [PedidoItemInline]
     ordering = ("-fecha",)
     date_hierarchy = "fecha"
+    list_per_page = 25
+    save_on_top = True
+    show_full_result_count = False
     actions = (
         "exportar_seleccion_excel",
         "exportar_seleccion_pdf",
@@ -74,6 +77,24 @@ class PedidoAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         return queryset.prefetch_related("items")
+
+    def changelist_view(self, request, extra_context=None):
+        stats = self.get_queryset(request).aggregate(
+            orders_count=Count("id"),
+            pending=Count("id", filter=Q(estado="pendiente")),
+            confirmed=Count("id", filter=Q(estado="confirmado")),
+            sent=Count("id", filter=Q(estado="enviado")),
+            delivered=Count("id", filter=Q(estado="entregado")),
+            sales=Sum("total"),
+        )
+        context = {
+            "title": "Gestión de pedidos",
+            "order_stats": stats,
+            "order_sales_formatted": format_cop(stats["sales"] or Decimal("0")),
+        }
+        if extra_context:
+            context.update(extra_context)
+        return super().changelist_view(request, extra_context=context)
 
     def get_urls(self):
         urls = super().get_urls()
