@@ -253,22 +253,10 @@ def get_catalog_queryset(
 
 
 def get_featured_products(base_queryset, search="", current_category=None, limit=6):
-    if search or current_category:
-        featured = list(base_queryset.filter(destacado=True)[:limit])
-        return featured or list(base_queryset[:limit])
-
-    featured = list(
-        Producto.objects.select_related("categoria")
-        .filter(destacado=True)
-        .order_by("-destacado", "nombre")[:limit]
-    )
-    if featured:
-        return featured
-
-    return list(
-        Producto.objects.select_related("categoria")
-        .order_by("-destacado", "nombre")[:limit]
-    )
+    # The caller owns availability and category constraints. Rebuilding the
+    # queryset here used to reintroduce out-of-stock products on the homepage.
+    featured = list(base_queryset.filter(destacado=True)[:limit])
+    return featured or list(base_queryset[:limit])
 
 
 def paginate_products(queryset, page_number, per_page=9):

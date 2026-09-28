@@ -46,18 +46,18 @@
         para confirmar colores, mensaje, entrega y disponibilidad por WhatsApp.
     </p>
 
-    {% if producto_anterior or producto_siguiente %}
+    {% if producto_anterior_id or producto_siguiente_id %}
         <div class="detail-switcher">
-            {% if producto_anterior %}
-                <a href="{% url 'detalle_producto' producto_anterior.id %}" class="detail-switcher-btn">&lsaquo; Anterior</a>
+            {% if producto_anterior_id %}
+                <a href="{% url 'detalle_producto' producto_anterior_id %}" class="detail-switcher-btn">&lsaquo; Anterior</a>
             {% else %}
                 <span class="detail-switcher-btn is-disabled">&lsaquo; Anterior</span>
             {% endif %}
 
             <div class="detail-switcher-status">Producto {{ posicion_producto }} de {{ total_en_navegacion }}</div>
 
-            {% if producto_siguiente %}
-                <a href="{% url 'detalle_producto' producto_siguiente.id %}" class="detail-switcher-btn">Siguiente &rsaquo;</a>
+            {% if producto_siguiente_id %}
+                <a href="{% url 'detalle_producto' producto_siguiente_id %}" class="detail-switcher-btn">Siguiente &rsaquo;</a>
             {% else %}
                 <span class="detail-switcher-btn is-disabled">Siguiente &rsaquo;</span>
             {% endif %}

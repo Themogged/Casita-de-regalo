@@ -1,4 +1,5 @@
 import hashlib
+from collections.abc import Mapping
 from datetime import date
 from decimal import Decimal
 
@@ -26,8 +27,11 @@ PERSONALIZATION_FIELDS = (
 
 
 def normalize_cart_mapping(raw_cart):
+    if not isinstance(raw_cart, Mapping):
+        return {}
+
     normalized = {}
-    for product_id, quantity in (raw_cart or {}).items():
+    for product_id, quantity in raw_cart.items():
         try:
             product_id = int(product_id)
             quantity = int(quantity)

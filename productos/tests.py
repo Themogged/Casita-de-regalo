@@ -525,6 +525,22 @@ class CatalogoViewsTests(TestCase):
         self.assertNotContains(response, 'registrar_interaccion')
         self.assertNotContains(response, 'Premium floral')
 
+    def test_inicio_no_reintroduce_destacados_agotados(self):
+        agotado_destacado = Producto.objects.create(
+            nombre='Destacado agotado',
+            descripcion='No debe aparecer en la portada.',
+            precio='50000.00',
+            stock=0,
+            categoria=self.categoria_regalos,
+            destacado=True,
+        )
+
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(agotado_destacado, response.context['destacados'])
+        self.assertTrue(all(producto.stock > 0 for producto in response.context['destacados']))
+
     def test_paginas_publicas_no_exponen_datos_bancarios(self):
         for url_name in ('inicio', 'como_comprar'):
             with self.subTest(url_name=url_name):
@@ -724,6 +740,14 @@ class CatalogoViewsTests(TestCase):
         self.assertContains(response, '<meta property="og:type" content="product">', html=True)
         self.assertContains(response, '"@type": "Product"')
         self.assertContains(response, '"priceCurrency": "COP"')
+        siguiente_esperado = (
+            Producto.objects.filter(categoria=self.categoria_regalos)
+            .exclude(pk=self.producto_principal.pk)
+            .order_by('-destacado', 'nombre', 'id')
+            .values_list('id', flat=True)
+            .first()
+        )
+        self.assertEqual(response.context['producto_siguiente_id'], siguiente_esperado)
 
     def test_detalle_producto_muestra_galeria_cuando_hay_varias_imagenes(self):
         ProductoImagen.objects.create(

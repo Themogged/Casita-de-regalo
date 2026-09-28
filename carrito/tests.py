@@ -115,6 +115,21 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(Carrito.objects.count(), 0)
         self.assertContains(response, '<span class="cart-count">0</span>')
 
+    def test_carrito_recupera_sesion_legacy_con_formato_invalido(self):
+        session = self.client.session
+        session['carrito'] = ['dato-antiguo-invalido']
+        session.save()
+
+        response = self.client.post(
+            reverse('agregar_carrito', args=[self.producto.id]),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            secure=True,
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()['cart_total'], 1)
+        self.assertEqual(CarritoItem.objects.get().cantidad, 1)
+
     def test_header_muestra_total_de_carrito_persistente_sin_mutarlo(self):
         cart = Carrito.objects.create(session_key='session-test')
         CarritoItem.objects.create(carrito=cart, producto=self.producto, cantidad=2)

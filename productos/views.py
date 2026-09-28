@@ -1,5 +1,6 @@
 import json
 
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
@@ -781,10 +782,10 @@ def inicio(request):
         )
     )
     videos_elaboracion = get_active_process_videos()
-    resumen = {
-        'total_productos': Producto.objects.count(),
-        'categorias': Producto.objects.values('categoria').distinct().count(),
-    }
+    resumen = Producto.objects.aggregate(
+        total_productos=Count('id'),
+        categorias=Count('categoria', distinct=True),
+    )
 
     contexto = {
         'destacados': destacados,
@@ -830,18 +831,18 @@ def detalle_producto(request, producto_id):
     navegacion_ids = list(navegacion_qs.values_list('id', flat=True))
     posicion_producto = 1
     total_en_navegacion = len(navegacion_ids)
-    producto_anterior = None
-    producto_siguiente = None
+    producto_anterior_id = None
+    producto_siguiente_id = None
 
     if producto.id in navegacion_ids:
         indice_actual = navegacion_ids.index(producto.id)
         posicion_producto = indice_actual + 1
 
         if indice_actual > 0:
-            producto_anterior = navegacion_qs.filter(id=navegacion_ids[indice_actual - 1]).first()
+            producto_anterior_id = navegacion_ids[indice_actual - 1]
 
         if indice_actual < total_en_navegacion - 1:
-            producto_siguiente = navegacion_qs.filter(id=navegacion_ids[indice_actual + 1]).first()
+            producto_siguiente_id = navegacion_ids[indice_actual + 1]
 
     relacionados = (
         Producto.objects.select_related('categoria')
@@ -885,8 +886,8 @@ def detalle_producto(request, producto_id):
         'producto_detalle.html',
         {
             'producto': producto,
-            'producto_anterior': producto_anterior,
-            'producto_siguiente': producto_siguiente,
+            'producto_anterior_id': producto_anterior_id,
+            'producto_siguiente_id': producto_siguiente_id,
             'posicion_producto': posicion_producto,
             'total_en_navegacion': total_en_navegacion,
             'relacionados': relacionados,
