@@ -2,7 +2,7 @@
    the existing storefront remains authoritative from 768px upwards. */
 @media (max-width: 767px) {
     :root {
-        --boutique-paper: #fffaf9;
+        --boutique-paper: #fff5f9;
         --boutique-card: #fffdfc;
         --boutique-blush: #fcf0f4;
         --boutique-line: #f0dfe4;
@@ -26,7 +26,10 @@
     html { scroll-padding-top: 128px; }
     body {
         color: var(--boutique-ink);
-        background: var(--boutique-paper);
+        background:
+            radial-gradient(circle at 12% 4%, rgba(247, 202, 220, 0.34), transparent 28%),
+            radial-gradient(circle at 92% 18%, rgba(255, 225, 237, 0.4), transparent 30%),
+            linear-gradient(180deg, #fff9fc 0%, var(--boutique-paper) 48%, #fff9fb 100%);
         font-size: 15px;
         line-height: 1.6;
         padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
