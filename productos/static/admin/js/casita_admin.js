@@ -10,8 +10,13 @@
     const enhanceActions = () => {
         document.querySelectorAll('#changelist-form .actions').forEach((container) => {
             const button = container.querySelector('button[type="submit"]');
-            if (button && button.textContent.trim().toLowerCase() === 'run') {
-                button.textContent = 'Aplicar';
+            if (button && ['run', 'go', 'ejecutar'].includes(button.textContent.trim().toLowerCase())) {
+                button.textContent = 'Aplicar acción';
+            }
+
+            const select = container.querySelector('select[name="action"]');
+            if (select && !select.getAttribute('aria-label')) {
+                select.setAttribute('aria-label', 'Acción para los registros seleccionados');
             }
         });
 
@@ -28,7 +33,17 @@
 
     const enhanceSearch = () => {
         const search = document.querySelector('#searchbar');
-        if (search && !search.placeholder) search.placeholder = 'Buscar por nombre o descripción';
+        if (!search) return;
+
+        const placeholders = [
+            ['model-producto', 'Buscar producto por nombre o descripción'],
+            ['model-videoelaboracion', 'Buscar video por título o descripción'],
+            ['model-pedido', 'Buscar pedido, cliente o teléfono'],
+            ['model-categoria', 'Buscar categoría'],
+        ];
+        const match = placeholders.find(([bodyClass]) => document.body.classList.contains(bodyClass));
+        search.placeholder = match?.[1] || 'Buscar en esta sección';
+        search.setAttribute('aria-label', search.placeholder);
     };
 
     const addFilePreview = (input, mediaType) => {

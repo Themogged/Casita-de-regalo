@@ -767,3 +767,41 @@
         *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
 }
+
+/* 2026-10 brand refresh: soft depth while preserving the compact mobile flow. */
+@media (max-width: 767px) {
+    .site-header {
+        background: rgba(255, 250, 252, 0.96);
+        box-shadow: 0 7px 24px rgba(123, 64, 88, 0.045);
+    }
+
+    .site-header .header-search {
+        border-color: #ead4dd;
+        background: #fffefe;
+    }
+
+    .category-strip {
+        border-bottom: 1px solid rgba(168, 68, 97, 0.08);
+        background: rgba(255, 248, 251, 0.97);
+    }
+
+    .home-hero.hero-card {
+        background:
+            radial-gradient(circle at 12% 8%, rgba(247, 210, 225, 0.28), transparent 34%),
+            radial-gradient(circle at 92% 16%, rgba(255, 230, 239, 0.36), transparent 30%);
+    }
+
+    .home-hero .hero-actions a:first-child {
+        box-shadow: 0 8px 22px rgba(168, 68, 97, 0.09);
+    }
+
+    .catalog-grid .product-card {
+        box-shadow: 0 9px 24px rgba(116, 61, 83, 0.045);
+    }
+
+    .floating-designer,
+    .floating-whatsapp,
+    .assistant-toggle {
+        box-shadow: 0 8px 22px rgba(100, 43, 69, 0.09);
+    }
+}

@@ -1704,3 +1704,937 @@ html[data-theme="dark"] #nav-sidebar #nav-filter::placeholder {
         transition: none;
     }
 }
+
+/* 2026-10 admin refresh: compact, balanced and operational. */
+:root {
+    --admin-accent: #c62f6c;
+    --admin-accent-strong: #941947;
+    --admin-accent-soft: #fff0f6;
+    --admin-ink: #3c1f2c;
+    --admin-muted: #785b69;
+    --admin-line: rgba(153, 58, 98, 0.15);
+    --admin-surface: rgba(255, 255, 255, 0.94);
+    --admin-surface-soft: rgba(255, 248, 251, 0.96);
+    --admin-shadow: 0 18px 48px rgba(74, 29, 51, 0.08);
+}
+
+body:not(.login) {
+    background:
+        radial-gradient(circle at 8% 0%, rgba(248, 210, 225, 0.42), transparent 25%),
+        linear-gradient(180deg, #fff9fc 0%, #fff6fa 46%, #fffafd 100%);
+}
+
+#header {
+    min-height: 66px;
+    padding: 9px clamp(16px, 2.4vw, 34px);
+    border-bottom-color: var(--admin-line);
+    background: rgba(255, 252, 253, 0.92);
+    box-shadow: 0 8px 28px rgba(74, 29, 51, 0.06);
+    backdrop-filter: blur(18px);
+}
+
+.casita-admin-brand {
+    gap: 11px;
+}
+
+.casita-admin-brand img {
+    width: 44px;
+    height: 44px;
+    border-width: 2px;
+    box-shadow: 0 8px 22px rgba(156, 44, 93, 0.14);
+}
+
+.casita-admin-brand strong {
+    color: var(--admin-ink);
+    font-size: 1.2rem;
+}
+
+.casita-admin-brand small {
+    color: #a43b68;
+    font-size: 0.64rem;
+}
+
+#user-tools {
+    min-height: 38px;
+    padding: 5px 11px;
+    border-color: var(--admin-line);
+    background: rgba(255, 255, 255, 0.74);
+    box-shadow: none;
+}
+
+.casita-admin-home-link,
+.casita-admin-public-link {
+    min-height: 38px;
+    padding: 0 15px;
+    border-radius: 12px;
+}
+
+.casita-admin-home-link {
+    border-color: var(--admin-line);
+    background: #fff;
+}
+
+.casita-admin-public-link {
+    background: var(--admin-accent);
+    box-shadow: 0 8px 20px rgba(198, 47, 108, 0.2);
+}
+
+.casita-admin-dashboard #content {
+    padding: 24px clamp(16px, 3.6vw, 52px) 56px;
+}
+
+.casita-dashboard-shell {
+    width: min(1400px, 100%);
+}
+
+.casita-dashboard-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 330px);
+    align-items: stretch;
+    gap: clamp(20px, 3vw, 40px);
+    padding: clamp(24px, 3.2vw, 38px);
+    border: 1px solid var(--admin-line);
+    border-radius: 20px;
+    background: var(--admin-surface);
+    box-shadow: var(--admin-shadow);
+}
+
+.casita-dashboard-hero-copy {
+    align-self: center;
+}
+
+.casita-dashboard-kicker {
+    margin-bottom: 8px;
+    color: var(--admin-accent);
+    font-size: 0.68rem;
+    letter-spacing: 0.13em;
+}
+
+.casita-dashboard-hero h1 {
+    max-width: 760px;
+    margin: 0;
+    color: var(--admin-ink);
+    font-size: clamp(2rem, 3.5vw, 3.2rem);
+    line-height: 1.02;
+}
+
+.casita-dashboard-hero-copy > p {
+    max-width: 700px;
+    margin: 13px 0 0;
+    color: var(--admin-muted);
+    font-size: 0.96rem;
+    line-height: 1.65;
+}
+
+.casita-dashboard-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 21px;
+}
+
+.casita-dashboard-primary-action,
+.casita-dashboard-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 17px;
+    border: 1px solid var(--admin-line);
+    border-radius: 12px;
+    font-size: 0.79rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.casita-dashboard-primary-action {
+    border-color: transparent;
+    background: var(--admin-accent);
+    color: #fff !important;
+}
+
+.casita-dashboard-secondary-action {
+    background: #fff;
+    color: var(--admin-accent-strong) !important;
+}
+
+.casita-dashboard-hero-status {
+    display: grid;
+    align-content: center;
+    gap: 9px;
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid rgba(198, 47, 108, 0.14);
+    border-radius: 16px;
+    background: var(--admin-accent-soft);
+}
+
+.casita-dashboard-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #08744d;
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.casita-dashboard-live i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #16a36a;
+    box-shadow: 0 0 0 4px rgba(22, 163, 106, 0.12);
+}
+
+.casita-dashboard-hero-status > strong {
+    color: var(--admin-ink);
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: 1.25rem;
+}
+
+.casita-dashboard-hero-status p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.8rem;
+    line-height: 1.55;
+}
+
+.casita-dashboard-hero-status a {
+    display: inline-flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 5px;
+    padding-top: 12px;
+    border-top: 1px solid var(--admin-line);
+    color: var(--admin-accent-strong) !important;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.casita-dashboard-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+    margin-top: 15px;
+}
+
+.casita-metric-card {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 13px;
+    min-height: 96px;
+    padding: 17px 19px;
+    border: 1px solid var(--admin-line);
+    border-radius: 16px;
+    background: var(--admin-surface);
+    color: var(--admin-ink) !important;
+    box-shadow: 0 9px 26px rgba(74, 29, 51, 0.05);
+}
+
+.casita-metric-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: var(--admin-accent-soft);
+    font-size: 1.25rem;
+}
+
+.casita-metric-copy {
+    display: grid;
+    gap: 4px;
+    min-width: 0;
+}
+
+.casita-metric-copy > span {
+    color: var(--admin-ink);
+    font-size: 0.82rem;
+    font-weight: 900;
+}
+
+.casita-metric-copy small {
+    color: var(--admin-muted);
+    font-size: 0.7rem;
+    line-height: 1.35;
+}
+
+.casita-metric-card > strong {
+    grid-column: auto;
+    grid-row: auto;
+    color: var(--admin-accent-strong);
+    font-family: Georgia, "Palatino Linotype", serif;
+    font-size: clamp(1.8rem, 2.7vw, 2.55rem);
+    line-height: 1;
+}
+
+.casita-dashboard-priority-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.casita-dashboard-section {
+    margin-top: 0;
+    padding: 22px;
+    border: 1px solid var(--admin-line);
+    border-radius: 18px;
+    background: var(--admin-surface);
+    box-shadow: 0 10px 30px rgba(74, 29, 51, 0.055);
+}
+
+.casita-dashboard-heading {
+    margin-bottom: 16px;
+}
+
+.casita-dashboard-heading h2 {
+    color: var(--admin-ink);
+    font-size: 1.45rem;
+}
+
+.casita-dashboard-status {
+    padding: 6px 9px;
+    border: 1px solid rgba(5, 150, 105, 0.13);
+    background: #f0fff7;
+}
+
+.casita-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.casita-quick-action {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 11px;
+    min-height: 78px;
+    padding: 13px;
+    border: 1px solid var(--admin-line);
+    border-radius: 14px;
+    background: #fff;
+    color: var(--admin-ink) !important;
+}
+
+.casita-quick-icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--admin-accent-soft);
+    font-size: 1.05rem;
+}
+
+.casita-quick-copy {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.casita-quick-copy strong {
+    color: var(--admin-ink);
+    font-size: 0.82rem;
+}
+
+.casita-quick-copy > span {
+    color: var(--admin-muted);
+    font-size: 0.68rem;
+    line-height: 1.4;
+}
+
+.casita-quick-arrow {
+    color: var(--admin-accent);
+    font-size: 1rem;
+}
+
+.casita-quick-action.is-primary {
+    border-color: rgba(198, 47, 108, 0.3);
+    background: #fff7fa;
+    color: var(--admin-ink) !important;
+}
+
+.casita-quick-action.is-primary strong,
+.casita-quick-action.is-primary span {
+    color: inherit;
+}
+
+.casita-quick-action.is-primary .casita-quick-icon {
+    background: var(--admin-accent);
+    color: #fff;
+}
+
+.casita-attention-list {
+    gap: 8px;
+}
+
+.casita-attention-item {
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    gap: 11px;
+    min-height: 54px;
+    padding: 10px;
+    border-color: var(--admin-line);
+    border-radius: 12px;
+}
+
+.casita-attention-count {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+}
+
+.casita-attention-item strong {
+    color: var(--admin-ink);
+    font-size: 0.78rem;
+}
+
+.casita-attention-item small {
+    font-size: 0.66rem;
+}
+
+.casita-dashboard-ok {
+    grid-template-columns: 38px minmax(0, 1fr);
+    align-items: center;
+    border-radius: 12px;
+}
+
+.casita-dashboard-ok > span:first-child {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(5, 150, 105, 0.12);
+    font-weight: 900;
+}
+
+.casita-dashboard-ok > span:last-child {
+    display: grid;
+    gap: 3px;
+}
+
+.casita-dashboard-ok small {
+    font-size: 0.7rem;
+}
+
+.casita-dashboard-lower-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 330px);
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.casita-app-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+}
+
+.casita-app-card {
+    border-color: var(--admin-line);
+    border-radius: 14px;
+    background: #fff;
+}
+
+.casita-app-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-color: var(--admin-line);
+    background: var(--admin-surface-soft);
+    color: #762442;
+    font-size: 0.69rem;
+}
+
+.casita-app-card h3 span {
+    font-size: 0.92rem;
+}
+
+.casita-model-row {
+    min-height: 48px;
+    padding: 10px 14px;
+    border-color: rgba(153, 58, 98, 0.1);
+}
+
+.casita-model-name {
+    font-size: 0.77rem;
+}
+
+.casita-model-actions a {
+    min-height: 28px;
+    padding: 5px 9px;
+    border: 1px solid rgba(198, 47, 108, 0.1);
+    background: var(--admin-accent-soft);
+    font-size: 0.66rem;
+}
+
+.casita-recent-actions {
+    align-self: start;
+}
+
+.casita-recent-actions ul {
+    gap: 0;
+}
+
+.casita-recent-actions li {
+    display: grid;
+    grid-template-columns: 9px minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+    padding: 11px 0;
+    border-color: var(--admin-line);
+}
+
+.casita-recent-actions li > span:last-child {
+    display: grid;
+    gap: 3px;
+}
+
+.casita-recent-dot {
+    width: 8px;
+    height: 8px;
+    margin-top: 5px;
+    border-radius: 50%;
+    background: #e7adc4;
+}
+
+.casita-recent-actions a,
+.casita-recent-actions strong {
+    font-size: 0.76rem;
+}
+
+.casita-recent-actions small {
+    color: var(--admin-muted);
+    font-size: 0.67rem;
+}
+
+.casita-recent-actions .casita-recent-empty,
+.casita-recent-actions li.casita-dashboard-empty {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--admin-muted);
+    line-height: 1.5;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: normal;
+}
+
+.casita-recent-actions .casita-recent-empty > span:last-child,
+.casita-recent-actions li.casita-dashboard-empty > span:last-child {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+/* Workspaces and standard Django admin pages. */
+.casita-workspace-summary {
+    grid-template-columns: minmax(260px, 0.8fr) minmax(500px, 1.2fr);
+    gap: 22px;
+    padding: 20px;
+    border-color: var(--admin-line);
+    border-radius: 16px;
+    background: var(--admin-surface);
+    box-shadow: 0 10px 28px rgba(74, 29, 51, 0.05);
+}
+
+.casita-workspace-copy h2 {
+    color: var(--admin-ink);
+    font-size: 1.45rem;
+}
+
+.casita-workspace-metric {
+    min-height: 72px;
+    border-color: var(--admin-line);
+    border-radius: 12px;
+}
+
+.change-list #content,
+.change-form #content,
+.delete-confirmation #content {
+    max-width: 1720px;
+    margin-inline: auto;
+}
+
+.change-list #toolbar,
+.change-list .actions,
+.change-list .results,
+.change-list .changelist-footer,
+.change-list #changelist-filter {
+    border-color: var(--admin-line);
+    background: var(--admin-surface);
+}
+
+.change-list #toolbar,
+.change-list .actions {
+    padding: 11px 14px;
+}
+
+.change-list #result_list thead th {
+    background: #fff5f9;
+    color: var(--admin-ink);
+    font-size: 0.72rem;
+    letter-spacing: 0.02em;
+}
+
+.change-list #result_list tbody td,
+.change-list #result_list tbody th {
+    padding-block: 10px;
+}
+
+.change-list #result_list tbody tr:hover {
+    background: #fff4f8;
+}
+
+.change-form .module,
+.change-form .inline-group,
+.submit-row {
+    border-color: var(--admin-line);
+    border-radius: 16px;
+    background: var(--admin-surface);
+    box-shadow: 0 10px 30px rgba(74, 29, 51, 0.05);
+}
+
+.change-form .module > h2,
+.change-form .inline-group > h2 {
+    background: #fff3f8;
+    color: var(--admin-ink);
+}
+
+.change-form .submit-row {
+    position: sticky;
+    bottom: 12px;
+    z-index: 12;
+    margin-inline: 0;
+    padding: 12px;
+    backdrop-filter: blur(14px);
+}
+
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button,
+.object-tools a {
+    border-radius: 11px;
+}
+
+.casita-admin-link,
+.casita-admin-badge,
+.casita-admin-count,
+.casita-admin-empty {
+    border-radius: 10px;
+}
+
+.casita-admin-thumb {
+    border-radius: 11px;
+}
+
+#nav-sidebar {
+    border-color: var(--admin-line);
+    background: rgba(255, 250, 252, 0.92);
+}
+
+#nav-sidebar #nav-filter {
+    border-color: var(--admin-line);
+    border-radius: 10px;
+}
+
+.login #container {
+    width: min(430px, calc(100% - 28px));
+    border-radius: 24px;
+}
+
+.login #header {
+    padding: 24px 22px 21px;
+}
+
+.login #content {
+    padding: 26px;
+}
+
+html[data-theme="dark"] body:not(.login) {
+    background: #221019;
+}
+
+html[data-theme="dark"] .casita-dashboard-hero,
+html[data-theme="dark"] .casita-dashboard-section,
+html[data-theme="dark"] .casita-metric-card,
+html[data-theme="dark"] .casita-workspace-summary {
+    background: rgba(57, 22, 40, 0.94);
+}
+
+html[data-theme="dark"] .casita-dashboard-hero-status,
+html[data-theme="dark"] .casita-quick-action,
+html[data-theme="dark"] .casita-app-card,
+html[data-theme="dark"] .casita-workspace-metric {
+    background: rgba(255, 255, 255, 0.055);
+}
+
+html[data-theme="dark"] .casita-dashboard-hero h1,
+html[data-theme="dark"] .casita-dashboard-hero-status > strong,
+html[data-theme="dark"] .casita-metric-copy > span,
+html[data-theme="dark"] .casita-quick-copy strong,
+html[data-theme="dark"] .casita-attention-item strong {
+    color: #fff4f8;
+}
+
+@media (max-width: 1100px) {
+    .casita-dashboard-priority-grid,
+    .casita-dashboard-lower-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .casita-recent-actions {
+        width: auto;
+    }
+
+    .casita-workspace-summary {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 767px) {
+    .casita-admin-dashboard #header,
+    body.change-list #header,
+    body.change-form #header,
+    body.delete-confirmation #header {
+        height: 104px;
+        min-height: 104px;
+        padding: 8px 10px;
+        gap: 6px 8px;
+    }
+
+    .casita-admin-brand img {
+        width: 36px;
+        height: 36px;
+    }
+
+    .casita-admin-brand strong {
+        font-size: 0.93rem;
+    }
+
+    .casita-admin-public-link {
+        min-height: 34px;
+        padding-inline: 11px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+    }
+
+    #user-tools {
+        height: 34px;
+        min-height: 34px;
+        justify-content: flex-start;
+        padding-inline: 8px;
+    }
+
+    .casita-admin-dashboard #content {
+        padding: 12px 10px 32px;
+    }
+
+    .casita-dashboard-hero {
+        grid-template-columns: 1fr;
+        gap: 17px;
+        padding: 20px 17px;
+        border-radius: 17px;
+    }
+
+    .casita-dashboard-hero h1 {
+        font-size: clamp(1.7rem, 8vw, 2.05rem);
+    }
+
+    .casita-dashboard-hero-copy > p {
+        font-size: 0.82rem;
+    }
+
+    .casita-dashboard-hero-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 17px;
+    }
+
+    .casita-dashboard-primary-action,
+    .casita-dashboard-secondary-action {
+        min-width: 0;
+        padding-inline: 9px;
+        font-size: 0.71rem;
+    }
+
+    .casita-dashboard-hero-status {
+        padding: 16px;
+    }
+
+    .casita-dashboard-metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 9px;
+    }
+
+    .casita-metric-card {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        gap: 4px;
+        min-height: 105px;
+        padding: 10px 6px;
+        text-align: center;
+    }
+
+    .casita-metric-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+        font-size: 0.9rem;
+    }
+
+    .casita-metric-copy {
+        order: 3;
+    }
+
+    .casita-metric-copy > span {
+        font-size: 0.62rem;
+        line-height: 1.2;
+    }
+
+    .casita-metric-copy small {
+        display: none;
+    }
+
+    .casita-metric-card > strong {
+        order: 2;
+        font-size: 1.55rem;
+    }
+
+    .casita-dashboard-priority-grid,
+    .casita-dashboard-lower-grid {
+        gap: 9px;
+        margin-top: 9px;
+    }
+
+    .casita-dashboard-section {
+        padding: 17px 14px;
+        border-radius: 16px;
+    }
+
+    .casita-dashboard-heading {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 13px;
+    }
+
+    .casita-dashboard-heading h2 {
+        font-size: 1.25rem;
+    }
+
+    .casita-quick-actions {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .casita-quick-action {
+        grid-template-columns: 32px minmax(0, 1fr);
+        align-content: start;
+        min-height: 92px;
+        padding: 11px;
+    }
+
+    .casita-quick-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .casita-quick-arrow {
+        display: none;
+    }
+
+    .casita-quick-copy > span {
+        font-size: 0.63rem;
+    }
+
+    .casita-attention-item {
+        grid-template-columns: 34px minmax(0, 1fr);
+    }
+
+    .casita-attention-count {
+        width: 34px;
+        height: 34px;
+    }
+
+    .casita-app-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .casita-model-row {
+        padding: 9px 11px;
+    }
+
+    .casita-model-actions a {
+        min-height: 30px;
+    }
+
+    .casita-workspace-summary {
+        padding: 17px 14px;
+    }
+
+    .casita-workspace-metrics {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 3px;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+    }
+
+    .casita-workspace-metrics::-webkit-scrollbar {
+        display: none;
+    }
+
+    .casita-workspace-metric {
+        flex: 0 0 104px;
+        min-height: 66px;
+        scroll-snap-align: start;
+    }
+
+    .change-form .submit-row {
+        bottom: 6px;
+        border-radius: 14px;
+    }
+
+    .change-list #result_list,
+    .model-producto.change-list #result_list {
+        min-width: 680px;
+    }
+}
+
+@media (max-width: 359px) {
+    .casita-dashboard-hero-actions,
+    .casita-quick-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .casita-dashboard-metrics {
+        gap: 5px;
+    }
+
+    .casita-metric-card {
+        min-height: 101px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .casita-dashboard-primary-action,
+    .casita-dashboard-secondary-action,
+    .casita-quick-action,
+    .casita-metric-card,
+    .casita-attention-item {
+        transition: none;
+    }
+}

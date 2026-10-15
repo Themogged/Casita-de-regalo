@@ -114,6 +114,7 @@ class CasitaAdminSite(AdminSite):
         definitions = (
             (
                 "productos.add_producto",
+                "🎁",
                 "Nuevo producto",
                 "Añade una referencia al catálogo.",
                 "admin:productos_producto_add",
@@ -121,6 +122,7 @@ class CasitaAdminSite(AdminSite):
             ),
             (
                 "productos.add_videoelaboracion",
+                "🎬",
                 "Nuevo video",
                 "Publica un proceso de elaboración.",
                 "admin:productos_videoelaboracion_add",
@@ -128,6 +130,7 @@ class CasitaAdminSite(AdminSite):
             ),
             (
                 "pedidos.view_pedido",
+                "🧾",
                 "Revisar pedidos",
                 "Gestiona estados y exportaciones.",
                 "admin:pedidos_pedido_changelist",
@@ -135,16 +138,18 @@ class CasitaAdminSite(AdminSite):
             ),
             (
                 "pedidos.view_pedido",
+                "📊",
                 "Abrir reportes",
                 "Consulta el resumen comercial.",
                 "admin:pedidos_pedido_reportes",
                 "neutral",
             ),
         )
-        for permission, label, description, route, tone in definitions:
+        for permission, icon, label, description, route, tone in definitions:
             if request.user.has_perm(permission):
                 actions.append(
                     {
+                        "icon": icon,
                         "label": label,
                         "description": description,
                         "url": reverse(route),
