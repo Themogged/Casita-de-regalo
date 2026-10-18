@@ -13,6 +13,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_GET, require_POST
 
 from pedidos.models import Pedido, PedidoItem
+from productos.media_optimization import optimized_image_url
 from productos.models import Producto
 from productos.whatsapp import build_whatsapp_url
 
@@ -37,15 +38,23 @@ def _is_ajax(request):
 
 
 def _cart_item_for_request(request, item_id):
-    cart = get_cart_for_request(request)
+    cart = get_cart_for_request(request, mirror_session=False)
     return get_object_or_404(
         cart.items.select_related("producto", "producto__categoria"),
         pk=item_id,
     )
 
 
-def _json_cart_update(request, item_id, message, level="success", status=200, product_id=None):
-    cart = get_cart_for_request(request)
+def _json_cart_update(
+    request,
+    item_id,
+    message,
+    level="success",
+    status=200,
+    product_id=None,
+    cart=None,
+):
+    cart = cart or get_cart_for_request(request)
     snapshot = cart_snapshot(request, cart)
     current = next((item for item in snapshot["items"] if item["id"] == item_id), None)
     payload = {
@@ -127,13 +136,19 @@ def agregar_al_carrito(request, producto_id):
     product = get_object_or_404(Producto, id=producto_id)
     # Persist the session/cart before the validation transaction so an invalid
     # personalization cannot roll back the database-backed session itself.
-    get_cart_for_request(request)
+    cart = get_cart_for_request(request, mirror_session=False)
     try:
-        item, quantity_updated = add_configured_item(request, product, request.POST, request.FILES)
+        item, quantity_updated = add_configured_item(
+            request,
+            product,
+            request.POST,
+            request.FILES,
+            cart=cart,
+        )
     except ValidationError as exc:
         message = exc.messages[0] if exc.messages else "Revisa los datos de personalización."
         if _is_ajax(request):
-            snapshot = cart_snapshot(request)
+            snapshot = cart_snapshot(request, cart)
             return JsonResponse(
                 {
                     "ok": False,
@@ -149,7 +164,7 @@ def agregar_al_carrito(request, producto_id):
 
     message = "Cantidad actualizada." if quantity_updated else f"{product.nombre} agregado a tu lista."
     if _is_ajax(request):
-        snapshot = cart_snapshot(request)
+        snapshot = cart_snapshot(request, cart)
         return JsonResponse(
             {
                 "ok": True,
@@ -159,7 +174,7 @@ def agregar_al_carrito(request, producto_id):
                 "product_id": product.id,
                 "item_id": item.id,
                 "product_name": product.nombre,
-                "product_image_url": product.imagen.url if product.imagen else "",
+                "product_image_url": optimized_image_url(product.imagen.url) if product.imagen else "",
                 "item_quantity": item.cantidad,
                 "quantity_updated": quantity_updated,
                 "cart": snapshot,
@@ -171,7 +186,7 @@ def agregar_al_carrito(request, producto_id):
 
 @require_GET
 def ver_carrito(request):
-    cart = get_cart_for_request(request)
+    cart = get_cart_for_request(request, mirror_session=False)
     persistent_items = list(cart.items.select_related("producto", "producto__categoria"))
     units_by_product = {}
     for item in persistent_items:
@@ -188,7 +203,7 @@ def ver_carrito(request):
         for item in persistent_items
     ]
     total = sum((item["subtotal"] for item in products), Decimal("0.00"))
-    mirror_cart_to_session(request, cart)
+    mirror_cart_to_session(request, cart, items=persistent_items)
     return render(
         request,
         "carrito.html",
@@ -196,7 +211,7 @@ def ver_carrito(request):
             "productos": products,
             "total": total,
             "checkout_prefill": request.session.get("checkout_prefill", {}),
-            "cart_snapshot": cart_snapshot(request, cart),
+            "cart_snapshot": cart_snapshot(request, cart, items=persistent_items),
         },
     )
 
@@ -215,7 +230,13 @@ def _change_item_quantity(request, item, delta):
             message = "Stock máximo alcanzado."
             if _is_ajax(request):
                 return _json_cart_update(
-                    request, item.id, message, level="warning", status=400, product_id=product_id
+                    request,
+                    item.id,
+                    message,
+                    level="warning",
+                    status=400,
+                    product_id=product_id,
+                    cart=cart,
                 )
             messages.warning(request, message)
             return redirect("ver_carrito")
@@ -228,7 +249,13 @@ def _change_item_quantity(request, item, delta):
         item.save(update_fields=["cantidad", "actualizado"])
     mirror_cart_to_session(request, cart)
     if _is_ajax(request):
-        return _json_cart_update(request, item_id, "Cantidad actualizada.", product_id=product_id)
+        return _json_cart_update(
+            request,
+            item_id,
+            "Cantidad actualizada.",
+            product_id=product_id,
+            cart=cart,
+        )
     return redirect("ver_carrito")
 
 
@@ -242,9 +269,8 @@ def restar_item(request, item_id):
     return _change_item_quantity(request, _cart_item_for_request(request, item_id), -1)
 
 
-@require_POST
-def eliminar_item(request, item_id):
-    item = _cart_item_for_request(request, item_id)
+def _delete_item_response(request, item):
+    item_id = item.id
     product_id = item.producto_id
     cart = item.carrito
     item.delete()
@@ -255,9 +281,15 @@ def eliminar_item(request, item_id):
             item_id,
             "Producto retirado de la lista.",
             product_id=product_id,
+            cart=cart,
         )
     messages.success(request, "Producto retirado de la lista.")
     return redirect("ver_carrito")
+
+
+@require_POST
+def eliminar_item(request, item_id):
+    return _delete_item_response(request, _cart_item_for_request(request, item_id))
 
 
 @require_POST
@@ -268,19 +300,31 @@ def editar_item_personalizacion(request, item_id):
     except ValidationError as exc:
         message = exc.messages[0] if exc.messages else "Revisa los datos de personalización."
         if _is_ajax(request):
-            return _json_cart_update(request, item.id, message, level="warning", status=400)
+            return _json_cart_update(
+                request,
+                item.id,
+                message,
+                level="warning",
+                status=400,
+                cart=item.carrito,
+            )
         messages.warning(request, message)
         return redirect(f"{reverse('ver_carrito')}#item-{item.id}")
 
     mirror_cart_to_session(request, updated_item.carrito)
     if _is_ajax(request):
-        return _json_cart_update(request, updated_item.id, "Personalización actualizada.")
+        return _json_cart_update(
+            request,
+            updated_item.id,
+            "Personalización actualizada.",
+            cart=updated_item.carrito,
+        )
     messages.success(request, "Personalización actualizada.")
     return redirect(f"{reverse('ver_carrito')}#item-{updated_item.id}")
 
 
 def _legacy_item(request, product_id):
-    cart = get_cart_for_request(request)
+    cart = get_cart_for_request(request, mirror_session=False)
     item = (
         cart.items.select_related("producto", "producto__categoria")
         .filter(producto_id=product_id)
@@ -304,8 +348,7 @@ def restar_producto(request, producto_id):
 
 @require_POST
 def eliminar_producto(request, producto_id):
-    item = _legacy_item(request, producto_id)
-    return eliminar_item(request, item.id)
+    return _delete_item_response(request, _legacy_item(request, producto_id))
 
 
 @require_POST
@@ -390,6 +433,7 @@ def enviar_carrito_whatsapp(request):
                 fecha_entrega=delivery_date,
                 detalles_personalizacion=checkout_data,
             )
+            order_items = []
             for item in cart_items:
                 product = locked_products[item.producto_id]
                 personalization = {
@@ -401,17 +445,23 @@ def enviar_carrito_whatsapp(request):
                     "imagen_cliente": item.imagen_cliente.url if item.imagen_cliente else "",
                     "opciones": item.opciones,
                 }
-                PedidoItem.objects.create(
-                    pedido=order,
-                    producto_nombre=product.nombre,
-                    cantidad=item.cantidad,
-                    precio=product.precio,
-                    personalizacion=personalization,
+                order_items.append(
+                    PedidoItem(
+                        pedido=order,
+                        producto_nombre=product.nombre,
+                        cantidad=item.cantidad,
+                        precio=product.precio,
+                        personalizacion=personalization,
+                    )
                 )
+            PedidoItem.objects.bulk_create(order_items)
+
+            products_to_update = []
             for product_id, quantity in units_by_product.items():
                 product = locked_products[product_id]
                 product.stock -= quantity
-                product.save(update_fields=["stock"])
+                products_to_update.append(product)
+            Producto.objects.bulk_update(products_to_update, ["stock"])
             clear_cart(request, locked_cart)
     except ValidationError as exc:
         message = exc.messages[0]

@@ -18,7 +18,10 @@ def env_list(name, default=""):
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
-PYTHONANYWHERE_HOST = os.getenv("PYTHONANYWHERE_HOST", "daxian7.pythonanywhere.com").strip()
+PYTHONANYWHERE_HOST = os.getenv(
+    "PYTHONANYWHERE_HOST",
+    "casitaderegalos.pythonanywhere.com",
+).strip()
 
 DEBUG = env_bool("DJANGO_DEBUG", False)
 

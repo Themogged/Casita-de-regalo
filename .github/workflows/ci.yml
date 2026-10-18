@@ -22,9 +22,9 @@ jobs:
         env:
           DJANGO_SETTINGS_MODULE: tienda_regalos.settings_pythonanywhere
           DJANGO_SECRET_KEY: ci-only-8f6ae4f31bff4479b16856970bc3a9810c969f05e1f144ca
-          PYTHONANYWHERE_HOST: daxian7.pythonanywhere.com
+          PYTHONANYWHERE_HOST: casitaderegalos.pythonanywhere.com
       - run: python manage.py collectstatic --noinput
         env:
           DJANGO_SETTINGS_MODULE: tienda_regalos.settings_pythonanywhere
           DJANGO_SECRET_KEY: ci-only-8f6ae4f31bff4479b16856970bc3a9810c969f05e1f144ca
-          PYTHONANYWHERE_HOST: daxian7.pythonanywhere.com
+          PYTHONANYWHERE_HOST: casitaderegalos.pythonanywhere.com

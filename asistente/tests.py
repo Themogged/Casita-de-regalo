@@ -1,7 +1,7 @@
 import json
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from .memory import (
@@ -12,6 +12,7 @@ from .memory import (
     retrieve_relevant_memories,
     save_memory_candidate,
 )
+from .context_processors import assistant_account_context
 from .models import AssistantConversation, AssistantMemory
 from pedidos.models import Pedido
 
@@ -159,3 +160,20 @@ class AssistantMemoryTests(TestCase):
 
         self.assertFalse(profile.memory_enabled)
         self.assertFalse(profile.is_memory_active)
+
+    def test_contexto_global_resuelve_perfil_y_conteo_en_una_consulta(self):
+        AssistantMemory.objects.create(
+            user=self.user,
+            category=AssistantMemory.Category.PREFERENCES,
+            key="favorite_finish",
+            content="acabado rosado",
+        )
+        request = RequestFactory().get("/")
+        request.user = self.user
+
+        with self.assertNumQueries(1):
+            context = assistant_account_context(request)
+
+        self.assertTrue(context["assistant_memory_enabled"])
+        self.assertTrue(context["assistant_memory_active"])
+        self.assertEqual(context["assistant_memory_count"], 1)

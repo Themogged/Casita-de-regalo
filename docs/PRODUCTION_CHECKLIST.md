@@ -9,20 +9,20 @@
 
 ## PythonAnywhere
 
-Aplicación: `daxian7.pythonanywhere.com`
+Aplicación: `casitaderegalos.pythonanywhere.com`
 
-- Código: `/home/daxian7/Casita-de-regalo`
-- Directorio de trabajo: `/home/daxian7/Casita-de-regalo`
-- Virtualenv: `/home/daxian7/.virtualenvs/casita-regalos-venv`
-- WSGI: `/var/www/daxian7_pythonanywhere_com_wsgi.py`
+- Código: `/home/Casitaderegalos/Casita-de-regalo`
+- Directorio de trabajo: `/home/Casitaderegalos/Casita-de-regalo`
+- Virtualenv: `/home/Casitaderegalos/.virtualenvs/casita-regalos-venv`
+- WSGI: `/var/www/casitaderegalos_pythonanywhere_com_wsgi.py`
 - Settings: `tienda_regalos.settings_pythonanywhere`
 
 Actualización desde una consola Bash de PythonAnywhere:
 
 ```bash
-cd /home/daxian7/Casita-de-regalo
+cd /home/Casitaderegalos/Casita-de-regalo
 git pull origin main
-source /home/daxian7/.virtualenvs/casita-regalos-venv/bin/activate
+source /home/Casitaderegalos/.virtualenvs/casita-regalos-venv/bin/activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py optimize_media_images --path media --quality 78
@@ -32,14 +32,14 @@ python manage.py check --deploy
 
 Mapeos estáticos:
 
-- `/static/` -> `/home/daxian7/Casita-de-regalo/staticfiles`
-- `/media/` -> `/home/daxian7/Casita-de-regalo/media`
+- `/static/` -> `/home/Casitaderegalos/Casita-de-regalo/staticfiles`
+- `/media/` -> `/home/Casitaderegalos/Casita-de-regalo/media`
 
 Después, pulsa **Reload** en la pestaña Web. Si algo falla, revisa primero:
 
-- `/var/log/daxian7.pythonanywhere.com.error.log`
-- `/var/log/daxian7.pythonanywhere.com.server.log`
-- `/var/log/daxian7.pythonanywhere.com.access.log`
+- `/var/log/casitaderegalos.pythonanywhere.com.error.log`
+- `/var/log/casitaderegalos.pythonanywhere.com.server.log`
+- `/var/log/casitaderegalos.pythonanywhere.com.access.log`
 
 ## WSGI
 

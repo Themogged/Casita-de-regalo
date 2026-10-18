@@ -1,0 +1,64 @@
+from pathlib import Path
+from urllib.parse import quote, unquote, urlsplit
+
+from django.conf import settings
+
+
+def webp_url(url):
+    if not url:
+        return ""
+
+    value = str(url)
+    media_url = settings.MEDIA_URL
+    if not value.startswith(media_url):
+        return ""
+
+    relative_path = unquote(urlsplit(value).path[len(media_url):]).lstrip("/")
+    if "\x00" in relative_path or not relative_path:
+        return ""
+
+    media_root = Path(settings.MEDIA_ROOT).resolve()
+    source_path = (media_root / relative_path).resolve()
+
+    try:
+        source_path.relative_to(media_root)
+    except ValueError:
+        return ""
+
+    webp_path = source_path.with_suffix(".webp")
+    if not webp_path.exists():
+        return ""
+
+    webp_relative_path = Path(relative_path).with_suffix(".webp").as_posix()
+    return f'{media_url.rstrip("/")}/{quote(webp_relative_path, safe="/")}'
+
+
+def optimized_image_url(url):
+    return webp_url(url) or url
+
+
+def responsive_image_srcset(url):
+    if not url:
+        return ""
+    value = str(url)
+    media_url = settings.MEDIA_URL
+    if not value.startswith(media_url):
+        return ""
+    decoded = unquote(urlsplit(value).path[len(media_url):]).lstrip("/")
+    if not decoded or "\x00" in decoded:
+        return ""
+    relative_path = Path(decoded)
+    media_root = Path(settings.MEDIA_ROOT).resolve()
+    source_path = (media_root / relative_path).resolve()
+    try:
+        source_path.relative_to(media_root)
+    except ValueError:
+        return ""
+
+    candidates = []
+    for width in (360, 720, 1080):
+        candidate = source_path.with_name(f"{source_path.stem}-{width}w.webp")
+        if candidate.exists():
+            relative = candidate.relative_to(media_root).as_posix()
+            candidates.append(f'{media_url.rstrip("/")}/{quote(relative, safe="/")} {width}w')
+    return ", ".join(candidates)

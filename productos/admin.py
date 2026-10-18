@@ -8,8 +8,8 @@ from django.utils.html import format_html
 from django.utils.http import urlencode
 
 from .forms import ProductoAdminForm, VideoElaboracionAdminForm
+from .media_optimization import optimized_image_url, responsive_image_srcset
 from .models import Categoria, Producto, ProductoImagen, VideoElaboracion
-from .templatetags.media_optimization import optimized_image_url, responsive_image_srcset
 
 
 class DisponibilidadFilter(admin.SimpleListFilter):

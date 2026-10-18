@@ -8,6 +8,7 @@ from django.db import transaction
 from django.db.models import Sum
 from django.urls import reverse
 
+from productos.media_optimization import optimized_image_url
 from productos.models import Producto
 
 from .models import Carrito, CarritoItem
@@ -49,7 +50,7 @@ def _ensure_session_key(request):
 
 
 @transaction.atomic
-def get_cart_for_request(request):
+def get_cart_for_request(request, *, mirror_session=True):
     session_key = _ensure_session_key(request)
     stored_cart_id = request.session.get(PERSISTENT_CART_SESSION_KEY)
 
@@ -81,7 +82,8 @@ def get_cart_for_request(request):
     legacy = normalize_cart_mapping(request.session.get(LEGACY_CART_SESSION_KEY, {}))
     if legacy and not cart.items.exists():
         import_legacy_cart(cart, legacy)
-    mirror_cart_to_session(request, cart)
+    if mirror_session:
+        mirror_cart_to_session(request, cart)
     return cart
 
 
@@ -137,9 +139,10 @@ def import_legacy_cart(cart, mapping):
     return cart
 
 
-def mirror_cart_to_session(request, cart):
+def mirror_cart_to_session(request, cart, *, items=None):
     mapping = {}
-    for item in cart.items.only("producto_id", "cantidad"):
+    cart_items = items if items is not None else cart.items.only("producto_id", "cantidad")
+    for item in cart_items:
         if item.cantidad > 0:
             key = str(item.producto_id)
             mapping[key] = mapping.get(key, 0) + item.cantidad
@@ -150,7 +153,15 @@ def mirror_cart_to_session(request, cart):
 
 
 def cart_units_for_request(request):
-    legacy = normalize_cart_mapping(request.session.get(LEGACY_CART_SESSION_KEY, {}))
+    raw_legacy = request.session.get(LEGACY_CART_SESSION_KEY)
+    legacy = normalize_cart_mapping(raw_legacy)
+
+    # Every cart mutation mirrors anonymous quantities into the session. Using
+    # that mirror keeps the header counter exact without two database queries
+    # on every public page. Sessions created before the persistent-cart rollout
+    # still fall through to the database once and retain backwards compatibility.
+    if not request.user.is_authenticated and isinstance(raw_legacy, Mapping):
+        return sum(legacy.values())
 
     if request.user.is_authenticated:
         cart = Carrito.objects.filter(usuario=request.user).only("pk").first()
@@ -250,21 +261,27 @@ def _configured_candidate(cart, product, fields, quantity=1):
 
 
 @transaction.atomic
-def add_configured_item(request, product, post_data, uploaded_files=None):
-    cart = get_cart_for_request(request)
+def add_configured_item(request, product, post_data, uploaded_files=None, *, cart=None):
+    cart = cart or get_cart_for_request(request)
     product = Producto.objects.select_for_update().get(pk=product.pk)
-    current_units = (
-        cart.items.filter(producto=product).aggregate(total=Sum("cantidad"))["total"] or 0
+    fields = parse_personalization(post_data, uploaded_files)
+    candidate = _configured_candidate(cart, product, fields)
+    existing_items = list(
+        cart.items.select_for_update()
+        .filter(producto=product)
+        .order_by("id")
     )
+    current_units = sum(existing.cantidad for existing in existing_items)
     if current_units >= product.stock:
         raise ValidationError(f"Solo hay {product.stock} unidades disponibles de {product.nombre}.")
 
-    fields = parse_personalization(post_data, uploaded_files)
-    candidate = _configured_candidate(cart, product, fields)
-    item = (
-        cart.items.select_for_update()
-        .filter(producto=product, configuration_key=candidate.configuration_key)
-        .first()
+    item = next(
+        (
+            existing
+            for existing in existing_items
+            if existing.configuration_key == candidate.configuration_key
+        ),
+        None,
     )
     quantity_updated = item is not None
     if item:
@@ -325,16 +342,20 @@ def _format_cop(value):
     return f"${integer:,}".replace(",", ".")
 
 
-def cart_snapshot(request, cart=None):
+def cart_snapshot(request, cart=None, *, items=None):
     cart = cart or get_cart_for_request(request)
-    items = list(cart.items.select_related("producto", "producto__categoria"))
-    total = sum((item.subtotal for item in items), Decimal("0.00"))
+    cart_items = (
+        list(items)
+        if items is not None
+        else list(cart.items.select_related("producto", "producto__categoria"))
+    )
+    total = sum((item.subtotal for item in cart_items), Decimal("0.00"))
     units_by_product = {}
-    for item in items:
+    for item in cart_items:
         units_by_product[item.producto_id] = units_by_product.get(item.producto_id, 0) + item.cantidad
 
     serialized_items = []
-    for item in items:
+    for item in cart_items:
         product = item.producto
         serialized_items.append(
             {
@@ -342,7 +363,7 @@ def cart_snapshot(request, cart=None):
                 "product_id": product.pk,
                 "name": product.nombre,
                 "category": product.categoria.nombre if product.categoria else "Detalle",
-                "image_url": product.imagen.url if product.imagen else "",
+                "image_url": optimized_image_url(product.imagen.url) if product.imagen else "",
                 "price_label": _format_cop(product.precio),
                 "quantity": item.cantidad,
                 "stock": product.stock,
@@ -367,10 +388,10 @@ def cart_snapshot(request, cart=None):
         )
     return {
         "items": serialized_items,
-        "units": sum(item.cantidad for item in items),
-        "references": len(items),
+        "units": sum(item.cantidad for item in cart_items),
+        "references": len(cart_items),
         "total_label": _format_cop(total),
-        "is_empty": not items,
+        "is_empty": not cart_items,
         "cart_url": reverse("ver_carrito"),
         "catalog_url": reverse("catalogo") + "#catalogo",
         "checkout_url": reverse("ver_carrito") + "#checkout-details-title",

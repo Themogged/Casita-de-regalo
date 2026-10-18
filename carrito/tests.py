@@ -1,16 +1,20 @@
 from datetime import date, timedelta
 from io import BytesIO
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AnonymousUser
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import IntegrityError, transaction
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from PIL import Image
 
 from carrito.models import Carrito, CarritoItem
+from carrito.services import cart_units_for_request
 from pedidos.models import Pedido
 from productos.models import Categoria, Producto
 
@@ -143,6 +147,21 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(Carrito.objects.count(), 1)
         self.assertContains(response, '<span class="cart-count">2</span>')
 
+    def test_header_anonimo_usa_el_espejo_de_sesion_sin_consultar_la_base(self):
+        cart = Carrito.objects.create(session_key="session-query-free")
+        CarritoItem.objects.create(carrito=cart, producto=self.producto, cantidad=2)
+        request = RequestFactory().get("/")
+        request.user = AnonymousUser()
+        request.session = {
+            "carrito": {str(self.producto.id): 2},
+            "persistent_cart_id": cart.pk,
+        }
+
+        with self.assertNumQueries(0):
+            total = cart_units_for_request(request)
+
+        self.assertEqual(total, 2)
+
     def test_agregar_por_ajax_responde_sin_redireccion(self):
         response = self.client.post(
             reverse('agregar_carrito', args=[self.producto.id]),
@@ -162,6 +181,30 @@ class CarritoViewsTests(TestCase):
         self.assertEqual(data['quantity_updated'], False)
         self.assertEqual(data['cart']['units'], 1)
         self.assertEqual(data['cart']['items'][0]['product_id'], self.producto.id)
+
+    def test_agregar_por_ajax_usa_miniatura_webp_en_toast_y_resumen(self):
+        test_media_parent = Path(settings.BASE_DIR) / ".tmp-test-media"
+        test_media_parent.mkdir(exist_ok=True)
+        with TemporaryDirectory(dir=test_media_parent) as media_root, self.settings(MEDIA_ROOT=media_root):
+            product_dir = Path(media_root) / "productos"
+            product_dir.mkdir(parents=True)
+            (product_dir / "detalle.jpg").write_bytes(b"original")
+            (product_dir / "detalle.webp").write_bytes(b"optimized")
+            self.producto.imagen = "productos/detalle.jpg"
+            self.producto.save(update_fields=["imagen"])
+
+            response = self.client.post(
+                reverse("agregar_carrito", args=[self.producto.id]),
+                HTTP_X_REQUESTED_WITH="XMLHttpRequest",
+                secure=True,
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["product_image_url"], "/media/productos/detalle.webp")
+        self.assertEqual(
+            response.json()["cart"]["items"][0]["image_url"],
+            "/media/productos/detalle.webp",
+        )
 
     def test_agregar_mismo_producto_por_ajax_actualiza_cantidad(self):
         self.client.post(

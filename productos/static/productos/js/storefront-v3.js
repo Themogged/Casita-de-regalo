@@ -559,7 +559,14 @@
         handle.addEventListener("pointerup", finishDrag);
         handle.addEventListener("pointercancel", finishDrag);
         media.addEventListener?.("change", restore);
-        window.addEventListener("resize", restore, { passive: true });
+        let restoreFrame = null;
+        window.addEventListener("resize", () => {
+            if (restoreFrame !== null) return;
+            restoreFrame = window.requestAnimationFrame(() => {
+                restore();
+                restoreFrame = null;
+            });
+        }, { passive: true });
         restore();
     }
 

@@ -1431,9 +1431,14 @@ const initMobileMenu = () => {
             await fetchCatalogSection(window.location.href, { pushState: false });
         });
 
+        let carouselResizeFrame = null;
         window.addEventListener('resize', () => {
-            document.querySelectorAll('.js-carousel').forEach((shell) => syncCarousel(shell));
-        });
+            if (carouselResizeFrame !== null) return;
+            carouselResizeFrame = window.requestAnimationFrame(() => {
+                document.querySelectorAll('.js-carousel').forEach((shell) => syncCarousel(shell));
+                carouselResizeFrame = null;
+            });
+        }, { passive: true });
 
         initCarousels();
         initMobileMenu();
