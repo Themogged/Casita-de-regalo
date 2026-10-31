@@ -2,7 +2,7 @@
    Keep this boundary so the approved mobile interface remains unchanged. */
 @media (min-width: 768px) {
     :root {
-        --atelier-paper: #fff9fc;
+        --atelier-paper: #ffedf4;
         --atelier-white: #ffffff;
         --atelier-blush: #f9eaf0;
         --atelier-pink: #f2c8d5;
@@ -19,10 +19,7 @@
     }
     html { scroll-padding-top: 150px; }
     body {
-        background:
-            radial-gradient(circle at 10% 5%, rgba(246, 207, 222, 0.22), transparent 28%),
-            radial-gradient(circle at 90% 15%, rgba(255, 228, 238, 0.26), transparent 30%),
-            linear-gradient(180deg, #fffafb 0%, var(--atelier-paper) 50%, #fffafb 100%);
+        background: var(--atelier-paper);
         color: var(--atelier-ink);
         font-size: 15px;
         line-height: 1.65;
@@ -92,7 +89,7 @@
     .featured-catalog-header .meta-copy { display: none; }
     .featured-catalog-header > .btn-secondary { background: none; border: 0; border-radius: 0; padding-inline: 0; text-decoration: underline; text-underline-offset: 5px; }
     .catalog-grid, .featured-catalog-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 24px; align-items: stretch; }
-    .featured-catalog-grid { grid-template-columns: repeat(3,minmax(0,1fr)); max-width: 1080px; margin-inline: auto; }
+    .featured-catalog-grid { grid-template-columns: repeat(4,minmax(0,1fr)); margin-inline: auto; }
     .page-shell .product-card { display: flex; flex-direction: column; align-self: stretch; min-width: 0; padding: 0; border: 1px solid var(--atelier-line); border-radius: 18px; overflow: hidden; background: white; box-shadow: none; transform: none; }
     .page-shell .product-card:hover { border-color: #dfb4c7; box-shadow: 0 8px 24px #67334508; transform: none; }
     .product-card .product-media { width: 100%; height: auto; min-height: 0; aspect-ratio: 1; margin: 0; padding: 10px; border: 0; border-radius: 0; background: #fff4f8; }
@@ -262,7 +259,7 @@
     }
 }
 
-/* 2026-10 brand refresh: warmer surfaces without changing the approved layout. */
+/* Final presentation details; the existing rose palette and content stay intact. */
 @media (min-width: 768px) {
     .site-header {
         background: rgba(255, 251, 253, 0.94);
@@ -282,11 +279,9 @@
     .desktop-store-intro[hidden] {
         position: relative;
         margin-top: 4px;
-        padding: 32px 24px 36px;
-        border-radius: 22px;
-        background:
-            radial-gradient(circle at 12% 8%, rgba(247, 211, 225, 0.34), transparent 31%),
-            radial-gradient(circle at 88% 12%, rgba(255, 231, 239, 0.46), transparent 28%);
+        padding: 24px 24px 32px;
+        border-radius: 0;
+        background: transparent;
     }
 
     .desktop-store-intro .section-kicker {
@@ -299,5 +294,67 @@
 
     .page-shell .product-card:hover {
         box-shadow: 0 14px 34px rgba(91, 42, 62, 0.075);
+    }
+
+    .site-header .header-links { gap: 20px; }
+    .site-header .header-link { font-size: 13px; }
+    .site-header .header-link[aria-current="page"] {
+        text-decoration: underline;
+        text-decoration-color: #dba4b9;
+        text-underline-offset: 8px;
+        text-decoration-thickness: 2px;
+    }
+    .site-header .header-search input { font-size: 13px; }
+    .category-strip .category-pill { font-size: 12px; }
+    .category-more > summary.category-pill::after { color: var(--atelier-accent); background: none; box-shadow: none; }
+    .page-shell .product-card .product-media { aspect-ratio: 4 / 5; padding: 8px; background: #fff3f7; }
+    .product-card .product-body { padding: 18px 16px 16px; gap: 12px; }
+    .product-card .product-topline { min-height: 32px; align-items: flex-start; }
+    .product-card .pill { font-size: 11px; line-height: 1.5; }
+    .product-card .stock-badge { flex-shrink: 0; font-size: 10px; }
+    .product-card h3 { min-height: 48px; font-size: 19px; line-height: 1.3; overflow-wrap: anywhere; }
+    .product-card .product-price { font-size: 17px; }
+    .product-card .product-copy { margin-top: 4px; font-size: 11px; line-height: 1.5; }
+    .product-card .product-actions :is(.btn, .btn-outline, .btn-disabled) { min-height: 44px; font-size: 13px; }
+    .process-video-copy h3 { text-wrap: balance; }
+    .process-video-copy p { font-size: 13px; }
+    .process-video-nav.carousel-btn:disabled { opacity: .4; cursor: default; }
+    .meta-grid { gap: 40px; }
+    .policy-section .meta-list li { font-size: 13px; line-height: 1.75; }
+    .payment-list li { min-width: 0; }
+    .page-shell :is(.cart-items-card, .cart-summary-card, .checkout-form, .account-card) {
+        border-color: var(--atelier-line);
+        box-shadow: 0 8px 24px #67334506;
+    }
+    .account-login-page .login-experience {
+        max-width: 1040px;
+        margin: 28px auto 40px;
+        min-height: 0;
+        border-color: var(--atelier-line);
+        border-radius: 22px;
+        box-shadow: 0 12px 36px #67334508;
+    }
+    .account-login-page :is(.login-brand-panel, .login-form-panel) { padding: 36px; }
+    .account-login-page .login-brand-panel { background: #fff2f6; }
+    .account-login-page .login-official-logo { width: 104px; height: 104px; border-radius: 26px; box-shadow: none; }
+    .account-login-page .login-brand-copy h1 { font-size: 36px; line-height: 1.2; }
+    .account-login-page .login-submit { background: var(--atelier-pink); color: #71354c; border: 1px solid #e9b8c9; box-shadow: none; }
+    .account-login-page .login-submit:hover:not(:disabled) { background: #ebbacb; transform: none; }
+    .account-login-page .login-input-shell input { font-size: 16px; box-shadow: none; }
+    .footer-card :is(a,p) { font-size: 13px; }
+    .footer-card > a { display: flex; align-items: center; min-height: 36px; }
+    .footer-card h4 { margin-bottom: 10px; }
+
+    @media (min-width: 1200px) {
+        .site-header .header-inner { grid-template-columns: 240px minmax(0,1fr) 230px auto; gap: 18px; }
+    }
+    @media (max-width: 1199px) {
+        .featured-catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 800px; }
+    }
+    @media (max-width: 1023px) {
+        .catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+        .product-card .product-actions { grid-template-columns: repeat(2,minmax(0,1fr)); }
+        .account-login-page :is(.login-brand-panel, .login-form-panel) { padding: 24px; }
+        .account-login-page .login-brand-copy h1 { font-size: 30px; }
     }
 }

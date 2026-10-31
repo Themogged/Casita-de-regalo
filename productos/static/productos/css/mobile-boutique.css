@@ -2,7 +2,7 @@
    the existing storefront remains authoritative from 768px upwards. */
 @media (max-width: 767px) {
     :root {
-        --boutique-paper: #fff8fb;
+        --boutique-paper: #ffedf4;
         --boutique-card: #fffdfc;
         --boutique-blush: #fcf0f4;
         --boutique-line: #f0dfe4;
@@ -26,10 +26,7 @@
     html { scroll-padding-top: 128px; }
     body {
         color: var(--boutique-ink);
-        background:
-            radial-gradient(circle at 12% 4%, rgba(247, 211, 226, 0.26), transparent 28%),
-            radial-gradient(circle at 92% 18%, rgba(255, 230, 240, 0.3), transparent 30%),
-            linear-gradient(180deg, #fffafb 0%, var(--boutique-paper) 48%, #fffafb 100%);
+        background: var(--boutique-paper);
         font-size: 15px;
         line-height: 1.6;
         padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
@@ -768,7 +765,7 @@
     }
 }
 
-/* 2026-10 brand refresh: soft depth while preserving the compact mobile flow. */
+/* Finishing details preserve the two-column catalogue and compact mobile flow. */
 @media (max-width: 767px) {
     .site-header {
         background: rgba(255, 250, 252, 0.96);
@@ -786,9 +783,7 @@
     }
 
     .home-hero.hero-card {
-        background:
-            radial-gradient(circle at 12% 8%, rgba(247, 210, 225, 0.28), transparent 34%),
-            radial-gradient(circle at 92% 16%, rgba(255, 230, 239, 0.36), transparent 30%);
+        background: transparent;
     }
 
     .home-hero .hero-actions a:first-child {
@@ -804,4 +799,54 @@
     .assistant-toggle {
         box-shadow: 0 8px 22px rgba(100, 43, 69, 0.09);
     }
+
+    .site-header .brand { min-height: 56px; }
+    .site-header .header-inner { padding-bottom: 8px; }
+    .site-header .header-search { height: 42px; min-height: 42px; border-radius: 12px; }
+    .site-header .header-search input { height: 40px; }
+    .site-header .header-search button { position: relative; height: 44px; }
+    .site-header .header-link[aria-current="page"] { background: var(--boutique-blush); border-radius: 10px; }
+    .category-strip .category-strip-inner { padding-block: 8px; }
+    .category-more > summary.category-pill::after { color: var(--boutique-accent); background: none; box-shadow: none; }
+    .home-hero.hero-card { padding-top: 16px; margin-bottom: 20px; }
+    .home-hero .hero-copy .hero-title { line-height: 1.16; }
+    .catalog-grid .product-topline { display: flex; flex-direction: column; gap: 6px; min-height: 58px; }
+    .catalog-grid .product-topline .pill { min-height: 29px; font-size: 10px; }
+    .catalog-grid .product-body h3 { min-height: 42px; }
+    .catalog-grid .product-price { font-size: 14px; }
+    .catalog-grid .product-copy { margin-top: 3px; font-size: 10px; line-height: 1.5; }
+    .catalog-grid .product-body { gap: 10px; }
+    .catalog-grid .product-actions { gap: 8px; }
+    .catalog-grid .product-actions .btn-outline { background: #fff; }
+    .catalog-landing-hero.hero-card { padding: 18px 0; border: 0; border-bottom: 1px solid var(--boutique-line); border-radius: 0; background: transparent; }
+    .catalog-page .catalog-hero-content { text-align: left; }
+    .catalog-page .catalog-landing-hero h1 { margin: 8px 0; font-size: 28px; }
+    .catalog-page .catalog-toolbar-copy :is(.section-kicker, p) { display: none; }
+    .catalog-page .catalog-toolbar-copy strong { font-size: 22px; line-height: 1.25; }
+    .catalog-page .catalog-toolbar-top { align-items: center; }
+    .catalog-page .results-counter { display: flex; flex-direction: row; align-items: baseline; gap: 4px; padding: 6px 10px; border: 0; background: var(--boutique-blush); }
+    .catalog-page .results-counter strong { font-size: 18px; }
+    .catalog-page .results-counter span { font-size: 10px; }
+    .catalog-page .catalog-filter-form.filter-form { gap: 14px 10px; margin-top: 0; }
+    .catalog-page .catalog-chip-row { display: none; }
+    .catalog-page .results-header { margin-bottom: 16px; }
+    .catalog-page .results-header h2 { margin: 4px 0; font-size: 24px; }
+    .catalog-page .results-header p { margin: 0; font-size: 13px; line-height: 1.6; }
+    .catalog-page .catalog-grid { gap: 20px 12px; padding-bottom: 0; }
+    .product-detail-page .detail-card { border-color: var(--boutique-line); box-shadow: none; }
+    .product-detail-page .detail-description { font-size: 14px; line-height: 1.75; }
+    #proceso-real .process-video-copy h3 { font-size: 20px; text-wrap: balance; }
+    #proceso-real .process-video-copy p { font-size: 13px; }
+    #proceso-real .process-video-carousel .carousel-btn:disabled { opacity: .4; }
+    .meta-grid > .section-card { padding: 22px 0; border: 0; border-top: 1px solid var(--boutique-line); border-radius: 0; background: transparent; }
+    .meta-grid h2 { margin-block: 10px; }
+    .payment-list { gap: 12px; }
+    .payment-list li { min-width: 0; min-height: 76px; }
+    .account-login-page .login-experience { border-radius: 18px; }
+    .account-login-page .login-brand-panel { padding: 16px 18px; }
+    .account-login-page .login-form-panel { padding-top: 20px; }
+    .footer-inner { gap: 24px 20px; }
+    .footer-card :is(p,a) { font-size: 13px; }
+    .footer-card h4 { margin-bottom: 8px; }
+    .footer-card > a { min-height: 44px; }
 }

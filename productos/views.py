@@ -778,7 +778,7 @@ def inicio(request):
     destacados = _prepare_home_products(
         get_featured_products(
             Producto.objects.select_related('categoria').filter(stock__gt=0),
-            limit=3,
+            limit=4,
         )
     )
     videos_elaboracion = get_active_process_videos()

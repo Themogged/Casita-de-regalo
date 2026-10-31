@@ -36,10 +36,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'productos/css/page-base-1.css' %}?v=20260913">
     {% block extra_head %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}?v=20260913">
+    <link rel="stylesheet" href="{% static 'productos/css/soft-premium-v3.css' %}?v=20261030-refinement-final">
     {% block page_styles %}{% endblock %}
-    <link rel="stylesheet" href="{% static 'productos/css/mobile-boutique.css' %}?v=20261014-brand-refresh" media="(max-width: 767px)">
-    <link id="desktop-store-styles" rel="stylesheet" href="{% static 'productos/css/desktop-atelier.css' %}?v=20261014-brand-refresh" media="(min-width: 768px)">
+    <link rel="stylesheet" href="{% static 'productos/css/mobile-boutique.css' %}?v=20261030-refinement-rose3" media="(max-width: 767px)">
+    <link id="desktop-store-styles" rel="stylesheet" href="{% static 'productos/css/desktop-atelier.css' %}?v=20261030-refinement-rose3" media="(min-width: 768px)">
 </head>
 <body class="{% block body_class %}{% endblock %}">
     <a class="skip-link" href="#main-content">Saltar al contenido principal</a>
@@ -54,9 +54,9 @@
             </a>
 
             <nav class="header-links" id="main-menu" aria-label="Navegaci&oacute;n principal">
-                <a href="{% url 'inicio' %}" class="header-link">Inicio</a>
-                <a href="{% url 'catalogo' %}#catalogo" class="header-link">Cat&aacute;logo</a>
-                <a href="{% url 'como_comprar' %}" class="header-link">C&oacute;mo comprar</a>
+                <a href="{% url 'inicio' %}" class="header-link"{% if request.resolver_match.url_name == 'inicio' %} aria-current="page"{% endif %}>Inicio</a>
+                <a href="{% url 'catalogo' %}#catalogo" class="header-link"{% if request.resolver_match.url_name == 'catalogo' or request.resolver_match.url_name == 'detalle_producto' %} aria-current="page"{% endif %}>Cat&aacute;logo</a>
+                <a href="{% url 'como_comprar' %}" class="header-link"{% if request.resolver_match.url_name == 'como_comprar' %} aria-current="page"{% endif %}>C&oacute;mo comprar</a>
                 <a href="#footer" class="header-link">Contacto</a>
             </nav>
 

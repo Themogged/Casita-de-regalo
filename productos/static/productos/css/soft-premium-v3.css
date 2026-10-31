@@ -3035,6 +3035,52 @@ body.is-process-video-visible .floating-whatsapp {
     }
 }
 
+/* Shared details stay consistent across the two responsive presentations. */
+.product-image-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+}
+.product-image-link:focus-visible {
+    outline: 2px solid #a84461;
+    outline-offset: -3px;
+}
+.product-card .product-ribbon { pointer-events: none; z-index: 1; }
+.product-card .product-body > div { min-width: 0; }
+.product-card .product-price { font-variant-numeric: tabular-nums; }
+.product-card .product-currency { margin-left: 4px; }
+.site-header .header-link[aria-current="page"] { color: #913c58; font-weight: 700; }
+.site-header .header-search svg { flex-shrink: 0; }
+.page-shell :is(input, select, textarea):not([type="checkbox"]):not([type="radio"]):focus-visible {
+    outline: 2px solid #a84461;
+    outline-offset: 3px;
+}
+.page-shell :is(.btn, .btn-secondary, .btn-outline):disabled {
+    cursor: wait;
+    opacity: .65;
+}
+.drawer-item-copy { min-width: 0; }
+.drawer-item-copy > a { overflow-wrap: anywhere; }
+.cart-drawer-footer { border-top: 1px solid #f0dfe4; }
+.footer-card :is(a, p) { overflow-wrap: anywhere; }
+.page-shell .product-card:focus-within { border-color: #dba4b9; }
+.page-shell :is(.btn, .btn-secondary, .btn-outline):focus-visible,
+.footer-card a:focus-visible {
+    outline: 2px solid #a84461;
+    outline-offset: 3px;
+}
+.product-title-link { text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.footer-card > a { text-underline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+    .product-title-link:hover,
+    .footer-card > a:hover { text-decoration: underline; }
+}
+@media (prefers-reduced-motion: no-preference) {
+    .product-title-link,
+    .footer-card > a { transition: color 160ms ease; }
+}
+
 @media (max-height: 650px) and (min-width: 721px) {
     .login-experience {
         min-height: 520px;

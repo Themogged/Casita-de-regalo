@@ -4,12 +4,13 @@
         {% if producto.destacado %}
             <span class="product-ribbon">Top regalo</span>
         {% endif %}
+        <a class="product-image-link" href="{% url 'detalle_producto' producto.id %}" aria-label="Ver {{ producto.nombre }}">
         {% if producto.imagen %}
             {% with image_srcset=producto.imagen.url|responsive_image_srcset %}
                 <img
                     src="{{ producto.imagen.url|optimized_image_url }}"
                     {% if image_srcset %}srcset="{{ image_srcset }}"{% endif %}
-                    sizes="(max-width: 767px) calc((100vw - 40px) / 2), (max-width: 1100px) 30vw, {% if request.resolver_match.url_name == 'inicio' %}360px{% else %}280px{% endif %}"
+                    sizes="(max-width: 767px) calc((100vw - 44px) / 2), {% if request.resolver_match.url_name == 'inicio' %}(max-width: 1199px) 46vw{% else %}(max-width: 1023px) 46vw, (max-width: 1199px) 30vw{% endif %}, 300px"
                     alt="{{ producto.nombre }}"
                     width="720"
                     height="720"
@@ -21,6 +22,7 @@
         {% else %}
             <div class="product-placeholder">Imagen pendiente de cargar</div>
         {% endif %}
+        </a>
     </div>
 
     <div class="product-body">

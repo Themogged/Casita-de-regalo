@@ -525,6 +525,27 @@ class CatalogoViewsTests(TestCase):
         self.assertNotContains(response, 'registrar_interaccion')
         self.assertNotContains(response, 'Premium floral')
 
+    def test_inicio_muestra_cuatro_favoritos_con_enlace_en_la_imagen(self):
+        response = self.client.get(reverse('inicio'), secure=True)
+
+        self.assertEqual(len(response.context['productos_destacados_home']), 4)
+        self.assertContains(response, 'class="product-image-link"', count=4)
+        for producto in response.context['productos_destacados_home']:
+            self.assertContains(
+                response,
+                f'class="product-image-link" href="{reverse("detalle_producto", args=[producto.pk])}"',
+            )
+
+    def test_navegacion_destaca_la_pagina_actual(self):
+        for url_name, label in (
+            ('inicio', 'Inicio'),
+            ('catalogo', 'Cat&aacute;logo'),
+            ('como_comprar', 'C&oacute;mo comprar'),
+        ):
+            with self.subTest(page=url_name):
+                response = self.client.get(reverse(url_name), secure=True)
+                self.assertContains(response, f'class="header-link" aria-current="page">{label}</a>')
+
     def test_inicio_no_reintroduce_destacados_agotados(self):
         agotado_destacado = Producto.objects.create(
             nombre='Destacado agotado',
